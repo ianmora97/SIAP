@@ -3,7 +3,6 @@ Sistema de Administracion de la Piscina del Departamento de Promocion Estudianti
 
 ## Clonar repositorio
 
-### Clonar el repositorio solo **UNA** vez en su computadora.
 Pasos:
 1. Descargar e instalar [GitHub Desktop](https://desktop.github.com/) 
 2. Abrir la aplicacion e Iniciar sesion.
@@ -21,81 +20,63 @@ Seguir los pasos 1-4 anteriores con GitHub Desktop.
 1. Descargan e instalan [Git Bash](https://git-scm.com/downloads)
 2. En la carpeta de su proyecto, click derecho y eligen la opcion, ***Git Bash Here***
 
-Se les abrira una Consola, les debera aparecer el path del proyecto seguido por el branch **(master)**
+Se les abrira una Consola, les debera aparecer el path del proyecto seguido por el branch **(master)** esto significaria
+que esta bien posicionado y que los archivos git funcionan.
 
-Comandos de git:
+## Comandos de git:
 ```
-
+git status
 ```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+git status muestra los archivos que han sido modificados, aniadidos o eliminados.
 ```
-Give the example
+git log
 ```
-
-And repeat
-
+git log muestra el log de commits que se han hecho en el repositorio.
 ```
-until finished
+git branch
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+git branch muestra una lista de los branches que existen en el repositorio.
 ```
-Give an example
+git checkout nombre-del-branch
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
+sirve para moverse entre branches, en este caso vamos al branch que indicamos en el comando. (Esto solo si estamos en sprint)
 ```
-Give an example
+git add -a
 ```
+sirve para aniadir _todos_ los archivos _nuevos_.
+```
+git commit -a -m "_nombre del commit_"
+```
+aniade todos los archivos a un commit para luego hacer commit. ```-a``` referencia a todo(all).
+```-m "nombre"``` referencia a mensaje o nombre del commit, entre comillas dobles el nombre. ***importante poner el nombre***
+```
+git push
+```
+sube(_push_) los cambios en el repositorio **en el branch en el que se encuentra posicionado**.
+```
+git push origin nombre-del-branch
+```
+sube(_push_) los cambios en el repositorio **en el branch en el que se indique en nombre-del-branch**.
 
-## Deployment
+## Pasos para ejecutar comandos en git al hacer cambios en el programa
 
-Add additional notes about how to deploy this on a live system
+Si se hace un cambio en **al menos un archivo** git reconoce los cambios hechos en los archivos. Se recomienda siempre trabajar
+una parte sin tiempo definido, pero corto, hasta que funcione, se hacen las pruebas. Una vez funcionando el programa se deben ejecutar los siguientes comandos.
 
-## Built With
+1. ```git status``` para verificar que hayan cambios en el repositorio local.
+2. Si se aniadieron archivos nuevos a la carpeta apareceran en rojo, luego se ejecuta el comando ```git add -a``` para aniadir los archivos al commit. 
+3. Seguido por ```git commit -a -m "nombreDelCommit"``` en ```"nombreDelCommit"``` se pone el cambio que se realizo en el programa.
+4. Una vez hecho el commit se ejecuta ```git push``` para subir el commit al repositorio en el branch en el que se encuentra. Para saber en cual branch se encuentra en la consola antes de escribir cualquier comando debe aparecer en color _cyan_ el nombre del branch. ***Se debe siempre antes verificar el branch en el que se encuentra antes de hacer git push.***
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+ **Ian Mora Rodriguez** - *Initial work* - [@ianmora97](https://github.com/ianmora97)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/ianmora97/2020-10/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
