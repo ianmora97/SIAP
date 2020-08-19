@@ -1,6 +1,21 @@
 # **2020-10**
 Sistema de Administracion de la Piscina del Departamento de Promocion Estudiantil
 
+## Arquitectura
+
+### Front-end:
+-	HTML: Template Engine (ejs)
+-	CSS: Frameworks: SASS, SCSS, Animate.css, Bootstrap
+-	Task Manager: Gulp
+-	JS: Native (ES7), Library (JQuery)
+### Back-end:
+-	Lenguaje de programación: NodeJs
+-	MVC Framework: Express
+-	Base de Datos: SQL (MySql)
+-	Aplicación de servidor: Node js
+-	Servidor web: Nodejs (HTTP)
+
+
 ## Clonar repositorio
 
 Pasos:
