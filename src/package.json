@@ -16,5 +16,24 @@
   "bugs": {
     "url": "https://github.com/ianmora97/2020-10/issues"
   },
-  "homepage": "https://github.com/ianmora97/2020-10#readme"
+  "homepage": "https://github.com/ianmora97/2020-10#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.1.0",
+    "jquery": "^3.5.1",
+    "mysql": "^2.18.1",
+    "node-sass": "^4.14.1",
+    "popper.js": "^1.16.1",
+    "routes": "^2.1.0",
+    "sass": "^1.26.10",
+    "socket.io": "^2.3.0"
+  }
 }
