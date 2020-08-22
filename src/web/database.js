@@ -4,7 +4,7 @@ var config = {
     host: "localhost",
     user: "root",
     password: "root",
-    database: "preguntados"
+    database: "siapd"
 };
 
 var con = mysql.createPool(config);

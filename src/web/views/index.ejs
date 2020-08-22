@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/jq-bs-bundle.js"></script>
+    <script src="../js/index.js"></script>
 </head>
 <body>
-    <h1>Hola mundo</h1>
+    <div class="container-fluid">
+        
+        <h1>Datos Usuarios</h1>
+        <table class="table table-hover table-inverse table-responsive">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Id</th>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Nacimiento</th>
+                    <th>Usuario</th>
+                    <th>Clave</th>
+                    <th>Sexo</th>
+                    <th>Creado</th>
+                    <th>Actualizado</th>
+                </tr>
+            </thead>
+            <tbody id="listaUsuarios">
+                
+            </tbody>
+        </table>
+        <button id="accion">Traer Datos de Usuarios</button>
+    </div>
 </body>
 </html>
