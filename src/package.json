@@ -2,10 +2,10 @@
   "name": "2020-10",
   "version": "1.0.0",
   "description": "SIADP",
-  "main": "web/index.js",
+  "main": "web/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon web/index.js"
+    "dev": "nodemon web/server.js"
   },
   "repository": {
     "type": "git",

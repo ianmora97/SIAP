@@ -4,7 +4,8 @@ var config = {
     host: "localhost",
     user: "root",
     password: "root",
-    database: "siapd"
+    database: "siapd",
+    dateStrings: true
 };
 
 var con = mysql.createPool(config);
