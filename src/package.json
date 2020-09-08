@@ -18,16 +18,20 @@
   },
   "homepage": "https://github.com/ianmora97/2020-10#readme",
   "devDependencies": {
-    "nodemon": "^2.0.4"
-  },
-  "dependencies": {
-    "bootstrap": "^4.5.2",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
     "gulp-sass": "^4.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^4.5.2",
+    "browser-sync": "^2.26.12",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
     "jquery": "^3.5.1",
     "mysql": "^2.18.1",
     "node-sass": "^4.14.1",
