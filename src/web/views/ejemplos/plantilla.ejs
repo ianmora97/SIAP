@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Favicon Icono en el tab-->
+    <link rel="shortcut icon" type="image/x-icon" href="https://image.flaticon.com/icons/svg/932/932532.svg">
+    <title>Plantilla</title>
+    <!--
+        Todos los CSS
+        Bootstrap, Animate.css, Font Awesome, General
+    -->
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/fontawesome.css">
+    <link rel="stylesheet" href="../css/animate.css">
+
+    <!--ARCHIVO JQUERY, Bootstrap JS y Popper-->
+    <script src="../js/jq-bs-bundle.js"></script> 
+
+    <!--Calendar JS-->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <!--Chart JS-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body>
+
+    <%- include('header') %>
+    <div class="container">
+        ...
+    </div>
+    <%- include('footer') %>
+
+    <!--Archivos de logica JavaScript van de ultimo-->
+    <script src="../js/ejemplo/default.js"></script>
+</body>
+</html>

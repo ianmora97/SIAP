@@ -1,3 +1,4 @@
 @echo off
 cd src
-npm run dev
+start npm run dev
+start gulp
