@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Favicon Icono en el tab-->
+    <link rel="shortcut icon" type="image/x-icon" href="https://image.flaticon.com/icons/svg/932/932532.svg">
+    <title>Plantilla</title>
+    <!--
+        Todos los CSS
+        Bootstrap, Animate.css, Font Awesome, General
+    -->
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/fontawesome.css">
+    <link rel="stylesheet" href="../css/animate.css">
+
+    <!--ARCHIVO JQUERY, Bootstrap JS y Popper-->
+    <script src="../js/jq-bs-bundle.js"></script> 
+
+    <!--Calendar JS-->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <!--Chart JS-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body>
+
+    <%- include('headerPrueba') %>
+    <div class="container">
+        <form method="post">
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"></div>
+            <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Usuario"></div>
+            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Contraseña"></div><a class="btn btn-success" href="perfil.html" style="width: 100%;color: rgb(255,255,255);background: #b81616;border-style: none;border-color: #ffffff;">Iniciar sesión</a>
+            <a
+                class="forgot" href="#"></a><a class="btn btn-success" href="registroUsuario.html" style="width: 100%;color: rgb(255,255,255);background: #b81616;border-style: none;border-color: #ffffff;">Registrarse</a></form>
+    </div>
+    </div>
+    <%- include('footer') %>
+
+    <!--Archivos de logica JavaScript van de ultimo-->
+    <script src="../js/ejemplo/default.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+.patito {
+  background-color: #364C78; }
+  .patito:hover {
+    background-color: #df1111; }
+
+.perrito {
+  color: #364C78; }
+
+.gatito {
+  color: #df1111; }
+
+.navbar-light .navbar-brand {
+  background: url(../img/UNA-VVE-logo-3.png) !important; }

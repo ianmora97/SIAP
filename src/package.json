@@ -1,0 +1,46 @@
+{
+  "name": "2020-10",
+  "version": "1.0.0",
+  "description": "SIADP",
+  "main": "web/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon web/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianmora97/2020-10.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ianmora97/2020-10/issues"
+  },
+  "homepage": "https://github.com/ianmora97/2020-10#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^4.5.2",
+    "browser-sync": "^2.26.12",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "jquery": "^3.5.1",
+    "mysql": "^2.18.1",
+    "mysql-ssh": "^1.0.6",
+    "mysql2": "^2.1.0",
+    "node-sass": "^4.14.1",
+    "popper.js": "^1.16.1",
+    "routes": "^2.1.0",
+    "sass": "^1.26.10",
+    "socket.io": "^2.3.0",
+    "ssh2": "^0.8.9"
+  }
+}
