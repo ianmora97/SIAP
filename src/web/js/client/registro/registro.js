@@ -10,7 +10,6 @@ function events(event){
 
 function registrar_usuario_ajax(){
     $('#enviar').on('click',()=>{
-
         let nombre = $('#nombre_t_usuario').val();
         let cedula = $('#cedula').val();
         let apellido = $('#apellido_t_usuario').val();
