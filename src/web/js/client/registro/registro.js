@@ -9,31 +9,31 @@ function events(event){
 }
 
 function registrar_usuario_ajax(){
-    $('#enviar').on('click',()=>{
-        let nombre = $('#nombre_t_usuario').val();
-        let cedula = $('#cedula').val();
-        let apellido = $('#apellido_t_usuario').val();
-        let nacimiento = $('#nacimiento_t_usuario').val();
-        let nombreUsuario = $('#nombreUsuario_t_usuario').val();
-        let clave = $('#clave_t_usuario').val();
-        let sexo = $("input[name='sexo_t_usuario']:checked").val();
+    $('#registrar').on('click',()=>{
+        let nombre = $('#nombre_registro').val();
+        let cedula = $('#id_registro').val();
+        let apellido = $('#apellidos_registro').val();
+        let nacimiento = $('#fecha_nacimiento_registro').val();
+        let nombreUsuario = $('#usuario_registro').val();
+        let clave = $('#clave_registro').val();
+        let sexo =$("#sexo option:selected" ).text();
 
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo};
-
+        console.log(data);
         if(validate(data)){       
-            $('#accion').on('click',function(){ 
-                $.ajax({
-                    type: "POST",
-                    url: "/usuario/registrarse",
-                    data: JSON.stringify(data),
-                    contentType: "application/json"
-                }).then((response) => {
-                    
-                }, (error) => {
-                });
+            console.log('yes');
+            $.ajax({
+                type: "POST",
+                url: "/usuario/registrarse",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                
+            }, (error) => {
             });
         }else{
-            let errores = check(datos);
+            console.log('no');
+            let errores = check(data);
             let why = "";
             errores.forEach(e => {why += e + ' ';});
             $('#alerta_error_registro').append(

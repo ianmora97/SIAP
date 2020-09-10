@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="../js/jq-bs-bundle.js"></script>
+    <script src="../js/index.js"></script>
+</head>
+<body> 
+
+  	<%- include('headerRegistrarse') %>
+  	<div class="container">
+		<div>
+			<form style="margin: 0px;padding: 65px;">
+				<div class="form-group">
+					<label>Número de cédula o DIMEX</label>
+					<input class="form-control" type="text" id="id_registro" style="width: 300px;">
+				</div>
+				<div class="form-group">
+					<div class="form-row" style="width: 630px;">
+						<div class="col" style="height: 70px;">
+							<label>Nombre</label>
+							<input class="form-control" type="text" id="nombre_registro" style="width: 300px;">
+						</div>
+						<div class="col">
+							<label>Apellidos</label>
+							<input class="form-control" type="text" id="apellidos_registro" style="width: 300px;">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Fecha de nacimiento</label>
+					<input class="form-control" id="fecha_nacimiento_registro" type="date" style="width: 170px;">
+				</div>
+				<div class="form-group">
+					<label>Usuario</label>
+					<input class="form-control" type="text" id="usuario_registro" style="width: 300px;">
+				</div>
+				<div class="form-group">
+					<label for="message">Correo electrónico</label
+						><input class="form-control" type="email" id="email" style="width: 300px;">
+					</div>
+				<div class="form-group">
+					<div class="form-row" style="width: 630px;">
+						<div class="col"><label>Contraseña</label><input class="form-control" type="password" id="clave_registro" style="width: 300px;"></div>
+						<div class="col"><label>Repita la contraseña</label><input class="form-control" type="password" id="contrasena_repetida" style="width: 300px;"></div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Sexo</label>
+					<select class="form-control" id="sexo" style="width: 300px;">
+						<optgroup label="Seleccione una opción">
+							<option value="" selected>Seleccione</option>
+							<option value="Masculino">Masculino</option>
+							<option value="Femenino">Femenino</option>
+							<option value="Otro">Otro</option>
+						</optgroup>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Perfil dentro de la universidad</label>
+					<select class="form-control" id="perfil" style="width: 300px;">
+						<optgroup label="Perfil">
+							<option value="0" selected>Estudiante</option>
+							<option value="1">Funcionario</option>
+							<option value="2">¿Pensionado?</option>
+						</optgroup>
+					</select>
+				</div>
+			<div class="form-group text-center">
+				<button class="btn btn-primary text-right" id="registrar" type="button" style="width: 300;background: #b81616;">Registrarme</button></div>
+			</form>
+		</div>
+	</div>
+ 
+  <!--Archivos de logica JavaScript van de ultimo-->
+  <script src="../js/ejemplo/default.js"></script>
+  <script type="module" src="../../js/client/registro/registro.js"></script>
+</body>
+</html>
