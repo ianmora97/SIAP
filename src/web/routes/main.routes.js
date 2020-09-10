@@ -8,6 +8,19 @@ router.get('/',(req,res)=>{
 });
 
 
+router.get('/prueba',(req,res)=>{
+    res.render('prueba');
+});
+
+router.post('/usuarios',(req,res)=>{
+    var script = con.query('select * from t_usuario',
+    (err,rows,fields)=>{
+        if(rows[0] != undefined){
+            res.send(rows);
+        }
+    });
+});
+
 router.post('/profesores',(req,res)=>{
     var script = con.query('select * from t_profesor',
     (err,rows,fields)=>{
@@ -17,3 +30,5 @@ router.post('/profesores',(req,res)=>{
     });
 });
 module.exports = router;
+
+
