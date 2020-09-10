@@ -25,9 +25,16 @@
 </head>
 <body>
 
-    <%- include('header') %>
+    <%- include('headerPrueba') %>
     <div class="container">
-       ...
+        <form method="post">
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"></div>
+            <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Usuario"></div>
+            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Contraseña"></div><a class="btn btn-success" href="perfil.html" style="width: 100%;color: rgb(255,255,255);background: #b81616;border-style: none;border-color: #ffffff;">Iniciar sesión</a>
+            <a
+                class="forgot" href="#"></a><a class="btn btn-success" href="registroUsuario.html" style="width: 100%;color: rgb(255,255,255);background: #b81616;border-style: none;border-color: #ffffff;">Registrarse</a></form>
+    </div>
     </div>
     <%- include('footer') %>
 
