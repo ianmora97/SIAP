@@ -9,5 +9,17 @@
 .gatito {
   color: #df1111; }
 
-.navbar-light .navbar-brand {
-  background: url(../img/UNA-VVE-logo-3.png) !important; }
+.nav-link {
+  color: white !important; }
+
+.bg-green {
+  background-color: #28a745; }
+
+.bg-rojo {
+  background-color: #dc3545; }
+
+.text-green {
+  color: #28a745; }
+
+.text-rojo {
+  color: #dc3545; }

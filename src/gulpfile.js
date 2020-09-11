@@ -18,15 +18,6 @@ gulp.task('animate', function() {
         .pipe(gulp.dest("web/css"));
 });
 
-// move fontawesome CSS file
-gulp.task('fo-aw', function() {
-    return gulp.src([
-            'node_modules/@fortawesome/fontawesome-free/css/all.css'
-        ])
-        .pipe(concat('fontawesome.css'))
-        .pipe(gulp.dest('web/css'))
-        .pipe(browserSync.stream());
-});
 // move bootstrap JS and Jquery
 gulp.task('js', function() {
     return gulp.src([
