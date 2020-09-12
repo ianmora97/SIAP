@@ -30,7 +30,7 @@ gulp.task('js', function() {
 });
 
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate','fo-aw', function() {
+gulp.task('serve', gulp.series('sass','js','animate', function() {
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
 }));
 

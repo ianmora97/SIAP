@@ -1,15 +1,3 @@
-.patito{
-    background-color: #364C78;
-    &:hover{
-        background-color: #df1111;
-    }
-}
-.perrito{
-    color: #364C78;
-}
-.gatito{
-    color: #df1111;
-}
 .nav-link{
     color: white !important;
 }
@@ -25,3 +13,23 @@
 .text-rojo{
     color: #dc3545;
 }
+.nombre-usuario-pos-0{
+    position: relative;
+    top: -8px;
+}
+.w-90{
+    width: 90% !important;
+}
+.text-celeste{
+    color:cornflowerblue !important;
+}
+.bg-celeste{
+    background-color: cornflowerblue !important;
+}
+.border-celeste{
+    border:3px solid cornflowerblue !important;
+}
+.menu-active {
+    border-right: 8px #dc3545 solid !important;
+    color: #dc3545;
+    font-size: 16px; }

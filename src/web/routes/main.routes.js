@@ -11,7 +11,6 @@ router.get('/registrarse',(req,res)=>{
     res.render('client/registrarse');
 });
 
-
 router.post('/profesores',(req,res)=>{
     var script = con.query('select * from t_profesor',
     (err,rows,fields)=>{

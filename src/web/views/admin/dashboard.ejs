@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
+    <div class="d-flex" id="wrapper">
+        <div class="bg-white border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">
+            <img src="../../img/vida-estudiantil-transparenxy.png" class="imgIcon" alt="" width="60px">
+            <strong>SIADP</strong></div>
+            <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4 menu-active">
+                <i class="fas fa-chart-line"></i>&nbsp; Dashboard</a>
+            <a href="/admin/usuarios" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
+                <i class="fas fa-users"></i>&nbsp; Usuarios</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
+                <i class="fas fa-glass-whiskey"></i>&nbsp; Vasos de agua</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
+                <i class="fas fa-flag-checkered"></i>&nbsp; Metas</a>
+            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
+                <i class="far fa-newspaper"></i>&nbsp; Papers</a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            
+            <div class="container-fluid">
+                <div class="w-90 mx-auto mt-2 mb-4">
+                    <div class="row no-gutters justify-content-between">
+                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border" style="height: 130px;">
+                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Talleres</a>
+                            <h1 id="talleres-stats" class="text-center text-celeste"></h1>
+                        </div>
+                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border border-celeste" style="height: 130px;">
+                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Usuarios</a>
+                            <h1 id="usuarios-stats" class="text-center text-celeste"></h1>
+                        </div>
+                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border" style="height: 130px;">
+                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Matriculados</a>
+                            <h1 id="matricula-stats" class="text-center text-celeste"></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container bg-white rounded shadow p-3 w-90" style="height:65%; margin: auto;">
+                    <div class="row py-2 px-3">
+                        <div class="w-100">
+                            <h4 id="data-selected-chart" class="d-block">Usuarios</h4>
+                        </div>
+                        <br>
+                        <small class="text-muted today-date d-block"></small>
+                    </div>
+                    <div class="row py-2 px-3">
+                        <div class="col-9">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center">
+                                <h6 class="text-muted">Estudiantes</h6>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <h6 class="text-muted">Profesores</h6>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <h6 class="text-muted">Activos</h6>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <h6 class="text-muted">Mororos</h6>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <h6 class="text-muted">Desmatriculados</h6>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Profesores', 'Estudiantes', 'Activos', 'Morosos', 'Desmatriculados'],
+                        datasets: [{
+                            label: 'Cantidad de Usuarios',
+                            data: [12, 19, 3, 5, 6,],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    drawBorder: true,
+                                    display:false
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    drawBorder: true,
+                                    display:false
+                                }   
+                            }]
+                        }
+                    }
+                });
+                </script>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/admin/dashboard.js"></script>
+</body>
+</html>
