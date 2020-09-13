@@ -29,7 +29,18 @@
 .border-celeste{
     border:3px solid cornflowerblue !important;
 }
+.border-secondary{
+    border: 3px solid #B81616 !important;
+}
 .menu-active {
-    border-right: 8px #dc3545 solid !important;
-    color: #dc3545;
-    font-size: 16px; }
+    border-right: 8px #fff solid !important;
+    color: #fff;
+    font-size: 16px;
+}
+
+.tab-dashboard-pane{
+    width: 100%;
+    max-width: 200px;
+    
+}
+

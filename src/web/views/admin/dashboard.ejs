@@ -16,21 +16,57 @@
 </head>
 <body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
     <div class="d-flex" id="wrapper">
-        <div class="bg-white border-right" id="sidebar-wrapper">
+        <div class="bg-primary border-right" id="sidebar-wrapper">
             <div class="sidebar-heading">
-            <img src="../../img/vida-estudiantil-transparenxy.png" class="imgIcon" alt="" width="60px">
-            <strong>SIADP</strong></div>
-            <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4 menu-active">
-                <i class="fas fa-chart-line"></i>&nbsp; Dashboard</a>
-            <a href="/admin/usuarios" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
-                <i class="fas fa-users"></i>&nbsp; Usuarios</a>
-            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
-                <i class="fas fa-glass-whiskey"></i>&nbsp; Vasos de agua</a>
-            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
-                <i class="fas fa-flag-checkered"></i>&nbsp; Metas</a>
-            <a href="#" class="list-group-item list-group-item-action border-0 bg-menu mb-4">
-                <i class="far fa-newspaper"></i>&nbsp; Papers</a>
+                <img src="../../img/logo-vive-promocion-transparency.png" class="imgIcon" alt="" width="60px">
+                <strong class="text-white">SIADP</strong>
+            </div>
+
+            <div class="list-group list-group-flush accordion " id="accordion-menu-lateral">
+                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu menu-active text-white py-3" role="button">
+                    <i class="fas fa-chart-line"></i>&nbsp; Dashboard
+                </a>
+                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3" 
+                data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
+                    <i class="fas fa-users"></i>&nbsp; Usuarios  <i class="fas fa-angle-down float-right"></i>
+                </a>
+                    <div class="collapse" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-user"></i>&nbsp; Estudiantes
+                        </a>
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-user-tie"></i></i>&nbsp; Administradores
+                        </a>
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-chalkboard-teacher"></i></i>&nbsp; Profesores
+                        </a>
+                    </div>
+                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+                data-toggle="collapse" href="#collapseTalleres" role="button" aria-expanded="false" aria-controls="collapseTalleres">
+                    <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
+                </a>
+                    <div class="collapse" id="collapseTalleres" data-parent="#accordion-menu-lateral">
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-swimmer"></i>&nbsp; Talleres
+                        </a>
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-swimmer"></i>&nbsp; Grupos
+                        </a>
+                    </div>
+                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+                data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
+                    <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
+                </a>
+                    <div class="collapse" id="collapseMatricula" data-parent="#accordion-menu-lateral">
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-bell"></i>&nbsp; Solicitudes
+                        </a>
+                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
+                            <i class="fas fa-user-check"></i>&nbsp; Comprobacion
+                        </a>
+                    </div>
+                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3" role="button">
+                    <i class="far fa-newspaper"></i>&nbsp; Reportes</a>
             </div>
         </div>
 
@@ -39,105 +75,113 @@
             
             <div class="container-fluid">
                 <div class="w-90 mx-auto mt-2 mb-4">
-                    <div class="row no-gutters justify-content-between">
-                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border" style="height: 130px;">
-                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Talleres</a>
-                            <h1 id="talleres-stats" class="text-center text-celeste"></h1>
+                    <nav>
+                        <div class="nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist">
+                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
+                                <label class="text-center align-text-top text-dark d-block" >Talleres</label>
+                                <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                            </a>
+                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border " id="usuarios_chart-tab" data-toggle="tab" href="#usuarios_chart" role="tab" aria-controls="usuarios_chart" aria-selected="false">
+                                <label class="text-center align-text-top text-dark d-block" >Usuarios</label>
+                                <h1 id="usuarios-stats" class="text-center text-secondary"></h1>
+                            </a>
+                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border" id="matricula_chart-tab" data-toggle="tab" href="#matricula_chart" role="tab" aria-controls="matricula_chart" aria-selected="false">
+                                <label class="text-center align-text-top text-dark d-block" >Matriculados</label>
+                                <h1 id="matricula-stats" class="text-center text-secondary"></h1>
+                            </a>
                         </div>
-                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border border-celeste" style="height: 130px;">
-                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Usuarios</a>
-                            <h1 id="usuarios-stats" class="text-center text-celeste"></h1>
+                    </nav>
+                    <div class="tab-content w-100" id="nav-tabContent">
+                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2 show active" id="talleres_chart" role="tabpanel" aria-labelledby="talleres-chart-tab">
+                            <div class="row py-2 px-3">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="d-block">Talleres</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="row py-2 px-3">
+                                <div class="col-md-9 px-0">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
+                                    <div class="text-center w-100">
+                                        <h6 class="text-muted">Grupos</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                    <div class="text-center w-100">
+                                        <hr>
+                                        <h6 class="text-muted">Talleres</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3 bg-white rounded-lg p-3 shadow-sm position-relative border" style="height: 130px;">
-                            <a href="#" class="stretched-link text-decoration-none d-block align-text-top text-center">Matriculados</a>
-                            <h1 id="matricula-stats" class="text-center text-celeste"></h1>
+                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2" id="usuarios_chart" role="tabpanel" aria-labelledby="
+                        nav-profile-tab">
+                            <div class="row py-2 px-3">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="d-block">Usuarios</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="row py-2 px-3">
+                                <div class="col-md-9 px-0">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
+                                    <div class="text-center w-100">
+                                        <h6 class="text-muted">Profesores</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                    <div class="text-center w-100">
+                                        <hr>
+                                        <h6 class="text-muted">Usuarios</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                    <div class="text-center w-100">
+                                        <hr>
+                                        <h6 class="text-muted">Administradores</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                    <div class="text-center w-100">
+                                        <hr>
+                                        <h6 class="text-muted">Morosos</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2" id="matricula_chart" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <div class="row py-2 px-3">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="d-block">Matricula</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="row py-2 px-3">
+                                <div class="col-md-9 px-0">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
+                                    <div class="text-center w-100">
+                                        <h6 class="text-muted">Matriculados</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                    <div class="text-center w-100">
+                                        <hr>
+                                        <h6 class="text-muted">Desmatriculados</h6>
+                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="chart-container bg-white rounded shadow p-3 w-90" style="height:65%; margin: auto;">
-                    <div class="row py-2 px-3">
-                        <div class="w-100">
-                            <h4 id="data-selected-chart" class="d-block">Usuarios</h4>
-                        </div>
-                        <br>
-                        <small class="text-muted today-date d-block"></small>
-                    </div>
-                    <div class="row py-2 px-3">
-                        <div class="col-9">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                        <div class="col-3">
-                            <div class="text-center">
-                                <h6 class="text-muted">Estudiantes</h6>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <h6 class="text-muted">Profesores</h6>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <h6 class="text-muted">Activos</h6>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <h6 class="text-muted">Mororos</h6>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <h6 class="text-muted">Desmatriculados</h6>
-                            </div>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-                <script>
-                    var ctx = document.getElementById('myChart').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Profesores', 'Estudiantes', 'Activos', 'Morosos', 'Desmatriculados'],
-                        datasets: [{
-                            label: 'Cantidad de Usuarios',
-                            data: [12, 19, 3, 5, 6,],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            xAxes: [{
-                                gridLines: {
-                                    drawBorder: true,
-                                    display:false
-                                }
-                            }],
-                            yAxes: [{
-                                gridLines: {
-                                    drawBorder: true,
-                                    display:false
-                                }   
-                            }]
-                        }
-                    }
-                });
-                </script>
             </div>
             <%- include('footerDashboard') %>
         </div>
     </div>
     <script src="../../js/admin/dashboard.js"></script>
+    <script src="../../js/admin/chart-dashboard.js"></script>
 </body>
 </html>

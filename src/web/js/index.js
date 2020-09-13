@@ -25,7 +25,7 @@ function traerProfesores(){
 function traerUsuarios(){
     $('#accion').on('click',function(){ 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "/usuarios",
             contentType: "application/json"
         }).then((response) => {
