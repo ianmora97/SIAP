@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Dashboard</title>
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <link rel="stylesheet" href="../../css/general.css">
@@ -16,60 +18,7 @@
 </head>
 <body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
     <div class="d-flex" id="wrapper">
-        <div class="bg-primary border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading">
-                <img src="../../img/logo-vive-promocion-transparency.png" class="imgIcon" alt="" width="60px">
-                <strong class="text-white">SIADP</strong>
-            </div>
-
-            <div class="list-group list-group-flush accordion " id="accordion-menu-lateral">
-                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu menu-active text-white py-3" role="button">
-                    <i class="fas fa-chart-line"></i>&nbsp; Dashboard
-                </a>
-                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3" 
-                data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
-                    <i class="fas fa-users"></i>&nbsp; Usuarios  <i class="fas fa-angle-down float-right"></i>
-                </a>
-                    <div class="collapse" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-user"></i>&nbsp; Estudiantes
-                        </a>
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-user-tie"></i></i>&nbsp; Administradores
-                        </a>
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-chalkboard-teacher"></i></i>&nbsp; Profesores
-                        </a>
-                    </div>
-                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
-                data-toggle="collapse" href="#collapseTalleres" role="button" aria-expanded="false" aria-controls="collapseTalleres">
-                    <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
-                </a>
-                    <div class="collapse" id="collapseTalleres" data-parent="#accordion-menu-lateral">
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-swimmer"></i>&nbsp; Talleres
-                        </a>
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-swimmer"></i>&nbsp; Grupos
-                        </a>
-                    </div>
-                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
-                data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
-                    <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
-                </a>
-                    <div class="collapse" id="collapseMatricula" data-parent="#accordion-menu-lateral">
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-bell"></i>&nbsp; Solicitudes
-                        </a>
-                        <a class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu">
-                            <i class="fas fa-user-check"></i>&nbsp; Comprobacion
-                        </a>
-                    </div>
-                <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3" role="button">
-                    <i class="far fa-newspaper"></i>&nbsp; Reportes</a>
-            </div>
-        </div>
-
+        <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
             

@@ -6,12 +6,86 @@ const con = require('../database');
 router.get('/admin/dashboard',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        res.render('admin/dashboard', usuario);
+        let s = 'dash';
+        res.render('admin/dashboard', {usuario,s});
     }else{
         res.render('index');
     }
 });
-
+// -------- #menu items-------------
+router.get('/admin/estudiantes',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'estudiantes';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/administradores',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'administradores';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/profesores',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'profesores';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/talleres',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'talleres';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/grupos',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'grupos';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/solicitudes',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'solicitudes';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/comprobacion',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'comprobacion';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+router.get('/admin/reportes',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let s = 'reportes';
+        res.render('admin/dashboard', {usuario,s});
+    }else{
+        res.render('index');
+    }
+});
+// -------- #menu items-------------
 router.get('/admin/stats/usuarios',(req,res)=>{
     let script = "select count(id) as cant from t_usuario";
     var query = con.query(script,

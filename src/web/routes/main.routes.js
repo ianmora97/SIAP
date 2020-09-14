@@ -7,6 +7,10 @@ router.get('/',(req,res)=>{
     res.render('index');
 });
 
+router.get('/client',(req,res)=>{
+    res.render('indexClient');
+});
+
 router.get('/registrarse',(req,res)=>{
     res.render('client/registrarse');
 });

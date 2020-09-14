@@ -1,6 +1,7 @@
 const path      = require('path');
 const express   = require('express');
 const session = require('express-session');
+const chalk = require('chalk');
 const app       = express();
 require('dotenv').config();
 
@@ -24,10 +25,11 @@ app.use(require('./routes/main.routes'));
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/admin.routes'));
 app.use(require('./routes/dashboard.routes'));
+app.use(require('./routes/client.routes'));
 
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 
 const server = app.listen(app.get('port'), () =>{
-    console.log('[OK] Servidor en',app.get('host')+':'+ app.get('port'));
+    console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
 });
