@@ -11,16 +11,25 @@
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    <link rel="stylesheet" href="../../css/animate.css">
     <script src="../js/jq-bs-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
 
 <body>
     <%- include('perfilHeader') %>
-    <div class="container">
-        <span class="sr-only" id="cedula"><%= usuario.cedula%></span>    
+    <div class="container my-4">
+        <span class="sr-only" id="cedula"><%= usuario.cedula%></span>
+
+        <table class="table table-hover">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th scope="col"><i class="fas fa-star-of-life"></i> Padecimiento</th>
+                    <th scope="col"><i class="fas fa-sticky-note"></i> Observaciones</th>
+                </tr>
+            </thead>
+            <tbody id="lista_padecimientos">
+                
+            </tbody>
+        </table>
     </div>
     <%- include('perfilFooter') %>
     <script src="../../../js/client/perfil/informacionMedica.js"></script>
