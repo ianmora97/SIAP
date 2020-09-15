@@ -14,8 +14,8 @@ router.get('/usuarios',(req,res)=>{
  
 router.post('/usuario/registrarse',(req,res)=>{
     console.log(req.body);
-    var script = con.query('call prc_insertar_usuario(?, ?, ?, ?, ?, ?, ?)', 
-    [req.body.cedula, req.body.nombre, req.body.apellido, req.body.nacimiento, req.body.nombreUsuario, req.body.clave, req.body.sexo],
+    var script = con.query('call prc_insertar_usuario_temp(?, ?, ?, ?, ?, ?, ?, ?)', 
+    [req.body.cedula, req.body.nombre, req.body.apellido, req.body.nacimiento, req.body.nombreUsuario, req.body.clave, req.body.sexo, req.body.tipoUser],
     (err,result,fields)=>{
         if(err){
             console.log(err);
