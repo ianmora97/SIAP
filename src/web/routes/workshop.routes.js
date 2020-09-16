@@ -8,7 +8,6 @@ const con = require('../database');
 //prc_actualizar_datos_taller
 //prc_actualizar_descripcion_taller
 //prc_actualizar_nivel_taller
-//prc_eliminar_taller
 
 //mostrar
 router.get('/talleres',(req,res)=>{
