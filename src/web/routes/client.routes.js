@@ -83,6 +83,19 @@ router.get('/client/cargarPadecimientos',(req,res)=>{
             }
         });
 });
+router.get('/client/cargarCursos',(req,res)=>{
+    let script = "select * from vta_grupos where nivel = ?";
+    var query = con.query(script,
+        [req.query.nivel],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    });
+});
 router.post('/client/login',(req,res)=>{
     let script = "select * from vta_cliente_estudiante "+
     "where cedula = ? " +

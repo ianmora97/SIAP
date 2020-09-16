@@ -9,6 +9,7 @@
     <title>Matricula</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/perfil.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
     <link rel="stylesheet" href="../../css/animate.css">
     <script src="../js/jq-bs-bundle.js"></script> 
@@ -17,10 +18,36 @@
 </head>
 <body>
     <%- include('perfilHeader') %>
-    <div class="container mt-3">
-        
+    <div class="container-fluid w-90 mt-3 px-0">
+        <span class="sr-only" id="nivel_estudiante"><%= usuario.nivel%></span>
+        <span class="sr-only" id="tipo_estudiante"><%= usuario.tipo%></span>
+        <div class="w-100 px-2" style="overflow-y: auto; height: 560px;" id="cursos_lista">
+<!-- 
+            <div class="w-100 my-3">
+                <div class="card-cursos-header">
+                    <h5 id="nombre">(Taller) Piscina Nivel Principiante <br><span id="nrc">NAT001</span></h5>
+                    <span class="my-auto badge badge-pill badge-success" id="cupo">Cupo disponible</span>
+                </div>
+                <div class="card-cursos-body">
+                    <p class="my-0" id="horario">Lunes 1pm - 2pm</p>
+                    <i class="fas fa-swimmer fa-3x text-celeste"></i>
+                </div>
+                <div class="card-cursos-footer">
+                    <div class="row w-100">
+                        <div class="col-md-6">
+                            <small id="profesor">Profesor: Marlon Freer Acevedo</small>
+                        </div>
+                        <div class="col-md-6">
+                            <span>Costo:</span>
+                            <a href="#" class="mx-3 btn btn-secondary disabled" role="button" id="precio">7000 Colones</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
     </div>
     <%- include('perfilFooter') %>
-    <script src="../js/ejemplo/default.js"></script>
+    <script src="../../../js/client/perfil/matricula.js"></script>
 </body>
 </html>
