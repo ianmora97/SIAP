@@ -26,8 +26,8 @@ router.post('/usuario/registrarse',(req,res)=>{
     });
 });
 
-router.get('/usuarios',(req,res)=>{
-    var script = con.query('select * from t_usuario',
+router.get('/usuariosPRC',(req,res)=>{
+    var script = con.query('call prc_seleccionar_usuarios()',
     (err,rows,fields)=>{
         if(rows[0] != undefined){
             res.send(rows);
@@ -53,12 +53,5 @@ router.put('/usuarios',(req,res)=>{
         }
     });
 });
-
-router.delete('',(req,res)=>{
-    var script = con.query('',(err,rows,fields)=>{
-
-    });
-});
-
 
 module.exports = router;
