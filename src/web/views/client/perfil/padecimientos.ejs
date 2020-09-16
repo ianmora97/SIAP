@@ -26,11 +26,14 @@
                 VICERRECTORÍA DE VIDA ESTUDIANTIL <br>
                 DEPARTAMENTO DE PROMOCIÓN ESTUDIANTIL <br>
             </h5>
+
             <div class="card-body">
+
                 <h5 class="card-title text-center">
                     CUESTIONARIO MÉDICO <br>
                     ESTRATIFICACIÓN DEL RIESGO <br>
                 </h5>
+
                 <p class="card-text text-center">
                     La presente ficha médica será tenida en cuenta para la atención 
                     integral del titular, por lo cual, le rogamos que la información 
@@ -40,21 +43,12 @@
                     con letra clara y de ser posible en imprenta mayúscula. 
                     Los datos incluidos en la presente serán utilizados bajo estricta confidencialidad. 
                 </p>
-                <a href="#" class="btn btn-primary d-block mx-auto">Aceptar terminos y condiciones</a>
-            </div>
-        </div>
 
-        <div class="card shadow mb-5">
-            <div class="card-header text-center py-3 px-5">
-                A continuación, se le presenta una lista de posibles discapacidades, condiciones especiales y o enfermedades, que condicionan la
-                práctica de la natación. Favor marcar con una x sólo aquellos que presenta.
-            </div>     
-            <div class="card-body">
                 <div class="row no-gutters">
                     <div class="col-md-4 px-3">
                         <label for="first_name">
-                        <strong>En caso de
-                                emergencia avisar a:</strong><br></label>
+
+                        <strong>En caso de emergencia avisar a</strong><br></label>
                         <div class="form-group"><input type="text" id="nombre_emergencia_medica-1"
                                 class="form-control"></div>
                     </div>
@@ -69,6 +63,23 @@
                                 class="form-control"></div>
                     </div>
                 </div>
+
+                <div class="row no-gutters">
+                    <div class="col-md px-3">
+                        <label for="first_name">
+
+                        <strong>Motivo por el que ingresa</strong><br></label>
+                        <div class="form-group"><input type="text" id="nombre_emergencia_medica-1"
+                                class="form-control"></div>
+                    </div>
+
+                </div>
+
+                <div class="card-header text-center py-3 px-5">
+                    A continuación, se le presenta una lista de posibles discapacidades, condiciones especiales y o enfermedades, que condicionan la
+                    práctica de la natación. Favor marcar con una x sólo aquellos que presenta.
+                </div>  
+
                 <div class="table-responsive text-left table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
                     <table class="table my-0" id="dataTable">
                         <thead>
@@ -310,6 +321,12 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="form-check form-check-inline" style="margin-bottom: 20px;">
+                    <input class="form-check-input" type="checkbox" id="terminos-condiciones" value="option3" >
+                    <label class="form-check-label" for="terminos-condiciones">Acepto los <a href="#" class="text-primary  términos-y-condiciones"> términos y condiciones</a> </label>
+
+                  </div>
                 <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" type="submit">Guardar</button>
             </div>
         </div>
