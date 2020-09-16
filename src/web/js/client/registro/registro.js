@@ -153,7 +153,7 @@ function registrar_usuario_ajax(){
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then((response) => {
-                
+                location.href = '/registrarse';
             }, (error) => {
             });
         }else{

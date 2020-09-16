@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,311 @@
     <title>Padecimientos</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <link rel="stylesheet" href="../../css/animate.css">
-    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="../js/jq-bs-bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
+
 <body>
     <%- include('perfilHeader') %>
     <div class="container mt-3">
-        
-    </div>
+        <div class="card my-5 shadow">
+            <h5 class="card-header text-center">
+                UNIVERSIDAD NACIONAL <br>
+                VICERRECTORÍA DE VIDA ESTUDIANTIL <br>
+                DEPARTAMENTO DE PROMOCIÓN ESTUDIANTIL <br>
+            </h5>
+            <div class="card-body">
+                <h5 class="card-title text-center">
+                    CUESTIONARIO MÉDICO <br>
+                    ESTRATIFICACIÓN DEL RIESGO <br>
+                </h5>
+                <p class="card-text text-center">
+                    La presente ficha médica será tenida en cuenta para la atención 
+                    integral del titular, por lo cual, le rogamos que la información 
+                    consignada sea lo más completa, precisa y veraz posible, para que 
+                    nuestros profesionales puedan brindar un servicio de calidad y 
+                    excelencia. Para que esto se cumpla, es importante que complete 
+                    con letra clara y de ser posible en imprenta mayúscula. 
+                    Los datos incluidos en la presente serán utilizados bajo estricta confidencialidad. 
+                </p>
+                <a href="#" class="btn btn-primary d-block mx-auto">Aceptar terminos y condiciones</a>
+            </div>
+        </div>
+
+        <div class="card shadow mb-5">
+            <div class="card-header text-center py-3 px-5">
+                A continuación, se le presenta una lista de posibles discapacidades, condiciones especiales y o enfermedades, que condicionan la
+                práctica de la natación. Favor marcar con una x sólo aquellos que presenta.
+            </div>     
+            <div class="card-body">
+                <div class="row no-gutters">
+                    <div class="col-md-4 px-3">
+                        <label for="first_name">
+                        <strong>En caso de
+                                emergencia avisar a:</strong><br></label>
+                        <div class="form-group"><input type="text" id="nombre_emergencia_medica-1"
+                                class="form-control"></div>
+                    </div>
+                    <div class="col-md-4 px-3"><label
+                            for="first_name"><strong>Celular&nbsp;&nbsp;</strong><br></label>
+                        <div class="form-group"><input type="text" id="celular_emergencia_medica-1"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-3"><label for="first_name"><strong>Parentesco</strong><br></label>
+                        <div class="form-group"><input type="text" id="parentesco_emergencia_medica-1"
+                                class="form-control"></div>
+                    </div>
+                </div>
+                <div class="table-responsive text-left table mt-2" id="dataTable-2" role="grid" aria-describedby="dataTable_info">
+                    <table class="table my-0" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th><strong>Enfermedad, lesión o padecimiento</strong> </th>
+                                <th class="px-0"><strong>Check</strong></th>
+                                <th><strong>Observaciones</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tabaquismo</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                      <input type="checkbox" class="custom-control-input" id="switch-tabaquismo">
+                                      <label class="custom-control-label" for="switch-tabaquismo"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_alcohol"class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Alcoholismo</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-alcoholismo">
+                                        <label class="custom-control-label" for="switch-alcoholismo"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_alcohol" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sobrepeso u Obesidad</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-sobrepeso">
+                                        <label class="custom-control-label" for="switch-sobrepeso"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_obesidad" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sedentarismo</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-sedentarismo">
+                                        <label class="custom-control-label" for="switch-sedentarismo"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_sedentarismo" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Enfermedades del corazón</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-corazon">
+                                        <label class="custom-control-label" for="switch-corazon"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_enfermedades_corazon" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lesiones articulares</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-articulaciones">
+                                        <label class="custom-control-label" for="switch-articulaciones"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_lesiones_articulares" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dislipidemia</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-dislipemia">
+                                        <label class="custom-control-label" for="switch-dislipemia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_dislipidemia" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Epilepsia o convulsiones</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-epilepsia">
+                                        <label class="custom-control-label" for="switch-epilepsia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_convulciones" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fracturas</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-fracturas">
+                                        <label class="custom-control-label" for="switch-fracturas"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_fracturas" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cirugías</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-cirugia">
+                                        <label class="custom-control-label" for="switch-cirugia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_cirujias" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Hernias</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-hernia">
+                                        <label class="custom-control-label" for="switch-hernia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_hernias" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Asma, sinusitis o bronquitis</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-asma">
+                                        <label class="custom-control-label" for="switch-asma"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_asma" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Enfermedades nerviosas</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-nerviosismo">
+                                        <label class="custom-control-label" for="switch-nerviosismo"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_nerviosas" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Enfermedades metabólicas</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-metabolicas">
+                                        <label class="custom-control-label" for="switch-metabolicas"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_metabolicas" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Embarazo<br></td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-embarazo">
+                                        <label class="custom-control-label" for="switch-embarazo"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_embarazo" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>¿Toma algún medicamento?</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-medicamento">
+                                        <label class="custom-control-label" for="switch-medicamento"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_medicamento" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>¿Posee alguna alergia?</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-alergia">
+                                        <label class="custom-control-label" for="switch-alergia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_alergia" class="form-control w-100" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>¿Posee alguna fobia?</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-fobia">
+                                        <label class="custom-control-label" for="switch-fobia"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" id="text_fobia" class="form-control w-100">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Otro</td>
+                                <td class="px-0">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="switch-otro">
+                                        <label class="custom-control-label" for="switch-otro"></label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <input type="text" id="text_otro" class="form-control w-100" >
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" type="submit">Guardar</button>
+            </div>
+        </div>
     <%- include('perfilFooter') %>
     <script src="../js/ejemplo/default.js"></script>
 </body>
+
 </html>

@@ -4,10 +4,12 @@ function loaded(event){
 
 function events(event){
     ejemploAJAX();
-    toogleMenu();
-    change_navbar();
     load_stats();
     get_today_date();
+    load_image();
+    $("#fileFoto").change(function(){
+        readURL(this);
+    });
 }
 function get_today_date() {
     let today = new Date();
@@ -18,25 +20,64 @@ function get_today_date() {
     today = mm + '/' + dd + '/' + yyyy;
     $('.today-date').text(today);
 }
-function load_stats() {
-    
 
-}
-function change_navbar(){
-    let md = 768;
-    let sizeScreen = screen.width;
-    console.log(sizeScreen,md);
-    if(sizeScreen <= md){
-        $('#nombreUsuario').hide();
+function load_stats() {
+    let cantones = ['Central','Escazú','Desamparados','Puriscal',
+        'Tarrazú','Aserrí','Mora','Goicoechea','Santa Ana','Alajuelita'];
+    let c = $('#cantonSelected').attr('data-values');
+    console.log(c);
+    for (let canton of cantones) {
+        if(canton == c){
+            $('#canton').append(new Option(canton, canton,true));
+        }else{
+            $('#canton').append(new Option(canton, canton));
+        }
     }
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+
+function readURL(input) {
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('.avatar-bg').css({
+                'background':'url('+e.target.result+')',
+                'background-size':'cover',
+                'background-position': '50% 50%'
+            });
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function load_image() {
+    $('#btn_cambiar_foto').on('click',function(event){
+
+        event.preventDefault();
+
+    // Get the files from input, create new FormData.
+    var files = $('#fileFoto').get(0).files,
+        formData = new FormData();
+
+    // Append the files to the formData.
+    for (var i=0; i < files.length; i++) {
+        var file = files[i];
+        formData.append('photos[]', file, file.name);
+    }
+
+        $.ajax({
+            type: "POST",
+            url: "/client/subirImagen",
+            data: formData,
+            contentType: false,
+            processData: false
+        }).then((response) => {
+            console.log(response);
+        }, (error) => {
+        });
     });
 }
-
 function ejemploAJAX(){
     // $('#accion').on('click',function(){ 
     //     $.ajax({

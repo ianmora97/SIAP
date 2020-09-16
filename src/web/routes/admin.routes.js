@@ -3,14 +3,9 @@ const router = express.Router();
 
 const con = require('../database');
 
-router.post('/admin/login',(req,res)=>{
-    let script = "select u.cedula, u.nombre, u.apellido, u.usuario, a.rol "+
-    "from t_usuario u "+
-    "inner join t_administrativo a "+
-    "on a.usuario = u.id "+
-    "where u.cedula = ?" +
-    "and u.clave = sha1(?)";
-
+router.post('/admin/log',(req,res)=>{
+    let script = "select * from vta_administradores "+
+    "where cedula = ? and clave = sha1(?)";
     var query = con.query(script,
         [req.body.cedula, req.body.clave],
         (err,rows,fields)=>{
@@ -30,6 +25,7 @@ router.post('/admin/login',(req,res)=>{
         }
     });
 });
+
 module.exports = router;
 
 
