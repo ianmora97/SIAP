@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Padecimientos</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="../js/jq-bs-bundle.js"></script>
+</head>
+
+<body>
+    <%- include('perfilHeader') %>
+    <div class="container my-4">
+        <span class="sr-only" id="cedula"><%= usuario.cedula%></span>
+
+        <table class="table table-hover">
+            <thead>
+                <tr class="bg-primary text-white">
+                    <th scope="col"><i class="fas fa-star-of-life"></i> Padecimiento</th>
+                    <th scope="col"><i class="fas fa-sticky-note"></i> Observaciones</th>
+                </tr>
+            </thead>
+            <tbody id="lista_padecimientos">
+                
+            </tbody>
+        </table>
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../../../js/client/perfil/informacionMedica.js"></script>
+</body>
+
+</html>

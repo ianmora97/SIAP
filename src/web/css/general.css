@@ -1,13 +1,42 @@
-.patito {
-  background-color: #364C78; }
-  .patito:hover {
-    background-color: #df1111; }
+.nav-link {
+  color: white !important; }
 
-.perrito {
-  color: #364C78; }
+.bg-green {
+  background-color: #28a745; }
 
-.gatito {
-  color: #df1111; }
+.bg-rojo {
+  background-color: #dc3545; }
 
-.navbar-light .navbar-brand {
-  background: url(../img/UNA-VVE-logo-3.png) !important; }
+.text-green {
+  color: #28a745; }
+
+.text-rojo {
+  color: #dc3545; }
+
+.nombre-usuario-pos-0 {
+  position: relative;
+  top: -8px; }
+
+.w-90 {
+  width: 90% !important; }
+
+.text-celeste {
+  color: cornflowerblue !important; }
+
+.bg-celeste {
+  background-color: cornflowerblue !important; }
+
+.border-celeste {
+  border: 3px solid cornflowerblue !important; }
+
+.border-secondary {
+  border: 3px solid #B81616 !important; }
+
+.menu-active {
+  border-right: 8px #fff solid !important;
+  color: #fff;
+  font-size: 16px; }
+
+.tab-dashboard-pane {
+  width: 100%;
+  max-width: 200px; }

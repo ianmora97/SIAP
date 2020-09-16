@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body>
+    <%- include('perfilHeader') %>
+    <div class="container-fluid mt-3 w-90">
+        <div class="row mb-3">
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center shadow">
+                        <div class="avatar-bg center"></div>
+                        <div class="custom-file my-3">
+                            <input type="file" id="fileFoto" name="avatar-file">
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="button">Cambiar foto</button>
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h3 class="text-center text-dark font-weight-bold m-0">Talleres</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">Natación l<span
+                                class="float-right">20%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="20" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 20%;"><span class="sr-only">20%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Natación ll<span
+                                class="float-right">40%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="40" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 40%;"><span class="sr-only">40%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Natación lll<span
+                                class="float-right">60%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="60" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 60%;"><span class="sr-only">60%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Natación lV<span
+                                class="float-right">80%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 80%;"><span class="sr-only">80%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Natación V<span
+                                class="float-right">¡Completo!</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 100%;"><span
+                                    class="sr-only">100%</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row mb-3 d-none">
+                    <div class="col">
+                        <div class="card text-white bg-primary shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Peformance</p>
+                                        <p class="m-0"><strong>65.2%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i
+                                        class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-white bg-success shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Peformance</p>
+                                        <p class="m-0"><strong>65.2%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i
+                                        class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-center text-dark m-0 font-weight-bold">Información
+                                    personal</p>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="username">
+                                                    <strong>Identificación</strong>
+                                                </label>
+                                                <input class="form-control" type="text" id="id_perfil"
+                                                    name="username" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group"><label
+                                                    for="email"><strong>Nombre</strong>
+                                                </label><input
+                                                    class="form-control" type="text" id="nombre_perfil"
+                                                    name="email" placeholder="Nombre" value="<%= usuario.nombre %>" disabled>
+                                                </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="apellido"><strong>Apellido</strong></label>
+                                                <input
+                                                    class="form-control" type="text" id="nombre_perfil"
+                                                    name="apellido" placeholder="Apellido" value="<%= usuario.apellido %>" disabled>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="first_name">
+                                                    <strong>Email</strong><br>
+                                                </label>
+                                                <input class="form-control" type="email" id="email_perfil"
+                                                    placeholder="John" name="first_name" value="<%= usuario.correo %>" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <label for="sexo">
+                                                <strong>Sexo</strong><br>
+                                            </label>
+                                            <div class="form-group">
+                                                <select class="form-control" name="sexo" id="sexo_perfil">
+                                                    <optgroup label="Seleccione uno">
+                                                        <option value="1" <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
+                                                        <option value="2" <%if(usuario.sexo == 'Femenino'){%>selected<%}%>>Femenino</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md"><label for="first_name">
+                                            <strong>Fecha de
+                                                    nacimiento</strong><br></label>
+                                            <div class="form-group">
+                                                <input class="form-control"
+                                                    id="fecha_nacimiento_perfil" type="date" value="<%= usuario.nacimiento %>" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="last_name">
+                                                    <strong>Celular</strong><br>
+                                                </label>
+                                                <input
+                                                    class="form-control" type="tel" id="celular_perfil"
+                                                    placeholder="Doe" name="last_name" value="<%= usuario.celular %>">
+                                                </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group"><label
+                                                    for="last_name"><strong>Teléfono</strong><br></label><input
+                                                    class="form-control" type="tel" id="telefono_perfil"
+                                                    placeholder="Doe" name="last_name" value="<%= usuario.telefono %>"></div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="last_name">
+                                                    <strong>Teléfono emergencia</strong><br>
+                                                </label>
+                                                <input class="form-control" type="tel" placeholder="Telefono" name="last_name" value="<%= usuario.telefono_emergencia %>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md">
+                                            <label for="first_name">
+                                                <strong>Provincia</strong><br>
+                                            </label>
+                                            <div class="form-group">
+                                                <select class="form-control" name="provincia" id="provincia">
+                                                    <optgroup label="Seleccione una Provincia">
+                                                        <option value="1" <%if(usuario.sexo == 'San Jose'){%>selected<%}%>>San Jose</option>
+                                                        <option value="2" <%if(usuario.sexo == 'Alajuela'){%>selected<%}%>>Alajuela</option>
+                                                        <option value="3" <%if(usuario.sexo == 'Cartago'){%>selected<%}%>>Cartago</option>
+                                                        <option value="4" <%if(usuario.sexo == 'Heredia'){%>selected<%}%>>Heredia</option>
+                                                        <option value="5" <%if(usuario.sexo == 'Guanacaste'){%>selected<%}%>>Guanacaste</option>
+                                                        <option value="6" <%if(usuario.sexo == 'Puntarenas'){%>selected<%}%>>Puntarenas</option>
+                                                        <option value="7" <%if(usuario.sexo == 'Limon'){%>selected<%}%>>Limon</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <label for="first_name">
+                                                <strong>Cantón</strong><br>
+                                            </label>
+                                            <div class="form-group">
+                                                <span class="sr-only" id="cantonSelected" data-values="<%= usuario.canton%>"></span>
+                                                <select class="form-control" name="canton" id="canton">
+                                                    <optgroup label="Seleccione el cantón">
+      
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <label for="first_name">
+                                                <strong>Distrito</strong><br>
+                                            </label>
+                                            <div class="form-group">
+                                                <select class="form-control" id="distrito_perfil">
+                                                    <optgroup label="Seleccione el distrito ">
+                                                        <option value="12" selected="">This is item 1
+                                                        </option>
+                                                        <option value="13">This is item 2</option>
+                                                        <option value="14">This is item 3</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <button class="btn btn-primary btn-sm btn_guardar_perfil" type="submit">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="/client/padecimientos" class="btn btn-primary">Padecimientos</a>
+            </div>
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../../../js/client/perfil/perfil.js"></script>
+</body>
+</html>
