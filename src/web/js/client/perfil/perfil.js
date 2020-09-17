@@ -1,14 +1,20 @@
+import { procesarLugares as proplaces, filtrarCantones as filCan, filtrarDistritos as filDis } from './places.js'
+
 function loaded(event){
     events(event);
 }
 
 function events(event){
-    ejemploAJAX();
     get_today_date();
     load_image();
     checkUpdate();
     update();
     getLugares();
+    fotoonChange();
+    reqCantones();
+    reqDistritos();
+}
+function fotoonChange() {
     $("#fileFoto").change(function(){
         readURL(this);
     });
@@ -58,87 +64,28 @@ function load_image() {
         });
     });
 }
-function ejemploAJAX(){
-    // $('#accion').on('click',function(){ 
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/ejemplo",
-    //         contentType: "application/json"
-    //     }).then((response) => {
-            
-    //     }, (error) => {
-    //     });
-    // });
+
+function reqCantones() {
+    $('#provincia').on('change', function(){
+        filCan(this.value);
+    });
 }
+
+function reqDistritos() {
+    $('#canton').on('change', function(){
+        filDis(this.value);
+    });
+}
+
 function getLugares(){
     $.ajax({
         type: "GET",
         url: "../../../assets/lugares.txt",
         contentType: "text"
     }).then((data) => {
-        processData(data);
+        proplaces(data);
     }, (error) => {
     });
-}
-function processData(data) {
-    var lines = data.split("\n");
-
-    var provincia = [];
-    var cantones = [];
-    var distritos = [];
-
-    for (var j=0; j<lines.length -1; j++) {
-        var values = lines[j].split(' ,'); 
-        provincia.push((values[0])); 
-        cantones.push((values[1]));
-        distritos.push((values[2]));
-    }
-    load_provincias(provincia);
-    load_cantones(cantones);
-    load_distritos(distritos);
-}
-
-function load_provincias(data) {
-    let provincias = data;
-    provincias = provincias.filter(function(item, pos) {
-        return provincias.indexOf(item) == pos;
-    })
-    let c = $('#provinciaSelected').attr('data-values');
-
-    for (let provincia of provincias) {
-        if(provincia == c){
-            $('#provincia').append(new Option(provincia, provincia,true));
-        }else{
-            $('#provincia').append(new Option(provincia, provincia));
-        }
-    }
-}
-function load_cantones(data) {
-    let cantones = data;
-    cantones = cantones.filter(function(item, pos) {
-        return cantones.indexOf(item) == pos;
-    })
-    let c = $('#cantonSelected').attr('data-values');
-
-    for (let canton of cantones) {
-        if(canton == c){
-            $('#canton').append(new Option(canton, canton,true));
-        }else{
-            $('#canton').append(new Option(canton, canton));
-        }
-    }
-}
-function load_distritos(data) {
-    let distritos = data;
-    let c = $('#distritoSelected').attr('data-values');
-
-    for (let distrito of distritos) {
-        if(distrito == c){
-            $('#distrito').append(new Option(distrito, distrito,true));
-        }else{
-            $('#distrito').append(new Option(distrito, distrito));
-        }
-    }
 }
 
 function checkUpdate(){

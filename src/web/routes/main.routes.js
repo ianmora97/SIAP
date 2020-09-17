@@ -7,8 +7,8 @@ router.get('/',(req,res)=>{
     res.render('index');
 });
 
-router.get('/client',(req,res)=>{
-    res.render('indexClient');
+router.get('/admin',(req,res)=>{
+    res.render('indexAdmin');
 });
 
 router.get('/registrarse',(req,res)=>{

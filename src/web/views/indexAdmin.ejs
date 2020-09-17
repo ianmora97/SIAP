@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Login</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
@@ -14,7 +16,7 @@
     <div class="container">
         <img class="mx-auto my-3 d-block" src="../img/UNA-VVE-logo-3.png" alt="" srcset="">
         <div class="w-100 m-auto" style="max-width: 450px;">
-            <form action="/client/login" method="post">
+            <form action="/admin/log" method="post">
                 <h1 class="h3 mb-3 text-center">Iniciar Session</h1>
                 <label for="inputEmail">Cedula</label>
                 <input type="text" id="cedula" name="cedula" class="form-control mb-3" placeholder="Cedula..." required="" autofocus="">
@@ -24,7 +26,6 @@
                 
                 <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit" id="inciarSesion">Entrar</button>
             </form>
-            <a href="/registrarse" class="btn btn-primary my-4 mx-auto d-block">Registrarse</a>
         </div>
     </div>
     <footer class="footer mt-5 py-3 justify-content-center">

@@ -15,13 +15,13 @@ router.post('/admin/log',(req,res)=>{
                     req.session.value = rows[0];
                     res.redirect('/admin/dashboard');
                 }else{
-                    res.render('index',{err:'1',id: req.body.cedula});
+                    res.render('indexAdmin',{err:'1',id: req.body.cedula});
                 }
             }else{
-                res.render('index',{err:'2',id: req.body.cedula});
+                res.render('indexAdmin',{err:'2',id: req.body.cedula});
             }
         }else{
-            res.render('index',{err:'3',id: req.body.cedula});
+            res.render('indexAdmin',{err:'3',id: req.body.cedula});
         }
     });
 });
