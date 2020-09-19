@@ -20,6 +20,7 @@
 <body>
     <%- include('perfilHeader') %>
     <div class="container mt-3">
+        <span class="sr-only" id="cedula"><%= usuario.cedula%></span>
         <div class="card my-5 shadow">
             <h5 class="card-header text-center">
                 UNIVERSIDAD NACIONAL <br>
@@ -47,32 +48,38 @@
                 <div class="row no-gutters">
                     <div class="col-md-4 px-3">
                         <label for="first_name">
-
-                        <strong>En caso de emergencia avisar a</strong><br></label>
-                        <div class="form-group"><input type="text" id="nombre_emergencia_medica-1"
-                                class="form-control"></div>
-                    </div>
-                    <div class="col-md-4 px-3"><label
-                            for="first_name"><strong>Celular&nbsp;&nbsp;</strong><br></label>
-                        <div class="form-group"><input type="text" id="celular_emergencia_medica-1"
-                                class="form-control">
+                            <strong>En caso de emergencia avisar a</strong><br>
+                        </label>
+                        <div class="form-group">
+                            <input type="text" id="nombre_emergencia_medica" class="form-control">
                         </div>
                     </div>
-                    <div class="col-md-4 px-3"><label for="first_name"><strong>Parentesco</strong><br></label>
-                        <div class="form-group"><input type="text" id="parentesco_emergencia_medica-1"
-                                class="form-control"></div>
+                    <div class="col-md-4 px-3">
+                        <label for="first_name">
+                            <strong>Celular</strong><br>
+                        </label>
+                        <div class="form-group">
+                            <input type="text" id="celular_emergencia_medica" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4 px-3">
+                        <label for="first_name">
+                            <strong>Parentesco</strong><br>
+                        </label>
+                        <div class="form-group">
+                            <input type="text" id="parentesco_emergencia_medica" class="form-control">
+                        </div>
                     </div>
                 </div>
-
                 <div class="row no-gutters">
                     <div class="col-md px-3">
                         <label for="first_name">
-
-                        <strong>Motivo por el que ingresa</strong><br></label>
-                        <div class="form-group"><input type="text" id="nombre_emergencia_medica-1"
-                                class="form-control"></div>
+                            <strong>Motivo por el que ingresa</strong><br>
+                        </label>
+                        <div class="form-group">
+                            <input type="text" id="motivo_ingresa" class="form-control">
+                        </div>
                     </div>
-
                 </div>
 
                 <div class="card-header text-center py-3 px-5">
@@ -90,47 +97,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr id="fila_tabaquismo">
                                 <td>Tabaquismo</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                      <input type="checkbox" class="custom-control-input" id="switch-tabaquismo">
+                                      <input type="checkbox" name="tabaquismo" class="custom-control-input" id="switch-tabaquismo">
                                       <label class="custom-control-label" for="switch-tabaquismo"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_alcohol"class="form-control w-100" >
+                                    <input type="text" id="text_tabaquismo"class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_alcoholismo">
                                 <td>Alcoholismo</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-alcoholismo">
+                                        <input type="checkbox" name="alcoholismo" class="custom-control-input" id="switch-alcoholismo">
                                         <label class="custom-control-label" for="switch-alcoholismo"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_alcohol" class="form-control w-100" >
+                                    <input type="text" id="text_alcoholismo" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_sobrepeso">
                                 <td>Sobrepeso u Obesidad</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-sobrepeso">
+                                        <input type="checkbox" name="sobrepeso" class="custom-control-input" id="switch-sobrepeso">
                                         <label class="custom-control-label" for="switch-sobrepeso"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_obesidad" class="form-control w-100" >
+                                    <input type="text" id="text_sobrepeso" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_sedentarismo">
                                 <td>Sedentarismo</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-sedentarismo">
+                                        <input type="checkbox" name="sedentarismo" class="custom-control-input" id="switch-sedentarismo">
                                         <label class="custom-control-label" for="switch-sedentarismo"></label>
                                     </div>
                                 </td>
@@ -138,59 +145,59 @@
                                     <input type="text" id="text_sedentarismo" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_corazon">
                                 <td>Enfermedades del corazón</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-corazon">
+                                        <input type="checkbox" name="corazon" class="custom-control-input" id="switch-corazon">
                                         <label class="custom-control-label" for="switch-corazon"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_enfermedades_corazon" class="form-control w-100" >
+                                    <input type="text" id="text_corazon" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_articulaciones">
                                 <td>Lesiones articulares</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-articulaciones">
+                                        <input type="checkbox" name="articulaciones" class="custom-control-input" id="switch-articulaciones">
                                         <label class="custom-control-label" for="switch-articulaciones"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_lesiones_articulares" class="form-control w-100" >
+                                    <input type="text" id="text_articulaciones" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_dislipidemia">
                                 <td>Dislipidemia</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-dislipemia">
-                                        <label class="custom-control-label" for="switch-dislipemia"></label>
+                                        <input type="checkbox" name="dislipidemia" class="custom-control-input" id="switch-dislipidemia">
+                                        <label class="custom-control-label" for="switch-dislipidemia"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <input type="text" id="text_dislipidemia" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_epilepsia">
                                 <td>Epilepsia o convulsiones</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-epilepsia">
+                                        <input type="checkbox" name="epilepsia" class="custom-control-input" id="switch-epilepsia">
                                         <label class="custom-control-label" for="switch-epilepsia"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_convulciones" class="form-control w-100" >
+                                    <input type="text" id="text_epilepsia" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_fracturas">
                                 <td>Fracturas</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-fracturas">
+                                        <input type="checkbox" name="fracturas" class="custom-control-input" id="switch-fracturas">
                                         <label class="custom-control-label" for="switch-fracturas"></label>
                                     </div>
                                 </td>
@@ -198,23 +205,23 @@
                                     <input type="text" id="text_fracturas" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_cirugia">
                                 <td>Cirugías</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-cirugia">
+                                        <input type="checkbox" name="cirugia" class="custom-control-input" id="switch-cirugia">
                                         <label class="custom-control-label" for="switch-cirugia"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="text_cirujias" class="form-control w-100" >
+                                    <input type="text" id="text_cirugia" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_hernia">
                                 <td>Hernias</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-hernia">
+                                        <input type="checkbox" name="hernia" class="custom-control-input" id="switch-hernia">
                                         <label class="custom-control-label" for="switch-hernia"></label>
                                     </div>
                                 </td>
@@ -222,11 +229,11 @@
                                     <input type="text" id="text_hernias" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_asma">
                                 <td>Asma, sinusitis o bronquitis</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-asma">
+                                        <input type="checkbox" name="asma" class="custom-control-input" id="switch-asma">
                                         <label class="custom-control-label" for="switch-asma"></label>
                                     </div>
                                 </td>
@@ -234,11 +241,11 @@
                                     <input type="text" id="text_asma" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_nerviosismo">
                                 <td>Enfermedades nerviosas</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-nerviosismo">
+                                        <input type="checkbox" name="nerviosismo" class="custom-control-input" id="switch-nerviosismo">
                                         <label class="custom-control-label" for="switch-nerviosismo"></label>
                                     </div>
                                 </td>
@@ -246,11 +253,11 @@
                                     <input type="text" id="text_nerviosas" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_metabolicas">
                                 <td>Enfermedades metabólicas</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-metabolicas">
+                                        <input type="checkbox" name="metabolicas" class="custom-control-input" id="switch-metabolicas">
                                         <label class="custom-control-label" for="switch-metabolicas"></label>
                                     </div>
                                 </td>
@@ -258,11 +265,11 @@
                                     <input type="text" id="text_metabolicas" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_embarazo">
                                 <td>Embarazo<br></td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-embarazo">
+                                        <input type="checkbox" name="embarazo" class="custom-control-input" id="switch-embarazo">
                                         <label class="custom-control-label" for="switch-embarazo"></label>
                                     </div>
                                 </td>
@@ -270,11 +277,11 @@
                                     <input type="text" id="text_embarazo" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_medicamento">
                                 <td>¿Toma algún medicamento?</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-medicamento">
+                                        <input type="checkbox" name="medicamento" class="custom-control-input" id="switch-medicamento">
                                         <label class="custom-control-label" for="switch-medicamento"></label>
                                     </div>
                                 </td>
@@ -282,11 +289,11 @@
                                     <input type="text" id="text_medicamento" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_alergia">
                                 <td>¿Posee alguna alergia?</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-alergia">
+                                        <input type="checkbox" name="alergia" class="custom-control-input" id="switch-alergia">
                                         <label class="custom-control-label" for="switch-alergia"></label>
                                     </div>
                                 </td>
@@ -294,11 +301,11 @@
                                     <input type="text" id="text_alergia" class="form-control w-100" >
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_fobia">
                                 <td>¿Posee alguna fobia?</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-fobia">
+                                        <input type="checkbox" name="fobia" class="custom-control-input" id="switch-fobia">
                                         <label class="custom-control-label" for="switch-fobia"></label>
                                     </div>
                                 </td>
@@ -306,11 +313,11 @@
                                     <input type="text" id="text_fobia" class="form-control w-100">
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="fila_otro">
                                 <td>Otro</td>
                                 <td class="px-0">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="switch-otro">
+                                        <input type="checkbox" name="otro" class="custom-control-input" id="switch-otro">
                                         <label class="custom-control-label" for="switch-otro"></label>
                                     </div>
                                 </td>
@@ -321,17 +328,16 @@
                         </tbody>
                     </table>
                 </div>
-                
                 <div class="form-check form-check-inline" style="margin-bottom: 20px;">
                     <input class="form-check-input" type="checkbox" id="terminos-condiciones" value="option3" >
                     <label class="form-check-label" for="terminos-condiciones">Acepto los <a href="#" class="text-primary  términos-y-condiciones"> términos y condiciones</a> </label>
 
                   </div>
-                <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" type="submit">Guardar</button>
+                <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" id="ingresarPadecimientosBoton" type="submit">Guardar</button>
             </div>
         </div>
     <%- include('perfilFooter') %>
-    <script src="../js/ejemplo/default.js"></script>
+    <script src="../../../js/client/perfil/padecimientos.js"></script>
 </body>
 
 </html>

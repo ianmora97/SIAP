@@ -5,10 +5,11 @@ function loaded(event){
 }
 
 function events(event){
-    cargar_cupos();
+    traerCursos();
+
 }
 
-function cargar_cupos(){
+function traerCursos(){
     let nivel = $('#nivel_estudiante').text();
     let data = {nivel}
     $.ajax({
@@ -18,17 +19,18 @@ function cargar_cupos(){
         contentType: "application/json"
     }).then((response) => {
         cursos = response;
-        cargarCupos(response);
+        console.log(response);
+        cargarCurso(response);
     }, (error) => {
     });
 }
-function cargarCupos(cupos) {
+function cargarCurso(cupos) {
     $('#cursos_lista').html('');
     cupos.forEach(cupo => {
-        llenarCupos(cupo);
+        llenarCurso(cupo);
     });
 }
-function llenarCupos(cupo) {
+function llenarCurso(cupo) {
     let tipo = $('#tipo_estudiante').text();
     let profesor = cupo.nombre.toUpperCase() +" "+ cupo.apellido.toUpperCase();
     let cod_t = cupo.codigo_taller;
@@ -52,17 +54,16 @@ function llenarCupos(cupo) {
         '<div class="col-md-6">'+
         '<small id="profesor">Profesor: '+profesor+'</small>'+
         '</div>'+
-        '<div class="col-md-6">'+
-        '<span>Costo:</span>'+
+        '<div class="col-md-6 d-flex justify-content-md-end">'+
         '<a href="#" class="mx-3 btn btn-secondary disabled" role="button" id="precio">'+costo+' Colones</a>'+
+        '<div class="custom-control custom-checkbox">' +
+        '<input type="checkbox" id="checkbox-' + cod_t + '" class="custom-control-input" value="' + cod_t + '" name="curso-checked[]"/>' +
+        '<label class="custom-control-label" for="checkbox-' + cod_t + '">&nbsp; Seleccionar Curso</label></div></td>' +
         '</div>'+
         '</div>'+
         '</div>'+
         '</div>'
-
     );
-
-
 }
 function parseFecha(dia,hora){
     let fecha = dia;

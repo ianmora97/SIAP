@@ -22,15 +22,16 @@ router.get('/padecimientosEstudiante',(req,res)=>{
 });
 
 //insertar un padecimiento en especifico
-router.post('/InsertarUnPadecimiento',(req,res)=>{
-    var script = con.query('call prc_insertar_padecimiento_estudiante(?, ?)',
-    [req.body.descripcion,req.body.estudiante,req.body.observaciones],
+router.post('/client/insertarPadecimientos',(req,res)=>{
+    var script = con.query('call prc_insertar_padecimiento_estudiante(?, ?, ?)',
+    [req.body.descripcion,req.body.cedula,req.body.observacion],
     (err,result,fields)=>{
         if(!err){
-            res.send(result[0]);
+            res.send(result);
         }
     });
 });
+
 
 //Actualizar un padecimiento con su ID
 router.put('/padecimiento/actualizarDescripcion',(req,res)=>{

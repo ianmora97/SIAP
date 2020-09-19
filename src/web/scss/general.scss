@@ -43,4 +43,13 @@
     max-width: 200px;
     
 }
-
+.nav-pills .nav-item a.nav-link {
+    background-color: #B81616;
+}
+.nav-pills .nav-link.active  {
+    color: #fff !important;
+    background-color: #364C78 !important;
+}
+.vline {
+    border-right: 1px dashed #838383;
+}
