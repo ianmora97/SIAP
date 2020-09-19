@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Lista de estudiantes</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid">
+                <h3 class="text-dark mb-4">Lista de estudiantes matriculados</h3>
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">II Ciclo 2021</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-nowrap">
+
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Buscar ...?"
+                                        aria-label="Buscar ...?" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="btn-buscar-est">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary">Reference</button>
+                                    <button type="button" class="btn btn-secondary  dropdown-toggle dropdown-toggle-split" id="dropdownboton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                                      <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdownhoras" >
+                                      <a class="dropdown-item" href="#">
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            <input class="custom-control-input" type="checkbox" id="horas-6-7"
+                                                name="horas-6-7">
+                                            <label class="custom-control-label" for="horas-6-7">6-7 </label>
+                                        </div>
+
+                                      </a>
+                                      <a class="dropdown-item" href="#">Another action</a>
+                                      <a class="dropdown-item" href="#">Something else here</a>
+                                      <div class="dropdown-divider"></div>
+                                      <a class="dropdown-item" href="#">Separated link</a>
+                                    </div>
+                                  </div>
+
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHoras" aria-expanded="false" aria-controls="collapseHoras" id= "btn-collap-horas">
+                                      Hora
+                                    </button>
+
+                                  <div class="collapse" id="collapseHoras">
+                                    <div class="card card-body">
+                                       
+                                        <div class="row px-2">
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-6-7"
+                                                        name="horas-6-7">
+                                                    <label class="custom-control-label" for="horas-6-7">6-7 </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-7-8"
+                                                        name="horas-7-8">
+                                                    <label class="custom-control-label" for="horas-7-8"> 7-8</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-8-9"
+                                                        name="horas-8-9">
+                                                    <label class="custom-control-label" for="horas-8-9"> 8-9</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-9-10"
+                                                        name="horas-9-10">
+                                                    <label class="custom-control-label" for="horas-9-10"> 9-10</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-10-11"
+                                                        name="horas-10-11">
+                                                    <label class="custom-control-label" for="horas-10-11">10-11</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-11-12"
+                                                        name="horas-11-12">
+                                                    <label class="custom-control-label" for="horas-11-12">11-12</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row px-2">
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-12-13"
+                                                        name="horas-12-13">
+                                                    <label class="custom-control-label" for="horas-12-13">12-13</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-13-14"
+                                                        name="horas-13-14">
+                                                    <label class="custom-control-label" for="horas-13-14">13-14</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-14-15"
+                                                        name="horas-14-15">
+                                                    <label class="custom-control-label" for="horas-14-15">14-15</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-15-16"
+                                                        name="horas-15-16">
+                                                    <label class="custom-control-label" for="horas-15-16">15-16</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-16-17"
+                                                        name="horas-16-17">
+                                                    <label class="custom-control-label" for="horas-16-17">16-17</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-17-18"
+                                                        name="horas-17-18">
+                                                    <label class="custom-control-label" for="horas-17-18">17-18</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row px-2">
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-18-19"
+                                                        name="horas-18-19">
+                                                    <label class="custom-control-label" for="horas-18-19">18-19</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-19-20"
+                                                        name="horas-19-20">
+                                                    <label class="custom-control-label" for="horas-19-20">19-20</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 d-flex justify-content-around">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input class="custom-control-input" type="checkbox" id="horas-20-21"
+                                                        name="horas-20-21">
+                                                    <label class="custom-control-label" for="horas-20-21">20-21</label>
+                                                </div>
+                                            </div>
+                                            
+
+
+                                        </div>
+
+
+
+                                    </div>
+                                  </div>
+
+                        </div>
+                        <div class="row px-2">
+
+
+    <button id="aplicarFiltro">HAcer</button>
+
+                            <div class="col-md-4 d-flex justify-content-around">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="filter_lista_dias_lunes"
+                                        name="filter_lista_dias_lunes">
+                                    <label class="custom-control-label" for="filter_lista_dias_lunes">Lunes</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="martes_filter_lista_est"
+                                        name="martes_filter_lista_est">
+                                    <label class="custom-control-label" for="martes_filter_lista_est">Martes</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-around">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="miercoles_filter_lista_est"
+                                        name="miercoles_filter_lista_est">
+                                    <label class="custom-control-label" for="miercoles_filter_lista_est">Miércoles</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="jueves_filter_lista_est"
+                                        name="jueves_filter_lista_est">
+                                    <label class="custom-control-label" for="jueves_filter_lista_est">Jueves</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-around">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="viernes_filter_lista_est"
+                                        name="viernes_filter_lista_est">
+                                    <label class="custom-control-label" for="viernes_filter_lista_est">Viernes</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input class="custom-control-input" type="checkbox" id="sabado_filter_lista_est"
+                                        name="sabado_filter_lista_est">
+                                    <label class="custom-control-label" for="sabado_filter_lista_est">Sábado</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                            aria-describedby="dataTable_info">
+                            <table class="table my-0" id="dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>Cédula</th>
+                                        <th>Nombre</th>
+                                        <th>NRC</th>
+                                        <th>Horario</th>
+                                        <th>Nivel</th>
+                                        <th>Profesor</th>
+                                        <th>Meses</th>
+                                        <th>Fecha de matricula</th>
+                                        <th>Ver</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-estudiantes">
+                   
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td><strong>Cédula</strong></td>
+                                        <td><strong>Nombre</strong></td>
+                                        <td><strong>NRC</strong></td>
+                                        <td><strong>Horario</strong></td>
+                                        <td><strong>Nivel</strong></td>
+                                        <td><strong>Profesor</strong></td>
+                                        <td><strong>Meses</strong></td>
+                                        <td><strong>Fecha de matricula</strong></td>
+                                        <td><strong>Ver</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('footerDashboard') %>
+    </div>
+    </div>
+    <script src="../../js/admin/lista-estdudiantes.js"></script>
+</body>
+
+</html>

@@ -26,6 +26,7 @@ app.use(require('./routes/users.routes'));
 app.use(require('./routes/admin.routes'));
 app.use(require('./routes/dashboard.routes'));
 app.use(require('./routes/client.routes'));
+app.use(require('./routes/listaestudiantes.routes'));
 
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));

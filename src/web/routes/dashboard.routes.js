@@ -62,11 +62,14 @@ router.get('/admin/solicitudes',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         let s = 'solicitudes';
-        res.render('admin/dashboard', {usuario,s});
+        res.render('admin/solicitudes', {usuario,s});
     }else{
         res.render('indexAdmin');
     }
 });
+
+
+
 router.get('/admin/comprobacion',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
