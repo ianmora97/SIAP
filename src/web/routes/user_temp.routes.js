@@ -4,16 +4,19 @@ const router = express.Router();
 const con = require('../database');
 
 //Selecciona todos los usuarios temporales
-router.get('/usuariostemp',(req,res)=>{
-    var script = con.query('select * from vta_usuario_temp;',(err,rows,fields)=>{
-        if(rows[0] != undefined){
-            res.send(rows);
+router.get('/admin/usuariostemp',(req,res)=>{
+    var script = con.query('select * from vta_usuario_temp',
+    (err,rows,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                res.send(rows);
+            }
         }
     });
 });
 
 //actualiza usuario temporal
-router.put('/',(req,res)=>{
+router.put('/admin/actualizarUsuarioTemp',(req,res)=>{
     var script = con.query('',[],(err,rows,fields)=>{
         if(rows[0] != undefined){
             res.send(rows);

@@ -13,6 +13,7 @@
     <script src="../js/jq-bs-bundle.js"></script>
 </head>
 <body>
+
     <%- include('modalesPerfil') %>
     <%- include('perfilHeader') %>
     <div class="container-fluid mt-3 w-90">
@@ -25,6 +26,7 @@
                             <input type="file" id="fileFoto" name="avatar-file">
                         </div>
                         <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="button">Cambiar foto</button>
+                        <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
                     </div>
                 </div>
                 <div class="card shadow mb-4">
@@ -105,7 +107,7 @@
                                             </label>
                                             <input class="form-control" type="text" id="cedula_perfil"
                                                 name="username" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
-                                            <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md">
@@ -128,11 +130,11 @@
                                 <div class="form-row">
                                     <div class="col-md">
                                         <div class="form-group">
-                                            <label for="first_name">
+                                            <label for="correo_perfil">
                                                 <strong>Email</strong><br>
                                             </label>
                                             <input class="form-control" type="email" id="email_perfil"
-                                                placeholder="John" name="first_name" value="<%= usuario.correo %>" disabled>
+                                                placeholder="John" name="correo_perfil" value="<%= usuario.correo %>">
                                         </div>
                                     </div>
                                     <div class="col-md">

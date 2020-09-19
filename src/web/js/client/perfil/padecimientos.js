@@ -4,36 +4,66 @@ function loaded(event) {
 
 function events(event) {
     ejemploAJAX();
-    change_navbar();
-    load_stats();
-    get_today_date();
+    get_padecimientos();
+    insertarPadecimientos();
 }
-function get_today_date() {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    let yyyy = today.getFullYear();
+function get_padecimientos(){
+    let cedula = $('#cedula').text();
+    let data ={cedula}
+    $.ajax({
+        type: "GET",
+        url: "/client/cargarPadecimientos",
+        data: data,
+        contentType: "application/json"
+    }).then((padecimientos) => {
+        padecimientos.forEach((p)=>{
+            ocultarPadecimiento(p);
+        });
+        
+    }, (error) => {
+    });
 
-    today = mm + "/" + dd + "/" + yyyy;
-    $(".today-date").text(today);
 }
-function load_stats() {
-    let cantones = ['San José','Escazú','Desamparados','Puriscal',
-    'Tarrazú','Aserrí','Mora','Goicoechea','Santa Ana','Alajuelita'];
-    for (let canton in cantones) {
-        $('#canton').append(new Option(canton, canton));
-    }
-
-}
-function change_navbar() {
-    let md = 768;
-    let sizeScreen = screen.width;
-    console.log(sizeScreen, md);
-    if (sizeScreen <= md) {
-        $("#nombreUsuario").hide();
-    }
+function ocultarPadecimiento(p){
+    $('#fila_'+p.descripcion.toLowerCase()).hide();
 }
 
+function insertarPadecimientos(){
+    $('#ingresarPadecimientosBoton').on('click',function(){
+        let cedula = $('#cedula').text();
+        
+        let padecimientos = $("[id*=switch-]");
+        
+        let padecimientosSeleccionados = [];
+        for (let i = 0; i < padecimientos.length; i++) {
+            if (padecimientos[i].checked) {
+                padecimientosSeleccionados.push(padecimientos[i].name);
+            }
+        }
+        let data = [];
+        for (let i = 0; i < padecimientosSeleccionados.length; i++) {
+            data.push({
+                descripcion: padecimientosSeleccionados[i].toUpperCase(),
+                observacion: $('#text_'+padecimientosSeleccionados[i]).val(),
+                cedula: cedula
+            });
+        }
+        console.log(data);
+        for(let i = 0; i < data.length; i++){
+            $.ajax({
+                type: "POST",
+                url: "/client/insertarPadecimientos",
+                data: data,
+                contentType: "application/json"
+            }).then((padecimientos) => {
+                
+            }, (error) => {
+            });
+        }
+    });
+
+
+}
 function ejemploAJAX() {
     // $('#accion').on('click',function(){
     //     $.ajax({

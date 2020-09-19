@@ -27,6 +27,10 @@ app.use(require('./routes/admin.routes'));
 app.use(require('./routes/dashboard.routes'));
 app.use(require('./routes/client.routes'));
 app.use(require('./routes/listaestudiantes.routes'));
+app.use(require('./routes/user_temp.routes'));
+app.use(require('./routes/stats.routes'));
+app.use(require('./routes/student.routes'));
+app.use(require('./routes/illness.routes'));
 
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));

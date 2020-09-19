@@ -157,8 +157,8 @@ function registrar_usuario_ajax(){
             }, (error) => {
             });
         }else{
-            console.log('no');
             let errores = check(data);
+            console.log(errores);
             let why = "";
             errores.forEach(e => {why += e + ' ';});
             $('#alerta_error_registro').append(

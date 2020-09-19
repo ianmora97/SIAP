@@ -95,14 +95,18 @@ function checkUpdate(){
 }
 function update() {
     $('#guardar_confirmar').on('click', function () {
+        
         let cedula = $('#cedula_gu').text();
-        let sexo =$("#sexo option:selected" ).text();
+        let sexo = $("#sexo option:selected" ).text();
         let celular = $('#celular_perfil').val();
         let telefono = $('#telefono_perfil').val();
         let TelEmergencia = $('#telefono_emergencia').val();
+        let correo = $('#email_perfil').val();    
+
         $.ajax({
             type: "POST",
             url: "/ejemplo",
+            data: data,
             contentType: "application/json"
         }).then((response) => {
             

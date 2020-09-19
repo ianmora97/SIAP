@@ -1,4 +1,4 @@
-    const express = require('express');
+const express = require('express');
 const router = express.Router();
 
 const con = require('../database');
@@ -17,8 +17,10 @@ router.get('/estudiantes',(req,res)=>{
 router.get('/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
     (err,rows,fields)=>{
-        if(rows[0] != undefined){
-            res.send(rows);
+        if(!err){
+            if(rows != undefined){
+                res.send(rows);
+            }
         }
     });
 });
@@ -62,11 +64,29 @@ router.get('/estudianteCedulaAdmin',(req,res)=>{
 
 //Inserta Estudiante
 router.post('/estudiante/insertar',(req,res)=>{
+    console.log(req.query);
     var script = con.query('call prc_insertar_estudiante(?, ?)', 
-    [req.departamento,req.usuario],
+    [req.query.departamento,req.query.usuario],
     (err,result,fields)=>{
         if(!err){
             res.send(result[0]);
+        }
+    });
+});
+
+//Mueve un usuario temporal a un usuario fijo y lo agregar a la lista de estudiantes
+router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
+    console.log(req.body);
+    var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
+    [req.body.cedula],
+    (err,result,fields)=>{
+        
+        if(!err){
+            console.log(result);
+            res.send(result);
+        }else{
+            console.log(err);
+            res.status(501).send('error');
         }
     });
 });
