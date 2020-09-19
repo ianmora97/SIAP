@@ -35,7 +35,7 @@ function load_stats() {
     }).then((response) => {
         $('#talleres-stats').text(response.cant);
     }, (error) => {
-
+        
     });
     $.ajax({
         type: "GET",
@@ -55,12 +55,6 @@ function change_navbar(){
     if(sizeScreen <= md){
         $('#nombreUsuario').hide();
     }
-}
-function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
 }
 
 function ejemploAJAX(){

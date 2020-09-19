@@ -21,6 +21,7 @@ function get_padecimientos(){
         });
         
     }, (error) => {
+        console.log('no tiene padecimientos');
     });
 
 }
@@ -30,7 +31,7 @@ function ocultarPadecimiento(p){
 
 function insertarPadecimientos(){
     $('#ingresarPadecimientosBoton').on('click',function(){
-        let cedula = $('#cedula').text();
+        let id = $('#idestudiante').text();
         
         let padecimientos = $("[id*=switch-]");
         
@@ -45,7 +46,7 @@ function insertarPadecimientos(){
             data.push({
                 descripcion: padecimientosSeleccionados[i].toUpperCase(),
                 observacion: $('#text_'+padecimientosSeleccionados[i]).val(),
-                cedula: cedula
+                id: id
             });
         }
         console.log(data);
@@ -53,11 +54,13 @@ function insertarPadecimientos(){
             $.ajax({
                 type: "POST",
                 url: "/client/insertarPadecimientos",
-                data: data,
+                data: JSON.stringify(data[i]),
                 contentType: "application/json"
-            }).then((padecimientos) => {
-                
+            }).then((response) => {
+                console.log('Insertado',data[i],'resultset',response);
             }, (error) => {
+            }).then(()=>{
+                get_padecimientos();
             });
         }
     });
