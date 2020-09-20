@@ -72,19 +72,7 @@ router.get('/client/padecimientos',(req,res)=>{
         res.render('index');
     }
 });
-router.get('/client/cargarPadecimientos',(req,res)=>{
-        let script = "select * from vta_padecimientos where cedula = ?";
-        var query = con.query(script,
-            [req.query.cedula],
-            (err,rows,fields)=>{
-            if(!err){
-                if(rows != undefined){
-                    console.log('[',chalk.green('OK'),'] cargando padecimientos de',chalk.yellow(req.session.value.usuario));
-                    res.send(rows);
-                }
-            }
-        });
-});
+
 router.get('/client/cargarCursos',(req,res)=>{
     let script = "select * from vta_grupos where nivel = ?";
     var query = con.query(script,
@@ -110,6 +98,8 @@ router.post('/client/login',(req,res)=>{
                 req.session.value = rows[0];
                 console.log('[',chalk.green('OK'),']',chalk.yellow(req.session.value.usuario),'Session Iniciada');
                 res.redirect('/client/home');
+            }else{
+                res.render('index',{err:'1',id: req.body.cedula});
             }
         }else{
             res.render('index',{err:'2',id: req.body.cedula});
