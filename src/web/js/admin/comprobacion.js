@@ -104,7 +104,9 @@ function cambiarEstadoShow() {
 function cambiarEstadoSend() {
     $('#CambiarEstadoConfirmarBoton').on('click', function () {
         let cedula = $('#cedulaTarget').text();
-        let data = {cedula}
+        let email = 'ianmorar03@gmail.com';
+        let nombre = $('#nombreTarget').text();
+        let data = {cedula, email, nombre}
         $.ajax({
             type: "POST",
             url: "/estudiante/insertarUsuarioPermanente",

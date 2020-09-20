@@ -102,20 +102,20 @@
                                 <div class="form-row">
                                     <div class="col-md">
                                         <div class="form-group">
-                                            <label for="username">
+                                            <label for="cedula">
                                                 <strong>Identificación</strong>
                                             </label>
                                             <input class="form-control" type="text" id="cedula_perfil"
-                                                name="username" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
+                                                name="cedula" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
                                             
                                         </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group"><label
-                                                for="email"><strong>Nombre</strong>
+                                                for="nombre"><strong>Nombre</strong>
                                             </label><input
                                                 class="form-control" type="text" id="nombre_perfil"
-                                                name="email" placeholder="Nombre" value="<%= usuario.nombre %>" disabled>
+                                                name="nombre" placeholder="Nombre" value="<%= usuario.nombre %>" disabled>
                                             </div>
                                     </div>
                                     <div class="col-md">
@@ -130,11 +130,11 @@
                                 <div class="form-row">
                                     <div class="col-md">
                                         <div class="form-group">
-                                            <label for="correo_perfil">
+                                            <label for="correo">
                                                 <strong>Email</strong><br>
                                             </label>
                                             <input class="form-control" type="email" id="email_perfil"
-                                                placeholder="John" name="correo_perfil" value="<%= usuario.correo %>">
+                                                placeholder="Correo" name="correo_perfil" value="<%= usuario.correo %>">
                                         </div>
                                     </div>
                                     <div class="col-md">
@@ -183,6 +183,48 @@
                                             <input class="form-control" type="tel" 
                                             placeholder="Telefono" name="last_name" 
                                             value="<%= usuario.telefono_emergencia %>" id="telefono_emergencia">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Carrera</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <label for="carrera">
+                                                <strong>Carrera / Departamento</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" 
+                                            placeholder="Carrera departamento" name="carrera" 
+                                            value="<%= usuario.carrera_departamento%>" id="telefono_emergencia">
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Cantón</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="cantonSelected" data-values="<%= usuario.canton%>"></span>
+                                            <select class="form-control" name="canton" id="canton">
+                                                <optgroup label="Seleccione el cantón">
+    
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Distrito</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="distritoSelected" data-values="<%= usuario.distrito%>"></span>
+                                            <select class="form-control" name="distrito" id="distrito">
+                                                <optgroup label="Seleccione el distrito ">
+
+                                                </optgroup>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
