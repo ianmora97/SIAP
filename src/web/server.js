@@ -1,8 +1,8 @@
-const path      = require('path');
-const express   = require('express');
+const path = require('path');
+const express = require('express');
 const session = require('express-session');
 const chalk = require('chalk');
-const app       = express();
+const app = express();
 require('dotenv').config();
 
 //server variables
