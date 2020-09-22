@@ -20,6 +20,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
+
 //Rutas --routering
 app.use(require('./routes/main.routes'));
 app.use(require('./routes/users.routes'));
@@ -38,3 +39,4 @@ app.use(express.static(path.join(__dirname)));
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
 });
+

@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
-
+const path = require('path');
+const multer = require('multer');
+const uuid = require('uuid');
 const con = require('../database');
 const email = require('../email');
+
+
 
 //selecciona todos los estudiantes
 router.get('/estudiantes',(req,res)=>{
@@ -112,6 +116,21 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
     });
 });
 
+const storage = multer.diskStorage({
+    destination: path.join(__dirname,'../public/uploads'),
+    filename: (req, file, cb) => {
+        cb(null,uuid.v4() + path.extname(file.originalname).toLocaleLowerCase());
+    }   
+});
 
+router.use(multer({
+    storage,
+    dest: path.join(__dirname,'public/uploads')
+}).single('image'));
+
+router.post('/uploadImage', (req,res)=>{
+    console.log(req.file);
+    res.send('uploaded');
+});
 
 module.exports = router;
