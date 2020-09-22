@@ -35,6 +35,7 @@ app.use(require('./routes/illness.routes'));
 
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname,'/public')));
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));

@@ -22,51 +22,173 @@
     <div class="container-fluid w-90 mt-3 px-0">
         <span class="sr-only" id="nivel_estudiante"><%= usuario.nivel%></span>
         <span class="sr-only" id="tipo_estudiante"><%= usuario.tipo%></span>
-           
         <h3 class="text-dark mb-4">Matrícula</h3>
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <p class="text-center text-dark m-0 font-weight-bold">Seleccione el o los días de la semana a los cuales desea asistir a clases</p>
-            </div>
-            <div class="card-body">
-                <div class="row px-2">
-                    <div class="col-md-4 d-flex justify-content-around">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="lunes_filter" name="lunes_filter">
-                            <label class="custom-control-label" for="lunes_filter">Lunes</label>
-                        </div>
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="martes_filter" name="martes_filter">
-                            <label class="custom-control-label" for="martes_filter">Martes</label>
+
+        <div class="card shadow mb-3">
+            <div class="card-body px-2">
+                <div class="row justify-content-between">
+                    <div class="col-md-6">
+                        <p class="text-dark m-0 font-weight-bold text-left">Seleccione el o los días de la semana a los cuales desea asistir a clases</p>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <div class="border p-1 rounded">
+                            Monto a pagar: <div class="border-bottom border-dark d-inline-block w-50" id="montoTotal">0</div>&nbsp;colones
                         </div>
                     </div>
-                    <div class="col-md-4 d-flex justify-content-around">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="miercoles_filter" name="miercoles_filter">
-                            <label class="custom-control-label" for="miercoles_filter">Miércoles</label>
-                        </div>
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="jueves_filter" name="jueves_filter">
-                            <label class="custom-control-label" for="jueves_filter">Jueves</label>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex justify-content-around">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="viernes_filter" name="viernes_filter">
-                            <label class="custom-control-label" for="viernes_filter">Viernes</label>
-                        </div>
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id="sabado_filter" name="sabado_filter">
-                            <label class="custom-control-label" for="sabado_filter">Sábado</label>
-                        </div>
+                    <div class="col-md-2 mt-3">
+                        <button type="button" name="" id="matricularCursoApply" class="btn btn-success w-100">
+                            <i class="fas fa-check text-white"></i>&nbsp; Matricular
+                        </button>
                     </div>
                 </div>
-                <div class="w-100" style="overflow-y: auto; height: 560px;" id="cursos_lista">
+            </div>
+        </div>
+        
+        <div class="card shadow mb-3">
+            <div class="card-body px-2">
+                <div class="row">
+                    <div class="col-md d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_lunes" name="LUNES">
+                            <label class="custom-control-label" for="filter_lunes">Lunes</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_martes" name="MARTES">
+                            <label class="custom-control-label" for="filter_martes">Martes</label>
+                        </div>
+                    </div>
+                    <div class="col-md d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_miercoles" name="MIERCOLES">
+                            <label class="custom-control-label" for="filter_miercoles">Miércoles</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_jueves" name="JUEVES">
+                            <label class="custom-control-label" for="filter_jueves">Jueves</label>
+                        </div>
+                    </div>
+                    <div class="col-md d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_viernes" name="VIERNES">
+                            <label class="custom-control-label" for="filter_viernes">Viernes</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline py-md-3">
+                            <input class="custom-control-input" type="checkbox" id="filter_sabado" name="SABADO">
+                            <label class="custom-control-label" for="filter_sabado">Sábado</label>
+                        </div>
+                    </div>
+                    <div class="col-md mt-2">
+                        <div class="btn-group w-100">
+                            <button type="button" 
+                                class="btn btn-secondary dropdown-toggle dropdown-toggle-split" 
+                                id="dropdownboton"> Horas
+                            </button>
+                            <div class="dropdown-menu" id="dropdownhoras">
+                                
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-6-7"name="6">
+                                    <label class="custom-control-label" for="horas-6-7">6-7 </label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-7-8"name="7">
+                                    <label class="custom-control-label" for="horas-7-8"> 7-8</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-8-9"name="8">
+                                    <label class="custom-control-label" for="horas-8-9"> 8-9</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-9-10"name="9">
+                                    <label class="custom-control-label" for="horas-9-10"> 9-10</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-10-11"name="10">
+                                    <label class="custom-control-label" for="horas-10-11">10-11</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-11-12"name="11">
+                                    <label class="custom-control-label" for="horas-11-12">11-12</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-12-13"name="12">
+                                    <label class="custom-control-label" for="horas-12-13">12-1</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-13-14"name="13">
+                                    <label class="custom-control-label" for="horas-13-14">1-2</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-14-15"name="14">
+                                    <label class="custom-control-label" for="horas-14-15">2-3</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-15-16"name="15">
+                                    <label class="custom-control-label" for="horas-15-16">3-4</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-16-17"name="16">
+                                    <label class="custom-control-label" for="horas-16-17">4-5</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-17-18"name="17">
+                                    <label class="custom-control-label" for="horas-17-18">5-6</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-18-19"name="18">
+                                    <label class="custom-control-label" for="horas-18-19">6-7</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-19-20"name="19">
+                                    <label class="custom-control-label" for="horas-19-20">7-8</label>
+                                </div>
+                                <hr>
+                            
+                                <div class="custom-control custom-checkbox mx-5 my-1">
+                                    <input class="custom-control-input" type="checkbox" id="horas-20-21"name="20">
+                                    <label class="custom-control-label" for="horas-20-21">8-9</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md mt-2">
+                        <button type="button" name="buscarApply" id="buscarApply" class="btn btn-primary w-100">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow">
+            <div class="card-body px-2">
+                <div class="w-100 border rounded px-1 mt-2" style="overflow-y: auto; height: 560px;" id="cursos_lista">
 
                 </div>
             </div>
         </div>
-
     </div>
     <%- include('perfilFooter') %>
     <script src="../../../js/client/perfil/matricula.js"></script>
