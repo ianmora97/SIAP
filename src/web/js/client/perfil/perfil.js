@@ -1,4 +1,4 @@
-import { procesarLugares as proplaces, filtrarCantones as filCan, filtrarDistritos as filDis } from './places.js'
+import { procesarLugares as proplaces, filtrarCantones as filCan, filtrarDistritos as filDis, validate, check } from './places.js'
 
 function loaded(event){
     events(event);
@@ -13,6 +13,7 @@ function events(event){
     fotoonChange();
     reqCantones();
     reqDistritos();
+    ocultarAlertaDanger();
 }
 function fotoonChange() {
     $("#fileFoto").change(function(){
@@ -93,26 +94,49 @@ function checkUpdate(){
         $('#modalCheckUpdate').modal('show');
     });
 }
+
 function update() {
     $('#guardar_confirmar').on('click', function () {
-        
         let cedula = $('#cedula_gu').text();
-        let sexo = $("#sexo option:selected" ).text();
         let celular = $('#celular_perfil').val();
         let telefono = $('#telefono_perfil').val();
-        let TelEmergencia = $('#telefono_emergencia').val();
-        let correo = $('#email_perfil').val();    
+        let emergencia = $('#telefono_emergencia').val();
+        let correo = $('#email_perfil').val();
+        let carrera = $('#carrera').val();
+        let provincia = $('#provincia option:selected').val();
+        let canton = $('#canton option:selected').val();
+        let distrito = $('#distrito option:selected').val();
+        let direccion = $('#direccion').val();
 
-        $.ajax({
-            type: "POST",
-            url: "/ejemplo",
-            data: data,
-            contentType: "application/json"
-        }).then((response) => {
-            
-        }, (error) => {
-        });
+        let data = {cedula,correo,celular,telefono,emergencia,carrera,provincia,canton,distrito,direccion}
+        console.log(data);
+
+        if(validate(data)){
+            $.ajax({
+                type: "PUT",
+                url: "/client/actualizardatos",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                
+            }, (error) => {
+            }); 
+        }else{
+            let err = check(data);
+            for (let i = 0; i < err.length; i++) {
+                if(i != err.length - 1){
+                    $('#erroresAlert').append(err[i] + ", ");
+                }else{
+                    $('#erroresAlert').append(err[i] + ".");
+                }
+            }
+            $("#alertadanger").fadeIn('slow');      
+        }
     })
 }
-
+function ocultarAlertaDanger(){
+    $('#cerrarAlertaDanger').on('click',function(){
+        $("#alertadanger").fadeOut('slow');
+    });
+}
 document.addEventListener("DOMContentLoaded", loaded);

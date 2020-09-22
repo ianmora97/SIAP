@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Perfil</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
@@ -13,10 +15,18 @@
     <script src="../js/jq-bs-bundle.js"></script>
 </head>
 <body>
-
     <%- include('modalesPerfil') %>
     <%- include('perfilHeader') %>
     <div class="container-fluid mt-3 w-90">
+        <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;" id="alertadanger">
+			<h4 class="alert-heading">Datos erroneos!</h4>
+			<p>No puede dejar espacios en blanco, esto se debe a:</p>
+			<hr>
+			<p class="mb-0" id="erroresAlert"></p>
+			<button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
         <div class="row mb-3">
             <div class="col-lg-4 ">
                 <div class="card mb-3">
@@ -26,7 +36,7 @@
                             <input type="file" id="fileFoto" name="avatar-file">
                         </div>
                         <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="button">Cambiar foto</button>
-                        <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
+
                     </div>
                 </div>
                 <div class="card shadow mb-4">
@@ -105,9 +115,8 @@
                                             <label for="cedula">
                                                 <strong>Identificación</strong>
                                             </label>
-                                            <input class="form-control" type="text" id="cedula_perfil"
-                                                name="cedula" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
-                                            
+                                            <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
+                                            <input class="form-control" type="text" id="cedula_perfil" name="cedula" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md">
@@ -142,7 +151,7 @@
                                             <strong>Sexo</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <select class="form-control" name="sexo" id="sexo_perfil">
+                                            <select class="form-control" name="sexo" id="sexo_perfil" disabled>
                                                 <optgroup label="Seleccione uno">
                                                     <option value="1" <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
                                                     <option value="2" <%if(usuario.sexo == 'Femenino'){%>selected<%}%>>Femenino</option>
@@ -150,8 +159,10 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md"><label for="first_name">
-                                        <strong>Fecha de nacimiento</strong><br></label>
+                                    <div class="col-md">
+                                        <label for="nacimiento">
+                                            <strong>Fecha de nacimiento</strong><br>
+                                        </label>
                                         <div class="form-group">
                                             <input class="form-control"
                                                 id="fecha_nacimiento_perfil" type="date" value="<%= usuario.nacimiento %>" disabled>
@@ -161,70 +172,59 @@
                                 <div class="form-row">
                                     <div class="col-md">
                                         <div class="form-group">
-                                            <label for="last_name">
+                                            <label for="celular">
                                                 <strong>Celular</strong><br>
                                             </label>
                                             <input
                                                 class="form-control" type="tel" id="celular_perfil"
-                                                placeholder="Doe" name="last_name" value="<%= usuario.celular %>">
+                                                placeholder="Celular" name="celular" value="<%= usuario.celular %>">
                                             </div>
                                     </div>
                                     <div class="col-md">
-                                        <div class="form-group"><label
-                                                for="last_name"><strong>Teléfono</strong><br></label><input
-                                                class="form-control" type="tel" id="telefono_perfil"
-                                                placeholder="Telefono" name="last_name" value="<%= usuario.telefono %>"></div>
+                                        <div class="form-group">
+                                            <label for="telefono">
+                                                <strong>Teléfono</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" id="telefono_perfil" placeholder="Telefono" name="telefono" value="<%= usuario.telefono %>">
+                                        </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group">
-                                            <label for="last_name">
+                                            <label for="tel_emergencia">
                                                 <strong>Teléfono emergencia</strong><br>
                                             </label>
-                                            <input class="form-control" type="tel" 
-                                            placeholder="Telefono" name="last_name" 
-                                            value="<%= usuario.telefono_emergencia %>" id="telefono_emergencia">
+                                            <input class="form-control" type="tel" placeholder="Telefono" name="tel_emergencia" value="<%= usuario.telefono_emergencia %>" id="telefono_emergencia">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md">
-                                        <label for="first_name">
-                                            <strong>Carrera</strong><br>
-                                        </label>
                                         <div class="form-group">
                                             <label for="carrera">
                                                 <strong>Carrera / Departamento</strong><br>
                                             </label>
-                                            <input class="form-control" type="tel" 
-                                            placeholder="Carrera departamento" name="carrera" 
-                                            value="<%= usuario.carrera_departamento%>" id="telefono_emergencia">
+                                            <input class="form-control" type="tel" placeholder="Carrera departamento" name="carrera" value="<%= usuario.carrera_departamento%>" id="carrera">
                                             <small class="text-muted">Carrera que cursa o departamento</small>
                                         </div>
                                     </div>
                                     <div class="col-md">
-                                        <label for="first_name">
-                                            <strong>Cantón</strong><br>
+                                        <label for="nivel">
+                                            <strong>Nivel</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="cantonSelected" data-values="<%= usuario.canton%>"></span>
-                                            <select class="form-control" name="canton" id="canton">
-                                                <optgroup label="Seleccione el cantón">
-    
-                                                </optgroup>
-                                            </select>
+                                            <span class="sr-only" id="nivelActual" data-values="<%= usuario.nivel%>"></span>
+                                            <input class="form-control" type="number" placeholder="Nivel" name="nivel" value="<%= usuario.nivel%>" id="nivel" disabled>
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
                                         </div>
                                     </div>
                                     <div class="col-md">
-                                        <label for="first_name">
-                                            <strong>Distrito</strong><br>
+                                        <label for="estado">
+                                            <strong>Estado</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="distritoSelected" data-values="<%= usuario.distrito%>"></span>
-                                            <select class="form-control" name="distrito" id="distrito">
-                                                <optgroup label="Seleccione el distrito ">
-
-                                                </optgroup>
-                                            </select>
+                                            <% var estado = usuario.estado == 1 ? 'Activo' : 'No activo' %>
+                                            <span class="sr-only" id="estadoEstudiante" data-values="<%= usuario.estado%>"></span>
+                                            <input class="form-control" type="text" placeholder="Estado" name="estado" value="<%- estado%>" id="estado" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +266,17 @@
 
                                                 </optgroup>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <label for="direccion">
+                                            <strong>Direccion Exacta</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="direccionText" data-values="<%= usuario.direccion%>"></span>
+                                            <input class="form-control" type="text" placeholder="Direccion Exacta" name="direccion" value="<%= usuario.direccion%>" id="direccion">
                                         </div>
                                     </div>
                                 </div>

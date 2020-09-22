@@ -13,7 +13,39 @@ router.get('/estudiantes',(req,res)=>{
         }
     });
 });
-
+//actualizar datos de estudiante
+router.put('/client/actualizardatos',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let q = req.body;
+        var script = con.query('call prc_actualizar_datos_cliente_estudiante(?,?,?,?,?,?,?,?,?,?)',
+        [q.cedula, q.correo, q.celular, q.telefono, q.emergencia, q.carrera, q.provincia, q.canton, q.distrito, q.direccion],
+        (err,rows,fields)=>{
+            if(!err){
+                if(rows != undefined){
+                    let script = "select * from vta_cliente_estudiante where cedula = ? ";
+                    var query = con.query(script,
+                    [q.cedula], (err,rows,fields)=>{
+                        if(!err){
+                            if(rows != undefined){
+                                req.session.value = rows[0];
+                                console.log('[',chalk.green('OK'),']',chalk.yellow(req.session.value.usuario),'cambios relizados');
+                                res.redirect('/client/home');
+                            }else{
+                                res.render('index',{err:'1',id: req.body.cedula});
+                            }
+                        }else{
+                            res.render('index',{err:'2',id: req.body.cedula});
+                        }
+                    });
+                    res.send(rows);
+                }
+            }
+        });
+    }else{
+        res.render('index',{err:'sessionExpired'});
+    }
+});
 //vista de estudiantes para administradores
 router.get('/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
