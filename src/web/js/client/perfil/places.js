@@ -105,4 +105,25 @@ function filtrarDistritos(canton) {
         $('#distrito').append(new Option(distrito, distrito));
     }
 }
-export { procesarLugares, filtrarCantones, filtrarDistritos, lugares };
+
+var validate = (u) => {
+    if (!u.celular || !u.telefono || !u.emergencia || !u.correo) return false;
+    if (!u.carrera || !u.provincia || !u.canton || !u.distrito || !u.direccion) return false;
+    return true;
+};
+var check = (u) => {
+    let error = [];
+    if (!u.celular) error.push("celular");
+    if (!u.telefono) error.push("telefono");
+    if (!u.emergencia) error.push("telefono de emergencia");
+    if (!u.correo) error.push("correo");
+    if (!u.carrera) error.push("carrera");
+    if (!u.provincia) error.push("provincia");
+    if (!u.canton) error.push("canton");
+    if (!u.distrito) error.push("distrito");
+    if (!u.direccion) error.push("direccion");
+    return error;
+};
+
+
+export { procesarLugares, filtrarCantones, filtrarDistritos, lugares, validate, check };

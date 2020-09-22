@@ -26,12 +26,12 @@ router.put('/admin/actualizarUsuarioTemp',(req,res)=>{
 
 //inserta un usuario temporal
 router.post('/usariotempo/insertar',(req,res)=>{
-    var script = con.query('call prc_insertar_usuario_temp(?, ?, ?, ?, ?, ?, ?, ?)',
+    var script = con.query('call prc_insertar_usuario_temp(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [req.body.cedula,req.body.nombre, req.body.apellido,req.body.nacimiento,req.body.usuario,req.body.clave,
-        req.body.sexo,req.body.tipo_usuario],
+        req.body.sexo,req.body.tipo_usuario, req.body.email],
     (err,result,fields)=>{
         if(!err){
-            res.send(result[0]);
+            res.send(result);
         }
     });
 });

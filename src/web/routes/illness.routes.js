@@ -46,6 +46,7 @@ router.put('/client/padecimiento/actualizarObservacion',(req,res)=>{
     var script = 'call prc_actualizar_observacion_padecimiento(? , ?)';
     con.query(script, [req.body.id , req.body.observacion] ,
     (error, results, fields) => {
+        console.log();
         if (!error){
             res.send(results);
         }else{

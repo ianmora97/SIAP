@@ -1,4 +1,5 @@
 const express = require('express');
+const chalk = require('chalk');
 const router = express.Router();
 const path = require('path');
 const multer = require('multer');
@@ -17,7 +18,38 @@ router.get('/estudiantes',(req,res)=>{
         }
     });
 });
-
+//actualizar datos de estudiante
+router.put('/client/actualizardatos',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let q = req.body;
+        var script = con.query('call prc_actualizar_datos_cliente_estudiante(?,?,?,?,?,?,?,?,?,?)',
+        [q.cedula, q.correo, q.celular, q.telefono, q.emergencia, q.carrera, q.provincia, q.canton, q.distrito, q.direccion],
+        (err,rows,fields)=>{
+            if(!err){
+                if(rows != undefined){
+                    let script = "select * from vta_cliente_estudiante where cedula = ? ";
+                    var query = con.query(script,
+                    [q.cedula], (err,row,fields)=>{
+                        if(!err){
+                            if(row != undefined){
+                                req.session.value = row[0];
+                                console.log('[',chalk.green('OK'),'] cambios relizados');
+                                res.send(row[0]);
+                            }else{
+                                res.render('index',{err:'1',id: req.body.cedula});
+                            }
+                        }else{
+                            res.render('index',{err:'2',id: req.body.cedula});
+                        }
+                    });
+                }
+            }
+        });
+    }else{
+        res.render('index',{err:'sessionExpired'});
+    }
+});
 //vista de estudiantes para administradores
 router.get('/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
@@ -81,27 +113,26 @@ router.post('/estudiante/insertar',(req,res)=>{
 
 //Mueve un usuario temporal a un usuario fijo y lo agregar a la lista de estudiantes
 router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
-    console.log(req.body);
     var mailOptions = {
         from: 'siapduna2020@gmail.com',
         to: req.body.email,
         subject: 'Tómela',
         html: '<div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
-        '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
-    '</div>' +
-    '<h1>' + req.body.nombre + ' ' + req.body.apellido + '</h1>' +
-    '<p>Usted ha sido aceptado en el sistema de la piscina,' +
-    'ahora podra iniciar session y completar sus datos personales.<br>' +
-    'Es importante que registre sus padecimientos si los presenta, y aceptar ' +
-    'el consentimiento informado que se le dara una vez que matricule un curso.' +
-    '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>' 
+            '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
+            '</div>' +
+            '<h1>' + req.body.nombre +'</h1>' +
+            '<p>Usted ha sido aceptado en el sistema de la piscina,' +
+            'ahora podra iniciar session y completar sus datos personales.<br>' +
+            'Es importante que registre sus padecimientos si los presenta, y aceptar ' +
+            'el consentimiento informado que se le dara una vez que matricule un curso.' +
+            '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>' 
     };
     var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
     [req.body.cedula],
     (err,result,fields)=>{
         if(!err){
             console.log(result);
-            transporter.sendMail(mailOptions, function(error, info){
+            email.sendMail(mailOptions, function(error, info){
                 if (error) {
                   console.log(error);
                 } else {

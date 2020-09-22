@@ -132,6 +132,21 @@ function toogle_clave(){
         }
     });
 }
+function limpiarCampos() {
+    $('#nombre_registro').val('');
+    $('#id_registro').val('');
+    $('#apellidos_registro').val('');
+    $('#fecha_nacimiento_registro').val('');
+    $('#usuario_registro').val('');
+    $('#clave_registro').val('');
+    $("#sexo option:selected" ).text('');
+    $("#perfil option:selected" ).val('');
+    $('#email').val('');
+    $('#clave_verificar').val('');
+}
+function ocultarAlertaSuccess(){
+    $("#alertasuccess").fadeOut('slow');
+}
 function registrar_usuario_ajax(){
     $('#registrar').on('click',()=>{
         let nombre = $('#nombre_registro').val();
@@ -142,20 +157,24 @@ function registrar_usuario_ajax(){
         let clave = $('#clave_registro').val();
         let sexo =$("#sexo option:selected" ).text();
         let tipoUser = parseInt($("#perfil option:selected" ).val());
+        let email = $('#email').val();
 
-        let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser};
-        console.log(data);
-        if(validate(data)){       
-            console.log('yes');
-            $.ajax({
-                type: "POST",
-                url: "/usuario/registrarse",
-                data: JSON.stringify(data),
-                contentType: "application/json"
-            }).then((response) => {
-                location.href = '/registrarse';
-            }, (error) => {
-            });
+        let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
+        
+        if(validate(data)){
+            if(cEm(email)){ 
+                $.ajax({
+                    type: "POST",
+                    url: "/usuario/registrarse",
+                    data: JSON.stringify(data),
+                    contentType: "application/json"
+                }).then((response) => {
+                    $("#alertasuccess").fadeIn('slow');
+                    setTimeout(ocultarAlertaSuccess, 5000);
+                    limpiarCampos();
+                }, (error) => {
+                });
+            }
         }else{
             let errores = check(data);
             console.log(errores);
