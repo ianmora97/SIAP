@@ -156,7 +156,16 @@ const storage = multer.diskStorage({
 
 router.use(multer({
     storage,
-    dest: path.join(__dirname,'public/uploads')
+    dest: path.join(__dirname,'public/uploads'),
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|gif/
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if(mimetype && extname){
+            return cb(null, true);
+        }
+        cb("Error: Archivo debe ser un formato valido");
+    }
 }).single('image'));
 
 router.post('/uploadImage', (req,res)=>{
