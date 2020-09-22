@@ -1,4 +1,5 @@
 const express = require('express');
+const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../database');
@@ -25,12 +26,12 @@ router.put('/client/actualizardatos',(req,res)=>{
                 if(rows != undefined){
                     let script = "select * from vta_cliente_estudiante where cedula = ? ";
                     var query = con.query(script,
-                    [q.cedula], (err,rows,fields)=>{
+                    [q.cedula], (err,row,fields)=>{
                         if(!err){
-                            if(rows != undefined){
-                                req.session.value = rows[0];
-                                console.log('[',chalk.green('OK'),']',chalk.yellow(req.session.value.usuario),'cambios relizados');
-                                res.redirect('/client/home');
+                            if(row != undefined){
+                                req.session.value = row[0];
+                                console.log('[',chalk.green('OK'),'] cambios relizados');
+                                res.send(row[0]);
                             }else{
                                 res.render('index',{err:'1',id: req.body.cedula});
                             }
@@ -38,7 +39,6 @@ router.put('/client/actualizardatos',(req,res)=>{
                             res.render('index',{err:'2',id: req.body.cedula});
                         }
                     });
-                    res.send(rows);
                 }
             }
         });

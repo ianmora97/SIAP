@@ -118,7 +118,7 @@ function update() {
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then((response) => {
-                
+                $("#alertasucess").fadeIn('slow');
             }, (error) => {
             }); 
         }else{
