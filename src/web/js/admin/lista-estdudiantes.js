@@ -7,9 +7,10 @@ function events(event) {
     cargar_Estudiantes();
     dropdownhoras();
     filtrarXdia();
+    toogleMenuAplicar();
 }
 
-//--------------------------------------------------------------
+//------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
 var estudiantes = [];
 
 function cargar_Estudiantes() {
@@ -37,47 +38,50 @@ function cargarEstudiantes(solicitudes) {
 
 function llenarEstudiantes(solicitudes) {
     let nrc = solicitudes.codigo_taller;
-    let nivel = solicitudes.nivel_taller;
-    let id_grup = solicitudes.id_grupo;
-    let dia = solicitudes.dia;
-    let hora = solicitudes.hora;
+
+
+    let nivel = solicitudes.nivel_taller == 1 ? 'Principiante' : solicitudes.nivel_taller == 2 ? 'Intermedio' : 'Avanzado';
+
+
     let nombre_pro = solicitudes.nombre_profesor;
-    let id_matri = solicitudes.id_matricula;
-    let consenti = solicitudes.consentimiento;
-    let id_est = solicitudes.id_estudiante;
-    let id_usu = solicitudes.id_usuario;
+    let id_matri = solicitudes.created_at;
+
     let cedul = solicitudes.cedula;
     let nomb =
         solicitudes.nombre.toUpperCase() +
         " " +
         solicitudes.apellido.toUpperCase();
+    let horario = solicitudes.dia.toUpperCase() +
+        " " + solicitudes.hora + "-" + parseInt(solicitudes.hora + 1);
     $("#lista-estudiantes").append(
         "<tr>" +
-            "<td>" +
-            cedul +
-            " </td>" +
-            "<td>" +
-            nomb +
-            "</td>" +
-            "<td>" +
-            nrc +
-            "</td>" +
-            "<td>" +
-            dia +
-            "</td>" +
-            "<td>" +
-            nivel +
-            "</td>" +
-            "<td>" +
-            nombre_pro +
-            "</td>" +
-            "<td> por hacer</td>" +
-            "<td>" +
-            id_matri +
-            "</td>" +
-            "</tr>"
+        "<td>" +
+        cedul +
+        " </td>" +
+        "<td>" +
+        nomb +
+        "</td>" +
+        "<td>" +
+        nrc +
+        "</td>" +
+        "<td>" +
+        horario +
+        "</td>" +
+        "<td>" +
+        nivel +
+        "</td>" +
+        "<td>" +
+        nombre_pro +
+        "</td>" +
+        "<td> por hacer</td>" +
+        "<td>" +
+        id_matri +
+        "</td>" +
+        "</tr>"
     );
 }
+
+//------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Fin---
 
 function dropdownhoras() {
     $("#dropdownboton").on("click", function () {
@@ -92,38 +96,80 @@ function toogleMenu() {
     });
 }
 
+function toogleMenuAplicar(){
+    $("#aplicarFiltro").on("click", function () {  $("#dropdownhoras").hide();});
+}
+
+
+//--------------------------------------------------------------Partde de los filtros--
 function filtrarXdia() {
     //primero obtiene los elementos marcados
     $("#aplicarFiltro").on("click", function () {
         let dias = [];
-        let seleccionados = $("[id*=filter_lista_dias_]");
+        let horas = [];
+        let seleccionadosDias = $("[id*=filter_lista_dias_]");
+        let seleccionadoHoras = $("[id*=horas-]")
 
-        for (let i = 0; i < seleccionados.length; i++) {
-            if (seleccionados[i].checked) {
-                dias.push(seleccionados[i].name.toUpperCase());
+        for (let i = 0; i < seleccionadosDias.length; i++) {
+            if (seleccionadosDias[i].checked) {
+                dias.push(seleccionadosDias[i].name.toUpperCase());
             }
         }
-        if(dias.length != 0){
-            cargarEstudiantes(filtrarxdia(estudiantes, dias));
-        }else{
+
+        for (let i = 0; i < seleccionadoHoras.length; i++) {
+            if (seleccionadoHoras[i].checked) {
+                horas.push(seleccionadoHoras[i].name);
+            }
+        }
+
+
+        if (horas.length != 0 || dias.length != 0) {
+            cargarEstudiantes(filtrarxdia(estudiantes, dias, horas));
+        } else {
             cargarEstudiantes(estudiantes);
         }
-        
     });
 }
 
-var filtrarxdia = (array, selected) => {
+var filtrarxdia = (estudiantes, dias, horas) => {
     let result = [];
-    for (let j = 0; j < selected.length; j++) {
-        for (let i = 0; i < array.length; i++) {
-            if (array[i].dia == selected[j]) {
-                result.push(array[i]);
+
+    if (horas.length == 0 && dias.length != 0) {
+        for (let i = 0; i < estudiantes.length; i++) {
+            for (let j = 0; j < dias.length; j++) {
+                if (estudiantes[i].dia == dias[j]) {
+                    result.push(estudiantes[i]);
+                }
+            }
+        }
+    }
+
+    if (horas.length != 0 && dias.length == 0) {
+        for (let i = 0; i < estudiantes.length; i++) {
+            for (let w = 0; w < horas.length; w++) {
+                if (estudiantes[i].hora == horas[w]) {
+                    result.push(estudiantes[i]);
+                }
+            }
+        }
+    }
+
+    if (horas.length != 0 && dias.length != 0) {
+        for (let i = 0; i < estudiantes.length; i++) {
+            for (let j = 0; j < dias.length; j++) {
+                for (let w = 0; w < horas.length; w++) {
+                    if (estudiantes[i].dia == dias[j] && estudiantes[i].hora == horas[w]) {
+                        result.push(estudiantes[i]);
+                    }
+                }
             }
         }
     }
     return result;
 };
 
-function filtrarXhora() {}
+
+//typeof
+// parseInt(string)
 
 document.addEventListener("DOMContentLoaded", loaded);
