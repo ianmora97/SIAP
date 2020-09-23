@@ -11,16 +11,21 @@ function events(event){
     filtrarTODOS();
     dropdownhoras();
     toogleMenuAplicar();
+    matricularCursos();
+    ocultarAlertaSuccess();
+    ocultarAlertaDanger();
 }
 function eventSeleccionar(curso) {
     let all = $("[id*=matricularCursoCheckbox-]");
     let select = [];
     let montoCantidad = 0;
+    
+    cursosSeleccionados = []; //limpio el vector de cursos seleccionados
 
     for (let i = 0; i < all.length; i++) {
         if (all[i].checked) {
             select.push(all[i].value);
-            cursosSeleccionados.push(all[i]); //FILTRAR CURSOS SELECCIONADOS
+            cursosSeleccionados.push(getCurso(all[i].value,cursos)); //lleno el vector de cursos seleccioandos para no perderlos a la hora de filtrarlos
             if(montoCantidad != 0){
                 montoCantidad += 1000;
             }else{
@@ -28,10 +33,16 @@ function eventSeleccionar(curso) {
             }
         }
     }
-    let contadorCursos = select.length;
-    montoTotal = montoCantidad;
+
+    cursosSeleccionados = cursosSeleccionados.filter(function(item, pos) { //elimina repetidos
+        return cursosSeleccionados.indexOf(item) == pos;
+    });
+    
+    let contadorCursos = select.length; //cuenta los cursos que se seleccionaron, e.g 3 cursos (lunes1, martes11, jueves3)
+    montoTotal = montoCantidad; //monto total precio
     $('#montoTotal').text(montoTotal);
-    if(contadorCursos == 3){
+
+    if(contadorCursos == 3){ //desabilito los demas botones para que no pueda marcar mas de 3 cursos
         for (let i = 0; i < all.length; i++) {
             if (!(all[i].checked)) {
                 $('#matricularCursoCheckbox-'+all[i].value).attr('disabled',true);
@@ -52,7 +63,7 @@ function dropdownhoras() {
 }
 
 function toogleMenuAplicar(){
-    $("#matricularCursoApply").on("click", function () {  
+    $("#buscarApply").on("click", function () {  
         $("#dropdownhoras").hide();
     });
 }
@@ -73,10 +84,11 @@ function filtrarTODOS(){
                 dias.push(seleccionadosDias[i].name.toUpperCase());
             }
         }
+        let vector = [];
         if (horas.length != 0 || dias.length != 0) {
-            let vector = [];
             vector = filtrarTodos(cursos,dias,horas);
-            vector = filtradosSeleccionados(cursosSeleccionados,vector);
+            // console.log(vector);
+            // vector = filtradosSeleccionados(cursosSeleccionados,vector);
             cargarCurso(vector);
         } else {
             cargarCurso(cursos);
@@ -95,7 +107,7 @@ function traerCursos(){
         contentType: "application/json"
     }).then((response) => {
         cursos = response;
-        console.log(cursos);
+        //console.log(cursos);
         cargarCurso(response);
     }, (error) => {
     });
@@ -142,19 +154,37 @@ function llenarCurso(cupo) {
         '</div>'
     );
 }
+function ocultarAlertaDanger(){
+    $('#cerrarAlertaDanger').on('click',function(){
+        $("#alertadanger").fadeOut('slow');
+    });
+}
+function ocultarAlertaSuccess(){
+    $('#alertasucess').on('click',function(){
+        $("#alertasucess").fadeOut('slow');
+    });
+}
 function matricularCursos(){
-    let nivel = $('#nivel_estudiante').text();
-    let data = {nivel}
-    $.ajax({
-        type: "GET",
-        url: "/client/matricularCursos",
-        data:data,
-        contentType: "application/json"
-    }).then((response) => {
-        cursos = response;
-        console.log(cursos);
-        cargarCurso(response);
-    }, (error) => {
+    $('#aceptarMatricularAll').on('click',function(){
+        let estudiante = parseInt($('#id_estudiante').text());
+        for (let i = 0; i < cursosSeleccionados.length; i++) {
+            let data; 
+            data = {
+                id:cursosSeleccionados[i].id_grupo,
+                estudiante,
+            };
+            $.ajax({
+                type: "POST",
+                url: "/client/matricularCursos",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                $("#alertasucess").fadeIn('slow');
+            }, (error) => {
+                $("#alertadanger").fadeIn('slow');   
+            });
+        }
+        
     });
 }
 function parseFecha(dia,hora){
@@ -164,27 +194,12 @@ function parseFecha(dia,hora){
     fecha = fecha + " " + h + u + "-" + (h+1) + u;
     return fecha;
 }
-var filtrarxdia = (array, selected)=>{
-	let result = [];
-	for(let j=0;j<selected.length;j++){
-		for(let i=0;i<array.length;i++){
-			if(array[i].dia.toUpperCase() == selected[j].toUpperCase()){
-				result.push(array[i])
-			}
-		}	
-	}
-	return result;
-}
-var filtrarxhora = (array, selected)=>{
-	let result = [];
-	for(let j=0;j<selected.length;j++){
-		for(let i=0;i<array.length;i++){
-			if(array[i].hora == selected[j]){
-				result.push(array[i])
-			}
-		}	
-	}
-	return result;
+var getCurso = (id,cursos)=>{
+    for(let i=0;i<cursos.length;i++){
+        if(cursos[i].id_grupo == id){
+            return cursos[i];
+        }
+    }
 }
 var filtrarTodos = (cursos, dias, horas)=>{
     let result = [];
@@ -221,15 +236,23 @@ var filtrarTodos = (cursos, dias, horas)=>{
     }
     return result;
 };
-var filtradosSeleccionados = (seleccioados, filtrados) =>{
+var filtradosSeleccionados = (seleccionados, filtrados) =>{
     let result = [];
     for (let i = 0; i < filtrados.length; i++) {
-        for (let w = 0; w < seleccioados.length; w++) {
-            if (filtrados[i].id == seleccioados[w].id) {
+        for (let w = 0; w < seleccionados.length; w++) {
+            if (filtrados[i].id_grupo == seleccioados[w].id_grupo) {
+                console.log(filtrados[i].id_grupo, seleccionados[w].id_grupo);
                 result.push(filtrados[i]);
             }
         }
     }
     return result;
 }
+var quitarCurso = ( arr, item )=> {
+    var i = arr.indexOf( item );
+    if ( i !== -1 ) {
+        arr.splice( i, 1 );
+    }
+}
+
 document.addEventListener("DOMContentLoaded", loaded);

@@ -9,6 +9,12 @@ function events(event){
     load_stats();
     get_today_date();
 }
+function toogleMenu() {
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+}
 function get_today_date() {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');

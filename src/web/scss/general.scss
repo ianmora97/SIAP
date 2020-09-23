@@ -78,3 +78,32 @@ hr {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+@mixin object-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.profile-pic {
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: multiply;
+    color: transparent;
+    transition: all .3s ease;
+    @include object-center;
+  
+    &:hover {
+      background-color: rgba(0,0,0,.5);
+      z-index: 10000;
+      color: rgba(250,250,250,1);
+      transition: all .3s ease;
+    }
+    
+    span {
+      display: inline-flex;
+      padding: .2em;
+    }
+}

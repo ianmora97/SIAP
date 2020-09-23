@@ -7,10 +7,54 @@ function events(event){
     get_padecimientos();
     openmodal_edit();
     edit();
+    cargarComprobantesFotos();
+    toggleComprobanteLista();
 }
+function toggleComprobanteLista() {
+    $('#comprobanteBoton').on('click',function(){
+        $('#comprobantes').slideToggle();
+    });
+}
+function cargarComprobantesFotos() {
+    $.ajax({
+        type: "GET",
+        url: "/client/cargarPadecimientosFotos",
+        contentType: "application/json"
+    }).then((response) => {
+        console.log(response);
+        showComprobantes(response);
+    }, (error) => {
+
+    });
+}
+function showComprobantes(comprobantes) {
+    $('#comprobantes').html(' ');
+    comprobantes.forEach(c =>{
+        printComprobantes(c);
+    });
+}
+
+function printComprobantes(c) {
+    let tipo = c.documento.split('.')[1];
+    if(tipo == 'pdf'){
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<embed src="./../public/uploads/'+c.documento+'" type="application/pdf" width="100%" height="300px" />'+
+            '</div>'    
+        );
+    }else{
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<img src="./../public/uploads/'+c.documento+'" alt="" width="100%">'+
+            '</div>'
+        );
+    }
+}
+
 function c_td(data,name){
     return '<td class="text-center" data-'+name+'="'+data+'" data-type="'+typeof(data)+'">'+data+'</td>';
 }
+
 function get_padecimientos(){
     let cedula = $('#cedula').text();
     let data ={cedula}

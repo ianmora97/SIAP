@@ -74,7 +74,7 @@ router.get('/client/padecimientos',(req,res)=>{
 });
 
 router.get('/client/cargarCursos',(req,res)=>{
-    let script = "select * from vta_grupos where nivel = ?";
+    let script = "select distinct * from vta_grupos where nivel = ? order by hora";
     var query = con.query(script,
         [req.query.nivel],
         (err,rows,fields)=>{
@@ -97,7 +97,7 @@ router.post('/client/login',(req,res)=>{
             if(rows != undefined){
                 req.session.value = rows[0];
                 console.log('[',chalk.green('OK'),']',chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                res.redirect('/client/home');
+                res.redirect('/client/perfil');
             }else{
                 res.render('index',{err:'1',id: req.body.cedula});
             }
@@ -107,18 +107,23 @@ router.post('/client/login',(req,res)=>{
     });
 });
 
-router.post('/client/subirImagen',(req,res)=>{
-    let script = "update t_usuario set foto = ? "+
-    "where cedula = 116890118";
-    var query = con.query(script,
-        [req.body.foto],
-        (err,result,fields)=>{
-        if(!err){
-            if(result.affectedRows){
+router.post('/client/matricularCursos',(req,res)=>{
+    if(req.session.value){
+        let script = "call prc_insertar_matricula(?,?,1)";
+        let c = req.body;
+        var query = con.query(script,
+            [c.id, c.estudiante],
+            (err,result,fields)=>{
+            if(err){
+                res.status(501).send('error'); 
+            }else{
                 res.send('ok');
             }
-        }
-    });
+        });
+    }else{
+        res.status(500).send('render');
+    }
+    
 });
 module.exports = router;
 

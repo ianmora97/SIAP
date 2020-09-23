@@ -39,8 +39,9 @@
                     Desea cambiar el estado del estudiante a confirmado?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="CambiarEstadoConfirmarBoton">Confirmar</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="CambiarEstadoRechazarBoton">Rechazar</button>
+                    <button type="button" class="btn btn-success" id="CambiarEstadoConfirmarBoton">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -86,9 +87,9 @@
                                 <div class="col-md-6 mt-2">
                                     <div class="input-group flex-nowrap">
                                         <div class="input-group-prepend">
-                                            <button class="btn bg-white" type="button" id="button-addon1"><i class="fas fa-search"></i></button>
+                                            <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
                                         </div>
-                                        <input type="search" class="form-control border-0 shadow-none" placeholder="Buscar..." aria-label="Username" aria-describedby="addon-wrapping">
+                                        <input type="search" class="form-control border-0 shadow-none" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
                                     </div>
                                 </div>
                                 <div class="col-md-4 mt-2 d-flex justify-content-between">
@@ -96,38 +97,41 @@
                                         <button type="button" class="btn btn-secondary dropdown-toggle w-75" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                           Filtrar
                                         </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                          <button class="dropdown-item" type="button">Nuevos</button>
+                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999;">
+                                          <button class="dropdown-item" type="button" id="filtrar_nuevos">Nuevos</button>
                                           <div class="dropdown-divider"></div>
-                                          <button class="dropdown-item" type="button">Verificados</button>
+                                          <button class="dropdown-item" type="button" id="filtrar_confirmados">Verificados</button>
                                           <div class="dropdown-divider"></div>
-                                          <button class="dropdown-item" type="button">Funcionarios</button>
+                                          <button class="dropdown-item" type="button" id="filtrar_funcionarios">Funcionarios</button>
                                           <div class="dropdown-divider"></div>
-                                          <button class="dropdown-item" type="button">Estudiantes</button>
+                                          <button class="dropdown-item" type="button" id="filtrar_estudiantes">Estudiantes</button>
                                         </div>
                                     </div>
                                     <button type="button" name="actualizar_lista" id="actualizar_lista" class="btn bg-white"><i class="fas fa-sync-alt"></i></button>
                                 </div>
                             </div>
-                            <table class="table table-hover table-responsive-md">
-                                <thead>
-                                    <tr class="bg-primary text-white">
-                                        <th scope="col">#</th>
-                                        <th scope="col">Cedula</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Apellido</th>
-                                        <th scope="col">Nacimiento</th>
-                                        <th scope="col">Nombre de Usuario</th>
-                                        <th scope="col">Sexo</th>
-                                        <th scope="col">Perfil</th>
-                                        <th scope="col">Fecha de Registro</th>
-                                        <th scope="col">Estado</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="lista_usuarios_temporales">
-            
-                                    </tbody>
-                            </table>
+                            <div class="row w-100 mx-0" style="height: 550px; overflow-y: auto;">
+                                <table class="table table-hover table-responsive-md table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-primary text-white sticky-top" style="border-top-left-radius: 10px;" scope="col">#</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Cedula</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Nombre</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Apellido</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Nacimiento</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Nombre de Usuario</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Sexo</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Perfil</th>
+                                            <th class="bg-primary text-white sticky-top" scope="col">Fecha de Registro</th>
+                                            <th class="bg-primary text-white sticky-top" style="border-top-right-radius: 10px;" scope="col">Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="lista_usuarios_temporales">
+                
+                                        </tbody>
+                                </table>
+
+                            </div>
                             
                         </div>
                     </div>

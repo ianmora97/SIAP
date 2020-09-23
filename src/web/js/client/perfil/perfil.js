@@ -6,31 +6,35 @@ function loaded(event){
 
 function events(event){
     get_today_date();
-    load_image();
+    fotoonChange();
     checkUpdate();
     update();
     getLugares();
-    fotoonChange();
+    cargarFoto();
     reqCantones();
     reqDistritos();
     ocultarAlertaDanger();
+    changeProfilePhoto();
+}
+function cargarFoto() {
+    let foto = $('#usuario_foto').data('value');
+    $('.avatar-bg').css({
+        'background':'url(./../public/uploads/'+foto+')',
+        'background-size':'cover',
+        'background-position': '50% 50%'
+    });
+}
+function changeProfilePhoto() {
+    $("#profileImageChange").click(function(e) {
+        $("#fileFoto").click();
+    });
 }
 function fotoonChange() {
     $("#fileFoto").change(function(){
         readURL(this);
+        $('#btn_cambiar_foto').show();
     });
 }
-function get_today_date() {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-
-    today = mm + '/' + dd + '/' + yyyy;
-    $('.today-date').text(today);
-}
-
-
 function readURL(input) { 
     if (input.files && input.files[0]) {
         var reader = new FileReader(); 
@@ -44,26 +48,14 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-function load_image() {
-    $('#btn_cambiar_foto').on('click',function(event){
-        event.preventDefault();
-        var files = $('#fileFoto').get(0).files,
-        formData = new FormData(); 
-        for (var i=0; i < files.length; i++) {
-            var file = files[i];
-            formData.append('photos[]', file, file.name);
-        } 
-        $.ajax({
-            type: "POST",
-            url: "/client/subirImagen",
-            data: formData,
-            contentType: false,
-            processData: false
-        }).then((response) => {
-            console.log(response);
-        }, (error) => {
-        });
-    });
+function get_today_date() {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    $('.today-date').text(today);
 }
 
 function reqCantones() {
