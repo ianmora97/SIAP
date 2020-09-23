@@ -6,6 +6,7 @@ const uuid = require('uuid');
 
 const con = require('../database');
 
+//middlewares
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'../public/MedicalDocuments'),
     filename: (req, file, cb) => {
