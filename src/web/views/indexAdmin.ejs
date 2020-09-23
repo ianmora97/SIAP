@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+</head>
+<body>
+    <div class="container">
+        <img class="mx-auto my-3 d-block" src="../img/UNA-VVE-logo-3.png" alt="" srcset="">
+        <div class="w-100 m-auto" style="max-width: 450px;">
+            <form action="/admin/log" method="post">
+                <h1 class="h3 mb-3 text-center">Iniciar Session</h1>
+                <label for="inputEmail">Cedula</label>
+                <input type="text" id="cedula" name="cedula" class="form-control mb-3" placeholder="Cedula..." required="" autofocus="">
+                
+                <label for="inputPassword">Clave</label>
+                <input type="password" id="clave" name="clave" class="form-control" placeholder="Clave..." required="">
+                
+                <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit" id="inciarSesion">Entrar</button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer mt-5 py-3 justify-content-center">
+        <p class="mb-1 text-center">© 2020-2021 Universidad Nacional de Costa Rica</p>
+        <ul class="list-inline text-center ">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+        <img class="mx-auto mt-2 d-block" src="../img/logo-universidad-gray-transparency.png" alt="" srcset="">
+   </footer>
+    <script src="../js/login.js"></script>
+</body>
+</html>

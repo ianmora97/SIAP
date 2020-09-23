@@ -1,0 +1,52 @@
+<div class="bg-primary border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading">
+        <img src="../../img/logo-vive-promocion-transparency.png" class="imgIcon" alt="" width="50px">
+        <strong class="text-white">SIADP</strong>
+    </div>
+    <div class="list-group list-group-flush accordion " id="accordion-menu-lateral">
+        <a href="/admin/dashboard" class="bg-primary list-group-item list-group-item-action border-0 bg-menu <%if(s == "dash"){%> menu-active <%}%> text-white py-3" role="button">
+            <i class="fas fa-chart-line"></i>&nbsp; Dashboard
+        </a>
+        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
+        data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
+            <i class="fas fa-users"></i>&nbsp; Usuarios  <i class="fas fa-angle-down float-right"></i>
+        </a>
+            <div class="collapse <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> show <%}%>" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
+                <a href="/admin/estudiantes" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "estudiantes"){%> menu-active <%}%>">
+                    <i class="fas fa-user"></i>&nbsp; Estudiantes
+                </a>
+                <a href="/admin/administradores" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "administradores"){%> menu-active <%}%>">
+                    <i class="fas fa-user-tie"></i></i>&nbsp; Administradores
+                </a>
+                <a href="/admin/profesores" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "profesores"){%> menu-active <%}%>">
+                    <i class="fas fa-chalkboard-teacher"></i></i>&nbsp; Profesores
+                </a>
+            </div>
+        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+        data-toggle="collapse" href="#collapseTalleres" role="button" aria-expanded="false" aria-controls="collapseTalleres">
+            <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
+        </a>
+            <div class="collapse <%if(s == 'talleres' || s == 'grupos'){%> show <%}%>" id="collapseTalleres" data-parent="#accordion-menu-lateral">
+                <a href="/admin/talleres" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>">
+                    <i class="fas fa-swimmer"></i>&nbsp; Talleres
+                </a>
+                <a href="/admin/grupos" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>">
+                    <i class="fas fa-swimmer"></i>&nbsp; Grupos
+                </a>
+            </div>
+        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+        data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
+            <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
+        </a>
+            <div class="collapse <%if(s == 'solicitudes' || s == 'comprobacion'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
+                <a href="/admin/solicitudes" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>">
+                    <i class="fas fa-bell"></i>&nbsp; Lista de estudiantes matriculados
+                </a>
+                <a href="/admin/comprobacion" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "comprobacion"){%> menu-active <%}%>">
+                    <i class="fas fa-user-check"></i>&nbsp; Comprobacion de datos
+                </a>
+            </div>
+        <a href="/admin/reportes" class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3 <%if(s == "reportes"){%> menu-active <%}%>" role="button">
+            <i class="far fa-newspaper"></i>&nbsp; Reportes</a>
+    </div>
+</div>

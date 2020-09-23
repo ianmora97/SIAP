@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="modal fade" id="modalCambiarEstado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar estado de <span id="nombreTarget"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert" id="alerta_error_estado">
+                        No se pudo cambiar el estado!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <span class="sr-only" id="cedulaTarget"></span>
+                    Al confirmar el estado de un estudiante, este sera un 
+                    estudiante que podra matricular talleres de la piscina. <br>
+                    Desea cambiar el estado del estudiante a confirmado?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="CambiarEstadoConfirmarBoton">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            
+            <div class="container-fluid">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Matricula</a></li>
+                        <li class="breadcrumb-item"><a href="#">Solicitudes de Matricula</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Lista de Usarios</li>
+                    </ol>
+                </nav>
+                <div class="card border-0 shadow-sm my-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h2 class="font-weight-bolder">Lista de Usuarios Registrados</h2>
+                                <small>Informacion Actualizada hace: <span class="text-success">2 segundos</span></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
+                                <small class="text-muted">Usuarios Registrados &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_verificados_stats"></h4>
+                                <small class="text-muted">Usuarios Verificados &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_nuevos_stats"></h4>
+                                <small class="text-muted">Nuevos Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="row bg-light mx-auto rounded-lg mb-3 p-3 justify-content-between">
+                                <div class="col-md-6 mt-2">
+                                    <div class="input-group flex-nowrap">
+                                        <div class="input-group-prepend">
+                                            <button class="btn bg-white" type="button" id="button-addon1"><i class="fas fa-search"></i></button>
+                                        </div>
+                                        <input type="search" class="form-control border-0 shadow-none" placeholder="Buscar..." aria-label="Username" aria-describedby="addon-wrapping">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-2 d-flex justify-content-between">
+                                    <div class="btn-group w-100 d-inline">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle w-75" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          Filtrar
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                          <button class="dropdown-item" type="button">Nuevos</button>
+                                          <div class="dropdown-divider"></div>
+                                          <button class="dropdown-item" type="button">Verificados</button>
+                                          <div class="dropdown-divider"></div>
+                                          <button class="dropdown-item" type="button">Funcionarios</button>
+                                          <div class="dropdown-divider"></div>
+                                          <button class="dropdown-item" type="button">Estudiantes</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" name="actualizar_lista" id="actualizar_lista" class="btn bg-white"><i class="fas fa-sync-alt"></i></button>
+                                </div>
+                            </div>
+                            <table class="table table-hover table-responsive-md">
+                                <thead>
+                                    <tr class="bg-primary text-white">
+                                        <th scope="col">#</th>
+                                        <th scope="col">Cedula</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellido</th>
+                                        <th scope="col">Nacimiento</th>
+                                        <th scope="col">Nombre de Usuario</th>
+                                        <th scope="col">Sexo</th>
+                                        <th scope="col">Perfil</th>
+                                        <th scope="col">Fecha de Registro</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="lista_usuarios_temporales">
+            
+                                    </tbody>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/admin/comprobacion.js"></script>
+</body>
+</html>

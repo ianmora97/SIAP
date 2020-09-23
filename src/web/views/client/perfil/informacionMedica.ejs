@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Padecimientos</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="../js/jq-bs-bundle.js"></script>
+</head>
+<body>
+    <%- include('perfilHeader') %>
+    <div class="modal fade" id="modalEditPadecimiento" tabindex="-1" aria-labelledby="modalEditPadecimientoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                    <h5 class="modal-title text-white" id="modalEditPadecimientoLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="sr-only" id="idPadecimiento_only"></span>
+                    <div class="form-group">
+                      <label for="observacionesInput">Observaciones</label>
+                      <input type="text" name="observacionesInput" id="observacionesInput" class="form-control" placeholder="Obervaciones..." aria-describedby="obHelp">
+                      <small id="obHelp" class="text-muted">Observaciones relacionadas a su padecimiento e.g. Medicamentos, Prevenciones</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="cerrarguardarpadecimiento">Cerrar y Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid w-90 my-4">
+        <span class="sr-only" id="cedula"><%= usuario.cedula%></span>
+
+        <div class="card shadow my-3">
+            <div class="card-body">
+                <a href="/client/padecimientos" class="btn btn-primary"><i class="fas fa-notes-medical"></i>&nbsp; Agregar Padecimientos</a>
+                <button type="button" name="eliminarPadecimiento" id="eliminarPadecimiento" class="btn btn-danger"><i class="fas fa-trash-alt"></i> &nbsp; Eliminar</button>
+            </div>
+        </div>
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-center text-dark m-0 font-weight-bold">Informacion medica</p>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-responsive-xl">
+                    <thead>
+                        <tr class="bg-primary text-white">
+                            <th class="list-action">
+                                <div class="custom-control custom-checkbox">
+                                    <label class="custom-control-label" for="checkboxAll-lists">#</label>
+                                    <input type="checkbox" id="checkboxAll-lists" class="custom-control-input" onclick="$('input[name*=\'checked\']').prop('checked', this.checked)"/>
+                                </div>
+                            </th>
+                            <th scope="col" class="text-center">&nbsp;</th>
+                            <th scope="col" class="text-center"><i class="fas fa-address-card"></i> &nbsp; Apellido</th>
+                            <th scope="col" class="text-center"><i class="fas fa-address-card"></i> &nbsp; Nombre</th>
+                            <th scope="col" class="text-center"><i class="fas fa-star-of-life"></i> &nbsp; Padecimiento</th>
+                            <th scope="col" class="text-center"><i class="fas fa-sticky-note"></i> &nbsp; Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista_padecimientos">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../../../js/client/perfil/informacionMedica.js"></script>
+</body>
+
+</html>

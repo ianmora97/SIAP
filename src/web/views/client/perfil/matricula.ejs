@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Matricula</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body>
+    
+    <%- include('perfilHeader') %>
+    <div class="container-fluid w-90 mt-3 px-0">
+        <span class="sr-only" id="nivel_estudiante"><%= usuario.nivel%></span>
+        <span class="sr-only" id="tipo_estudiante"><%= usuario.tipo%></span>
+           
+        <h3 class="text-dark mb-4">Matrícula</h3>
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-center text-dark m-0 font-weight-bold">Seleccione el o los días de la semana a los cuales desea asistir a clases</p>
+            </div>
+            <div class="card-body">
+                <div class="row px-2">
+                    <div class="col-md-4 d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="lunes_filter" name="lunes_filter">
+                            <label class="custom-control-label" for="lunes_filter">Lunes</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="martes_filter" name="martes_filter">
+                            <label class="custom-control-label" for="martes_filter">Martes</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="miercoles_filter" name="miercoles_filter">
+                            <label class="custom-control-label" for="miercoles_filter">Miércoles</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="jueves_filter" name="jueves_filter">
+                            <label class="custom-control-label" for="jueves_filter">Jueves</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-around">
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="viernes_filter" name="viernes_filter">
+                            <label class="custom-control-label" for="viernes_filter">Viernes</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id="sabado_filter" name="sabado_filter">
+                            <label class="custom-control-label" for="sabado_filter">Sábado</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100" style="overflow-y: auto; height: 560px;" id="cursos_lista">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../../../js/client/perfil/matricula.js"></script>
+</body>
+</html>

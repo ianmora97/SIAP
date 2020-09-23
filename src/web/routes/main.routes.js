@@ -7,10 +7,22 @@ router.get('/',(req,res)=>{
     res.render('index');
 });
 
+router.get('/prueba',(req,res)=>{
+    res.render('prueba');
+});
+
+
+router.get('/admin',(req,res)=>{
+    res.render('indexAdmin');
+});
+
 router.get('/registrarse',(req,res)=>{
     res.render('client/registrarse');
 });
 
+router.get('/perfil',(req,res)=>{
+    res.render('client/perfil');
+});
 
 router.post('/profesores',(req,res)=>{
     var script = con.query('select * from t_profesor',

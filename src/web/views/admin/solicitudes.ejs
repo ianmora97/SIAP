@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Lista de estudiantes</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid">
+                <h3 class="text-dark mb-4">Lista de estudiantes matriculados</h3>
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">II Ciclo 2021</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" >
+                            <div class="col-md-4 text-nowrap  " >
+
+                                <input id="buscar_est_matr" class="bg-light form-control border-0 small" type="search" placeholder="Buscar" />
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-secondary">Horas</button>
+                                    <button type="button"
+                                        class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
+                                        id="dropdownboton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-reference="parent">
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdownhoras">
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-6-7"
+                                                    name="6">
+                                                <label class="custom-control-label" for="horas-6-7">6-7 </label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-7-8"
+                                                    name="7">
+                                                <label class="custom-control-label" for="horas-7-8"> 7-8</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-8-9"
+                                                    name="8">
+                                                <label class="custom-control-label" for="horas-8-9"> 8-9</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-9-10"
+                                                    name="9">
+                                                <label class="custom-control-label" for="horas-9-10"> 9-10</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-10-11"
+                                                    name="10">
+                                                <label class="custom-control-label" for="horas-10-11">10-11</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-11-12"
+                                                    name="11">
+                                                <label class="custom-control-label" for="horas-11-12">11-12</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-12-13"
+                                                    name="12">
+                                                <label class="custom-control-label" for="horas-12-13">12-13</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-13-14"
+                                                    name="13">
+                                                <label class="custom-control-label" for="horas-13-14">13-14</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-14-15"
+                                                    name="14">
+                                                <label class="custom-control-label" for="horas-14-15">14-15</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-15-16"
+                                                    name="15">
+                                                <label class="custom-control-label" for="horas-15-16">15-16</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-16-17"
+                                                    name="16">
+                                                <label class="custom-control-label" for="horas-16-17">16-17</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-17-18"
+                                                    name="17">
+                                                <label class="custom-control-label" for="horas-17-18">17-18</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-18-19"
+                                                    name="18">
+                                                <label class="custom-control-label" for="horas-18-19">18-19</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-19-20"
+                                                    name="19">
+                                                <label class="custom-control-label" for="horas-19-20">19-20</label>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="horas-20-21"
+                                                    name="20">
+                                                <label class="custom-control-label" for="horas-20-21">20-21</label>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                                <div class="col-md-6 d-flex justify-content-around">
+
+
+                                    <div class="row">
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="filter_lista_dias_lunes" name="lunes">
+                                                <label class="custom-control-label" for="filter_lista_dias_lunes">Lunes</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="filter_lista_dias_martes" name="martes">
+                                                <label class="custom-control-label" for="filter_lista_dias_martes">Martes</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="filter_lista_dias_miercoles" name="miercoles">
+                                                <label class="custom-control-label" for="filter_lista_dias_miercoles">Miércoles</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="filter_lista_dias_jueves" name="jueves">
+                                                <label class="custom-control-label" for="filter_lista_dias_jueves">Jueves</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox" id="filter_lista_dias_viernes" name="viernes">
+                                                <label class="custom-control-label" for="filter_lista_dias_viernes">Viernes</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md- d-flex justify-content-around">
+                                            <div class="custom-control custom-checkbox custom-control-inline">
+                                                <input class="custom-control-input" type="checkbox"  id="filter_lista_dias_sabado" name="sabado">
+                                                <label class="custom-control-label" for="filter_lista_dias_sabado">Sábado</label>
+                                            </div>
+    
+                                        </div>
+                                      </div>
+
+                                  
+                                </div>
+                                
+                            </div>
+                            <div class="row" style="margin-top: 10px; margin-bottom: 7px;" >
+                                <div class="col text-center">
+                                    <button class="btn btn-primary text-center" type="button"id="aplicarFiltro">Aplicar</button>
+                                </div>
+                            </div>
+                            <div class="row">                            
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                                aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>NRC</th>
+                                            <th>Horario</th>
+                                            <th>Nivel</th>
+                                            <th>Profesor</th>
+                                            <th>Meses</th>
+                                            <th>Fecha de matricula</th>
+                                            <th>Ver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lista-estudiantes">
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td><strong>Cédula</strong></td>
+                                            <td><strong>Nombre</strong></td>
+                                            <td><strong>NRC</strong></td>
+                                            <td><strong>Horario</strong></td>
+                                            <td><strong>Nivel</strong></td>
+                                            <td><strong>Profesor</strong></td>
+                                            <td><strong>Meses</strong></td>
+                                            <td><strong>Fecha de matricula</strong></td>
+                                            <td><strong>Ver</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/admin/lista-estdudiantes.js"></script>
+</body>
+
+</html>

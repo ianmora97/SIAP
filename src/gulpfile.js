@@ -18,15 +18,6 @@ gulp.task('animate', function() {
         .pipe(gulp.dest("web/css"));
 });
 
-// move fontawesome CSS file
-gulp.task('fo-aw', function() {
-    return gulp.src([
-            'node_modules/@fortawesome/fontawesome-free/css/all.css'
-        ])
-        .pipe(concat('fontawesome.css'))
-        .pipe(gulp.dest('web/css'))
-        .pipe(browserSync.stream());
-});
 // move bootstrap JS and Jquery
 gulp.task('js', function() {
     return gulp.src([
@@ -39,7 +30,7 @@ gulp.task('js', function() {
 });
 
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate','fo-aw', function() {
+gulp.task('serve', gulp.series('sass','js','animate', function() {
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
 }));
 

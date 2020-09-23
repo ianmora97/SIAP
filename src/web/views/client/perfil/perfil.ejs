@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="../js/jq-bs-bundle.js"></script>
+</head>
+<body>
+    <%- include('modalesPerfil') %>
+    <%- include('perfilHeader') %>
+    <div class="container-fluid mt-3 w-90">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;" id="alertasucess">
+          <strong>Cambios realizados!</strong> Sus datos han sido actualizados correctamente.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;" id="alertadanger">
+			<h4 class="alert-heading">Datos erroneos!</h4>
+			<p>No puede dejar espacios en blanco, esto se debe a:</p>
+			<hr>
+			<p class="mb-0" id="erroresAlert"></p>
+			<button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+        <div class="row mb-3">
+            <div class="col-lg-4 ">
+                <div class="card mb-3">
+                    <div class="card-body text-center shadow">
+                        <div class="avatar-bg center"></div>
+                        <div class="custom-file my-3">
+                            <input type="file" id="fileFoto" name="avatar-file">
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="button">Cambiar foto</button>
+
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h3 class="text-center text-dark font-weight-bold m-0">Talleres</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">Principiante<span
+                                class="float-right">100%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 100%;"><span class="sr-only">100%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Intermedio - Avanzado<span
+                                class="float-right">40%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="40" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 40%;"><span class="sr-only">40%</span>
+                            </div>
+                        </div>
+                        <h4 class="small font-weight-bold">Avanzado<span
+                                class="float-right">0%</span></h4>
+                        <div class="progress progress-sm mb-3">
+                            <div class="progress-bar bg-info" aria-valuenow="0" aria-valuemin="0"
+                                aria-valuemax="100" style="width: 0%;"><span class="sr-only">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 ">
+                <div class="row mb-3">
+                    <div class="col pl-0">
+                        <div class="card text-white bg-primary shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Asistencia</p>
+                                        <p class="m-0"><strong>95.2%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-poll fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i
+                                        class="fas fa-arrow-up"></i>&nbsp;100% desde la ultima semana</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col pr-0">
+                        <div class="card text-white bg-success shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Progreso</p>
+                                        <p class="m-0"><strong>40%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-swimmer fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i
+                                        class="fas fa-arrow-up"></i>&nbsp;40% desde el primer dia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col p-0">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-center text-dark m-0 font-weight-bold">Información
+                                    personal</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="cedula">
+                                                <strong>Identificación</strong>
+                                            </label>
+                                            <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
+                                            <input class="form-control" type="text" id="cedula_perfil" name="cedula" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group"><label
+                                                for="nombre"><strong>Nombre</strong>
+                                            </label><input
+                                                class="form-control" type="text" id="nombre_perfil"
+                                                name="nombre" placeholder="Nombre" value="<%= usuario.nombre %>" disabled>
+                                            </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="apellido"><strong>Apellido</strong></label>
+                                            <input
+                                                class="form-control" type="text" id="apellido_perfil"
+                                                name="apellido" placeholder="Apellido" value="<%= usuario.apellido %>" disabled>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="correo">
+                                                <strong>Email</strong><br>
+                                            </label>
+                                            <input class="form-control" type="email" id="email_perfil"
+                                                placeholder="Correo" name="correo_perfil" value="<%= usuario.correo %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="sexo">
+                                            <strong>Sexo</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <select class="form-control" name="sexo" id="sexo_perfil" disabled>
+                                                <optgroup label="Seleccione uno">
+                                                    <option value="1" <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
+                                                    <option value="2" <%if(usuario.sexo == 'Femenino'){%>selected<%}%>>Femenino</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="nacimiento">
+                                            <strong>Fecha de nacimiento</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <input class="form-control"
+                                                id="fecha_nacimiento_perfil" type="date" value="<%= usuario.nacimiento %>" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="celular">
+                                                <strong>Celular</strong><br>
+                                            </label>
+                                            <input
+                                                class="form-control" type="tel" id="celular_perfil"
+                                                placeholder="Celular" name="celular" value="<%= usuario.celular %>">
+                                            </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="telefono">
+                                                <strong>Teléfono</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" id="telefono_perfil" placeholder="Telefono" name="telefono" value="<%= usuario.telefono %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="tel_emergencia">
+                                                <strong>Teléfono emergencia</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" placeholder="Telefono" name="tel_emergencia" value="<%= usuario.telefono_emergencia %>" id="telefono_emergencia">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="carrera">
+                                                <strong>Carrera / Departamento</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" placeholder="Carrera departamento" name="carrera" value="<%= usuario.carrera_departamento%>" id="carrera">
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="nivel">
+                                            <strong>Nivel</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="nivelActual" data-values="<%= usuario.nivel%>"></span>
+                                            <input class="form-control" type="number" placeholder="Nivel" name="nivel" value="<%= usuario.nivel%>" id="nivel" disabled>
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="estado">
+                                            <strong>Estado</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <% var estado = usuario.estado == 1 ? 'Activo' : 'No activo' %>
+                                            <span class="sr-only" id="estadoEstudiante" data-values="<%= usuario.estado%>"></span>
+                                            <input class="form-control" type="text" placeholder="Estado" name="estado" value="<%- estado%>" id="estado" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Provincia</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="provinciaSelected" data-values="<%= usuario.provincia%>"></span>
+                                            <select class="form-control" name="provincia" id="provincia">
+                                                <optgroup label="Seleccione una Provincia">
+
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Cantón</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="cantonSelected" data-values="<%= usuario.canton%>"></span>
+                                            <select class="form-control" name="canton" id="canton">
+                                                <optgroup label="Seleccione el cantón">
+    
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="first_name">
+                                            <strong>Distrito</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="distritoSelected" data-values="<%= usuario.distrito%>"></span>
+                                            <select class="form-control" name="distrito" id="distrito">
+                                                <optgroup label="Seleccione el distrito ">
+
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <label for="direccion">
+                                            <strong>Direccion Exacta</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="direccionText" data-values="<%= usuario.direccion%>"></span>
+                                            <input class="form-control" type="text" placeholder="Direccion Exacta" name="direccion" value="<%= usuario.direccion%>" id="direccion">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="btn btn-primary btn-lg d-block mx-auto" id="guardar_info" type="submit">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script type="module" src="../../../js/client/perfil/perfil.js"></script>
+</body>
+</html>

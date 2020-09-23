@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+const chalk = require('chalk');
 require('dotenv').config();
 
 var config = {
@@ -16,7 +17,7 @@ con.getConnection(function(err) {
         console.log(err);
         return;
     }else{
-        console.log('[OK] BD',process.env.DB_DATABASE,'conected');
+        console.log('[',chalk.green('OK'),'] BD',process.env.DB_DATABASE,'conected');
     }
 });
 module.exports = con;
