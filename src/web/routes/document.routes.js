@@ -1,7 +1,32 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const multer = require('multer');
+const uuid = require('uuid');
 
 const con = require('../database');
+
+//middlewares
+const storage = multer.diskStorage({
+    destination: path.join(__dirname,'../public/MedicalDocuments'),
+    filename: (req, file, cb) => {
+        cb(null,uuid.v4() + path.extname(file.originalname).toLocaleLowerCase());
+    }   
+});
+
+router.use(multer({
+    storage,
+    dest: path.join(__dirname,'public/MedicalDocuments'),
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|pdf/
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if(mimetype && extname){
+            return cb(null, true);
+        }
+        cb("Error: Archivo debe ser un formato valido");
+    }
+}).single('image'));
 
 //Muestra todos los documentos 
 router.get('/documento/select',(req,res)=>{
@@ -13,9 +38,11 @@ router.get('/documento/select',(req,res)=>{
     });
 });
 
-router.post('/documento/insertar',(req,res)=>{
-    var script = '';
+router.post('/uploadDocument', (req,res)=>{
+    console.log(req.file);
+    res.send('uploaded');
 });
+
 
 
 module.exports = router;

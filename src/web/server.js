@@ -26,6 +26,7 @@ app.use(require('./routes/main.routes'));
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/admin.routes'));
 app.use(require('./routes/dashboard.routes'));
+app.use(require('./routes/document.routes'));
 app.use(require('./routes/client.routes'));
 app.use(require('./routes/listaestudiantes.routes'));
 app.use(require('./routes/user_temp.routes'));
