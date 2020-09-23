@@ -67,17 +67,6 @@ function insertarPadecimientos(){
 
 
 }
-function ejemploAJAX() {
-    // $('#accion').on('click',function(){
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/ejemplo",
-    //         contentType: "application/json"
-    //     }).then((response) => {
-            
-    //     }, (error) => {
-    //     });
-    // });
-}
+
 
 document.addEventListener("DOMContentLoaded", loaded);
