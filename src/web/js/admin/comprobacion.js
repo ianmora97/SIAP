@@ -123,7 +123,7 @@ function llenarListaUsuarios(u) {
     let nacimiento = u.nacimiento;
     let username = u.usuario;
     let sexo = u.sexo;
-    let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario0';
+    let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario';
     let creado = u.creado;
     let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';

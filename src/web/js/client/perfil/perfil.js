@@ -16,6 +16,9 @@ function events(event){
     ocultarAlertaDanger();
     changeProfilePhoto();
 }
+
+
+
 function cargarFoto() {
     let foto = $('#usuario_foto').data('value');
     $('.avatar-bg').css({
@@ -30,9 +33,19 @@ function changeProfilePhoto() {
     });
 }
 function fotoonChange() {
-    $("#fileFoto").change(function(){
-        readURL(this);
-        $('#btn_cambiar_foto').show();
+    $("#fileFoto").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+            readURL(this);
+            $('#btn_cambiar_foto').show();
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+                    
     });
 }
 function readURL(input) { 
@@ -104,12 +117,15 @@ function update() {
         console.log(data);
 
         if(validate(data)){
+            $('#spinnerWaiter').show();
+
             $.ajax({
                 type: "PUT",
                 url: "/client/actualizardatos",
                 data: JSON.stringify(data),
                 contentType: "application/json"
             }).then((response) => {
+                $('#spinnerWaiter').hide();
                 $("#alertasucess").fadeIn('slow');
             }, (error) => {
             }); 

@@ -7,8 +7,12 @@ const con = require('../database');
 router.get('/client/home',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'home'}
-        res.render('client/perfil/inicio',v);
+        if(typeof usuario.rol != 'number'){
+            let v = {usuario, selected:'home'}
+            res.render('client/perfil/inicio',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -17,8 +21,13 @@ router.get('/client/home',(req,res)=>{
 router.get('/client/clases',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'clases'}
-        res.render('client/perfil/clases',v);
+        if(typeof usuario.rol != 'number'){
+            let usuario = req.session.value;
+            let v = {usuario, selected:'clases'}
+            res.render('client/perfil/clases',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -26,8 +35,13 @@ router.get('/client/clases',(req,res)=>{
 router.get('/client/matricula',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'matricula'}
-        res.render('client/perfil/matricula',v);
+        if(typeof usuario.rol != 'number'){
+            let usuario = req.session.value;
+            let v = {usuario, selected:'matricula'}
+            res.render('client/perfil/matricula',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -35,8 +49,13 @@ router.get('/client/matricula',(req,res)=>{
 router.get('/client/informacionMedica',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'informacionMedica'}
-        res.render('client/perfil/informacionMedica',v);
+        if(typeof usuario.rol != 'number'){
+            let usuario = req.session.value;
+            let v = {usuario, selected:'informacionMedica'}
+            res.render('client/perfil/informacionMedica',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -45,8 +64,13 @@ router.get('/client/informacionMedica',(req,res)=>{
 router.get('/client/perfil',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'perfil'}
-        res.render('client/perfil/perfil',v);
+        if(typeof usuario.rol != 'number'){
+            let usuario = req.session.value;
+            let v = {usuario, selected:'perfil'}
+            res.render('client/perfil/perfil',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -54,11 +78,15 @@ router.get('/client/perfil',(req,res)=>{
 
 router.get('/client/logout',(req,res)=>{
     if(req.session.value){
-        let u = req.session.value.usuario;
-        req.session.destroy((err) => {
-            console.log('[',chalk.green('OK'),']',chalk.yellow(u),'Session Cerrada');
+        let usuario = req.session.value;
+        if(typeof usuario.rol != 'number'){
+            let u = req.session.value.usuario;
+            req.session.destroy((err) => {
+                res.render('index');
+            })
+        }else{
             res.render('index');
-        })
+        }
     }else{
         res.render('index');
     }
@@ -66,8 +94,13 @@ router.get('/client/logout',(req,res)=>{
 router.get('/client/padecimientos',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        let v = {usuario, selected:'padecimientos'}
-        res.render('client/perfil/padecimientos',v);
+        if(typeof usuario.rol != 'number'){
+            let usuario = req.session.value;
+            let v = {usuario, selected:'padecimientos'}
+            res.render('client/perfil/padecimientos',v);
+        }else{
+            res.render('index');
+        }
     }else{
         res.render('index');
     }
@@ -80,7 +113,7 @@ router.get('/client/cargarCursos',(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             if(rows != undefined){
-                console.log('[',chalk.green('OK'),'] cargando cursos disponibles para',chalk.yellow(req.session.value.usuario));
+                
                 res.send(rows);
             }
         }
@@ -94,15 +127,14 @@ router.post('/client/login',(req,res)=>{
         [req.body.cedula, req.body.clave],
         (err,rows,fields)=>{
         if(!err){
-            if(rows != undefined){
+            if(rows.length != 0){
                 req.session.value = rows[0];
-                console.log('[',chalk.green('OK'),']',chalk.yellow(req.session.value.usuario),'Session Iniciada');
                 res.redirect('/client/perfil');
             }else{
-                res.render('index',{err:'1',id: req.body.cedula});
+                res.render('index',{err:'No se encuentra registrado',id: 1});
             }
         }else{
-            res.render('index',{err:'2',id: req.body.cedula});
+            res.render('index',{err:'Error en servidor',id: 2});
         }
     });
 });

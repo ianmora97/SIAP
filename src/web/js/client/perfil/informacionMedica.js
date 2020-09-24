@@ -9,10 +9,29 @@ function events(event){
     edit();
     cargarComprobantesFotos();
     toggleComprobanteLista();
+    leerComprobante();
 }
 function toggleComprobanteLista() {
     $('#comprobanteBoton').on('click',function(){
         $('#comprobantes').slideToggle();
+    });
+}
+function leerComprobante(){
+    $("#comprobante").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG' 
+        || tipo == 'PDF' || tipo == 'pdf'){
+            $('#fileHelpId').append(
+                '<input type="submit" value="Subir Comprobante" id="subirComprobanteBotonModal" class="btn btn-secondary w-100 mt-4" >'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
     });
 }
 function cargarComprobantesFotos() {

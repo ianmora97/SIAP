@@ -24,11 +24,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                        <p class="m-0">Formato de documento invalido!</p>
+                    </div>
                     <form action="/client/uploadDocument" method="POST" enctype="multipart/form-data">
                         <label for="file" class="mt-4">Subir Comprobante Medico</label>
                         <input type="file" class="form-control-file" name="image" id="comprobante" placeholder="Combrobante" aria-describedby="fileHelpId">
-                        <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF, PNG, PGJ, JPEG, GIF</small>
-                        <input type="submit" value="Subir Comprobante" class="btn btn-secondary w-100 mt-4">
+                        <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF, PNG, PGJ, JPEG</small>
+                        
                     </form>
                 </div>
             </div>
