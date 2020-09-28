@@ -113,3 +113,12 @@ hr {
     padding: 15px;
     margin: auto;
 }
+.hv-90{
+    height: 90vh !important;
+}
+.blurObject{
+    width: 100%;
+    height: 100%;
+    filter: blur(2px);
+    z-index: 2;
+}

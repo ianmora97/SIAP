@@ -107,7 +107,8 @@ function traerCursos(){
         contentType: "application/json"
     }).then((response) => {
         cursos = response;
-        //console.log(cursos);
+        $('#spinnerCursos').toggleClass('d-block');
+        $('#spinnerCursos').hide();
         cargarCurso(response);
     }, (error) => {
     });

@@ -129,7 +129,6 @@ function llenarListaUsuarios(u) {
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
     $('#lista_usuarios_temporales').append(
         '<tr>'+
-        '<td>'+id+'</td>'+
         '<td>'+cedula+'</td>'+
         '<td>'+nombre+'</td>'+
         '<td>'+apellido+'</td>'+
@@ -190,7 +189,12 @@ function cambiarEstadoSend() {
 function toogleMenu() {
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
+        //$('#sidebar-wrapper').css('position','relative');
         $("#wrapper").toggleClass("toggled");
+        //$("#side-panel").css('margin-left','-12px');
+        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+        //$("#sidebar-wrapper").animate({left:'-200'},1000);
     });
 }
 var filtrarNuevos = (estudiantes)=>{

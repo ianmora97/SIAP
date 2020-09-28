@@ -38,7 +38,8 @@ function fotoonChange() {
         let archivos = fileInput.files;
         let nombre = archivos[0].name;
         let tipo = nombre.split('.')[archivos.length];
-        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
             readURL(this);
             $('#btn_cambiar_foto').show();
             $('#formatoImagenInvalido').hide();

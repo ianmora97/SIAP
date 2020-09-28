@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const chalk = require('chalk');
 const path = require('path');
 
@@ -34,7 +35,6 @@ router.put('/client/actualizardatos',(req,res)=>{
                         if(!err){
                             if(row != undefined){
                                 req.session.value = row[0];
-                                console.log('[',chalk.green('OK'),'] cambios relizados');
                                 res.send(row[0]);
                             }else{
                                 res.render('index',{err:'1',id: req.body.cedula});
@@ -143,9 +143,10 @@ router.post('/estudiante/rechazarEstudiante',(req,res)=>{
 //Mueve un usuario temporal a un usuario fijo y lo agregar a la lista de estudiantes
 router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
     var mailOptions = {
+        name:'SIAP',
         from: 'siapduna2020@gmail.com',
         to: req.body.email,
-        subject: 'Tómela',
+        subject: 'Sistema de Administracion de la Piscina',
         html: '<div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
             '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
             '</div>' +
@@ -154,13 +155,18 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
             'ahora podra iniciar session y completar sus datos personales.<br>' +
             'Es importante que registre sus padecimientos si los presenta, y aceptar ' +
             'el consentimiento informado que se le dara una vez que matricule un curso.' +
-            '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>' 
+            '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>'+
+            '',
+        attachments: [
+            {   // consentimiento informado
+                filename: 'Consentimiento Informado.docx',
+                content: fs.createReadStream('../assets/Consentimiento informado.docx')
+            }]
     };
     var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
     [req.body.cedula],
     (err,result,fields)=>{
         if(!err){
-            console.log(result);
             email.sendMail(mailOptions, function(error, info){
                 if (error) {
                   console.log(error);
@@ -190,7 +196,6 @@ router.post('/client/uploadImage', (req,res)=>{
                     if(!err){
                         if(row != undefined){
                             req.session.value = row[0];
-                            console.log('[',chalk.green('OK'),'] cambios relizados');
                             res.render('client/perfil/perfil',v);
                         }else{
                             res.render('index',{err:'1',id: req.body.cedula});
