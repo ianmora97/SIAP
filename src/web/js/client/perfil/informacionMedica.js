@@ -7,10 +7,74 @@ function events(event){
     get_padecimientos();
     openmodal_edit();
     edit();
+    cargarComprobantesFotos();
+    toggleComprobanteLista();
+    leerComprobante();
 }
+function toggleComprobanteLista() {
+    $('#comprobanteBoton').on('click',function(){
+        $('#comprobantes').slideToggle();
+    });
+}
+function leerComprobante(){
+    $("#comprobante").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG' 
+        || tipo == 'PDF' || tipo == 'pdf'){
+            $('#fileHelpId').append(
+                '<input type="submit" value="Subir Comprobante" id="subirComprobanteBotonModal" class="btn btn-secondary w-100 mt-4" >'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+    });
+}
+function cargarComprobantesFotos() {
+    $.ajax({
+        type: "GET",
+        url: "/client/cargarPadecimientosFotos",
+        contentType: "application/json"
+    }).then((response) => {
+        $('#spinnerPadecimientos').toggleClass('d-block');
+        $('#spinnerPadecimientos').hide();
+        showComprobantes(response);
+    }, (error) => {
+
+    });
+}
+function showComprobantes(comprobantes) {
+    $('#comprobantes').html(' ');
+    comprobantes.forEach(c =>{
+        printComprobantes(c);
+    });
+}
+
+function printComprobantes(c) {
+    let tipo = c.documento.split('.')[1];
+    if(tipo == 'pdf'){
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<embed src="./../public/uploads/'+c.documento+'" type="application/pdf" width="100%" height="400px" />'+
+            '</div>'    
+        );
+    }else{
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<img src="./../public/uploads/'+c.documento+'" alt="" width="100%">'+
+            '</div>'
+        );
+    }
+}
+
 function c_td(data,name){
     return '<td class="text-center" data-'+name+'="'+data+'" data-type="'+typeof(data)+'">'+data+'</td>';
 }
+
 function get_padecimientos(){
     let cedula = $('#cedula').text();
     let data ={cedula}

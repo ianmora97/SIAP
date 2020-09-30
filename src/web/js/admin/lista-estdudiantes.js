@@ -8,6 +8,7 @@ function events(event) {
     dropdownhoras();
     filtrarXdia();
     toogleMenuAplicar();
+    buscarEscritura();
 }
 
 //------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
@@ -18,38 +19,42 @@ function cargar_Estudiantes() {
         type: "GET",
         url: "/admin/matricula/listaest",
         contentType: "application/json",
-    }).then(
-        (solicitudes) => {
+    }).then( (solicitudes) => {
             estudiantes = solicitudes;
             cargarEstudiantes(solicitudes);
+            $('#cargarDatosSpinner').hide();
         },
         (error) => {
             alert(error.status);
         }
     );
 }
-
+function buscarEscritura() {
+    $('#buscar_est_matr').on('keyup',(cantidad)=>{
+        if($('#buscar_est_matr').val() != ''){
+            cargarEstudiantes(filtrarxdia(estudiantes,[],[],$('#buscar_est_matr').val().toUpperCase()));
+        }else{
+            cargarEstudiantes(estudiantes);
+        }
+    });
+}
 function cargarEstudiantes(solicitudes) {
     $("#lista-estudiantes").html("");
+    console.log(solicitudes);
     solicitudes.forEach((solicitudes) => {
         llenarEstudiantes(solicitudes);
     });
 }
 
 function llenarEstudiantes(solicitudes) {
+    let id_matricula = solicitudes.id_matricula;
     let nrc = solicitudes.codigo_taller;
     let nivel = solicitudes.nivel_taller == 1 ? 'Principiante' : solicitudes.nivel_taller == 2 ? 'Intermedio' : 'Avanzado';
     let nombre_pro = solicitudes.nombre_profesor;
     let id_matri = solicitudes.created_at;
     let cedul = solicitudes.cedula;
-    let nomb =
-
-        solicitudes.nombre.toUpperCase() +
-        " " +
-        solicitudes.apellido.toUpperCase();
-
-    let horario = solicitudes.dia.toUpperCase() +
-        " " + solicitudes.hora + "-" + parseInt(solicitudes.hora + 1);
+    let nomb = solicitudes.nombre.toUpperCase() + " " + solicitudes.apellido.toUpperCase();
+    let horario = solicitudes.dia.toUpperCase() + " " + solicitudes.hora + "-" + parseInt(solicitudes.hora + 1);
     $("#lista-estudiantes").append(
         "<tr>" +
         "<td>" +
@@ -74,6 +79,11 @@ function llenarEstudiantes(solicitudes) {
         "<td>" +
         id_matri +
         "</td>" +
+        '<td class="list-action ">'+
+        '<a class="btn btn-success text-white" data-id="'+id_matricula+'" data-toggle="modal" data-target="#modalVerMatricula">'+
+        '<i class="fas fa-eye"></i>'+
+        '</a>'+
+        '</td>'+
         "</tr>"
     );
 }

@@ -10,7 +10,7 @@ router.get('/admin/dashboard',(req,res)=>{
             let s = 'dash';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -25,7 +25,7 @@ router.get('/admin/estudiantes',(req,res)=>{
             let s = 'estudiantes';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -38,7 +38,7 @@ router.get('/admin/administradores',(req,res)=>{
             let s = 'administradores';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -51,7 +51,7 @@ router.get('/admin/profesores',(req,res)=>{
             let s = 'profesores';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -64,7 +64,7 @@ router.get('/admin/talleres',(req,res)=>{
             let s = 'talleres';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -77,7 +77,7 @@ router.get('/admin/grupos',(req,res)=>{
             let s = 'grupos';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -90,7 +90,7 @@ router.get('/admin/solicitudes',(req,res)=>{
             let s = 'solicitudes';
             res.render('admin/solicitudes', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -104,7 +104,7 @@ router.get('/admin/comprobacion',(req,res)=>{
             let s = 'comprobacion';
             res.render('admin/comprobacionDatos', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');
@@ -117,7 +117,7 @@ router.get('/admin/reportes',(req,res)=>{
             let s = 'reportes';
             res.render('admin/dashboard', {usuario,s});
         }else{
-            res.render('index');
+            res.render('indexAdmin');
         }
     }else{
         res.render('indexAdmin');

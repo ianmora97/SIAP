@@ -1,7 +1,9 @@
-const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const path = require('path');
 const chalk = require('chalk');
+const multer = require('multer');
+const uuid = require('uuid');
 const app = express();
 require('dotenv').config();
 
@@ -19,7 +21,27 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+//middlewares
+const storage = multer.diskStorage({
+    destination: path.join(__dirname,'/public/uploads'),
+    filename: (req, file, cb) => {
+        cb(null,uuid.v4() + path.extname(file.originalname).toLocaleLowerCase());
+    }   
+});
 
+app.use(multer({
+    storage,
+    dest: path.join(__dirname,'public/uploads'),
+    fileFilter: (req, file, cb) => {
+        const filetypes = /jpeg|jpg|png|pdf/
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+        if(mimetype && extname){
+            return cb(null, true);
+        }
+        cb("Error: Archivo debe ser un formato valido");
+    }
+}).single('image'));
 
 //Rutas --routering
 app.use(require('./routes/main.routes'));
@@ -36,6 +58,7 @@ app.use(require('./routes/illness.routes'));
 
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname,'/public')));
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));

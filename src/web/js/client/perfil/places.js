@@ -107,8 +107,8 @@ function filtrarDistritos(canton) {
 }
 
 var validate = (u) => {
-    if (!u.celular || !u.telefono || !u.emergencia || !u.correo) return false;
-    if (!u.carrera || !u.provincia || !u.canton || !u.distrito || !u.direccion) return false;
+    if (!u.celular || !u.correo) return false;
+    // if (!u.carrera || !u.provincia || !u.canton || !u.distrito || !u.direccion) return false;
     return true;
 };
 var check = (u) => {
