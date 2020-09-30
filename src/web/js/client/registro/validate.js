@@ -1,6 +1,6 @@
 var validate = (u) => {
     if (u.clave.length < 8 || u.clave.length > 20) return false;
-    if (u.cedula.length == 9 || u.length == 12) return false;
+    if (u.cedula.length < 9 || u.cedula.length > 13) return false;
     if (!u.nombre || !u.apellido || !u.nombreUsuario || !u.clave) return false;
     if (!u.sexo || !u.nacimiento) return false;
     return true;

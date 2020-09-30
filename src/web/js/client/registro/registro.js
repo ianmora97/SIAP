@@ -177,47 +177,46 @@ function registrar_usuario_ajax(){
         let tipoUser = parseInt($("#perfil option:selected" ).val());
         let email = $('#email').val();
 
-        var pass = $('#clave_registro').val();
-        var pass_v = $('#clave_verificar').val();
-        
-        let claves = {pass, pass_v};
-
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
 
-        if(validate(data) && vc(cedula) && cNA(data) && checkPass(claves)){
-            $.ajax({
-                type: "POST",
-                url: "/usuario/registrarse",
-                data: JSON.stringify(data),
-                contentType: "application/json"
-            }).then((response) => {
-                console.log('user registered');
-                $('#spinnerWaiter').hide();
-                $("#alertasuccess").fadeIn('slow');
-                limpiarCampos();
-            }, (error) => {
-            });
-        }else{
-            if(!checkPass(claves)){
-                $('#spinnerWaiter').hide();
-                let why = "Las contraseñas deben ser iguales";
-                $('#text_incorrect').html('');
-                $('#text_incorrect').append(why);
-                $('#alerta_error_registro').show().fadeIn(4000);
-            }else{
-                $('#spinnerWaiter').hide();
-                let errores = check(data);
-                let why = "";
-                errores.forEach(e => {
-                    why += e + ', ';
-                });
-                $('#text_incorrect').html('');
-                $('#text_incorrect').append(
-                    why+'deben ser completados'
-                );
-                $('#alerta_error_registro').show().fadeIn(4000);
+        if(validate(data)){
+            if(cNA(data)){
+                if(vc(cedula)){
+                    $.ajax({
+                        type: "POST",
+                        url: "/usuario/registrarse",
+                        data: JSON.stringify(data),
+                        contentType: "application/json"
+                    }).then((response) => {
+
+                        $('html').scrollTop(0);
+                        $('#spinnerWaiter').hide();
+                        $("#alertasuccess").fadeIn('slow');
+                        limpiarCampos();
+                        setTimeout(() => {
+                            location.href = "/registrarse";
+                        }, 7000);
+                    }, (error) => {
+                        $('#text_incorrect').html('');
+                        $('#text_incorrect').append(
+                            error
+                        );
+                        $('#alerta_error_registro').show().fadeIn(4000);
+                    });
+                }
             }
-            
+        }else{
+            $('#spinnerWaiter').hide();
+            let errores = check(data);
+            let why = "";
+            errores.forEach(e => {
+                why += e + ', ';
+            });
+            $('#text_incorrect').html('');
+            $('#text_incorrect').append(
+                why+'deben ser completados'
+            );
+            $('#alerta_error_registro').show().fadeIn(4000);
         }
     });
 }
