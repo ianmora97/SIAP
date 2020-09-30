@@ -192,8 +192,8 @@ router.post('/client/uploadImage', (req,res)=>{
             if(!err){
                 let script = "select * from vta_cliente_estudiante where cedula = ? ";
                 var query = con.query(script,
-                [usuario.cedula], (err,row,fields)=>{
-                    if(!err){
+                [usuario.cedula], (er,row,fields)=>{
+                    if(!er){
                         if(row != undefined){
                             req.session.value = row[0];
                             res.render('client/perfil/perfil',v);

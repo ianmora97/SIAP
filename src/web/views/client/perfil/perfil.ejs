@@ -20,7 +20,7 @@
     <%- include('modalesPerfil') %>
     
     <%- include('perfilHeader') %>
-    <span class="sr-only" data-value="<%= usuario.foto%>" id="usuario_foto"></span>
+
     <div class="container-fluid mt-3 w-90">
         <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;"
             id="alertasucess">
@@ -44,19 +44,18 @@
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
                         <form action="/client/uploadImage" method="POST" enctype="multipart/form-data">
-                            <div class="custom-file my-3">
-                                <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
-                                    <p class="m-0">Formato de Imagen invalida!</p>
-                                </div>
-                                <label for="image" role="button" id="profileImageChange">
-                                    <div class="avatar-bg center profile-pic">
-                                        <span class="fas fa-camera"></span>
-                                        <span class="user-select-none">Change Image</span>
-                                    </div>
-                                </label>
-                                <input type="text" name="cedula" value="<%= usuario.cedula%>" hidden>
-                                <input type="file" id="fileFoto" name="image" style="visibility: hidden;" >
+                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                                <p class="m-0">Formato de Imagen invalida!</p>
                             </div>
+                            <span class="sr-only" data-value="<%= usuario.foto%>" id="usuario_foto"></span>
+                            <label for="image" role="button" id="profileImageChange" class="d-block">
+                                <div class="avatar-bg center profile-pic mx-auto mt-4 ">
+                                    <span class="fas fa-camera"></span>
+                                    <span class="user-select-none">Change Image</span>
+                                </div>
+                            </label>
+                            <input type="text" name="cedula" value="<%= usuario.cedula%>" hidden>
+                            <input type="file" id="fileFoto" name="image" style="visibility: hidden;">
                             <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="submit"
                                 style="display: none;">Cambiar foto</button>
                         </form>

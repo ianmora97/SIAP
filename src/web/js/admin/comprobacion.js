@@ -56,7 +56,23 @@ function buscar() {
             else mostrarUsuarios(filtrarBuscar(estudiantes,texto));
         }
     });
-
+    $('#barraBuscar').on('keyup',(cantidad)=>{
+        if($('#barraBuscar').val() != ''){
+            mostrarUsuarios(buscarInlcudes(estudiantes,$('#barraBuscar').val().toUpperCase()));
+        }else{
+            mostrarUsuarios(estudiantes);
+        }
+    });
+    
+}
+function buscarInlcudes(estudiantes, buscar) {
+    let result = [];
+    for (let i = 0; i < estudiantes.length; i++) {
+        if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar) ) {
+            result.push(estudiantes[i]);
+        }
+    }
+    return result;
 }
 function get_today_date() {
     let today = new Date();
@@ -104,6 +120,7 @@ function traer_estudiantes() {
         url: "/admin/usuariostemp",
         contentType: "application/json"
     }).then((usuarios) => {
+        $('#cargarDatosSpinner').hide();
         estudiantes = usuarios;
         mostrarUsuarios(usuarios);
     }, (error) => {

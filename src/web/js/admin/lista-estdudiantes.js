@@ -8,6 +8,7 @@ function events(event) {
     dropdownhoras();
     filtrarXdia();
     toogleMenuAplicar();
+    buscarEscritura();
 }
 
 //------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
@@ -18,17 +19,25 @@ function cargar_Estudiantes() {
         type: "GET",
         url: "/admin/matricula/listaest",
         contentType: "application/json",
-    }).then(
-        (solicitudes) => {
+    }).then( (solicitudes) => {
             estudiantes = solicitudes;
             cargarEstudiantes(solicitudes);
+            $('#cargarDatosSpinner').hide();
         },
         (error) => {
             alert(error.status);
         }
     );
 }
-
+function buscarEscritura() {
+    $('#buscar_est_matr').on('keyup',(cantidad)=>{
+        if($('#buscar_est_matr').val() != ''){
+            cargarEstudiantes(filtrarxdia(estudiantes,[],[],$('#buscar_est_matr').val().toUpperCase()));
+        }else{
+            cargarEstudiantes(estudiantes);
+        }
+    });
+}
 function cargarEstudiantes(solicitudes) {
     $("#lista-estudiantes").html("");
     console.log(solicitudes);
