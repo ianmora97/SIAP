@@ -59,7 +59,7 @@ function printComprobantes(c) {
     if(tipo == 'pdf'){
         $('#comprobantes').append(
             '<div class="col-md-6">'+
-            '<embed src="./../public/uploads/'+c.documento+'" type="application/pdf" width="100%" height="300px" />'+
+            '<embed src="./../public/uploads/'+c.documento+'" type="application/pdf" width="100%" height="400px" />'+
             '</div>'    
         );
     }else{

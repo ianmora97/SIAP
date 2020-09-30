@@ -1,4 +1,4 @@
-import {validate, check, emailCheck as cEm} from './validate.js';
+import {validate, check, emailCheck as cEm, verificarCedula as vc, verificarNombreCompleto as cNA, checkPass} from './validate.js';
 
 function loaded(event){
     events(event);
@@ -16,12 +16,13 @@ function events(event){
 }
 function validar_cedula() {
     $("#id_registro").keydown(function () {
-        if ((parseInt($(this).val().length) <= 12 && parseInt($(this).val().length) >= 0))
-        $(this).data("old", $(this).val());
+        if ((parseInt($(this).val().length) <= 12 && parseInt($(this).val().length) >= 0)) $(this).data("old", $(this).val());
     });
     $("#id_registro").keyup(function (key) {
         if (($(this).val().length <= 12 && $(this).val().length >= 0)) ;
-        else $(this).val($(this).data("old"));
+        else {
+            $(this).val($(this).data("old"));
+        }
     });
 }
 function verificar_correo(){
@@ -59,6 +60,7 @@ function verificar_dropdowns(params) {
 function llenarDatos() {
     $('#id_registro').on('keyup',(cantidad)=>{
         let id = $('#id_registro').val();
+        
         if(id.length == 9){
             $('#id_registro').addClass('is-valid');
             let url = 'https://ronaldoarriola.com/api/padroncr/'+id;
@@ -78,6 +80,9 @@ function llenarDatos() {
             }, (error) => {
             
             });
+        }
+        else if(id.length == 12){
+            $('#id_registro').addClass('is-valid');
         }else{
             $('#id_registro').removeClass('is-valid');
 
@@ -172,36 +177,47 @@ function registrar_usuario_ajax(){
         let tipoUser = parseInt($("#perfil option:selected" ).val());
         let email = $('#email').val();
 
-        let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
+        var pass = $('#clave_registro').val();
+        var pass_v = $('#clave_verificar').val();
         
-        console.log(data);
+        let claves = {pass, pass_v};
 
-        if(validate(data)){
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/usuario/registrarse",
-            //     data: JSON.stringify(data),
-            //     contentType: "application/json"
-            // }).then((response) => {
-            //     console.log('user registered');
-            //     $('#spinnerWaiter').hide();
-            //     $("#alertasuccess").fadeIn('slow');
-            //     limpiarCampos();
-            // }, (error) => {
-            // });
-        }else{
-            $('#spinnerWaiter').hide();
-            let errores = check(data);
-            console.log(errores);
-            let why = "";
-            errores.forEach(e => {
-                why += e + ', ';
+        let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
+
+        if(validate(data) && vc(cedula) && cNA(data) && checkPass(claves)){
+            $.ajax({
+                type: "POST",
+                url: "/usuario/registrarse",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                console.log('user registered');
+                $('#spinnerWaiter').hide();
+                $("#alertasuccess").fadeIn('slow');
+                limpiarCampos();
+            }, (error) => {
             });
-            $('#text_incorrect').html('');
-            $('#text_incorrect').append(
-                why+'deben ser completados'
-            );
-            $('#alerta_error_registro').show().fadeIn(4000);
+        }else{
+            if(!checkPass(claves)){
+                $('#spinnerWaiter').hide();
+                let why = "Las contraseñas deben ser iguales";
+                $('#text_incorrect').html('');
+                $('#text_incorrect').append(why);
+                $('#alerta_error_registro').show().fadeIn(4000);
+            }else{
+                $('#spinnerWaiter').hide();
+                let errores = check(data);
+                let why = "";
+                errores.forEach(e => {
+                    why += e + ', ';
+                });
+                $('#text_incorrect').html('');
+                $('#text_incorrect').append(
+                    why+'deben ser completados'
+                );
+                $('#alerta_error_registro').show().fadeIn(4000);
+            }
+            
         }
     });
 }
