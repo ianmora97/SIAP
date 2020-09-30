@@ -46,9 +46,22 @@
 				<div class="col-md-6">
 					<div class="form-group w-100">
 						<label>Número de cédula</label><small class="float-right text-rojo">Requerido</small>
-						<input class="form-control" type="text" id="id_registro" minlength="9" maxlength="9">
-						<small class="text-muted">Sin guiones y/o barra(/) e.g: 122334455</small>
+						<input class="form-control" type="number" id="id_registro" minlength="9" maxlength="12" min="9" max="12">
+						<small class="text-muted">Sin guiones ni barras(/) e.g: 123456789</small>
 					</div>
+					<style>
+						/* Chrome, Safari, Edge, Opera */
+						input::-webkit-outer-spin-button,
+						input::-webkit-inner-spin-button {
+						  -webkit-appearance: none;
+						  margin: 0;
+						}
+						
+						/* Firefox */
+						input[type=number] {
+						  -moz-appearance: textfield;
+						}
+					</style>
 					<div class="form-group w-100">
 						<label>Nombre</label><small class="float-right text-rojo">Requerido</small>
 						<input class="form-control" type="text" id="nombre_registro" >
