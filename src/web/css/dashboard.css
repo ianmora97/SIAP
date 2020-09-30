@@ -1,36 +1,78 @@
 #wrapper {
   overflow-x: hidden; }
 
-#sidebar-wrapper {
-  min-height: 100vh;
-  height: 60vw;
-  margin-left: -15rem;
-  -webkit-transition: margin .25s ease-out;
-  -moz-transition: margin .25s ease-out;
-  -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out; }
+#menu-header {
+  height: 50px;
+  position: sticky;
+  top: 0;
+  z-index: 99; }
 
-#sidebar-wrapper .sidebar-heading {
-  padding: 0.875rem 1.25rem;
-  font-size: 1.2rem; }
+.sidebar-heading {
+  height: 50px; }
+
+#sidebar-wrapper {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  margin-left: -13rem;
+  -webkit-transition: all .25s;
+  -moz-transition: all .25s;
+  -o-transition: all .25s;
+  transition: all .25s; }
 
 #sidebar-wrapper .list-group {
-  width: 15rem; }
+  transition: all .25s;
+  width: 13rem; }
+
+#wrapper.toggled #sidebar-wrapper {
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  margin-left: 0;
+  transition: all .25s; }
 
 #page-content-wrapper {
   min-width: 100vw; }
 
-#wrapper.toggled #sidebar-wrapper {
-  margin-left: 0; }
-
 @media (min-width: 768px) {
   #sidebar-wrapper {
-    margin-left: 0; }
+    top: 0;
+    left: 0;
+    height: 100vh;
+    position: sticky;
+    margin-left: 0;
+    transition: all .25s; }
   #page-content-wrapper {
     min-width: 0;
     width: 100%; }
   #wrapper.toggled #sidebar-wrapper {
-    margin-left: -15rem; } }
+    position: relative !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    margin-left: -13rem;
+    transition: all .25s; } }
+
+.menu-items-var {
+  background-color: #263655; }
+  .menu-items-var:hover {
+    background-color: #364C78; }
+  .menu-items-var:focus {
+    background-color: #364C78 !important; }
 
 .hover-menu-items-parent {
   background-color: #263655; }
+
+.photo_side_panel {
+  background: url(../img/UNA-VVE-logo-3.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-position: center;
+  height: 130px; }
+
+.photo_side_panel_front {
+  background-color: rgba(54, 76, 120, 0.8);
+  height: 100%; }

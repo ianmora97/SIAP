@@ -1,4 +1,4 @@
-import {validate, check, emailCheck as cEm} from './validate.js';
+import {validate, check} from './validate.js';
 
 function loaded(event){
     events(event);
@@ -149,39 +149,44 @@ function ocultarAlertaSuccess(){
 }
 function registrar_usuario_ajax(){
     $('#registrar').on('click',()=>{
+        $('#spinnerWaiter').show();
+
         let nombre = $('#nombre_registro').val();
         let cedula = $('#id_registro').val();
         let apellido = $('#apellidos_registro').val();
         let nacimiento = $('#fecha_nacimiento_registro').val();
         let nombreUsuario = $('#usuario_registro').val();
         let clave = $('#clave_registro').val();
-        let sexo =$("#sexo option:selected" ).text();
+        let sexo = $("#sexo option:selected" ).val();
         let tipoUser = parseInt($("#perfil option:selected" ).val());
         let email = $('#email').val();
 
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
         
         if(validate(data)){
-            if(cEm(email)){ 
-                $.ajax({
-                    type: "POST",
-                    url: "/usuario/registrarse",
-                    data: JSON.stringify(data),
-                    contentType: "application/json"
-                }).then((response) => {
-                    $("#alertasuccess").fadeIn('slow');
-                    setTimeout(ocultarAlertaSuccess, 5000);
-                    limpiarCampos();
-                }, (error) => {
-                });
-            }
+            $.ajax({
+                type: "POST",
+                url: "/usuario/registrarse",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                console.log('user registered');
+                $('#spinnerWaiter').hide();
+                $("#alertasuccess").fadeIn('slow');
+                limpiarCampos();
+            }, (error) => {
+            });
         }else{
+            $('#spinnerWaiter').hide();
             let errores = check(data);
             console.log(errores);
             let why = "";
-            errores.forEach(e => {why += e + ' ';});
-            $('#alerta_error_registro').append(
-                '<p>'+why+'</p>'
+            errores.forEach(e => {
+                why += e + ', ';
+            });
+            $('#text_incorrect').html('');
+            $('#text_incorrect').append(
+                why+'deben ser completados'
             );
             $('#alerta_error_registro').show().fadeIn(4000);
         }

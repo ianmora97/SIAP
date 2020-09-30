@@ -40,7 +40,8 @@ function cargarComprobantesFotos() {
         url: "/client/cargarPadecimientosFotos",
         contentType: "application/json"
     }).then((response) => {
-        console.log(response);
+        $('#spinnerPadecimientos').toggleClass('d-block');
+        $('#spinnerPadecimientos').hide();
         showComprobantes(response);
     }, (error) => {
 

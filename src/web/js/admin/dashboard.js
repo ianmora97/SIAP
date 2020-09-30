@@ -8,6 +8,66 @@ function events(event){
     change_navbar();
     load_stats();
     get_today_date();
+    cargarFoto();
+    changeProfilePhoto();
+    fotoonChange();
+}
+function cargarFoto() {
+    let foto = $('#usuario_foto').data('value');
+    if(!foto){
+        $('.avatar-bg').css({
+            'background':'url(../../img/default-user-image.png)',
+            'background-size':'cover',
+            'background-position': '50% 50%'
+        });
+
+    }else{
+        $('.avatar-bg').css({
+            'background':'url(./../public/uploads/'+foto+')',
+            'background-size':'cover',
+            'background-position': '50% 50%'
+        });
+
+    }
+}
+function changeProfilePhoto() {
+    $("#profileImageChange").click(function(e) {
+        $("#fileFoto").click();
+    });
+}
+function readURL(input) { 
+    if (input.files && input.files[0]) {
+        var reader = new FileReader(); 
+        reader.onload = function (e) {
+            $('.avatar-bg').css({
+                'background':'url('+e.target.result+')',
+                'background-size':'cover',
+                'background-position': '50% 50%'
+            });
+        }; 
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function fotoonChange() {
+    $("#fileFoto").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+            readURL(this);
+            $('#fileFoto').after(
+                '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
+                'id="btn_cambiar_foto" type="submit" '+
+                'style="display: none;">Cambiar foto</button>'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+                    
+    });
 }
 function toogleMenu() {
     $("#menu-toggle").click(function (e) {
@@ -55,12 +115,9 @@ function load_stats() {
 
 }
 function change_navbar(){
-    let md = 768;
-    let sizeScreen = screen.width;
-    console.log(sizeScreen,md);
-    if(sizeScreen <= md){
-        $('#nombreUsuario').hide();
-    }
+    let sizeScreen = $('body')[0].clientWidth;
+    console.log(sizeScreen);
+    
 }
 
 function ejemploAJAX(){

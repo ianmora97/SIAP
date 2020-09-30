@@ -1,37 +1,88 @@
-
 #wrapper {
-    overflow-x: hidden; }
-  
+  overflow-x: hidden;
+}
+
+#menu-header{
+  height: 50px;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+.sidebar-heading{
+  height: 50px;
+}
+
+#sidebar-wrapper {
+  position: relative;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	margin-left: -13rem;
+  -webkit-transition: all .25s ;
+  -moz-transition: all .25s ;
+  -o-transition: all .25s ;
+  transition: all .25s ; 
+}
+#sidebar-wrapper .list-group {
+  transition: all .25s ; 
+  width: 13rem; 
+}
+#wrapper.toggled #sidebar-wrapper {
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  margin-left: 0; 
+  transition: all .25s ; 
+}
+#page-content-wrapper {
+  min-width: 100vw;
+}
+@media (min-width: 768px) { //si el ancho de la pantalla es mayor que 768px 
   #sidebar-wrapper {
-    min-height: 100vh;
-    height: 60vw;
-    margin-left: -15rem;
-    -webkit-transition: margin .25s ease-out;
-    -moz-transition: margin .25s ease-out;
-    -o-transition: margin .25s ease-out;
-    transition: margin .25s ease-out; }
-  
-  #sidebar-wrapper .sidebar-heading {
-    padding: 0.875rem 1.25rem;
-    font-size: 1.2rem; }
-  
-  #sidebar-wrapper .list-group {
-    width: 15rem; }
-  
+    top: 0;
+    left: 0;
+    height: 100vh;
+    position: sticky;
+    margin-left: 0; 
+    transition: all .25s ; 
+  }
   #page-content-wrapper {
-    min-width: 100vw; }
-  
+    min-width: 0;
+    width: 100%;
+  }
+
   #wrapper.toggled #sidebar-wrapper {
-    margin-left: 0; }
-  
-  @media (min-width: 768px) {
-    #sidebar-wrapper {
-      margin-left: 0; }
-    #page-content-wrapper {
-      min-width: 0;
-      width: 100%; }
-    #wrapper.toggled #sidebar-wrapper {
-      margin-left: -15rem; } }
-.hover-menu-items-parent{
+    position: relative !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    margin-left: -13rem; 
+    transition: all .25s ; 
+  } 
+}
+.menu-items-var{
   background-color: #263655;
+    &:hover{
+      background-color: #364C78;    
+    }
+    &:focus{
+      background-color: #364C78 !important;    
+    }
+}
+.hover-menu-items-parent {
+  background-color: #263655;
+}
+
+.photo_side_panel{
+  background: url(../img/UNA-VVE-logo-3.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-position: center;
+  height: 130px;
+}
+.photo_side_panel_front{
+  background-color: rgba(54, 76, 120, .8);
+  height: 100%;
 }
