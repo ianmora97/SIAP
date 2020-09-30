@@ -1,4 +1,4 @@
-import {validate, check} from './validate.js';
+import {validate, check, emailCheck as cEm} from './validate.js';
 
 function loaded(event){
     events(event);
@@ -12,6 +12,17 @@ function events(event){
     verificar_dropdowns();
     verificar_fecha();
     verificar_correo();
+    validar_cedula();
+}
+function validar_cedula() {
+    $("#id_registro").keydown(function () {
+        if ((parseInt($(this).val().length) <= 12 && parseInt($(this).val().length) >= 0))
+        $(this).data("old", $(this).val());
+    });
+    $("#id_registro").keyup(function (key) {
+        if (($(this).val().length <= 12 && $(this).val().length >= 0)) ;
+        else $(this).val($(this).data("old"));
+    });
 }
 function verificar_correo(){
     $('#email').on('keyup', ()=>{
@@ -150,7 +161,7 @@ function ocultarAlertaSuccess(){
 function registrar_usuario_ajax(){
     $('#registrar').on('click',()=>{
         $('#spinnerWaiter').show();
-
+        
         let nombre = $('#nombre_registro').val();
         let cedula = $('#id_registro').val();
         let apellido = $('#apellidos_registro').val();
@@ -163,19 +174,21 @@ function registrar_usuario_ajax(){
 
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
         
+        console.log(data);
+
         if(validate(data)){
-            $.ajax({
-                type: "POST",
-                url: "/usuario/registrarse",
-                data: JSON.stringify(data),
-                contentType: "application/json"
-            }).then((response) => {
-                console.log('user registered');
-                $('#spinnerWaiter').hide();
-                $("#alertasuccess").fadeIn('slow');
-                limpiarCampos();
-            }, (error) => {
-            });
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/usuario/registrarse",
+            //     data: JSON.stringify(data),
+            //     contentType: "application/json"
+            // }).then((response) => {
+            //     console.log('user registered');
+            //     $('#spinnerWaiter').hide();
+            //     $("#alertasuccess").fadeIn('slow');
+            //     limpiarCampos();
+            // }, (error) => {
+            // });
         }else{
             $('#spinnerWaiter').hide();
             let errores = check(data);
