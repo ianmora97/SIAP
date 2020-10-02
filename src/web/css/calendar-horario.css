@@ -836,10 +836,12 @@ a.fc-more:hover {
   margin-top: 1em; }
 
 .fc-toolbar .fc-left {
+  width: 100%;
+  text-transform: capitalize;
   float: left; }
 
 .fc-toolbar .fc-right {
-  float: right; }
+  display: none; }
 
 .fc-toolbar .fc-center {
   display: inline-block; }
@@ -869,7 +871,7 @@ a.fc-more:hover {
 /* title text */
 .fc-toolbar h2 {
   margin: 0;
-  font-size: 15px;
+  font-size: 25px;
   font-weight: 700; }
 
 /* button layering (for border precedence) */
@@ -1361,15 +1363,11 @@ a.fc-more:hover {
 .datepicker {
   z-index: 123456; }
 
-body {
-  font-family: 'Nunito', sans-serif;
-  background: #F3F5F9; }
-
 .card {
   border: 0;
   background: transparent; }
 
-.btn {
+.fc-toolbar .btn {
   font-size: 15px !important;
   text-transform: uppercase;
   font-weight: 700;
@@ -1379,35 +1377,12 @@ body {
   border: 0;
   padding: 10px 20px !important; }
 
-.btn:focus {
+.fc-toolbar .btn:focus {
   box-shadow: none; }
 
-.btn.btn-primary {
-  background: #002147;
-  color: #ffffff; }
-
-.form-group label {
-  font-weight: 600;
-  letter-spacing: 0.010em;
-  font-size: 18px;
-  margin-bottom: 5px; }
-
-.modal-body {
-  background: #F3F5F9;
-  border-radius: 10px; }
-
-.modal-body h4 {
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 1px;
-  font-family: 'Montserrat', sans-serif;
-  color: #002147;
-  margin-bottom: 20px; }
-
-.modal-body .form-control {
-  box-shadow: none;
-  height: 50px; }
+.fc-toolbar .btn.btn-primary {
+  background: #8c0202 !important;
+  color: #ffffff !important; }
 
 /* related product */
 .related-product {
@@ -1452,3 +1427,11 @@ body {
 .download-btn .fa {
   font-size: 40px;
   margin-right: 10px; }
+
+#calendar {
+  width: 100%; }
+
+@media (min-width: 768px) {
+  #calendar {
+    width: 70%;
+    margin: 0 auto; } }
