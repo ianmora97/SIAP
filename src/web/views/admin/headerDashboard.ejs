@@ -1,32 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-    <button class="btn btn-primary" id="menu-toggle">
-        <i class="fas fa-bars"></i>
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary justify-content-between py-0" id="menu-header">
+    <button class="btn btn-outline-secondary px-1" id="menu-toggle">
+        <i class="fas fa-bars text-white"></i>
     </button>      
-    <div class="navbar p-0" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-            <li class="nav-item dropdown">
-                <div class="d-inline nombre-usuario-pos-0" id="nombreUsuario" style="height: 50px;">
-                    <h6 class="d-inline align-middle"><%= usuario.nombre%>&nbsp; <%= usuario.apellido%></h6>
-                </div>
-                <a class="nav-link dropdown-toggle d-inline" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user-circle text-primary" style="font-size: 30px;"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <div class="container">
-                        <div class="w-100 justify-content-middle">
-                            <div class="col-md-12">
-                                <i class="fas fa-user-circle text-center d-block mx-auto text-primary" style="font-size: 40px;"></i>
-                                <h6 class="text-center text-muted mt-2">
-                                    <%= usuario.usuario%>
-                                </h6>
-                            </div>
-                        </div>
+    <div class="p-0" id="navbarSupportedContent">
+        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0">
+            <li class="d-inline dropdown">
+                <div class="dropdown d-inline">
+                    <a class=" mr-2 " href="#" role="button" id="notificaciones" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell text-white" style="font-size: 20px;"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificaciones">
+                        <p class="pl-3" >Notificaciones</p>
+                        <hr>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <hr>
+                        <a class="dropdown-item text-center" href="#">...</a>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="fas fa-circle" style="color:limegreen;"></i>&nbsp; Status</a>
-                    <a class="dropdown-item" href="#"><i class="fas fa-user-edit"></i>&nbsp; Editar Datos</a>
-                    <a class="dropdown-item" href="#"><i class="fas fa-power-off" style="color:brown"></i>&nbsp; LogOut</a>
                 </div>
+            </li>
+            <li class="d-inline">
+                <a class="nav-link my-auto mx-1" href="/admin/logout"><i class="fas fa-power-off"></i>&nbsp; Salir</a>
+            </li>
+            <li class="d-inline">
+                <a href=""><i class="fas fa-ellipsis-v text-white"></i></a>
             </li>
         </ul>
     </div>

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const multer = require('multer');
-const uuid = require('uuid');
 
 const con = require('../database');
 
@@ -16,31 +14,21 @@ router.get('/documento/select',(req,res)=>{
     });
 });
 
-//middlewares
-const storage = multer.diskStorage({
-    destination: path.join(__dirname,'../public/MedicalDocuments'),
-    filename: (req, file, cb) => {
-        cb(null,uuid.v4() + path.extname(file.originalname).toLocaleLowerCase());
-    }   
-});
-
-router.use(multer({
-    storage,
-    dest: path.join(__dirname,'public/MedicalDocuments'),
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|pdf/
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname));
-        if(mimetype && extname){
-            return cb(null, true);
-        }
-        cb("Error: Archivo debe ser un formato valido");
+router.post('/client/uploadDocument', (req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let v = {usuario, selected:'informacionMedica'}
+        var script = con.query('call prc_insertar_documento_usuario(1, ?, ?)',
+        [req.file.filename, req.session.value.id],(err,rows,fields)=>{
+            if(!err){
+                res.render('client/perfil/informacionMedica',v);
+            }else{
+                res.render('client/perfil/informacionMedica',v);
+            }
+        });
+    }else{
+        res.render('index');
     }
-}).single('file'));
-
-router.post('/uploadDocument', (req,res)=>{
-    console.log(req.file);
-    res.send('uploaded');
 });
 
 

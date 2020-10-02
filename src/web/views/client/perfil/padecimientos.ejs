@@ -334,7 +334,12 @@
                     <label class="form-check-label" for="terminos-condiciones">Acepto los <a href="#" class="text-primary  términos-y-condiciones"> términos y condiciones</a> </label>
 
                   </div>
-                <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" id="ingresarPadecimientosBoton" type="submit">Guardar</button>
+                <button class="btn btn-danger btn-lg btn_guardar_perfil d-block w-50 mx-auto mb-3" id="ingresarPadecimientosBoton" type="submit">
+                    <div class="spinner-border" id="spinnerWaiter" role="status" style="display: none;">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    Guardar
+                </button>
             </div>
         </div>
     <%- include('perfilFooter') %>

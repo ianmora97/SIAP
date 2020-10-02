@@ -5,7 +5,7 @@ const con = require('../database');
 
 //Selecciona todos los usuarios temporales
 router.get('/admin/usuariostemp',(req,res)=>{
-    var script = con.query('select * from vta_usuario_temp',
+    var script = con.query('select * from vta_usuario_temp ',
     (err,rows,fields)=>{
         if(!err){
             if(rows != undefined){

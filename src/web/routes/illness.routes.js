@@ -12,7 +12,6 @@ router.get('/client/cargarPadecimientos',(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             if(rows != undefined){
-                console.log('[',chalk.green('OK'),'] cargando padecimientos de',chalk.yellow(req.session.value.usuario));
                 res.send(rows);
             }else{
                 res.status(504).send('');

@@ -3,7 +3,6 @@ function loaded(event) {
 }
 
 function events(event) {
-    ejemploAJAX();
     get_padecimientos();
     insertarPadecimientos();
 }
@@ -51,13 +50,15 @@ function insertarPadecimientos(){
         }
         console.log(data);
         for(let i = 0; i < data.length; i++){
+            $('#spinnerWaiter').show();
             $.ajax({
                 type: "POST",
                 url: "/client/insertarPadecimientos",
                 data: JSON.stringify(data[i]),
                 contentType: "application/json"
             }).then((response) => {
-                console.log('Insertado',data[i],'resultset',response);
+                $('#spinnerWaiter').hide();
+                location.href = "/client/informacionMedica";
             }, (error) => {
             }).then(()=>{
                 get_padecimientos();
@@ -67,17 +68,6 @@ function insertarPadecimientos(){
 
 
 }
-function ejemploAJAX() {
-    // $('#accion').on('click',function(){
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/ejemplo",
-    //         contentType: "application/json"
-    //     }).then((response) => {
-            
-    //     }, (error) => {
-    //     });
-    // });
-}
+
 
 document.addEventListener("DOMContentLoaded", loaded);

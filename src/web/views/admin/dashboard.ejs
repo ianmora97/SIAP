@@ -16,14 +16,21 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
-<body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
-    <div class="d-flex" id="wrapper">
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="d-flex h-100" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
             
-            <div class="container-fluid">
-                <div class="w-90 mx-auto mt-2 mb-4">
+            <nav aria-label="breadcrumb ">
+                <ol class="breadcrumb ">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Estadisticas</li>
+                </ol>
+            </nav>
+            <div class="container-fluid hv-90">
+                <div class=" mx-auto mt-2 mb-4">
                     <nav>
                         <div class="nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist">
                             <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
@@ -49,8 +56,8 @@
                                 <small class="text-muted today-date d-block"></small>
                             </div>
                             <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0">
-                                    <canvas id="myChart"></canvas>
+                                <div class="col-md-9 px-0" style="height:400px;">
+                                    <canvas id="talleresChart"></canvas>
                                 </div>
                                 <div class="col-md-3 d-flex align-content-stretch flex-wrap">
                                     <div class="text-center w-100">
@@ -74,8 +81,8 @@
                                 <small class="text-muted today-date d-block"></small>
                             </div>
                             <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0">
-                                    <canvas id="myChart"></canvas>
+                                <div class="col-md-9 px-0" style="height:400px;">
+                                    <canvas id="usuariosChart"></canvas>
                                 </div>
                                 <div class="col-md-3 d-flex align-content-stretch flex-wrap">
                                     <div class="text-center w-100">
@@ -108,8 +115,8 @@
                                 <small class="text-muted today-date d-block"></small>
                             </div>
                             <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0">
-                                    <canvas id="myChart"></canvas>
+                                <div class="col-md-9 px-0" style="height:400px;">
+                                    <canvas id="matriculaChart"></canvas>
                                 </div>
                                 <div class="col-md-3 d-flex align-content-stretch flex-wrap">
                                     <div class="text-center w-100">
@@ -124,6 +131,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="bg-white w-100 shadow rounded-lg">
+                        
                     </div>
                 </div>
             </div>

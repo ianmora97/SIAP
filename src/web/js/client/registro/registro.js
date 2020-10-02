@@ -1,4 +1,4 @@
-import {validate, check, emailCheck as cEm} from './validate.js';
+import {validate, check, emailCheck as cEm, verificarCedula as vc, verificarNombreCompleto as cNA, checkPass} from './validate.js';
 
 function loaded(event){
     events(event);
@@ -12,6 +12,18 @@ function events(event){
     verificar_dropdowns();
     verificar_fecha();
     verificar_correo();
+    validar_cedula();
+}
+function validar_cedula() {
+    $("#id_registro").keydown(function () {
+        if ((parseInt($(this).val().length) <= 12 && parseInt($(this).val().length) >= 0)) $(this).data("old", $(this).val());
+    });
+    $("#id_registro").keyup(function (key) {
+        if (($(this).val().length <= 12 && $(this).val().length >= 0)) ;
+        else {
+            $(this).val($(this).data("old"));
+        }
+    });
 }
 function verificar_correo(){
     $('#email').on('keyup', ()=>{
@@ -48,6 +60,7 @@ function verificar_dropdowns(params) {
 function llenarDatos() {
     $('#id_registro').on('keyup',(cantidad)=>{
         let id = $('#id_registro').val();
+        
         if(id.length == 9){
             $('#id_registro').addClass('is-valid');
             let url = 'https://ronaldoarriola.com/api/padroncr/'+id;
@@ -67,6 +80,9 @@ function llenarDatos() {
             }, (error) => {
             
             });
+        }
+        else if(id.length == 12){
+            $('#id_registro').addClass('is-valid');
         }else{
             $('#id_registro').removeClass('is-valid');
 
@@ -149,39 +165,56 @@ function ocultarAlertaSuccess(){
 }
 function registrar_usuario_ajax(){
     $('#registrar').on('click',()=>{
+        $('#spinnerWaiter').show();
+        
         let nombre = $('#nombre_registro').val();
         let cedula = $('#id_registro').val();
         let apellido = $('#apellidos_registro').val();
         let nacimiento = $('#fecha_nacimiento_registro').val();
         let nombreUsuario = $('#usuario_registro').val();
         let clave = $('#clave_registro').val();
-        let sexo =$("#sexo option:selected" ).text();
+        let sexo = $("#sexo option:selected" ).val();
         let tipoUser = parseInt($("#perfil option:selected" ).val());
         let email = $('#email').val();
 
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};
-        
+
         if(validate(data)){
-            if(cEm(email)){ 
-                $.ajax({
-                    type: "POST",
-                    url: "/usuario/registrarse",
-                    data: JSON.stringify(data),
-                    contentType: "application/json"
-                }).then((response) => {
-                    $("#alertasuccess").fadeIn('slow');
-                    setTimeout(ocultarAlertaSuccess, 5000);
-                    limpiarCampos();
-                }, (error) => {
-                });
+            if(cNA(data)){
+                if(vc(cedula)){
+                    $.ajax({
+                        type: "POST",
+                        url: "/usuario/registrarse",
+                        data: JSON.stringify(data),
+                        contentType: "application/json"
+                    }).then((response) => {
+
+                        $('html').scrollTop(0);
+                        $('#spinnerWaiter').hide();
+                        $("#alertasuccess").fadeIn('slow');
+                        limpiarCampos();
+                        setTimeout(() => {
+                            location.href = "/registrarse";
+                        }, 7000);
+                    }, (error) => {
+                        $('#text_incorrect').html('');
+                        $('#text_incorrect').append(
+                            error
+                        );
+                        $('#alerta_error_registro').show().fadeIn(4000);
+                    });
+                }
             }
         }else{
+            $('#spinnerWaiter').hide();
             let errores = check(data);
-            console.log(errores);
             let why = "";
-            errores.forEach(e => {why += e + ' ';});
-            $('#alerta_error_registro').append(
-                '<p>'+why+'</p>'
+            errores.forEach(e => {
+                why += e + ', ';
+            });
+            $('#text_incorrect').html('');
+            $('#text_incorrect').append(
+                why+'deben ser completados'
             );
             $('#alerta_error_registro').show().fadeIn(4000);
         }
