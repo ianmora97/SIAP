@@ -6,6 +6,16 @@ const uuid = require('uuid');
 
 const con = require('../database');
 
+//Muestra todos los documentos 
+router.get('/documento/select',(req,res)=>{
+    var script = 'select * from t_documento';
+    con.query(script,(err,rows,fields)=>{
+        if(rows[0] != undefined){
+           res.send(rows);
+        }
+    });
+});
+
 //middlewares
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'../public/MedicalDocuments'),
@@ -26,17 +36,7 @@ router.use(multer({
         }
         cb("Error: Archivo debe ser un formato valido");
     }
-}).single('image'));
-
-//Muestra todos los documentos 
-router.get('/documento/select',(req,res)=>{
-    var script = 'select * from t_documento';
-    con.query(script,(err,rows,fields)=>{
-        if(rows[0] != undefined){
-           res.send(rows);
-        }
-    });
-});
+}).single('file'));
 
 router.post('/uploadDocument', (req,res)=>{
     console.log(req.file);
