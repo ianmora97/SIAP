@@ -110,3 +110,6 @@ hr {
   height: 100%;
   filter: blur(2px);
   z-index: 2; }
+
+.nav-clases .nav-link {
+  color: #364C78 !important; }
