@@ -1,9 +1,10 @@
 const express = require('express');
+const fs = require('fs');
 const chalk = require('chalk');
-const router = express.Router();
 const path = require('path');
-const multer = require('multer');
-const uuid = require('uuid');
+
+const router = express.Router();
+
 const con = require('../database');
 const email = require('../email');
 
@@ -34,7 +35,6 @@ router.put('/client/actualizardatos',(req,res)=>{
                         if(!err){
                             if(row != undefined){
                                 req.session.value = row[0];
-                                console.log('[',chalk.green('OK'),'] cambios relizados');
                                 res.send(row[0]);
                             }else{
                                 res.render('index',{err:'1',id: req.body.cedula});
@@ -98,6 +98,22 @@ router.get('/estudianteCedulaAdmin',(req,res)=>{
         }
     });
 });
+//cargar los documentos de prescripcion medica
+router.get('/client/cargarPadecimientosFotos',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('call prc_seleccionar_documentos_usuario_por_cedula(?)',
+        [usuario.cedula],(err,rows,fields)=>{
+            if(!err){
+                if(rows[0] != undefined){
+                    res.send(rows[0]);
+                }
+            }
+        });
+    }else{
+        res.render('index');
+    }
+});
 
 //Inserta Estudiante
 router.post('/estudiante/insertar',(req,res)=>{
@@ -111,12 +127,26 @@ router.post('/estudiante/insertar',(req,res)=>{
     });
 });
 
+//rechaza a un usuario temporal
+router.post('/estudiante/rechazarEstudiante',(req,res)=>{
+    var script = con.query('call prc_actualizar_estado_estudiante_temporal(?,2)', 
+    [req.body.cedula],
+    (err,result,fields)=>{
+        if(!err){
+            res.send(result);
+        }else{
+            console.log(err);
+            res.status(501).send('error');
+        }
+    });
+});
 //Mueve un usuario temporal a un usuario fijo y lo agregar a la lista de estudiantes
 router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
     var mailOptions = {
+        name:'SIAP',
         from: 'siapduna2020@gmail.com',
         to: req.body.email,
-        subject: 'Tómela',
+        subject: 'Sistema de Administracion de la Piscina',
         html: '<div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
             '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
             '</div>' +
@@ -125,13 +155,18 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
             'ahora podra iniciar session y completar sus datos personales.<br>' +
             'Es importante que registre sus padecimientos si los presenta, y aceptar ' +
             'el consentimiento informado que se le dara una vez que matricule un curso.' +
-            '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>' 
+            '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>'+
+            '',
+        attachments: [
+            {   // consentimiento informado
+                filename: 'Consentimiento Informado.docx',
+                content: fs.createReadStream('../assets/Consentimiento informado.docx')
+            }]
     };
     var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
     [req.body.cedula],
     (err,result,fields)=>{
         if(!err){
-            console.log(result);
             email.sendMail(mailOptions, function(error, info){
                 if (error) {
                   console.log(error);
@@ -147,30 +182,36 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
     });
 });
 
-const storage = multer.diskStorage({
-    destination: path.join(__dirname,'../public/uploads'),
-    filename: (req, file, cb) => {
-        cb(null,uuid.v4() + path.extname(file.originalname).toLocaleLowerCase());
-    }   
-});
 
-router.use(multer({
-    storage,
-    dest: path.join(__dirname,'public/uploads'),
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif/
-        const mimetype = filetypes.test(file.mimetype);
-        const extname = filetypes.test(path.extname(file.originalname));
-        if(mimetype && extname){
-            return cb(null, true);
-        }
-        cb("Error: Archivo debe ser un formato valido");
+router.post('/client/uploadImage', (req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let v = {usuario, selected:'perfil'}
+        var script = con.query('call prc_actualizar_foto_usuario(?, ?)',
+        [req.session.value.cedula,req.file.filename],(err,rows,fields)=>{
+            if(!err){
+                let script = "select * from vta_cliente_estudiante where cedula = ? ";
+                var query = con.query(script,
+                [usuario.cedula], (er,row,fields)=>{
+                    if(!er){
+                        if(row != undefined){
+                            req.session.value = row[0];
+                            res.render('client/perfil/perfil',v);
+                        }else{
+                            res.render('index',{err:'1',id: req.body.cedula});
+                        }
+                    }else{
+                        res.render('index',{err:'2',id: req.body.cedula});
+                    }
+                });
+            }else{
+                res.render('client/perfil/perfil',v);
+            }
+        });
+    }else{
+        res.render('index');
     }
-}).single('image'));
-
-router.post('/uploadImage', (req,res)=>{
-    console.log(req.file);
-    res.send('uploaded');
+    
 });
 
 module.exports = router;

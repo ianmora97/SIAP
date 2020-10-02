@@ -1,52 +1,77 @@
-<div class="bg-primary border-right" id="sidebar-wrapper">
-    <div class="sidebar-heading">
-        <img src="../../img/logo-vive-promocion-transparency.png" class="imgIcon" alt="" width="50px">
-        <strong class="text-white">SIADP</strong>
+<div class="hover-menu-items-parent " id="sidebar-wrapper" style="display: block;">
+    <div class="sidebar-heading bg-secondary d-flex">
+        <img src="../../img/logo-vive-promocion-transparency.png" alt="UNA" class="d-inline mx-2 my-auto" height="40px" style="filter: brightness(0) invert(1);">
+        <div class="text-center text-white d-flex justify-content-center align-items-center h-100 d-inline">
+            <h4 class="">SIAP</h4>
+        </div>
     </div>
-    <div class="list-group list-group-flush accordion " id="accordion-menu-lateral">
-        <a href="/admin/dashboard" class="bg-primary list-group-item list-group-item-action border-0 bg-menu <%if(s == "dash"){%> menu-active <%}%> text-white py-3" role="button">
+    <div class="photo_side_panel">
+        <a class="text-decoration-none" href="/admin/perfil" >
+            <div class="photo_side_panel_front p-2 d-flex flex-column" >
+
+                <% if (!usuario.foto) { %>
+                    <i class="fas fa-user-circle text-white fa-3x" 
+                    data-toggle="tooltip" data-placement="bottom" title="Cambiar foto de perfil" id="tooltipFoto"></i>
+                    <!-- <script>
+                        $('#tooltipFoto').tooltip('show');
+                    </script> -->
+                <% } %>
+                <%if (usuario.foto){%>
+                    <img src="./../public/uploads/<%= usuario.foto%>" class="rounded-circle" width="50px">
+                <%}%>
+                <div class="nombre-usuario-pos-0 mt-auto" id="nombreUsuario">
+                    <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
+                    <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
+                    <h6 class="align-middle text-white mb-0"><%= usernameNombre %>&nbsp;<%= usernameApellido %></h6>
+                    <span class="text-white" style="font-size: 0.8em;"><%= usuario.correo%></span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="list-group list-group-flush accordion mx-0 mb-auto" id="accordion-menu-lateral">
+        <a href="/admin/dashboard" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu <%if(s == "dash"){%> menu-active <%}%> text-white py-3 pl-2" role="button">
             <i class="fas fa-chart-line"></i>&nbsp; Dashboard
         </a>
-        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
+        <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
         data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
             <i class="fas fa-users"></i>&nbsp; Usuarios  <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> show <%}%>" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
-                <a href="/admin/estudiantes" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "estudiantes"){%> menu-active <%}%>">
+                <a href="/admin/estudiantes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "estudiantes"){%> menu-active <%}%>">
                     <i class="fas fa-user"></i>&nbsp; Estudiantes
                 </a>
-                <a href="/admin/administradores" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "administradores"){%> menu-active <%}%>">
+                <a href="/admin/administradores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "administradores"){%> menu-active <%}%>">
                     <i class="fas fa-user-tie"></i></i>&nbsp; Administradores
                 </a>
-                <a href="/admin/profesores" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "profesores"){%> menu-active <%}%>">
+                <a href="/admin/profesores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "profesores"){%> menu-active <%}%>">
                     <i class="fas fa-chalkboard-teacher"></i></i>&nbsp; Profesores
                 </a>
             </div>
-        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+        <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2"
         data-toggle="collapse" href="#collapseTalleres" role="button" aria-expanded="false" aria-controls="collapseTalleres">
             <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'talleres' || s == 'grupos'){%> show <%}%>" id="collapseTalleres" data-parent="#accordion-menu-lateral">
-                <a href="/admin/talleres" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>">
+                <a href="/admin/talleres" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>">
                     <i class="fas fa-swimmer"></i>&nbsp; Talleres
                 </a>
-                <a href="/admin/grupos" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>">
+                <a href="/admin/grupos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>">
                     <i class="fas fa-swimmer"></i>&nbsp; Grupos
                 </a>
             </div>
-        <a class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3"
+        <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2"
         data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
             <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'solicitudes' || s == 'comprobacion'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
-                <a href="/admin/solicitudes" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>">
+                <a href="/admin/solicitudes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>">
                     <i class="fas fa-bell"></i>&nbsp; Lista de estudiantes matriculados
                 </a>
-                <a href="/admin/comprobacion" class="bg-primary text-white list-group-item list-group-item-action border-0 pl-5 pr-0 bg-menu <%if(s == "comprobacion"){%> menu-active <%}%>">
+                <a href="/admin/comprobacion" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "comprobacion"){%> menu-active <%}%>">
                     <i class="fas fa-user-check"></i>&nbsp; Comprobacion de datos
                 </a>
             </div>
-        <a href="/admin/reportes" class="bg-primary list-group-item list-group-item-action border-0 bg-menu text-white py-3 <%if(s == "reportes"){%> menu-active <%}%>" role="button">
+        <a href="/admin/reportes" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "reportes"){%> menu-active <%}%>" role="button">
             <i class="far fa-newspaper"></i>&nbsp; Reportes</a>
     </div>
 </div>

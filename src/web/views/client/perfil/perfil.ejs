@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,47 +10,87 @@
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="../css/perfil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <link rel="stylesheet" href="../../css/animate.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="../js/jq-bs-bundle.js"></script>
 </head>
+
 <body>
     <%- include('modalesPerfil') %>
+    
     <%- include('perfilHeader') %>
+
     <div class="container-fluid mt-3 w-90">
-        <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;" id="alertasucess">
-          <strong>Cambios realizados!</strong> Sus datos han sido actualizados correctamente.
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;"
+            id="alertasucess">
+            <strong>Cambios realizados!</strong> Sus datos han sido actualizados correctamente.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-        <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;" id="alertadanger">
-			<h4 class="alert-heading">Datos erroneos!</h4>
-			<p>No puede dejar espacios en blanco, esto se debe a:</p>
-			<hr>
-			<p class="mb-0" id="erroresAlert"></p>
-			<button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
+        <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;"
+            id="alertadanger">
+            <h4 class="alert-heading">Datos erroneos!</h4>
+            <p>No puede dejar espacios en blanco, esto se debe a:</p>
+            <hr>
+            <p class="mb-0" id="erroresAlert"></p>
+            <button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <div class="row mb-3">
             <div class="col-lg-4 ">
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
-                        <div class="avatar-bg center"></div>
-                        <div class="custom-file my-3">
-                            <input type="file" id="fileFoto" name="avatar-file">
-                        </div>
-                        <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="button">Cambiar foto</button>
-
+                        <form action="/client/uploadImage" method="POST" enctype="multipart/form-data">
+                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                                <p class="m-0">Formato de Imagen invalida!</p>
+                            </div>
+                            <span class="sr-only" data-value="<%= usuario.foto%>" id="usuario_foto"></span>
+                            <label for="image" role="button" id="profileImageChange" class="d-block">
+                                <div class="avatar-bg center profile-pic mx-auto mt-4 ">
+                                    <span class="fas fa-camera"></span>
+                                    <span class="user-select-none">Change Image</span>
+                                </div>
+                            </label>
+                            <input type="text" name="cedula" value="<%= usuario.cedula%>" hidden>
+                            <input type="file" id="fileFoto" name="image" style="visibility: hidden;">
+                            <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="submit"
+                                style="display: none;">Cambiar foto</button>
+                        </form>
                     </div>
                 </div>
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h3 class="text-center text-dark font-weight-bold m-0">Talleres</h3>
                     </div>
-                    <div class="card-body">
+                    <div id='calendar' class="py-3" style="max-width: 400px;
+                    margin: 40px auto;"></div>
+                    <script>
+
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var calendar = new FullCalendar.Calendar(
+                                document.getElementById("calendar"), {
+                                    themeSystem: 'bootstrap',
+                                    initialView: "dayGridMonthCustom",
+                                    initialDate: "2020-03-01",
+                                    duration: { weeks: 8 }, 
+                                    views: {
+                                        dayGridMonthCustom: {
+                                            type: "dayGridMonth",
+                                            fixedWeekCount: false
+                                        }
+                                    }
+                                }
+                            );
+                            calendar.render();
+                        });
+
+
+
+                    </script>
+                    <!-- <div class="card-body">
                         <h4 class="small font-weight-bold">Principiante<span
                                 class="float-right">100%</span></h4>
                         <div class="progress progress-sm mb-3">
@@ -71,11 +112,11 @@
                                 aria-valuemax="100" style="width: 0%;"><span class="sr-only">0%</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-8 ">
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                     <div class="col pl-0">
                         <div class="card text-white bg-primary shadow">
                             <div class="card-body">
@@ -86,8 +127,8 @@
                                     </div>
                                     <div class="col-auto"><i class="fas fa-poll fa-2x"></i></div>
                                 </div>
-                                <p class="text-white-50 small m-0"><i
-                                        class="fas fa-arrow-up"></i>&nbsp;100% desde la ultima semana</p>
+                                <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;100% desde la
+                                    ultima semana</p>
                             </div>
                         </div>
                     </div>
@@ -101,12 +142,12 @@
                                     </div>
                                     <div class="col-auto"><i class="fas fa-swimmer fa-2x"></i></div>
                                 </div>
-                                <p class="text-white-50 small m-0"><i
-                                        class="fas fa-arrow-up"></i>&nbsp;40% desde el primer dia</p>
+                                <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;40% desde el
+                                    primer dia</p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col p-0">
                         <div class="card shadow mb-3">
@@ -122,24 +163,23 @@
                                                 <strong>Identificación</strong>
                                             </label>
                                             <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
-                                            <input class="form-control" type="text" id="cedula_perfil" name="cedula" placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
+                                            <input class="form-control" type="text" id="cedula_perfil" name="cedula"
+                                                placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md">
-                                        <div class="form-group"><label
-                                                for="nombre"><strong>Nombre</strong>
-                                            </label><input
-                                                class="form-control" type="text" id="nombre_perfil"
-                                                name="nombre" placeholder="Nombre" value="<%= usuario.nombre %>" disabled>
-                                            </div>
+                                        <div class="form-group"><label for="nombre"><strong>Nombre</strong>
+                                            </label><input class="form-control" type="text" id="nombre_perfil"
+                                                name="nombre" placeholder="Nombre" value="<%= usuario.nombre %>"
+                                                disabled>
+                                        </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group">
                                             <label for="apellido"><strong>Apellido</strong></label>
-                                            <input
-                                                class="form-control" type="text" id="apellido_perfil"
-                                                name="apellido" placeholder="Apellido" value="<%= usuario.apellido %>" disabled>
-                                            </div>
+                                            <input class="form-control" type="text" id="apellido_perfil" name="apellido"
+                                                placeholder="Apellido" value="<%= usuario.apellido %>" disabled>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -159,7 +199,8 @@
                                         <div class="form-group">
                                             <select class="form-control" name="sexo" id="sexo_perfil" disabled>
                                                 <optgroup label="Seleccione uno">
-                                                    <option value="1" <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
+                                                    <option value="1"
+                                                        <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
                                                     <option value="2" <%if(usuario.sexo == 'Femenino'){%>selected<%}%>>Femenino</option>
                                                 </optgroup>
                                             </select>
@@ -181,17 +222,17 @@
                                             <label for="celular">
                                                 <strong>Celular</strong><br>
                                             </label>
-                                            <input
-                                                class="form-control" type="tel" id="celular_perfil"
+                                            <input class="form-control" type="tel" id="celular_perfil"
                                                 placeholder="Celular" name="celular" value="<%= usuario.celular %>">
-                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-group">
                                             <label for="telefono">
                                                 <strong>Teléfono</strong><br>
                                             </label>
-                                            <input class="form-control" type="tel" id="telefono_perfil" placeholder="Telefono" name="telefono" value="<%= usuario.telefono %>">
+                                            <input class="form-control" type="tel" id="telefono_perfil"
+                                                placeholder="Telefono" name="telefono" value="<%= usuario.telefono %>">
                                         </div>
                                     </div>
                                     <div class="col-md">
@@ -199,7 +240,9 @@
                                             <label for="tel_emergencia">
                                                 <strong>Teléfono emergencia</strong><br>
                                             </label>
-                                            <input class="form-control" type="tel" placeholder="Telefono" name="tel_emergencia" value="<%= usuario.telefono_emergencia %>" id="telefono_emergencia">
+                                            <input class="form-control" type="tel" placeholder="Telefono"
+                                                name="tel_emergencia" value="<%= usuario.telefono_emergencia %>"
+                                                id="telefono_emergencia">
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +252,8 @@
                                             <label for="carrera">
                                                 <strong>Carrera / Departamento</strong><br>
                                             </label>
-                                            <input class="form-control" type="tel" placeholder="Carrera departamento" name="carrera" value="<%= usuario.carrera_departamento%>" id="carrera">
+                                            <input class="form-control" type="tel" placeholder="Carrera departamento"
+                                                name="carrera" value="<%= usuario.carrera_departamento%>" id="carrera">
                                             <small class="text-muted">Carrera que cursa o departamento</small>
                                         </div>
                                     </div>
@@ -218,8 +262,10 @@
                                             <strong>Nivel</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="nivelActual" data-values="<%= usuario.nivel%>"></span>
-                                            <input class="form-control" type="number" placeholder="Nivel" name="nivel" value="<%= usuario.nivel%>" id="nivel" disabled>
+                                            <span class="sr-only" id="nivelActual"
+                                                data-values="<%= usuario.nivel%>"></span>
+                                            <input class="form-control" type="number" placeholder="Nivel" name="nivel"
+                                                value="<%= usuario.nivel%>" id="nivel" disabled>
                                             <small class="text-muted">Carrera que cursa o departamento</small>
                                         </div>
                                     </div>
@@ -229,8 +275,10 @@
                                         </label>
                                         <div class="form-group">
                                             <% var estado = usuario.estado == 1 ? 'Activo' : 'No activo' %>
-                                            <span class="sr-only" id="estadoEstudiante" data-values="<%= usuario.estado%>"></span>
-                                            <input class="form-control" type="text" placeholder="Estado" name="estado" value="<%- estado%>" id="estado" disabled>
+                                            <span class="sr-only" id="estadoEstudiante"
+                                                data-values="<%= usuario.estado%>"></span>
+                                            <input class="form-control" type="text" placeholder="Estado" name="estado"
+                                                value="<%- estado%>" id="estado" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +288,8 @@
                                             <strong>Provincia</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="provinciaSelected" data-values="<%= usuario.provincia%>"></span>
+                                            <span class="sr-only" id="provinciaSelected"
+                                                data-values="<%= usuario.provincia%>"></span>
                                             <select class="form-control" name="provincia" id="provincia">
                                                 <optgroup label="Seleccione una Provincia">
 
@@ -253,10 +302,11 @@
                                             <strong>Cantón</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="cantonSelected" data-values="<%= usuario.canton%>"></span>
+                                            <span class="sr-only" id="cantonSelected"
+                                                data-values="<%= usuario.canton%>"></span>
                                             <select class="form-control" name="canton" id="canton">
                                                 <optgroup label="Seleccione el cantón">
-    
+
                                                 </optgroup>
                                             </select>
                                         </div>
@@ -266,7 +316,8 @@
                                             <strong>Distrito</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="distritoSelected" data-values="<%= usuario.distrito%>"></span>
+                                            <span class="sr-only" id="distritoSelected"
+                                                data-values="<%= usuario.distrito%>"></span>
                                             <select class="form-control" name="distrito" id="distrito">
                                                 <optgroup label="Seleccione el distrito ">
 
@@ -281,13 +332,21 @@
                                             <strong>Direccion Exacta</strong><br>
                                         </label>
                                         <div class="form-group">
-                                            <span class="sr-only" id="direccionText" data-values="<%= usuario.direccion%>"></span>
-                                            <input class="form-control" type="text" placeholder="Direccion Exacta" name="direccion" value="<%= usuario.direccion%>" id="direccion">
+                                            <span class="sr-only" id="direccionText"
+                                                data-values="<%= usuario.direccion%>"></span>
+                                            <input class="form-control" type="text" placeholder="Direccion Exacta"
+                                                name="direccion" value="<%= usuario.direccion%>" id="direccion">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button class="btn btn-primary btn-lg d-block mx-auto" id="guardar_info" type="submit">Guardar</button>
+                                    <button class="btn btn-primary btn-lg d-block mx-auto" id="guardar_info"
+                                        type="submit">
+                                        <div class="spinner-border" id="spinnerWaiter" role="status" style="display: none;">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        Guardar
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -302,4 +361,5 @@
     <%- include('perfilFooter') %>
     <script type="module" src="../../../js/client/perfil/perfil.js"></script>
 </body>
+
 </html>
