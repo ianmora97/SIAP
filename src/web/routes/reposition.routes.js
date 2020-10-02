@@ -42,7 +42,7 @@ router.post('/reposicion/insertar',(req,res)=>{
 
 //actualizar una reposicion
 router.put('/reposicion/actualizar',(req,res)=>{
-    var script = '';
+    var script = 'prc_actualizar_datos_reposicion( ? , ? , ? , ? , ? )';
     con.query(script,[req.body.id , req.body.grupo_origen , req.body.grupo_reposicion , 
         req.body.fecha_reposicion , req.body.comprobante],(err,result,fields)=>{
         if(!err){
@@ -63,6 +63,23 @@ router.delete('/reposicion/delete',(req,res)=>{
     });
 });
 
+router.post('/client/uploadRepoImage', (req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        let v = {usuario, selected:'perfil'}
+        var script = con.query('call prc_actualizar_comprobante_reposicion( ? , ? )',
+        [req.id,req.file.filename],(err,result,fields)=>{
+            if(!err){
+                res.send(result);
+            }else{
+                console.log(err.message);
+            }
+        });
+    }else{
+        res.render('index');
+    }
+    
+});
 
 module.exports = router;
 
