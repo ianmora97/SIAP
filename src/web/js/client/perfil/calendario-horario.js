@@ -2,21 +2,13 @@
     $('#calendar').fullCalendar({
         locale: 'es',
         themeSystem: 'bootstrap4',
-        defaultView: 'month',
-        height: '400px',
+        defaultView: 'agendaWeek',
+        height: 500,
         header: {
-            left: 'title'
+            left: 'title',
         },
         events: [
-            {
-                title: 'Cumpleaños de Ian',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu pellentesque nibh. In nisl nulla, convallis ac nulla eget, pellentesque pellentesque magna.',
-                start: '2020-10-03',
-                end: '2020-10-03',
-                className: 'fc-bg-default',
-                icon : "circle",
-                allDay:'true'
-            }
+            
         ],
         eventRender: function(event, element) {
             if(event.icon){

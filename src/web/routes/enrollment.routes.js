@@ -14,13 +14,15 @@ router.get('/matricula',(req,res)=>{
 });
 
 //Selecciona matriculas de un estudiante en especifico
-router.get('/matricula/seleccionaMatriculaEstudiante',(req,res)=>{
+router.get('/client/matricula/seleccionaMatriculaEstudiante',(req,res)=>{
     const script = 'call prc_seleccionar_matricula_por_estudiante(?)'; 
-    con.query(script,[req.body.id],(err,rows,fields)=>{
-        if(err) throw err;
-        if(rows[0] != undefined){
-            res.send(rows);
-        }
+    con.query(script,[req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows[0].lenght != 0){
+                res.send(rows[0]);
+            }
+        }   
     });
 });
 

@@ -141,12 +141,14 @@ router.post('/client/login',(req,res)=>{
 
 router.post('/client/matricularCursos',(req,res)=>{
     if(req.session.value){
-        let script = "call prc_insertar_matricula(?,?,1)";
+        let script = "call prc_insertar_matricula(?,?)";
         let c = req.body;
+        console.log(c);
         var query = con.query(script,
             [c.id, c.estudiante],
             (err,result,fields)=>{
             if(err){
+                console.log(err);
                 res.status(501).send('error'); 
             }else{
                 res.send('ok');

@@ -20,7 +20,32 @@
 </head>
 
 <body class="bg-white">
-    <!-- calendar modal -->
+    <span class="sr-only" id="id_cedula"><%=usuario.cedula%></span>
+    <span class="sr-only" id="id_estudiante"><%=usuario.id_estudiante%></span>
+    <div id="editMatriculaActual" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-primary" id="tituloCursoModal">Informacion y desmatricula</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="informacionCursoModal"></p>
+                    <span class="text-muted">
+                        Si desmatricula este curso no podra asistir a esta clase 
+                        el pago de este curso se le devolvera. Para mas consultas
+                        <a href="/contactarAdministrador">puede contactar a un administrador</a>.
+                    </span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="desmatricularCurso">Desmatricular Curso</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="modal-view-event" class="modal modal-top fade calendar-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -57,16 +82,15 @@
                                 <tr>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-swimmer"></i> Titulo</th>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-qrcode"></i> Codigo</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Nivel</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-calendar-day"></i> Fecha</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-calendar-day"></i> Dia</th>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Hora</th>
                                 </tr>
                                 </thead>
-                                <tbody id="lista_usuarios_temporales">
+                                <tbody id="lista_cursos_actuales">
         
                                 </tbody>
                         </table>
-                        <div class="text-center w-100" id="cargarDatosSpinner">
+                        <div class="text-center w-100" id="cargarCursosActuales">
                             <div class="spinner-border" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
@@ -79,11 +103,9 @@
                             <div class="form-group">
                                 <label for="nivel">Nivel</label>
                                 <select class="form-control" id="nivel">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option>Principiante</option>
+                                    <option>Intermedio</option>
+                                    <option>Avanzado</option>
                                 </select>
                             </div>
                         </div>
@@ -95,18 +117,18 @@
                         <table class="table table-hover table-responsive-md table-borderless">
                             <thead>
                                 <tr>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Titulo</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Codigo</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Nivel</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Fecha</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Hora</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-swimmer"></i> Titulo</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-qrcode"></i> Codigo</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Nivel</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-calendar-day"></i> Fecha</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Hora</th>
                                 </tr>
                                 </thead>
-                                <tbody id="lista_usuarios_temporales">
+                                <tbody id="lista_historial_cursos">
         
                                 </tbody>
                         </table>
-                        <div class="text-center w-100" id="cargarDatosSpinner">
+                        <div class="text-center w-100" id="cargarHistorialCursos">
                             <div class="spinner-border" role="status">
                               <span class="sr-only">Loading...</span>
                             </div>
@@ -127,6 +149,7 @@
     </div>
     <%- include('perfilFooter') %>
     <script src="../js/client/perfil/calendario-horario.js"></script>
+    <script src="../js/client/perfil/clases-ui.js"></script>
 </body>
 
 </html>

@@ -52,7 +52,7 @@ gulp.task('serve', gulp.series('sass','js','animate','nodemon', function() {
         open: false,
         notify: false,
         ui:false,
-        port: 8080,
+        port: 3000,
 	});
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
     gulp.watch("web/views/*.ejs").on('change', browserSync.reload);
