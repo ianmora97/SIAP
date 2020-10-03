@@ -1,6 +1,7 @@
 var gulp        = require('gulp');
 var sass        = require('gulp-sass');
 var concat      = require('gulp-concat');
+var nodemon     = require('gulp-nodemon');
 var browserSync = require('browser-sync').create();
 
 // Compile sass into CSS & auto-inject into browsers
@@ -29,9 +30,30 @@ gulp.task('js', function() {
         .pipe(gulp.dest('web/js'));
 });
 
+// Iniciar nodemon
+gulp.task('nodemon', function (cb) {
+	var started = false;
+	return nodemon({
+		script: 'web/server.js'
+	}).on('start', function () {
+		// to avoid nodemon being started multiple times
+		if (!started) {
+			cb();
+			started = true; 
+		} 
+	});
+});
+
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate', function() {
+gulp.task('serve', gulp.series('sass','js','animate','nodemon', function() {
+    browserSync.init(null, {
+		proxy: "http://localhost:8080",
+        files: ["web/views/**/*.*"],
+        browser:"opera",
+        port: 80,
+	});
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
+    gulp.watch("web/views/*.ejs").on('change', browserSync.reload);
 }));
 
 gulp.task('default', gulp.series('serve'));
