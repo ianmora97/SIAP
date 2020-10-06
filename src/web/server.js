@@ -43,7 +43,7 @@ app.use(multer({
     }
 }).single('image'));
 
-//Rutas --routering
+//REST API --routering
 app.use(require('./routes/main.routes'));
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/admin.routes'));
@@ -56,6 +56,7 @@ app.use(require('./routes/stats.routes'));
 app.use(require('./routes/student.routes'));
 app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
+app.use(require('./routes/profesor.routes'));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));

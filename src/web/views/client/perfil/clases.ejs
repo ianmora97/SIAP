@@ -69,12 +69,13 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="historial-matricula-tab" data-toggle="tab" href="#historial-matricula" role="tab" aria-controls="historial-matricula" aria-selected="false">Historial</a>
                 </li>
+                <span class="ml-auto"><%= usuario.cedula%></span>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active bg-white py-2" id="matricula-activa" role="tabpanel" aria-labelledby="matricula-activa-tab" style="height: 400px;">
                     <div class="w-100 d-flex justify-content-between">
                         <h5 class="px-2 my-auto">Cursos matriculados en este mes</h5>
-                        <button class="btn" onclick="imprimirHistorial()"><i class="fa fa-print fa-2x" aria-hidden="true"></i> </button>
+                        <button class="btn" onclick="window.print()"><i class="fa fa-print fa-2x" aria-hidden="true"></i> </button>
                     </div>
                     <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
                         <table class="table table-hover table-responsive-md table-borderless">
@@ -104,13 +105,12 @@
                                 <label for="nivel">Nivel</label>
                                 <select class="form-control" id="nivel">
                                     <option>Principiante</option>
-                                    <option>Intermedio</option>
-                                    <option>Avanzado</option>
+                                    <option>Intermedio-Avanzado</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3 d-flex justify-content-end">
-                            <button class="btn" onclick="imprimirHistorial()"><i class="fa fa-print fa-2x" aria-hidden="true"></i> </button>
+                            <button class="btn" onclick="window.print()"><i class="fa fa-print fa-2x" aria-hidden="true"></i> </button>
                         </div>
                     </div>
                     <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
@@ -119,8 +119,8 @@
                                 <tr>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-swimmer"></i> Titulo</th>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-qrcode"></i> Codigo</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Nivel</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-calendar-day"></i> Fecha</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Periodo</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-calendar-day"></i> Dia</th>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Hora</th>
                                 </tr>
                                 </thead>

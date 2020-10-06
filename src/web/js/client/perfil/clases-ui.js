@@ -6,6 +6,7 @@ function loaded(event){
 
 function events(event){
     traerCursosEstudiante();
+    filtarHistorial();
 }
 function imprimirHistorial(){
     alert('imprimir');
@@ -56,6 +57,19 @@ function toWeekDay(dia) {
             break;
     }
 }
+function filtarHistorial(){
+    $('#nivel').on('change', function(){
+        let opcion = $( "#nivel option:selected" ).text();
+        let result = [];
+        for(let i=0; i<cursos_matriculados.length; i++){
+            let nivel = cursos_matriculados[i].nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+            if(nivel == opcion){
+                result.push(cursos_matriculados[i]);
+            }
+        }
+        forEachCursosMatriculados(result);
+    });
+}
 function filtrarCursosActuales(cursos) {
     let today = get_today_date().split('-')[1];
     let result = [];
@@ -77,7 +91,7 @@ function mostrarCursosActuales(c) {
     let id_matricula = c.id_matricula;
     let grupo = c.id_grupo;
     let codigo = c.codigo_taller;
-    let titulo = c.nivel_taller == 1 ? 'Principiante' : c.nivel_taller == 2 ? 'Intermedio' : 'Avanzado';
+    let titulo = c.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
     let dia = c.dia;
     let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
     let horaF = c.hora > 12 ? c.hora - 12 +':00': c.hora +':00' ;
@@ -108,11 +122,23 @@ function forEachCursosMatriculados(cursos) {
     });
 }
 function mostrarCursos(c) {
-    let id = c.id;
-    let grupo = c.grupo;
-    let titulo = c.nivel
+    let id_matricula = c.id_matricula;
+    let grupo = c.id_grupo;
+    let codigo = c.codigo_taller;
+    let titulo = c.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+    let dia = c.dia;
+    let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
+    let horaF = c.hora > 12 ? c.hora - 12 +':00': c.hora +':00' ;
+    let horaFi = c.hora > 12 ? c.hora - 11 +':00': c.hora + 1 +':00' ;
+    let periodo = c.periodo;
     $('#lista_historial_cursos').append(
-        ''
+        '<tr>'+
+        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'">'+titulo+'</th>'+
+        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'">'+codigo+'</th>'+
+        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'">'+periodo+'</th>'+
+        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'">'+dia+'</th>'+
+        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'">'+hora+'</th>'+
+        '<tr>'
     );
 }
 document.addEventListener("DOMContentLoaded", loaded);
