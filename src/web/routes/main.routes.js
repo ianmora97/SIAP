@@ -31,6 +31,10 @@ router.get('/perfil',(req,res)=>{
     res.render('client/perfil');
 });
 
+router.get('/contactarAdministrador',(req,res)=>{
+    res.render('client/perfil');
+});
+
 module.exports = router;
 
 

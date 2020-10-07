@@ -7,6 +7,64 @@ function loaded(event){
 function events(event){
     traerCursosEstudiante();
     filtarHistorial();
+    desmatricula();
+}
+function desmatricula(){
+    $('#editMatriculaActual').on('shown.bs.modal', function (event) {
+        let button = $(event.relatedTarget)
+        let id = button.data('id')
+        let c;
+        for(let i = 0; i<cursos_matriculados.length; i++){
+            if(cursos_matriculados[i].id_matricula == id){
+                c = cursos_matriculados[i];
+            }
+        }
+        let codigo = c.codigo_taller;
+        let titulo = c.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+        let dia = c.dia;
+        let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
+        let periodo = c.periodo;
+        let profesor = c.nombre_profesor;
+        
+        $('#informacionCursoModal').html(' ');
+        $('#informacionCursoModal').append(
+            '<strong>Descripcion:</strong> '+codigo+' '+titulo+
+            '<br><strong>Dia:</strong> '+dia+
+            '<br><strong>Hora:</strong> '+hora+
+            '<br><strong>Periodo:</strong> '+periodo+
+            '<br><strong>Profesor:</strong> '+profesor.toUpperCase()
+        );
+        $('#desmatricularCurso').attr('data-id',id);
+        $('#desmatricularCurso').attr('data-target','#desmatricularCursoModal');
+        $('#desmatricularCurso').attr('data-toggle','modal');
+    })
+    $('#desmatricularCursoModal').on('shown.bs.modal',function(event){
+        $('#editMatriculaActual').modal('toggle');
+        let button = $(event.relatedTarget)
+        let id = button.data('id')
+        console.log(id);
+        $('#idCursoDesmatricular').attr('data-id',id);
+    });
+    $('#desmatricularCursoAceptar').on('click',function(){
+        $('#desmatriculaLoader').show();
+        let curso_id = $('#idCursoDesmatricular').data('id');
+        let data = {curso_id}
+        $.ajax({
+            type: "POST",
+            url: "/client/cursos/desmatricular",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        }).then((response) => {
+            $('#alertasucess').show();
+            $('#desmatriculaLoader').hide();
+            setTimeout(()=>{
+                location.href = "/client/clases";
+            },3000);
+        }, (error) => {
+            $('#alertadanger').show();
+            $('#desmatriculaLoader').hide();
+        });
+    });
 }
 function imprimirHistorial(){
     alert('imprimir');

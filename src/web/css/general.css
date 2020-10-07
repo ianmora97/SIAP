@@ -113,3 +113,16 @@ hr {
 
 .nav-clases .nav-link {
   color: #364C78 !important; }
+
+.card-list-custom {
+  position: relative;
+  width: 100%;
+  display: flex;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-left: 3px solid #B81616;
+  border-radius: 0.25rem !important;
+  margin-top: 4px;
+  cursor: pointer; }
+  .card-list-custom:hover {
+    background-color: #F0F2F5 !important; }

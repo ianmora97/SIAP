@@ -45,7 +45,10 @@ gulp.task('nodemon', function (cb) {
 });
 
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate','nodemon', function() {
+gulp.task('serve', gulp.series('sass','js','animate', function() {
+    gulp.watch("web/scss/*.scss", gulp.series('sass'));
+}));
+gulp.task('dev', gulp.series('sass','js','animate','nodemon', function() {
     browserSync.init(null, {
 		proxy: "http://localhost:80",
         files: ["web/views/**/*.*"],
