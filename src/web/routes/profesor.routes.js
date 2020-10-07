@@ -1,51 +1,84 @@
 const express = require('express');
+const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../database');
 
 //Selecciona todos los profesores
-router.get('/profesores',(req,res)=>{
-    var script = 'call prc_seleccionar_profesores();';
-    con.query(script,(err,rows,fields)=>{
-        if(err) throw err;
-        if(rows[0] != undefined){
-            res.send(rows);
-        }
-    });
-});
-
-//Selecciona profesores especifico
-router.get('/profesores/:id',(req,res)=>{
-    console.log(req.params.id);
-    const script = 'call prc_seleccionar_profesor_id(?)'; 
-    con.query(script,[req.params.id],(err,rows,fields)=>{
-        if(err) throw err;
-        if(rows[0] != undefined){
-            res.send(rows);
-        }
-    });
-});
-
-//Inserta un profesor
-router.post('/profesores/insertar',(req,res)=>{
-    var script = 'call prc_insertar_profesor( ? )';
-    con.query(script,[req.body.idUsuario],(err,result,fields)=>{
+router.post('/profesores/entrar',(req,res)=>{
+    let script = 'select * from vta_profesores where cedula = ? and clave = sha1(?)';
+    var query = con.query(script,
+        [req.body.cedula, req.body.clave],
+        (err,rows,fields)=>{
         if(!err){
-            res.send(result[0]);
+            if(rows.length != 0){
+                req.session.value = rows[0];
+                console.log('[',chalk.green('OK'),']', chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                res.redirect('/profesor/inicio');
+            }else{
+                res.render('indexProfesores', {err:'No se encuentra Registrado',id: 2});
+            }
         }else{
-            console.log(err.message);
+            res.render('indexProfesores', {err:'Server Error',id: 3});
         }
     });
 });
 
-//Elimina un profesor 
-router.delete('/profesores/delete',(req,res)=>{
-    var script = 'call prc_eliminar_profesor( ? )';
-    con.query(script,[req.body.id],(err,result,fields)=>{
-        if(!err){
-            res.send(result);
+router.get('/profesores/logout',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let u = req.session.value.usuario;
+                req.session.destroy((err) => {
+                    res.render('indexProfesores');
+                })
+            }else{
+                res.render('indexProfesores');
+            }  
+        }else{
+            res.render('indexProfesores');
         }
-    });
+    }else{
+        res.render('indexProfesores');
+    }
 });
+
+router.get('/profesor/inicio',(req,res)=>{ //clases es la pagina de inicio
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let v = {usuario, selected:'clases'}
+                res.render('profesor/perfil/inicio',v);
+            }else{
+                res.render('indexProfesores');
+            }    
+        }else{
+            res.render('indexProfesores');
+        }
+    }else{
+        res.render('indexProfesores');
+    }
+});
+
+router.get('/profesor/clases',(req,res)=>{ //perfil del profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let v = {usuario, selected:'clases'}
+                res.render('profesor/perfil/inicio',v);
+            }else{
+                res.render('indexProfesores');
+            }    
+        }else{
+            res.render('indexProfesores');
+        }
+    }else{
+        res.render('indexProfesores');
+    }
+});
+
 
 module.exports = router;

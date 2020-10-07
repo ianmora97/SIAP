@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <a class="navbar-brand p-0" href="/client/home">
+        <img src="../../../img/logo-vive-promocion-transparency.png" style="width:2em;filter: brightness(0) invert(1);" class="d-inline-block align-middle" alt="" loading="lazy">
+        <span class="text-white">SIAPD</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars text-white"></i>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="menuDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item ml-3">
+                <a class="nav-link text-center" href="/profesores/clases">
+                    <%if(selected == "clases"){%>
+                        <u>Clases</u>
+                    <%} else{ %>
+                        Clases
+                    <%}%>
+                </a>
+            </li>
+            <li class="nav-item ml-3 dropdown">
+                <a class="nav-link text-center text-uppercase" href="/profesores/perfil">
+                    <i class="fa fa-user-circle"></i>
+                    <%if(selected == "perfil"){%>
+                        <u><%= usuario.usuario %></u>
+                    <%} else{ %>
+                        <%= usuario.usuario %>
+                    <%}%>
+                </a>
+            </li>
+            <li class="nav-item ml-3">
+                <a class="nav-link text-center" href="/profesores/logout">
+                    <i class="fas fa-power-off"></i>&nbsp; Salir
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

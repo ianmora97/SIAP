@@ -174,6 +174,7 @@ function matricularCursos(){
                 id:cursosSeleccionados[i].id_grupo,
                 estudiante,
             };
+            console.log(data);
             $.ajax({
                 type: "POST",
                 url: "/client/matricularCursos",
