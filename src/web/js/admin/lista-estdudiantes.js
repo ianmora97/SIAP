@@ -118,19 +118,6 @@ function filtrarXdia() {
         let seleccionadoHoras = $("[id*=horas-]")
         let buscar = $('#buscar_est_matr').val().toUpperCase();
 
-        if ('HOLAS'.includes(buscar)) {
-
-
-            console.log('si sirve');
-        }
-        console.log(buscar);
-        //typeof
-        // parseInt(string)
-
-        //buscar_est_matr -> id del espacio de matricula
-
-
-
         for (let i = 0; i < seleccionadosDias.length; i++) {
             if (seleccionadosDias[i].checked) {
                 dias.push(seleccionadosDias[i].name.toUpperCase());
@@ -230,10 +217,6 @@ var filtrarxdia = (estudiantes, dias, horas, buscar) => {
             }
         }
     }
-
-
-
-
     return result;
 };
 

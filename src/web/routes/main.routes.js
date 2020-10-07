@@ -11,6 +11,7 @@ router.get('/prueba',(req,res)=>{
     res.render('prueba');
 });
 
+
 router.get('/pruebaImage',(req,res)=>{
     res.render('pruebaImage');
 });

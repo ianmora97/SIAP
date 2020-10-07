@@ -32,6 +32,7 @@ router.get('/client/clases',(req,res)=>{
         res.render('index');
     }
 });
+
 router.get('/client/matricula',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
