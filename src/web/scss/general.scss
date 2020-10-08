@@ -142,3 +142,17 @@ hr {
         background-color: #F0F2F5 !important;
     }
 }
+.card-list-custom-2{
+    position: relative;
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-left: 3px solid #28a745;
+    border-radius: .25rem!important;
+    margin-top: 4px;
+    cursor: pointer;
+    &:hover{
+        background-color: #F0F2F5 !important;
+    }
+}

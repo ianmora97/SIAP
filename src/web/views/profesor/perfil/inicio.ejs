@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
-    <title>Inicio</title>
+    <title>Clases</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
@@ -18,60 +18,23 @@
 <body style="overflow-x:hidden ;">
     <%- include('perfilHeader') %>
     <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0" id="breadcrumbPages">
+            <li class="breadcrumb-item active"><a href="#">Clases</a></li>
+            <li class="breadcrumb-item" id="breadcrum-item-listaestudiantes" style="display: none;"><a href="#">Listado de Estudiantes</a></li>
+        </ol>
+    </nav>
     <div class="container mt-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item active"><a href="#">Clases</a></li>
-                <!-- <li class="breadcrumb-item"><a href="#">Listado de Estudiantes</a></li> -->
-            </ol>
-        </nav>
+        
         <nav class="d-flex justify-content-between" aria-label="breadcrumb" style="height: 40px;">
             <button type="button" class="btn" data-page="0" id="pag_ant" style="display: none;"><i class="fas fa-chevron-left"></i></button>
         </nav>
-        <div id="contentLista" style="height: 600px;">
+        <div id="contentLista" style="min-height: 600px;">
             <div id="clasesLista">
-                <div class="card-list-custom" data-grupo="80" id="idGrupo-80" onclick="abrirCurso(80)">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="far fa-calendar-alt"></i> Jueves 1pm</h4>
-                        <p class="card-text text-muted">Principiante</p>
-                        <h5 class="card-text">25 <span class="text-muted" style="font-size: 15px;">estudiantes</span></h5>
-                    </div>
-                    <div class=" d-flex align-items-center mr-2">
-                        <i class="fas fa-chevron-right fa-2x"></i>
-                    </div>
-                </div>
-                <div class="card-list-custom">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="far fa-calendar-alt"></i> Lunes 1pm</h4>
-                        <p class="card-text text-muted">Principiante</p>
-                        <h5 class="card-text">25 <span class="text-muted" style="font-size: 15px;">estudiantes</span></h5>
-                    </div>
-                    <div class=" d-flex align-items-center mr-2">
-                        <i class="fas fa-chevron-right fa-2x"></i>
-                    </div>
-                </div>
+                
             </div>
             <div id="EstudiantesPorClaseLista" style="display: none;">
-                <div class="card-list-custom" data-grupo="80" id="idGrupo-80" onclick="abrirCurso(80)">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="far fa-calendar-alt"></i> pedrito</h4>
-                        <p class="card-text text-muted">Principiante</p>
-                        <h5 class="card-text">25 <span class="text-muted" style="font-size: 15px;">estudiantes</span></h5>
-                    </div>
-                    <div class=" d-flex align-items-center mr-2">
-                        <i class="fas fa-chevron-right fa-2x"></i>
-                    </div>
-                </div>
-                <div class="card-list-custom">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="far fa-calendar-alt"></i> Maria</h4>
-                        <p class="card-text text-muted">Principiante</p>
-                        <h5 class="card-text">25 <span class="text-muted" style="font-size: 15px;">estudiantes</span></h5>
-                    </div>
-                    <div class=" d-flex align-items-center mr-2">
-                        <i class="fas fa-chevron-right fa-2x"></i>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

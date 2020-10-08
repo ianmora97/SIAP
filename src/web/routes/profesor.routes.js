@@ -85,32 +85,61 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 3){
-                let script = 'select * from vta_profesores where cedula = ? and clave = sha1(?)';
+                let script = 'select * from vta_grupos where cedula = ?';
                 var query = con.query(script,
-                    [req.body.cedula, req.body.clave],
+                    [req.query.cedula],
                     (err,rows,fields)=>{
                     if(!err){
                         if(rows.length != 0){                            
-                            res.send(rows[0]);
+                            res.send(rows);
                         }else{
                             res.status(501).send('error');
                         }
                     }else{
-                        res.render('indexProfesores', {err:'Server Error',id: 3});
+                        res.status(501).send('error');
                     }
                 });
-                let v = {usuario, selected:'clases'}
-                res.render('profesor/perfil/inicio',v);
             }else{
-                res.render('indexProfesores');
+                res.status(501).send('error');
             }    
         }else{
-            res.render('indexProfesores');
+            res.status(501).send('error');
         }
     }else{
-        res.render('indexProfesores');
+        res.status(501).send('error');
     }
 });
+
+router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let script = 'select * from vta_matriculados_por_grupo';
+                var query = con.query(script,
+                    [req.query.id],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){                            
+                            res.send(rows);
+                        }else{
+                            res.status(501).send('error');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.status(501).send('error');
+            }    
+        }else{
+            res.status(501).send('error');
+        }
+    }else{
+        res.status(501).send('error');
+    }
+});
+
 
 
 module.exports = router;

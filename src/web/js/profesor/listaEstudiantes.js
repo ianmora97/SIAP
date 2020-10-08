@@ -6,6 +6,7 @@ function loaded(event){
 }
 
 function events(event){
+    traerEstudantesXGrupo();
     traerCursosEstudiante();
     movePageBack();
 }
@@ -13,6 +14,7 @@ function movePageBack() {
     $('#pag_ant').on('click',function(){
         let page = $('#pag_ant').attr('data-page');
         if(page == 1){
+            $('#breadcrum-item-listaestudiantes').hide();
             $('#pag_ant').attr('data-page','0');
             $('#pag_ant').hide();
             $('#EstudiantesPorClaseLista').removeClass('animate__bounceInRight');
@@ -31,6 +33,8 @@ function movePageBack() {
 
 function abrirCurso(grupo){
     let curso = $('#idGrupo-'+grupo);
+    $('html').scrollTop(0);
+    forEachEstudiantesxGrupo(grupo);
     $('#clasesLista').removeClass('animate__bounceInLeft');
     $('#EstudiantesPorClaseLista').removeClass('animate__bounceOutRight');
     
@@ -38,7 +42,7 @@ function abrirCurso(grupo){
     setTimeout(()=>{
         $('#clasesLista').hide();
         $('#pag_ant').attr('data-page','1');
-        console.log($('#pag_ant').attr('data-page'));
+        $('#breadcrum-item-listaestudiantes').show();
         $('#pag_ant').show();
     },500);
     setTimeout(()=>{
@@ -47,45 +51,55 @@ function abrirCurso(grupo){
     },500);
 }
 
-function traerCursosEstudiante(){
-    let cedula = $('#id_cedula').text();
-    let data = {cedula}
+function traerEstudantesXGrupo(){
     $.ajax({
         type: "GET",
-        url: "/profesor/grupos",
-        data: data,
+        url: "/profesor/matriculaEstudiantes",
         contentType: "application/json"
     }).then((response) => {
-        g_grupos = response;
+        console.log(response);
+        g_estudiantes = response;
     }, (error) => {
     });
 }
 
-
-function forEachCursosActuales(cursos){
-    let result = filtrarCursosActuales(cursos);
-    $('#lista_cursos_actuales').html('');
+function filtrarEstudiantesxGrupo(grupo) {
+    let result=[];
+    for(let i=0;i<g_estudiantes.length; i++){
+        if(g_estudiantes[i].id_grupo == grupo){
+            result.push(g_estudiantes[i]);
+        }
+    }
+    return result;
+}
+function forEachEstudiantesxGrupo(grupo){
+    let result = filtrarEstudiantesxGrupo(grupo);
+    $('#EstudiantesPorClaseLista').html('');
     result.forEach((c)=>{
         mostrarCursosActuales(c);
     });
 }
 
 function mostrarCursosActuales(c) {
-    let id_matricula = c.id_matricula;
-    let grupo = c.id_grupo;
-    let codigo = c.codigo_taller;
-    let titulo = c.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
-    let dia = c.dia;
-    let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
-    let horaF = c.hora > 12 ? c.hora - 12 +':00': c.hora +':00' ;
-    let horaFi = c.hora > 12 ? c.hora - 11 +':00': c.hora + 1 +':00' ;
-    $('#lista_cursos_actuales').append(
-        '<tr>'+
-        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+titulo+'</th>'+
-        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+codigo+'</th>'+
-        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+dia+'</th>'+
-        '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+hora+'</th>'+
-        '<tr>'
+    let id_usuario = c.id_usuario;
+    let cedula = c.cedula;
+    let nombre = c.nombre + ' ' + c.apellido;
+
+    $('#EstudiantesPorClaseLista').append(
+        '<div class="card-list-custom-2" id="idEstudiantexGrupo-'+id_usuario+'" onclick="abrirEstudiante('+id_usuario+')">'+
+        '<div class="card-body d-flex">'+
+        '<div class="align-self-center pr-2">'+
+        '<i class="fas fa-user-circle fa-2x"></i>'+
+        '</div>'+
+        '<div class="align-self-stretch">'+
+        '<h4 class="card-title">'+nombre+'</h4>'+
+        '<p class="card-text text-muted">'+cedula+'</p>'+
+        '</div>'+
+        '</div>'+
+        '<div class=" d-flex align-items-center mr-2">'+
+        '<i class="fas fa-chevron-right fa-2x"></i>'+
+        '</div>'+
+        '</div>'
     );
 }
 
@@ -99,7 +113,36 @@ function traerCursosEstudiante(){
         contentType: "application/json"
     }).then((response) => {
         g_grupos = response;
+        eachGrupos(response);
     }, (error) => {
     });
 }
+function eachGrupos(grupos) {
+    $('#clasesLista').html('');
+    grupos.forEach((e)=>{
+        if(e.cupo_actual != 0){
+            showGrupos(e);
+        }
+    });
+}
+function showGrupos(g){
+    let id = g.id_grupo;
+    let dia = g.dia;
+    let hora = g.hora > 12 ? g.hora - 12 + 'pm' : g.hora + 'am';
+    let nivel = g.nivel == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+    let cupo_actual = g.cupo_actual;
+    $('#clasesLista').append(
+        '<div class="card-list-custom" data-grupo="'+id+'" id="idGrupo-'+id+'" onclick="abrirCurso('+id+')">'+
+        '<div class="card-body">'+
+        '<h4 class="card-title"><i class="far fa-calendar-alt"></i> '+dia+' '+hora+'</h4>'+
+        '<p class="card-text text-muted">'+nivel+'</p>'+
+        '<h5 class="card-text">'+cupo_actual+' <span class="text-muted" style="font-size: 15px;">estudiantes</span></h5>'+
+        '</div>'+
+        '<div class=" d-flex align-items-center mr-2">'+
+        '<i class="fas fa-chevron-right fa-2x"></i>'+
+        '</div>'+
+        '</div>'
+    );
+}
+
 document.addEventListener("DOMContentLoaded", loaded);
