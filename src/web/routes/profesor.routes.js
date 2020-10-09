@@ -139,6 +139,35 @@ router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por prof
         res.status(501).send('error');
     }
 });
+router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la informacion de un estudiante por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let script = 'select * from vta_matriculados_grupo_detalle where cedula_profesor = ?';
+                var query = con.query(script,
+                    [req.query.cedula],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){                            
+                            res.send(rows);
+                        }else{
+                            res.status(501).send('error');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.status(501).send('error');
+            }    
+        }else{
+            res.status(501).send('error');
+        }
+    }else{
+        res.status(501).send('error');
+    }
+});
 
 
 
