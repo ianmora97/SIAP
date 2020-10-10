@@ -57,6 +57,7 @@ app.use(require('./routes/student.routes'));
 app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
 app.use(require('./routes/profesor.routes'));
+app.use(require('./routes/reposition.routes'));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
