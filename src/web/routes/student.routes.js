@@ -19,6 +19,7 @@ router.get('/estudiantes',(req,res)=>{
         }
     });
 });
+
 //actualizar datos de estudiante
 router.put('/client/actualizardatos',(req,res)=>{
     if(req.session.value){
@@ -50,6 +51,21 @@ router.put('/client/actualizardatos',(req,res)=>{
         res.render('index',{err:'sessionExpired'});
     }
 });
+
+//Actualiza estado de consentimiento
+router.put('/estudiantes/actualizarConsentimiento',(req,res)=>{
+    var script = 'prc_actualizar_consentimiento_estudiante( ? , ? )';
+    con.query(script, [req.body.cedula , req.body.consentimiento] ,
+    (err,result,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                res.send(result);
+            }
+        }
+    });
+});
+
+
 //vista de estudiantes para administradores
 router.get('/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
