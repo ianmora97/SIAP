@@ -15,7 +15,7 @@ var clasesPerdidas = [];
 function cargar_clases_perdidas() {
     $.ajax({
         type: "GET",
-        url: "/client/reposicion-clases-perdidas",
+        url: "/ausencias/porEstudiante",
         contentType: "application/json",
     }).then((asistenciaPerdida) => {
         clasesPerdidas = asistenciaPerdida;
