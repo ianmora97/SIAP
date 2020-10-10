@@ -45,7 +45,7 @@ router.delete('/usuariotempo/delete',(req,res)=>{
           return console.error(error.message);
       
         console.log('Deleted Row(s):', results.affectedRows);
-      });
+          });
 });
 
 
