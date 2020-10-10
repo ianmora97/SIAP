@@ -127,6 +127,76 @@ function llenarCursosPerdidos(clasesDispo) {
         "</tr>"
     );
 }
+//-------------------------------------------------------------valida que los campos estén llenos----------------------------------
+
+$(document).ready(function()
+{
+$("#boton").click(function () {	 
+    if( $("#formulario input[name='edad']:radio").is(':checked')) {  
+        alert("Bien!!!, la edad seleccionada es: " + $('input:radio[name=edad]:checked').val());
+        $("#formulario").submit();  
+        } else{  
+            alert("Selecciona la edad por favor!!!");  
+            }  
+});
+});
+
+//----------------------------------------------------------------Parte de los commprobantes
+
+function leerComprobante(){
+    $("#comprobante").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG' 
+        || tipo == 'PDF' || tipo == 'pdf'){
+            $('#fileHelpId').append(
+                '<input type="submit" value="Subir Comprobante" id="subirComprobanteBotonModal" class="btn btn-secondary w-100 mt-4" >'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+    });
+}
+function cargarComprobantesFotos() {
+    $.ajax({
+        type: "GET",
+        url: "/client/cargarPadecimientosFotos",
+        contentType: "application/json"
+    }).then((response) => {
+        $('#spinnerPadecimientos').toggleClass('d-block');
+        $('#spinnerPadecimientos').hide();
+        showComprobantes(response);
+    }, (error) => {
+
+    });
+}
+function showComprobantes(comprobantes) {
+    $('#comprobantes').html(' ');
+    comprobantes.forEach(c =>{
+        printComprobantes(c);
+    });
+}
+
+function printComprobantes(c) {
+    let tipo = c.documento.split('.')[1];
+    if(tipo == 'pdf'){
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<embed src="./../public/uploads/'+c.documento+'" type="application/pdf" width="100%" height="400px" />'+
+            '</div>'    
+        );
+    }else{
+        $('#comprobantes').append(
+            '<div class="col-md-6">'+
+            '<img src="./../public/uploads/'+c.documento+'" alt="" width="100%">'+
+            '</div>'
+        );
+    }
+}
 
 
 document.addEventListener("DOMContentLoaded", loaded);

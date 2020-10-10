@@ -63,6 +63,7 @@ router.delete('/reposicion/delete',(req,res)=>{
     });
 });
 
+//-----------------------------------------------------------------subir archivos como en la parte de los padecimientros------/jpeg|jpg|png|pdf/
 router.post('/client/uploadRepoImage', (req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
