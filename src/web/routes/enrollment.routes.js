@@ -39,6 +39,17 @@ router.post('/matricula/insertar',(req,res)=>{
     });
 });
 
+//desmatricula - cambia el estado de matricula
+router.put('/desmatricula',(req,res)=>{
+    var script = 'prc_actualizar_activa_matricula( ? , ? )';
+    con.query(script, [req.body.id,req.body.activa] , (err,result,fields)=>{
+        if(!err){
+            res.send(result[0]);
+        }else{
+            console.log(err.message);
+        }
+    });
+});
 
 module.exports = router;
 
