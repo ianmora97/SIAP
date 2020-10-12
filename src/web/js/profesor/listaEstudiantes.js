@@ -12,6 +12,17 @@ function events(event){
     traerInformacionDeEstudiante();
     movePageBack();
 }
+function openAnotacion(){
+    $('#modalAnotaciones').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('whatever') // Extract info from data-* attributes
+         
+        var modal = $(this)
+        modal.find('.modal-title').text('New message to ' + recipient)
+        modal.find('.modal-body input').val(recipient)
+    })
+}
+
 function movePageBack() {
     $('#pag_ant').on('click',function(){
         let page = $('#pag_ant').attr('data-page');
@@ -224,6 +235,7 @@ function showInformacionDeEstudiante(id){
         '<h6>Celular: <a href="tel:'+e.celular_estudiante+'" class="badge badge-success py-1" >'+e.celular_estudiante+' <i class="fas fa-phone"></i></a></h6>'+
         '<h6>Telefono de emergencia: <a href="tel:'+e.telefono_emergencia_estudiante+'" class="badge badge-warning py-1" >'+e.telefono_emergencia_estudiante+' <i class="fas fa-phone"></i></a></h6>'+
         '<h6>'+edad+' años</h6>'+
+        '<button type="button" class="btn btn-primary" data-cedula="'+e.cedula_estudiante+'" data-toggle="modal" data-target="#modalAnotaciones">Crear anotacion</button>'+
         '</div>'+
         '</div>'+
         '</div>'
