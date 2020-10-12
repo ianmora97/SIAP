@@ -168,7 +168,31 @@ router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la i
         res.status(501).send('error');
     }
 });
-
+router.post('/profesor/crearAnotacion',(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 3){
+                let script = 'call prc_insertar_anotaciones(?,?,?)'; //anotacion, id profesor, id estudiante
+                var query = con.query(script,
+                    [req.body.nota, req.body.profesor, req.body.estudiante],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        res.send('send');
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.status(501).send('error');
+            }    
+        }else{
+            res.status(501).send('error');
+        }
+    }else{
+        res.status(501).send('error');
+    }
+});
 
 
 module.exports = router;

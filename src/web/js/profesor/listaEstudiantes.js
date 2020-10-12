@@ -1,3 +1,4 @@
+
 var g_estudiantes = [];
 var g_grupos = [];
 var g_informacionEstudiantes = [];
@@ -11,15 +12,56 @@ function events(event){
     traerCursosEstudiante();
     traerInformacionDeEstudiante();
     movePageBack();
+    openAnotacion();
+    crearAnotacion();
+}
+function crearAnotacion(){
+    $('#crearAnotacionButton').on('click',function(){
+        $('erroresAlert').text('');
+        $('#i_send').removeClass('fa-paper-plane');
+        $('#i_send').addClass('spinner-border spinner-border-sm');
+        let nota = $('#anotacionEstudiante').val();
+        let profesor = $('#id_usuario').text();
+        let estudiante = $('#cedulaEstudianteGet').text();
+        let data = {nota,profesor,estudiante}
+
+        if(check(data)){
+            $.ajax({
+                type: "POST",
+                url: "/profesor/crearAnotacion",
+                data: JSON.stringify(data),
+                contentType: "application/json"
+            }).then((response) => {
+                $('#alertasucess').show();
+
+                $('#i_send').addClass('fa-paper-plane');
+                $('#i_send').removeClass('spinner-border spinner-border-sm');
+            }, (error) => {
+                $('erroresAlert').text('La anotacion no se pudo enviar!');
+                $('#alertadanger').show();
+
+                $('#i_send').addClass('fa-paper-plane');
+                $('#i_send').removeClass('spinner-border spinner-border-sm');
+            });
+        }else{
+            $('erroresAlert').text('La anotacion es muy grande o esta vacia!');
+            $('#alertadanger').show();
+        }
+    });
+}
+var check = (data) =>{
+    if(data.nota.length > 300) return false;
+    if(!data.nota) return false;
+    return true;
 }
 function openAnotacion(){
     $('#modalAnotaciones').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('whatever') // Extract info from data-* attributes
-         
-        var modal = $(this)
-        modal.find('.modal-title').text('New message to ' + recipient)
-        modal.find('.modal-body input').val(recipient)
+        let button = $(event.relatedTarget)
+        let cedula = button.data('cedula')
+        let id = button.data('est');
+        let modal = $(this)
+        modal.find('.modal-title').text('Anotacion a ' + cedula)
+        $('#cedulaEstudianteGet').text(id);
     })
 }
 
@@ -213,12 +255,17 @@ function showInformacionDeEstudiante(id){
     $('#estudianteInformacionLista').html('');
     let e = buscarEstudiantexCedula(id);
     let foto;
+    let celular = e.celular_estudiante == null ? 'No Asignado' : e.celular_estudiante;
+    let correo = e.correo_estudiante == null ? 'No Asignado' : e.correo_estudiante;
+    let carrera = e.carrera_departamento == null ? 'No Asignado' : e.carrera_departamento;
+    let telefono = e.telefono_emergencia_estudiante == null ? 'No Asignado' : e.telefono_emergencia_estudiante;
+    let id_est = e.id_estudiante;
     if(e.foto_estudiante != null){
         foto = '<div class="rounded-circle" style="background-image: url(../public/uploads/'+e.foto_estudiante+'); height: 20vh;width: 20vh;background-position: center;background-size: contain;"></div>';
     }else{
         foto = '<i class="fas fa-user-circle fa-10x"></i>';
     }
-    let celular = e.celular_estudiante
+
     let edad = getEdad(e.nacimiento_estudiante);
     $('#estudianteInformacionLista').append(
         '<div class="card bg-light shadow-sm rounded-lg" id="estudianteInformacionCard">'+
@@ -229,13 +276,13 @@ function showInformacionDeEstudiante(id){
         '<div class="align-self-stretch col-md">'+
         '<h4 class="card-title">'+e.nombre_estudiante+' '+e.apellido_estudiante+'</h4>'+
         '<span class="text-muted">'+e.cedula_estudiante+'</span>'+
-        '<h6>'+e.correo_estudiante+'</h6>'+
-        '<h6>'+e.carrera_departamento+'</h6>'+
+        '<h6>'+correo+'</h6>'+
+        '<h6>'+carrera+'</h6>'+
         '<h6>'+e.sexo_estudiante+'</h6>'+
-        '<h6>Celular: <a href="tel:'+e.celular_estudiante+'" class="badge badge-success py-1" >'+e.celular_estudiante+' <i class="fas fa-phone"></i></a></h6>'+
-        '<h6>Telefono de emergencia: <a href="tel:'+e.telefono_emergencia_estudiante+'" class="badge badge-warning py-1" >'+e.telefono_emergencia_estudiante+' <i class="fas fa-phone"></i></a></h6>'+
+        '<h6>Celular: <a href="tel:'+celular+'" class="badge badge-success py-1" >'+celular+' <i class="fas fa-phone"></i></a></h6>'+
+        '<h6>Telefono de emergencia: <a href="tel:'+telefono+'" class="badge badge-warning py-1" >'+telefono+' <i class="fas fa-phone"></i></a></h6>'+
         '<h6>'+edad+' años</h6>'+
-        '<button type="button" class="btn btn-primary" data-cedula="'+e.cedula_estudiante+'" data-toggle="modal" data-target="#modalAnotaciones">Crear anotacion</button>'+
+        '<button type="button" class="btn btn-secondary" data-est="'+id_est+'" data-cedula="'+e.cedula_estudiante+'" data-toggle="modal" data-target="#modalAnotaciones">Crear anotacion</button>'+
         '</div>'+
         '</div>'+
         '</div>'
