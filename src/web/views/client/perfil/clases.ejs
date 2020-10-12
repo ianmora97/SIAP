@@ -20,6 +20,36 @@
 </head>
 
 <body class="bg-white">
+
+
+    <div class="modal fade" id="modalAgregarComprobanteReposicion" tabindex="-1" aria-labelledby="modalAgregarComprobanteReposicionLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                    <h5 class="modal-title text-white">Comprobante</h5>
+                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                        <p class="m-0">Formato de documento invalido!</p>
+                    </div>
+                    <form action="/client/uploadDocument" method="POST" enctype="multipart/form-data">
+                        <label for="file" class="mt-4">Subir comprobante</label>
+                        <input type="file" class="form-control-file" name="image" id="comprobante"
+                            placeholder="Combrobante" aria-describedby="fileHelpId">
+                        <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF, PNG, PGJ,
+                            JPEG</small>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <span class="sr-only" id="id_cedula"><%=usuario.cedula%></span>
     <span class="sr-only" id="id_estudiante"><%=usuario.id_estudiante%></span>
     <div id="editMatriculaActual" class="modal fade">
@@ -103,6 +133,9 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="historial-matricula-tab" data-toggle="tab" href="#historial-matricula" role="tab" aria-controls="historial-matricula" aria-selected="false">Historial</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="reposicion-matricula-tab" data-toggle="tab" href="#reposicion-matricula" role="tab" aria-controls="reposicion-matricula" aria-selected="false">Reposición de clases</a>
+                </li>
                 <span class="ml-auto"><%= usuario.cedula%></span>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -169,6 +202,152 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane fade  bg-white py-2" id="reposicion-matricula" role="tabpanel" aria-labelledby="reposicion-matricula-tab" style="min-height: 400px;">
+
+                    <h3 class="text-dark mb-4" style="margin-top: 13px;">Reposición de clases</h3>
+                    <div style="margin-top: -9px;">
+                        <div class="card-header py-3">
+                            <p class="text-dark m-0 font-weight-bold">Seleccione la clase perdida y su respectiva
+                                reposición</p>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="row">
+                                <div class="col-md-6 d-block float-left">
+                                    <p class="text-dark m-0 font-weight-bold">Clases perdidas</p>
+                                    <div class="table-responsive text-center border rounded border-danger table mt-2"
+                                        id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+                                        <table class="table table-striped my-0"> 
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Código</th>
+                                                    <th>Fecha de la clase perdida</th>
+                                                    <th>Tiempo restante para justificar</th>
+                                                    <th>Ausencias del curso</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaClasesPerdidas">
+                                                <tr>
+                                                    <td><input type="radio" name="radio_clase_perdida " /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>7 días</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="radio" name="radio_clase_perdida " /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>7 días</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="radio" name="radio_clase_perdida " /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>7 días</td>
+                                                    <td>2</td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><strong>NRC</strong></td>
+                                                    <td><strong>Fecha de la clase perdida</strong></td>
+                                                    <td><strong>Tiempo restante para justificar</strong></td>
+                                                    <td><strong>Ausencias del curso</strong></td>  
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-dark m-0 font-weight-bold">Clases disponibles</p>
+                                    <div class="table-responsive text-center border rounded border-success table mt-2"
+                                        id="dataTable-2" role="grid" aria-describedby="dataTable_info">
+                                        <table class="table table-striped my-0" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>NRC</th>
+                                                    <th>Fecha de la clase de reposición</th>
+                                                    <th>Cupos disponibles</th>
+                                                    <th>Profesor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaClasesDisponibles">
+                                                <tr>
+                                                    <td><input type="radio" /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>2</td>
+                                                    <td>Marlon</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="radio" /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>2</td>
+                                                    <td>Marlon</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="radio" /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>2</td>
+                                                    <td>Marlon</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input type="radio" name="hola" /></td>
+                                                    <td>NAT001</td>
+                                                    <td>2009/10/09 11:00<br /></td>
+                                                    <td>2</td>
+                                                    <td>Marlon</td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td><strong></strong></td>
+                                                    <td><strong>NRC</strong></td>
+                                                    <td><strong>Fecha de la clase de reposición</strong></td>
+                                                    <td><strong>Cupos disponibles</strong></td>
+                                                    <td><strong>Profesor</strong></td>
+
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 11px;">
+                                <div class="col">
+                                    <input type="text" id="observacionesReposicion" name="observacionesReposicion"
+                                        class="form-control mb-3" placeholder="Observaciones" required="" autofocus="">
+                                </div>
+
+                                <div class="col text-left">
+                                    <button  class="btn btn-outline-danger w-100" data-toggle="modal"
+                                    data-target="#modalAgregarComprobanteReposicion"> <i class="fas fa-star-of-life"></i>&nbsp; Subir
+                                    comprobante </button></div>
+
+
+
+                                    
+                                </div>
+                                
+                            <div class="row">
+                                <div class="col" style="padding: 17px;"><button class="btn btn-primary"
+                                        type="button">Confirmar</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+               </div>
+
             </div>
         </div>
         <div class="bg-light p-2 shadow-sm rounded-lg mt-4">

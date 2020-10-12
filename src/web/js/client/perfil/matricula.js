@@ -148,7 +148,7 @@ function llenarCurso(cupo) {
         '<a href="#" class="mx-3 btn btn-secondary disabled" role="button" id="precio">'+costo+' Colones</a>'+
         '<div class="custom-control custom-checkbox">' +
         '<input type="checkbox" id="matricularCursoCheckbox-' + id + '" class="custom-control-input" value="' + id + '" data-price="'+costo+'" name="matricularCursoCheckbox-'+id+'" onclick="eventSeleccionar('+id+')"/>' +
-        '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div></td>' +
+        '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div>' +
         '</div>'+
         '</div>'+
         '</div>'+
