@@ -14,38 +14,101 @@ function events(event){
     movePageBack();
     openAnotacion();
     crearAnotacion();
+    getAnotaciones();
+}
+function getAnotaciones_alt(e){
+    //just if call
+    var scroll=$('#scrollText');
+    scroll.animate({scrollTop: scroll.prop("scrollHeight")});
+    // $('#messagesText').scrollTop(300);
+    let anotacion = e.nota;
+    let a = new Date();
+    let b = a.getMonth() + 1;
+    let fecha = a.getFullYear()+'-'+b+'-'+a.getDate()
+    $('#messagesText').append(
+        '<div class="text-black rounded-lg text-message-a align-self-end p-1 mb-2 animate__animated animate__fadeInUp" style="background-color: #cce7ff; min-height: 50px; position: relative;">'+
+        anotacion+
+        '<div class="align-self-end d-flex justify-content-end pr-2"><span class="text-muted" style="font-size: 10px;">'+fecha+'</span></div>'+
+        '<i class="fas fa-caret-right" style=" position: absolute; bottom: -1px; right: -5px; color: #cce7ff;"></i>'+
+        '</div>'
+    );
+
+}
+function getAnotaciones(){
+    $('#modalAnotaciones').on('show.bs.modal', function (event) {
+        let profesor = parseInt($('#id_usuario').text());
+        let estudiante = parseInt($('#cedulaEstudianteGet').text());
+        let data = {profesor,estudiante}
+        $.ajax({
+            type: "GET",
+            url: "/profesor/obtenerAnotacionesPorProfesor",
+            data: data,
+            contentType: "application/json"
+        }).then((response) => {
+            listAnotaciones(response);
+        }, (error) => {
+
+        });
+    });
+}
+function listAnotaciones(lista){
+    $('#messagesText').html('');
+    lista.forEach((e)=>{
+        showAnotacion(e);
+    });
+}
+function showAnotacion(e){
+    
+    let anotacion = e.nota;
+    let fecha = e.created_at.substring(0,e.created_at.indexOf(' '));
+    $('#messagesText').append(
+        '<div class="text-black rounded-lg text-message-a align-self-end p-1 mb-2 animate__animated animate__fadeInUp" style="background-color: #cce7ff; min-height: 50px; position: relative;">'+
+        anotacion+
+        '<div class="align-self-end d-flex justify-content-end pr-2"><span class="text-muted" style="font-size: 10px;">'+fecha+'</span></div>'+
+        '<i class="fas fa-caret-right" style=" position: absolute; bottom: -1px; right: -5px; color: #cce7ff;"></i>'+
+        '</div>'
+    );
+
+}
+function sendAnotacion_alt(){
+    $('erroresAlert').text('');
+    $('#i_send').removeClass('fa-paper-plane');
+    $('#i_send').addClass('spinner-border spinner-border-sm');
+    let nota = $('#anotacionEstudiante').val();
+    let profesor = $('#id_usuario').text();
+    let estudiante = $('#cedulaEstudianteGet').text();
+    let data = {nota,profesor,estudiante}
+
+    if(check(data)){
+        $.ajax({
+            type: "POST",
+            url: "/profesor/crearAnotacion",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        }).then((response) => {
+            getAnotaciones_alt(data);
+            $('#anotacionEstudiante').val('');
+            $('#i_send').addClass('fa-paper-plane');
+            $('#i_send').removeClass('spinner-border spinner-border-sm');
+        }, (error) => {
+            $('erroresAlert').text('La anotacion no se pudo enviar!');
+            $('#alertadanger').show();
+
+            $('#i_send').addClass('fa-paper-plane');
+            $('#i_send').removeClass('spinner-border spinner-border-sm');
+        });
+    }else{
+        $('erroresAlert').text('La anotacion es muy grande o esta vacia!');
+        $('#alertadanger').show();
+    }
 }
 function crearAnotacion(){
     $('#crearAnotacionButton').on('click',function(){
-        $('erroresAlert').text('');
-        $('#i_send').removeClass('fa-paper-plane');
-        $('#i_send').addClass('spinner-border spinner-border-sm');
-        let nota = $('#anotacionEstudiante').val();
-        let profesor = $('#id_usuario').text();
-        let estudiante = $('#cedulaEstudianteGet').text();
-        let data = {nota,profesor,estudiante}
-
-        if(check(data)){
-            $.ajax({
-                type: "POST",
-                url: "/profesor/crearAnotacion",
-                data: JSON.stringify(data),
-                contentType: "application/json"
-            }).then((response) => {
-                $('#alertasucess').show();
-
-                $('#i_send').addClass('fa-paper-plane');
-                $('#i_send').removeClass('spinner-border spinner-border-sm');
-            }, (error) => {
-                $('erroresAlert').text('La anotacion no se pudo enviar!');
-                $('#alertadanger').show();
-
-                $('#i_send').addClass('fa-paper-plane');
-                $('#i_send').removeClass('spinner-border spinner-border-sm');
-            });
-        }else{
-            $('erroresAlert').text('La anotacion es muy grande o esta vacia!');
-            $('#alertadanger').show();
+        sendAnotacion_alt();
+    });
+    $('#anotacionEstudiante').on('keydown',function(event){
+        if(event.which == 13){
+            sendAnotacion_alt();
         }
     });
 }
@@ -289,7 +352,6 @@ function showInformacionDeEstudiante(id){
     );
 }
 function buscarEstudiantexCedula(id) {
-    console.log(g_informacionEstudiantes);
     for(let i =0;i<g_informacionEstudiantes.length;i++){
         // console.log(g_informacionEstudiantes[i].cedula_estudiante,id);
         if(g_informacionEstudiantes[i].cedula_estudiante == id){

@@ -120,6 +120,19 @@ router.get('/client/cargarCursos',(req,res)=>{
         }
     });
 });
+router.get('/client/cargarCursosMatriculadosCliente',(req,res)=>{
+    let script = "select * from vta_matriculados_por_grupo where cedula = ?";
+    var query = con.query(script,
+        [req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                
+                res.send(rows);
+            }
+        }
+    });
+});
 router.post('/client/login',(req,res)=>{
     let script = "select * from vta_cliente_estudiante "+
     "where cedula = ? " +

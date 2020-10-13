@@ -19,7 +19,7 @@
     
     <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
     <div class="modal fade" id="modalAnotaciones" tabindex="-1" role="dialog" aria-labelledby="modalAnotaciones" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg" role="document">
             <div class="modal-content ">
                 <div class="modal-header bg-secondary">
                         <h5 class="modal-title text-white">Crear anotacion</h5>
@@ -42,18 +42,45 @@
                         </button>
                     </div>
                     <div class="container-fluid">
-                        <div class="form-group">
+                        <div class="position-relative">
                             <span class="sr-only" id="cedulaEstudianteGet"></span>
-                            <label for="anotacion">Anotacion</label>
-                            <textarea class="form-control" name="anotacion" id="anotacionEstudiante" rows="3"></textarea>
+                            <div class=" container-fluid my-0 border border-bottom-0" id="scrollText" style="height: 300px; overflow-y: auto;" >
+                                <div class="h-100 d-flex justify-content-end flex-column" id="messagesText">
+
+                                </div>
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <input type="text" class="rounded-0 form-control mt-0" name="anotacion" id="anotacionEstudiante" rows="1" style="resize: none;" placeholder="Escribir anotación...">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-success" id="crearAnotacionButton"><i class="fas fa-paper-plane" id="i_send"></i></button>
+                                </div>
+                            </div>
+                            <style>
+                                #messagesText::-webkit-scrollbar {
+                                    width: 8px;
+                                }
+                                #messagesText::-webkit-scrollbar-thumb {
+                                    background-color: darkgrey;
+                                }
+                                #messagesText::-webkit-scrollbar-track {
+                                    border-radius: 8px;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar {
+                                    width: 4px;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar-thumb {
+                                    background-color: darkgrey;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar-track {
+                                    border-radius: 8px;
+                                }
+                            </style>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-success" id="crearAnotacionButton">
-                        <i class="fas fa-paper-plane" id="i_send"></i> Enviar Anotacion
-                    </button>
                 </div>
             </div>
         </div>

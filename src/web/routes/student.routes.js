@@ -172,7 +172,13 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
             'Es importante que registre sus padecimientos si los presenta, y aceptar ' +
             'el consentimiento informado que se le dara una vez que matricule un curso.' +
             '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>'+
-            ''
+            '',
+        attachments: [
+            {   // stream as an attachment
+                filename: 'Consentimiento Informado.docx',
+                content: fs.createReadStream('web/assets/Consentimiento informado.docx')
+            }
+        ]
     };
     var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
     [req.body.cedula],

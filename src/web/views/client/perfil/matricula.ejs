@@ -45,6 +45,7 @@
         <span class="sr-only" id="id_estudiante"><%= usuario.id_estudiante%></span>
         <span class="sr-only" id="nivel_estudiante"><%= usuario.nivel%></span>
         <span class="sr-only" id="tipo_estudiante"><%= usuario.tipo%></span>
+        <span class="sr-only" id="cedula_estudiante"><%= usuario.cedula%></span>
 
         <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;" id="alertasucess">
             <strong>Matricula realizada!</strong>Curso Agregado.
@@ -62,14 +63,14 @@
         </div>
         
         <h3 class="text-dark mb-4">Matrícula</h3>
-        <div class="card shadow mb-3">
+        <div class="card mb-3">
             <div class="card-body px-2">
                 <div class="row justify-content-between">
                     <div class="col-md-6">
                         <p class="text-dark m-0 font-weight-bold text-left">Seleccione el o los días de la semana a los cuales desea asistir a clases</p>
                     </div>
                     <div class="col-md-4 mt-3">
-                        <div class="border p-1 rounded">
+                        <div class="p-1 rounded">
                             Monto a pagar: <div class="border-bottom border-dark d-inline-block w-50" id="montoTotal">0</div>&nbsp;colones
                         </div>
                     </div>
@@ -83,7 +84,7 @@
             </div>
         </div>
         
-        <div class="card shadow mb-3">
+        <div class="bg-dark text-white">
             <div class="card-body px-2">
                 <div class="row">
                     <div class="col-md d-flex justify-content-around">
@@ -221,9 +222,9 @@
                 </div>
             </div>
         </div>
-        <div class="card shadow">
+        <div class="border">
             <div class="card-body px-2">
-                <div class="w-100 border rounded px-1 mt-2" style="overflow-y: auto; height: 560px;" id="cursos_lista">
+                <div class="w-100 px-1" style="overflow-y: auto; height: 560px;" id="cursos_lista">
                     <div class="spinner-border text-info d-block my-5 mx-auto" style="display: none;" role="status" id="spinnerCursos">
                         <span class="sr-only">Loading...</span>
                     </div>
