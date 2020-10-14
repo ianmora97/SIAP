@@ -7,7 +7,6 @@ function loaded(event){
 function events(event){
     traer_estudiantes();
     toogleMenu();
-    load_stats();
     get_today_date();
     cambiarEstadoShow();
     cambiarEstadoSend();
@@ -17,6 +16,7 @@ function events(event){
     filtrarXEstudiantes();
     filtrarTodos();
     buscar();
+    actualizar();
 }
 function filtrarXFuncionarios() {
     $('#filtrar_funcionarios').on('click',function(){
@@ -84,45 +84,33 @@ function get_today_date() {
     $('.today-date').text(today);
 }
 
-function load_stats() {
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/cantidadRegistros",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_registrados_stats').text(response.cantidad);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/usuariosVerificados",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_verificados_stats').text(response.cant);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/usuariosNuevos",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_nuevos_stats').text(response.cant);
-    }, (error) => {
-
-    });
-
+function load_stats(usuarios) {
+    let cantidad = usuarios.length;
+    let verificados=0;
+    let nuevos =0 ;
+    for (let i of usuarios) {
+        if(i.estado) verificados++;
+        if(!i.estado) nuevos++;
+    }
+    $('#usuarios_registrados_stats').text(cantidad);
+    $('#usuarios_verificados_stats').text(verificados);
+    $('#usuarios_nuevos_stats').text(nuevos);
 }
 function traer_estudiantes() {
+    let ajaxTime= new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/usuariostemp",
         contentType: "application/json"
     }).then((usuarios) => {
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime/1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').text(t);
         $('#cargarDatosSpinner').hide();
         estudiantes = usuarios;
         mostrarUsuarios(usuarios);
+        load_stats(usuarios);
     }, (error) => {
     });
 }
@@ -138,25 +126,28 @@ function llenarListaUsuarios(u) {
     let nombre = u.nombre;
     let apellido = u.apellido;
     let nacimiento = u.nacimiento;
-    let username = u.usuario;
     let sexo = u.sexo;
     let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario';
-    let creado = u.creado;
+    let creado = u.creado.substring(0,u.creado.indexOf(' '));
     let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
     $('#lista_usuarios_temporales').append(
         '<tr>'+
         '<td>'+cedula+'</td>'+
-        '<td>'+nombre+'</td>'+
-        '<td>'+apellido+'</td>'+
+        '<td>'+nombre+' '+apellido+'</td>'+
         '<td>'+nacimiento+'</td>'+
-        '<td>'+username+'</td>'+
         '<td>'+sexo+'</td>'+
         '<td>'+tipo+'</td>'+
         '<td>'+creado+'</td>'+
-        '<td><span type="button" class="badge badge-pill badge-'+colorEstado+'" data-toggle="modal" data-target="#modalCambiarEstado" data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'">'+estado+'</span></td>'+
+        '<td> <button class="btn btn-'+colorEstado+' py-0 w-100" data-toggle="modal" data-target="#modalCambiarEstado" '+
+        'data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'"><i class="fas fa-sign-in-alt"></i> '+estado+'</button></td>'+
         '</tr>'
     );
+}
+function actualizar(){
+    socket.on('notificacion:nuevo_registro',function (data) {
+        traer_estudiantes();
+    });
 }
 function cambiarEstadoShow() {
     $('#modalCambiarEstado').on('show.bs.modal', function (event) {

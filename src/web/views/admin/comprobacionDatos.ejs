@@ -64,7 +64,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <h2 class="font-weight-bolder">Lista de Usuarios Registrados</h2>
-                                <small>Informacion Actualizada hace: <span class="text-success">2 segundos</span></small>
+                                <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                             </div>
                             <div class="col border-right">
                                 <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
@@ -114,15 +114,13 @@
                             <table class="table table-hover table-responsive-md table-borderless">
                                 <thead>
                                     <tr>
-                                        <th class="bg-primary text-white sticky-top" style="border-top-left-radius: 10px;" scope="col">Cedula</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Nombre</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Apellido</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Nacimiento</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Nombre de Usuario</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Sexo</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Perfil</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col">Fecha de Registro</th>
-                                        <th class="bg-primary text-white sticky-top" style="border-top-right-radius: 10px;" scope="col">Estado</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-birthday-cake"></i> Nacimiento</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-venus-mars"></i> Sexo</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-tag"></i> Perfil</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha de Registro</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-toggle-on"></i> Estado</th>
                                     </tr>
                                     </thead>
                                     <tbody id="lista_usuarios_temporales">

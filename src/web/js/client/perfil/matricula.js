@@ -163,7 +163,7 @@ async function filtrarCursosMatriculados(array1){
     result = result.filter(function(item, pos) {
         return result.indexOf(item) == pos;
     })
-    
+
     return result;
 }
 function llenarCurso(cupo) {
