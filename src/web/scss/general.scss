@@ -79,6 +79,11 @@ hr {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+
+td{
+    font-size: 0.8rem;
+}
+
 @mixin object-center {
     display: flex;
     justify-content: center;
