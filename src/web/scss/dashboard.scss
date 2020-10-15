@@ -6,7 +6,7 @@
   height: 50px;
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 99999;
 }
 .sidebar-heading{
   height: 50px;
@@ -85,4 +85,8 @@
 .photo_side_panel_front{
   background-color: rgba(54, 76, 120, .8);
   height: 100%;
+}
+.toast{
+  width: 300px;
+  max-width: 300px;
 }

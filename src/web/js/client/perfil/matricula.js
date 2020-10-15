@@ -1,6 +1,7 @@
 var cursos = [];
 var montoTotal = 0;
-var cursosSeleccionados = [];
+var cursosSeleccionados = []
+var cursosMatriculados = [];
 
 function loaded(event){
     events(event);
@@ -14,6 +15,7 @@ function events(event){
     matricularCursos();
     ocultarAlertaSuccess();
     ocultarAlertaDanger();
+    traerCursosMatriculados();
 }
 function eventSeleccionar(curso) {
     let all = $("[id*=matricularCursoCheckbox-]");
@@ -97,6 +99,9 @@ function filtrarTODOS(){
 	});
 }
 
+function traerCursosMatriculados(){
+    
+}
 function traerCursos(){
     let nivel = $('#nivel_estudiante').text();
     let data = {nivel}
@@ -105,19 +110,61 @@ function traerCursos(){
         url: "/client/cargarCursos",
         data:data,
         contentType: "application/json"
-    }).then((response) => {
-        cursos = response;
-        $('#spinnerCursos').toggleClass('d-block');
-        $('#spinnerCursos').hide();
-        cargarCurso(response);
+    }).then((cursosDis) => {
+        cursos = cursosDis;
+        let cedula = $('#cedula_estudiante').text();
+        let datos = {cedula}
+        $.ajax({
+            type: "GET",
+            url: "/client/cargarCursosMatriculadosCliente",
+            data:datos,
+            contentType: "application/json"
+        }).then((response) => {
+            cursosMatriculados = response;
+            $('#spinnerCursos').toggleClass('d-block');
+            $('#spinnerCursos').hide();
+
+            cargarCurso(cursos);
+        }, (error) => {
+        });        
     }, (error) => {
     });
 }
 function cargarCurso(cupos) {
     $('#cursos_lista').html('');
-    cupos.forEach(cupo => {
-        llenarCurso(cupo);
-    });
+    filtrarCursosMatriculados(cupos).then((newCupos)=>{
+        newCupos.forEach(cupo => {
+            llenarCurso(cupo);
+        });
+    }); 
+}
+async function filtrarCursosMatriculados(array1){
+    let result = [];
+    let todos = [];
+    let matriculados = [];
+    for(let i=0;i<cursosMatriculados.length;i++){
+        matriculados.push(cursosMatriculados[i].id_grupo);
+    }
+    for(let i=0;i<array1.length;i++){
+        todos.push(array1[i].id_grupo);
+    }
+    todos = todos.filter(function(item) {
+        return !matriculados.includes(item); 
+    })
+
+    console.log(todos)
+    for(let i=0;i<array1.length;i++){
+        for(let j=0;j<todos.length;j++){
+            if(array1[i].id_grupo == todos[j]){
+                result.push(array1[i]);
+            }
+        }
+    }
+    result = result.filter(function(item, pos) {
+        return result.indexOf(item) == pos;
+    })
+
+    return result;
 }
 function llenarCurso(cupo) {
     let id = cupo.id_grupo;
@@ -125,35 +172,40 @@ function llenarCurso(cupo) {
     let profesor = cupo.nombre.toUpperCase() +" "+ cupo.apellido.toUpperCase();
     let cod_t = cupo.codigo_taller;
     let costo = tipo == 1 ? cupo.costo : cupo.costo_funcionario;
-    let nivel = cupo.nivel == 1 ? 'Principiante' : cupo.nivel == 2 ? 'Intermedio' : 'Avanzado';
-    let cupos = cupo.cupo_base > 0 ? 'Cupo Disponible' : 'No hay cupos';
-    let cupos_t = cupo.cupo_base > 0 ? 'bg-success' : 'bg-danger';
+    let nivel = cupo.nivel == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+    let cupos = cupo.cupo_base - cupo.cupo_actual > 0 ? 'Cupo Disponible' : 'No hay cupos';
+    let cantidad = cupo.cupo_base - cupo.cupo_actual;
+    let cupos_t = cupo.cupo_base - cupo.cupo_actual > 0 ? 'success' : 'danger';
+    
     let fecha = parseFecha(cupo.dia,cupo.hora);
-    $('#cursos_lista').append(
-        '<div class="w-100 my-3">'+
-        '<div class="card-cursos-header">'+
-        '<h5 id="nombre">(Taller) Piscina Nivel '+nivel+' <br><span id="nrc">'+cod_t+'</span></h5>'+
-        '<span class="my-auto badge badge-pill '+cupos_t+'" id="cupo">'+cupos+'</span>'+
-        '</div>'+
-        '<div class="card-cursos-body">'+
-        '<p class="my-0" id="horario">'+fecha+'</p>'+
-        '<i class="fas fa-swimmer fa-3x text-celeste"></i>'+
-        '</div>'+
-        '<div class="card-cursos-footer">'+
-        '<div class="row w-100">'+
-        '<div class="col-md-6">'+
-        '<small id="profesor">Profesor: '+profesor+'</small>'+
-        '</div>'+
-        '<div class="col-md-6 d-flex justify-content-md-end">'+
-        '<a href="#" class="mx-3 btn btn-secondary disabled" role="button" id="precio">'+costo+' Colones</a>'+
-        '<div class="custom-control custom-checkbox">' +
-        '<input type="checkbox" id="matricularCursoCheckbox-' + id + '" class="custom-control-input" value="' + id + '" data-price="'+costo+'" name="matricularCursoCheckbox-'+id+'" onclick="eventSeleccionar('+id+')"/>' +
-        '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div>' +
-        '</div>'+
-        '</div>'+
-        '</div>'+
-        '</div>'
-    );
+    if(cupo.cupo_base - cupo.cupo_actual > 0){
+        $('#cursos_lista').append(
+            '<div class="w-100 my-3">'+
+            '<div class="card-cursos-header">'+
+            '<h5 id="nombre">(Taller) Piscina Nivel '+nivel+' <br><span id="nrc">'+cod_t+'</span></h5>'+
+            '<button type="button" class="btn btn-'+cupos_t+' my-auto" >'+
+            cupos+'<span class="ml-2 badge badge-light">'+cantidad+'</span>'+
+            '</button>'+
+            '</div>'+
+            '<div class="card-cursos-body">'+
+            '<p class="my-0" id="horario">'+fecha+'</p>'+
+            '<i class="fas fa-swimmer fa-3x text-celeste"></i>'+
+            '</div>'+
+            '<div class="card-cursos-footer">'+
+            '<div class="row w-100">'+
+            '<div class="col-md-6">'+
+            '<small id="profesor">Profesor: '+profesor+'</small>'+
+            '</div>'+
+            '<div class="col-md-6 d-flex justify-content-md-end">'+
+            '<div class="custom-control custom-checkbox">' +
+            '<input type="checkbox" id="matricularCursoCheckbox-' + id + '" class="custom-control-input" value="' + id + '" data-price="'+costo+'" name="matricularCursoCheckbox-'+id+'" onclick="eventSeleccionar('+id+')"/>' +
+            '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div>' +
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+        );
+    }
 }
 function ocultarAlertaDanger(){
     $('#cerrarAlertaDanger').on('click',function(){

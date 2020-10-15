@@ -1,5 +1,7 @@
 import {validate, check, emailCheck as cEm, verificarCedula as vc, verificarNombreCompleto as cNA, checkPass} from './validate.js';
 
+const socket = io();
+
 function loaded(event){
     events(event);
 }
@@ -188,7 +190,7 @@ function registrar_usuario_ajax(){
                         data: JSON.stringify(data),
                         contentType: "application/json"
                     }).then((response) => {
-
+                        socket.emit('notificacion:nuevo_registro',data);
                         $('html').scrollTop(0);
                         $('#spinnerWaiter').hide();
                         $("#alertasuccess").fadeIn('slow');

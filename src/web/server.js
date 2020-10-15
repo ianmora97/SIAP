@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const SocketIo = require('socket.io');
 const path = require('path');
 const chalk = require('chalk');
 const multer = require('multer');
@@ -67,3 +68,12 @@ const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
 });
 
+const io = SocketIo(server);
+
+io.on('connection', (socket) =>{
+    console.log('nueva conecion');
+    socket.on('notificacion:nuevo_registro', (data) => {
+        io.sockets.emit('notificacion:nuevo_registro',data);
+    });
+
+});

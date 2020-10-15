@@ -44,7 +44,6 @@ router.post('/admin/log',(req,res)=>{
                     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                     let dateTime = date+' '+time;
                     console.log('[',chalk.green('OK'),']',chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                    console.log(rows[0]);
                     res.redirect('/admin/dashboard');
                 }else{
                     res.render('indexAdmin',{err:'No tiene permisos',id: 1});

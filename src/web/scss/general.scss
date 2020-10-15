@@ -79,6 +79,11 @@ hr {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+
+td,th{
+    font-size: 0.8rem;
+}
+
 @mixin object-center {
     display: flex;
     justify-content: center;
@@ -92,7 +97,7 @@ hr {
     background-size: cover;
     background-position: center;
     background-blend-mode: multiply;
-    color: transparent;
+    
     transition: all .3s ease;
     @include object-center;
   
@@ -155,4 +160,21 @@ hr {
     &:hover{
         background-color: #F0F2F5 !important;
     }
+}
+
+
+#anotacionEstudiante.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: none; 
+    outline: 0;
+    box-shadow: none;
+}
+.text-message-a{
+    width: 100% ;
+}  
+@media (min-width: 768px) {
+    .text-message-a{
+        width: 50% !important;
+    }                                   
 }
