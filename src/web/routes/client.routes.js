@@ -32,6 +32,7 @@ router.get('/client/clases',(req,res)=>{
         res.render('index');
     }
 });
+
 router.get('/client/matricula',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
@@ -46,6 +47,7 @@ router.get('/client/matricula',(req,res)=>{
         res.render('index');
     }
 });
+
 router.get('/client/informacionMedica',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
@@ -119,6 +121,19 @@ router.get('/client/cargarCursos',(req,res)=>{
         }
     });
 });
+router.get('/client/cargarCursosMatriculadosCliente',(req,res)=>{
+    let script = "select * from vta_matriculados_por_grupo where cedula = ?";
+    var query = con.query(script,
+        [req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                
+                res.send(rows);
+            }
+        }
+    });
+});
 router.post('/client/login',(req,res)=>{
     let script = "select * from vta_cliente_estudiante "+
     "where cedula = ? " +
@@ -141,12 +156,33 @@ router.post('/client/login',(req,res)=>{
 
 router.post('/client/matricularCursos',(req,res)=>{
     if(req.session.value){
-        let script = "call prc_insertar_matricula(?,?,1)";
+        let script = "call prc_insertar_matricula(?,?)";
         let c = req.body;
+        console.log(c);
         var query = con.query(script,
             [c.id, c.estudiante],
             (err,result,fields)=>{
             if(err){
+                console.log(err);
+                res.status(501).send('error'); 
+            }else{
+                res.send('ok');
+            }
+        });
+    }else{
+        res.status(500).send('render');
+    }
+    
+});
+router.post('/client/cursos/desmatricular',(req,res)=>{
+    if(req.session.value){
+        let script = "call prc_actualizar_matricula_estudiante(?)";
+        let c = req.body;
+        console.log(c);
+        var query = con.query(script,
+            [c.curso_id,], (err,result,fields)=>{
+            if(err){
+                console.log(err);
                 res.status(501).send('error'); 
             }else{
                 res.send('ok');

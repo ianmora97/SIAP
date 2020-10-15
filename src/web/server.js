@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const SocketIo = require('socket.io');
 const path = require('path');
 const chalk = require('chalk');
 const multer = require('multer');
@@ -43,7 +44,7 @@ app.use(multer({
     }
 }).single('image'));
 
-//Rutas --routering
+//REST API --routering
 app.use(require('./routes/main.routes'));
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/admin.routes'));
@@ -54,8 +55,11 @@ app.use(require('./routes/listaestudiantes.routes'));
 app.use(require('./routes/user_temp.routes'));
 app.use(require('./routes/stats.routes'));
 app.use(require('./routes/student.routes'));
+app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
-
+app.use(require('./routes/profesor.routes'));
+app.use(require('./routes/reposition.routes'));
+app.use(require('./routes/attendance.routes'));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
@@ -64,3 +68,12 @@ const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
 });
 
+const io = SocketIo(server);
+
+io.on('connection', (socket) =>{
+    console.log('nueva conecion');
+    socket.on('notificacion:nuevo_registro', (data) => {
+        io.sockets.emit('notificacion:nuevo_registro',data);
+    });
+
+});

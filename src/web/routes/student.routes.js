@@ -19,6 +19,7 @@ router.get('/estudiantes',(req,res)=>{
         }
     });
 });
+
 //actualizar datos de estudiante
 router.put('/client/actualizardatos',(req,res)=>{
     if(req.session.value){
@@ -50,6 +51,21 @@ router.put('/client/actualizardatos',(req,res)=>{
         res.render('index',{err:'sessionExpired'});
     }
 });
+
+//Actualiza estado de consentimiento
+router.put('/estudiantes/actualizarConsentimiento',(req,res)=>{
+    var script = 'prc_actualizar_consentimiento_estudiante( ? , ? )';
+    con.query(script, [req.body.cedula , req.body.consentimiento] ,
+    (err,result,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                res.send(result);
+            }
+        }
+    });
+});
+
+
 //vista de estudiantes para administradores
 router.get('/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
@@ -158,10 +174,11 @@ router.post('/estudiante/insertarUsuarioPermanente',(req,res)=>{
             '<br><br>Click <a href="localhost">aqui</a> para iniciar sesion.</p>'+
             '',
         attachments: [
-            {   // consentimiento informado
+            {   // stream as an attachment
                 filename: 'Consentimiento Informado.docx',
-                content: fs.createReadStream('../assets/Consentimiento informado.docx')
-            }]
+                content: fs.createReadStream('web/assets/Consentimiento informado.docx')
+            }
+        ]
     };
     var script = con.query('call prc_cambiar_usuario_temp_a_permanente(?)', 
     [req.body.cedula],

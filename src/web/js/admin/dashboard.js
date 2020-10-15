@@ -3,7 +3,7 @@ function loaded(event){
 }
 
 function events(event){
-    ejemploAJAX();
+    cargarDatos();
     toogleMenu();
     change_navbar();
     load_stats();
@@ -119,18 +119,22 @@ function change_navbar(){
     console.log(sizeScreen);
     
 }
-
-function ejemploAJAX(){
-    // $('#accion').on('click',function(){ 
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/ejemplo",
-    //         contentType: "application/json"
-    //     }).then((response) => {
-            
-    //     }, (error) => {
-    //     });
-    // });
+function cargarDatos() {
+    $.ajax({
+        type: "GET",
+        url: "/admin/stats/getTalleres",
+        contentType: "application/json",
+    }).then(
+        (response) => {
+            // addData(barChart, '# of Votes 2017', '#ff0000', [16, 14, 8]);
+            updateChart( tallerCh,response);
+        },
+        (error) => {}
+    );
 }
 
+function updateChart(chart,data) {
+    chart.data.datasets[0].data = data;
+    chart.update();
+}
 document.addEventListener("DOMContentLoaded", loaded);

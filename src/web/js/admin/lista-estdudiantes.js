@@ -15,11 +15,16 @@ function events(event) {
 var estudiantes = [];
 
 function cargar_Estudiantes() {
+    let ajaxTime= new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/matricula/listaest",
         contentType: "application/json",
     }).then( (solicitudes) => {
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime/1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').text(t);
             estudiantes = solicitudes;
             cargarEstudiantes(solicitudes);
             $('#cargarDatosSpinner').hide();
@@ -117,19 +122,6 @@ function filtrarXdia() {
         let seleccionadosDias = $("[id*=filter_lista_dias_]");
         let seleccionadoHoras = $("[id*=horas-]")
         let buscar = $('#buscar_est_matr').val().toUpperCase();
-
-        if ('HOLAS'.includes(buscar)) {
-
-
-            console.log('si sirve');
-        }
-        console.log(buscar);
-        //typeof
-        // parseInt(string)
-
-        //buscar_est_matr -> id del espacio de matricula
-
-
 
         for (let i = 0; i < seleccionadosDias.length; i++) {
             if (seleccionadosDias[i].checked) {
@@ -230,10 +222,6 @@ var filtrarxdia = (estudiantes, dias, horas, buscar) => {
             }
         }
     }
-
-
-
-
     return result;
 };
 

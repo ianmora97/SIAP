@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <h2 class="font-weight-bolder">Lista de Estudiantes Matriculados</h2>
-                                <small>Informacion Actualizada hace: <span class="text-success">2 segundos</span></small>
+                                <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                             </div>
                             <div class="col border-right">
                                 <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
@@ -124,7 +124,6 @@
                                             <label class="custom-control-label" for="filter_lista_dias_sabado">Sábado</label>
                                         </div>
                                     </div>
-
                                     <div class="col-md-4 px-0 mt-2 d-flex justify-content-end">
                                         <div class="w-50 d-inline">
                                             <div class="btn-group w-90">
@@ -253,15 +252,15 @@
                         <table class="table table-hover table-responsive-md table-borderless" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th class="bg-primary text-white sticky-top" style="border-top-left-radius: 10px;" scope="col">Cédula</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Nombre</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">NRC</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Horario</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Nivel</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Profesor</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Meses</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Fecha de matricula</th>
-                                    <th class="bg-primary text-white sticky-top" style="border-top-right-radius: 10px;" scope="col">Ver</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Cédula</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Nombre</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">NRC</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Horario</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Nivel</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Profesor</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Meses</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Fecha de matricula</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Ver</th>
                                 </tr>
                             </thead>
                             <tbody id="lista-estudiantes">

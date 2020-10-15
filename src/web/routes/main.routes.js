@@ -3,35 +3,42 @@ const router = express.Router();
 
 const con = require('../database');
 
-router.get('/',(req,res)=>{
+router.get('/', (req, res) => {
     res.render('index');
 });
 
-router.get('/prueba',(req,res)=>{
-    res.render('prueba');
+router.get('/prueba', (req, res) => {
+    let usuario = req.session.value;
+
+        let v = { usuario, selected: 'home' }
+        res.render('client/perfil/lo_que_voy_a_probar',v);
+    });
+
+
+router.get('/pruebaImage', (req, res) => {
+    res.render('pruebaImage');
 });
 
-
-router.get('/admin',(req,res)=>{
+router.get('/admin', (req, res) => {
     res.render('indexAdmin');
 });
 
-router.get('/registrarse',(req,res)=>{
+router.get('/profesores', (req, res) => {
+    res.render('indexProfesores');
+});
+
+router.get('/registrarse', (req, res) => {
     res.render('client/registrarse');
 });
 
-router.get('/perfil',(req,res)=>{
+router.get('/perfil', (req, res) => {
     res.render('client/perfil');
 });
 
-router.post('/profesores',(req,res)=>{
-    var script = con.query('select * from t_profesor',
-    (err,rows,fields)=>{
-        if(rows[0] != undefined){
-            res.send(rows);
-        }
-    });
+router.get('/contactarAdministrador',(req,res)=>{
+    res.render('client/perfil');
 });
+
 module.exports = router;
 
 
