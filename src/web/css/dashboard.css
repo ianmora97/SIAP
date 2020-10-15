@@ -80,3 +80,8 @@
 .toast {
   width: 300px;
   max-width: 300px; }
+
+@media (min-width: 768px) {
+  .nav-link.col-md-3 {
+    flex: 0 0 24% !important;
+    max-width: 25% !important; } }

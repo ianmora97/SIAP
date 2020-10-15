@@ -1,9 +1,8 @@
-
 var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
-gradienteColores.addColorStop(0, 'rgb(54, 162, 235)');
-gradienteColores.addColorStop(1, 'white');
+gradienteColores.addColorStop(0, "#4c84ff");
+gradienteColores.addColorStop(1, "white");
 
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
@@ -12,12 +11,7 @@ var tallerCh = new Chart(talleresChart, {
         datasets: [
             {
                 label: ["Cantidad de personas matriculadas por taller"],
-                data: [0,0,0], //los datos de los talleres aqui
-                backgroundColor: gradienteColores,
-				hoverBackgroundColor: gradienteColores,
-                hoverBorderWidth: 2,
-				hoverBorderColor: '#364C78',
-                borderWidth: 1,
+                backgroundColor: '#4c84ff',
             },
         ],
     },
@@ -27,8 +21,8 @@ var tallerCh = new Chart(talleresChart, {
             xAxes: [
                 {
                     gridLines: {
-                        //display:false,
-                        drawTicks:false,
+                        display:false,
+                        drawTicks: false,
                         drawBorder: true,
                     },
                 },
@@ -36,65 +30,46 @@ var tallerCh = new Chart(talleresChart, {
             yAxes: [
                 {
                     gridLines: {
-                        //display:false,
-                        drawTicks:false,
-                        drawBorder: true,
+                        // display:false,
+                        drawTicks: false,
+                        drawBorder: false,
                     },
                     ticks: {
-                        beginAtZero: true
-                    }
+                        beginAtZero: true,
+                        // stepSize: 5,
+						// max: 50,
+                    },
                 },
-                
             ],
         },
-        animation: {
-            
-        },
+        animation: {},
         tooltips: {
-            mode: 'nearest'
+            mode: "nearest",
         },
         responsive: true,
         maintainAspectRatio: false,
     },
 });
 
-
 var usuariosChart = document.getElementById("usuariosChart").getContext("2d");
 usuariosChart.height = 600;
-var myChart = new Chart(usuariosChart, {
+var usuarioCharVar = new Chart(usuariosChart, {
     type: "bar",
     data: {
-        labels: ["Principiante", "Intermedio", "Avanzado"],
+        labels: ["Principiante", "Intermedio-Avanzado"],
         datasets: [
             {
                 label: "Principiante",
                 data: [12],
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                ],
+                backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+                borderColor: ["rgba(255, 99, 132, 1)"],
                 borderWidth: 1,
-            },{
-                label: "Intermedio",
+            },
+            {
+                label: "Intermedio-Avanzado",
                 data: [19],
-                backgroundColor: [
-                    "rgba(54, 162, 235, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(54, 162, 235, 1)",
-                ],
-                borderWidth: 1,
-            },{
-                label: "Avanzado",
-                data: [19],
-                backgroundColor: [
-                    "rgba(75, 192, 192, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(75, 192, 192, 0.2)",
-                ],
+                backgroundColor: ["rgba(54, 162, 235, 0.2)"],
+                borderColor: ["rgba(54, 162, 235, 1)"],
                 borderWidth: 1,
             },
         ],
@@ -124,7 +99,7 @@ var myChart = new Chart(usuariosChart, {
 });
 var matriculaChart = document.getElementById("matriculaChart").getContext("2d");
 matriculaChart.height = 600;
-var myChart = new Chart(matriculaChart, {
+var matriculaChartVar = new Chart(matriculaChart, {
     type: "bar",
     data: {
         labels: [
@@ -180,11 +155,3 @@ var myChart = new Chart(matriculaChart, {
     },
 });
 
-
-function addData(chart, label, data) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
-    chart.update();
-}

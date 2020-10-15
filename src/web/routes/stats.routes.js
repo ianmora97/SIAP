@@ -62,6 +62,30 @@ router.get('/admin/stats/talleres',(req,res)=>{
     });
 });
 
+router.get('/admin/stats/getTalleres',(req,res)=>{
+    let script = "select * from vta_matriculados_por_grupo";
+    var query = con.query(script,
+        (err,rows,fields)=>{
+        if(rows != undefined){
+            let principiante = 0;
+            let inter = 0;
+            let avanzado = 0;
+            rows.forEach((e)=>{
+                if(e.descripcion == 'Principiante') principiante++;
+                if(e.descripcion == 'Intermedio') inter++;
+                if(e.descripcion == 'Avanzado') avanzado++;
+            });
+            let data = [];
+            data.push(principiante);
+            data.push(inter);
+            data.push(avanzado);
+            res.send(data);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
+
 router.get('/admin/stats/matricula',(req,res)=>{
     let script = "select count(id) as cant from t_matricula";
     var query = con.query(script,

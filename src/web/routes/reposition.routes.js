@@ -43,13 +43,20 @@ router.get('/reposicion/porEstudiante', (req, res) => {
 //  Trae los cursos reservados de la tabla de cursos disponibles para reponer 
 
 router.get('/reposicion/cursosDisponiblesPorNivel', (req, res) => {
-    const script = 'call prc_seleccionar_reposiciones_por_nivel(?)';
-    con.query(script, [req.body.id], (err, rows, fields) => {
-        if (err) throw err;
-        if (rows[0] != undefined) {
-            res.send(rows);
-        }
-    });
+    if (req.session.value) {
+        let usuario = req.session.value;
+        let v = { usuario, selected: 'clases' }
+        const script = 'call prc_seleccionar_reposiciones_por_nivel(?)';
+        con.query(script, [usuario.nivel], (err, rows, fields) => {
+            if (!err){
+                if (rows[0] != undefined) {
+                    res.send(rows[0]);
+                }
+            }
+        });
+    } else {
+        res.render('index');
+    }
 });
 
 
