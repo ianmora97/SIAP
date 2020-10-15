@@ -1,5 +1,4 @@
 const express = require('express');
-const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../database');
@@ -24,7 +23,7 @@ const con = require('../database');
 
 //seleccionar ausencia por estudiante
 router.get('/ausencias/porEstudiante',(req,res)=>{
-    var script = 'call prc_seleccionar_ausencias_por_estudiante( ? )';
+    var script = 'call prc_seleccionar_ausencias_por_estudiante( ? )'; // buscar como mandarle el id de l estudienate
     con.query(script, [req.body.id],(err,rows,fields)=>{
         if(!err){
             res.send(rows);
@@ -44,12 +43,6 @@ router.get('/attendance',(req,res)=>{
         }
     });
 });
-
-router.post();
-
-router.put();
-
-router.delete();
 
 
 module.exports = router;

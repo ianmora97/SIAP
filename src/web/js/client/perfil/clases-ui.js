@@ -128,6 +128,7 @@ function filtarHistorial(){
         forEachCursosMatriculados(result);
     });
 }
+
 function filtrarCursosActuales(cursos) {
     let today = get_today_date().split('-')[1];
     let result = [];
@@ -199,4 +200,5 @@ function mostrarCursos(c) {
         '<tr>'
     );
 }
+
 document.addEventListener("DOMContentLoaded", loaded);

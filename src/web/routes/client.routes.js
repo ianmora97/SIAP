@@ -47,6 +47,7 @@ router.get('/client/matricula',(req,res)=>{
         res.render('index');
     }
 });
+
 router.get('/client/informacionMedica',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;

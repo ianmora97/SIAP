@@ -11,7 +11,7 @@ router.get('/prueba', (req, res) => {
     let usuario = req.session.value;
 
         let v = { usuario, selected: 'home' }
-        res.render('client/perfil/reposicion-clases',v);
+        res.render('client/perfil/lo_que_voy_a_probar',v);
     });
 
 
