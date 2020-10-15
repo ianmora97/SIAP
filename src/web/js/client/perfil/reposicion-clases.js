@@ -194,7 +194,7 @@ function cargarCursosDisponibles(clasesReservadas,clasesExistentes) {
     });
 }
 
-function llenarCursosPerdidos(clasesDispo) {
+function llenarCursosDisponibles(clasesDispo) {
     let id = clasesDispo.id;
     let codigo = clasesDispo.codigo;
     let fecha = clasesDispo.fecha;
