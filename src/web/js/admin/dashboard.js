@@ -112,7 +112,59 @@ function load_stats() {
     }, (error) => {
 
     });
+    $.ajax({
+        type: "GET",
+        url: "/admin/stats/usuariosNuevosTabla",
+        contentType: "application/json"
+    }).then((response) => {
+        cargarTablaUsuariosNuevos(response);
+    }, (error) => {
 
+    });
+    
+}
+function cargarTablaUsuariosNuevos(usuarios) {
+    $('#dataListUsuariosNuevos').html('');
+    $('#statNuevoUsusariosNotificacion').append(usuarios.length);
+    usuarios.forEach((u)=>{
+        showTablaUsuariosNuevos(u);
+    });
+}
+function showTablaUsuariosNuevos(u) {
+    
+    let cedula = u.cedula;
+    let nombre = u.nombre + ' ' + u.apellido;
+    let tipo = u.tipo ? 'Estudiante' : 'Funcionario';
+    let registro = u.registro.split(' ')[0];
+    let iniciales = u.nombre[0] + u.apellido[0];
+    let color = getRandomColor();
+
+    $('#dataListUsuariosNuevos').append(
+        '<tr>'+
+        '<td><span class="rounded-circle p-2 text-white mr-2" style="background:'+color+';">'+iniciales+'</span></td>'+
+        '<td>'+cedula+'</td>'+
+        '<td>'+nombre+'</td>'+
+        '<td>'+tipo+'</td>'+
+        '<td>'+registro+'</td>'+
+        '</tr>'
+    );
+}
+function getRandomColor() {
+    let number = Math.floor(Math.random() * 6) + 1;
+    switch (number) {
+        case 1:
+            return '#6f42c1';
+        case 2:
+            return '#fd7e14';
+        case 3:
+            return '#20c997';
+        case 4:
+            return '#007bff';
+        case 5: 
+            return '#dc3545';
+        case 6:
+            return '#ffc107';
+    }
 }
 function change_navbar(){
     let sizeScreen = $('body')[0].clientWidth;

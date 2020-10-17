@@ -1,0 +1,23 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="#ffffff" id="canvas_background" height="602" width="802" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#000" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="362.45313" x2="100" y1="471.45312" x1="-10" stroke-width="8" fill="none"/>
+  <line stroke="#498cff" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_3" y2="362.45313" x2="100" y1="471.45312" x1="-10" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(63.776206970214844 166.89109802246088,395.5365295410157) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_4" y2="346.07201" x2="226.79466" y1="445.00104" x1="106.98754" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-169.3948211669922 256.5387878417969,386.6151123046875) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_5" y2="341.43198" x2="272.42098" y1="431.79823" x1="240.65658" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-74.98774719238281 321.0643920898437,377.4403991699218) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_6" y2="332.25727" x2="336.9466" y1="422.62352" x1="305.18219" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-74.98774719238281 397.4496765136718,354.6171875) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_7" y2="382.00595" x2="456.97016" y1="327.22841" x1="337.92921" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(63.776206970214844 505.4810791015626,337.00219726562494) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_10" y2="287.53768" x2="565.38467" y1="386.46671" x1="445.57755" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-169.3948211669922 596.1492309570312,330.12158203124994) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_11" y2="284.93847" x2="612.0314" y1="375.30472" x1="580.267" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-74.98774719238281 660.6748657226562,320.9468688964843) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_12" y2="275.76375" x2="676.55702" y1="366.13001" x1="644.79261" stroke-width="8" fill="#fff"/>
+  <line stroke="#498cff" transform="rotate(-74.98774719238281 754.5671997070312,264.4422912597656) " stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_13" y2="300.04356" x2="851.05764" y1="228.84104" x1="658.07673" stroke-width="8" fill="#fff"/>
+ </g>
+</svg>

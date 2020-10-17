@@ -27,6 +27,7 @@ router.get('/admin/stats/usuarios',(req,res)=>{
         }
     });
 });
+
 router.get('/admin/stats/usuariosVerificados',(req,res)=>{
     let script = "select count(id) as cant from t_usuario_temp";
     var query = con.query(script,
@@ -92,6 +93,19 @@ router.get('/admin/stats/matricula',(req,res)=>{
         (err,rows,fields)=>{
         if(rows != undefined){
             res.send(rows[0]);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
+
+router.get('/admin/stats/usuariosNuevosTabla',(req,res)=>{ //para la tabla del dashboard
+    let script = "select cedula, nombre, apellido, tipo_usuario as tipo, creado as registro from vta_usuario_temp where estado = 0";
+    var query = con.query(script,
+        (err,rows,fields)=>{
+        console.log(rows);
+        if(rows != undefined){
+            res.send(rows);
         }else{
             res.send({err:'NotFound'});
         }

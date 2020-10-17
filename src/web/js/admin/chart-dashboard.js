@@ -1,8 +1,8 @@
 var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
-gradienteColores.addColorStop(0, "#4c84ff");
-gradienteColores.addColorStop(1, "white");
+gradienteColores.addColorStop(0, "rgba(29.8%, 51.8%, 100%, 0.6)");
+gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
@@ -11,7 +11,10 @@ var tallerCh = new Chart(talleresChart, {
         datasets: [
             {
                 label: ["Cantidad de personas matriculadas por taller"],
-                backgroundColor: '#4c84ff',
+                // backgroundColor: "#4c84ff",
+                backgroundColor: gradienteColores,
+                borderColor: '#4c84ff',
+                borderWidth: 2,
             },
         ],
     },
@@ -21,7 +24,7 @@ var tallerCh = new Chart(talleresChart, {
             xAxes: [
                 {
                     gridLines: {
-                        display:false,
+                        display: false,
                         drawTicks: false,
                         drawBorder: true,
                     },
@@ -37,7 +40,7 @@ var tallerCh = new Chart(talleresChart, {
                     ticks: {
                         beginAtZero: true,
                         // stepSize: 5,
-						// max: 50,
+                        // max: 50,
                     },
                 },
             ],
@@ -154,4 +157,36 @@ var matriculaChartVar = new Chart(matriculaChart, {
         maintainAspectRatio: false,
     },
 });
-
+var pieDonutChart = document.getElementById("pieDonutChart").getContext("2d");
+var pieDonutChartVar = new Chart(pieDonutChart, {
+    type: "pie",
+    data: {
+        labels: [
+            "Agregados",
+            "Eliminados",
+            "Actualizados"
+        ],
+        datasets: [
+            {
+                label: "Reportes",
+                data: [12, 19, 3],
+                borderWidth: [2],
+                backgroundColor: [
+                    "#4c84ff",
+                    "#28a745",
+                    "#ffc107",
+                ],
+                borderColor: [
+                    "#fff",
+                    "#fff",
+                    "#fff",
+                ],
+                borderWidth: 1,
+            },
+        ],
+    },
+    options:{
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});

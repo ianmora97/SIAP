@@ -1,25 +1,32 @@
-<!-- <button id="toastBoton">prueba</button> -->
-<div style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;" id="toastsNotifications">
-    
-</div>
+<div style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;" id="toastsNotifications"></div>
 <div class="mx-auto mt-2">
     <div class="footer">
         <svg width="100%" height="20px" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave">
-            <defs></defs>
+            <defs>
+                <linearGradient id="gradient1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff"  />
+                    <stop offset="100%" stop-color="#3c8eec"  />
+                </linearGradient>
+            </defs>
             <path id="feel-the-wave" d=""/>
         </svg>
+        <div class="bg-dark  mt-0 py-3 text-center" style="height: 50px;">
+            <p class="mb-1 text-white">© 2020-2021 Universidad Nacional de Costa Rica</p>
+        </div>
     </div>
 </div>
 <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
 <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
 <script>
-    var wave1 = $('#feel-the-wave').wavify({
-        height: 1,
-        bones: 3,
-        amplitude: 2,
-        color: '#3c8eec',
-        speed: .35
+    $(document).ready(function () {
+        var wave1 = $('#feel-the-wave').wavify({
+            height: 1,
+            bones: 3,
+            amplitude: 8,
+            color: '#4c84ff',
+            speed: .35
+        });
     });
 </script>
 <script src="/socket.io/socket.io.js" charset="utf-8"></script>
