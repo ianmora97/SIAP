@@ -83,6 +83,19 @@ router.get('/admin/grupos',(req,res)=>{
         res.render('indexAdmin');
     }
 });
+router.get('/admin/reposiciones',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reposiciones';
+            res.render('admin/reposiciones', {usuario,s});
+        }else{
+            res.render('indexAdmin');
+        }
+    }else{
+        res.render('indexAdmin');
+    }
+});
 router.get('/admin/solicitudes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){

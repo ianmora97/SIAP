@@ -60,6 +60,7 @@ app.use(require('./routes/illness.routes'));
 app.use(require('./routes/profesor.routes'));
 app.use(require('./routes/reposition.routes'));
 app.use(require('./routes/attendance.routes'));
+app.use(require('./routes/group.routes'));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));

@@ -21,34 +21,6 @@
 </head>
 
 <body class="bg-white">
-    <div class="modal fade" id="modalAgregarComprobanteReposicion" tabindex="-1"
-        aria-labelledby="modalAgregarComprobanteReposicionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-secondary">
-                    <h5 class="modal-title text-white">Comprobante</h5>
-                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
-                        <p class="m-0">Formato de documento invalido!</p>
-                    </div>
-                    <form action="/client/uploadDocument" method="POST" enctype="multipart/form-data">
-                        <label for="file" class="mt-4">Subir comprobante</label>
-                        <input type="file" class="form-control-file" name="image" id="comprobante"
-                            placeholder="Combrobante" aria-describedby="fileHelpId">
-                        <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF, PNG, PGJ,
-                            JPEG</small>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <span class="sr-only" id="id_nivel"><%=usuario.nivel%></span>
     <span class="sr-only" id="id_cedula"><%=usuario.cedula%></span>
     <span class="sr-only" id="id_estudiante"><%=usuario.id_estudiante%></span>
@@ -146,14 +118,14 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active bg-white py-2" id="matricula-activa" role="tabpanel"
-                    aria-labelledby="matricula-activa-tab" style="height: 450px;">
+                    aria-labelledby="matricula-activa-tab" style="min-height: 450px;">
                     <div class="w-100 d-flex justify-content-between">
                         <h5 class="px-2 my-auto">Cursos matriculados en este mes</h5>
                         <button class="btn" onclick="window.print()"><i class="fa fa-print fa-2x"
                                 aria-hidden="true"></i> </button>
                     </div>
                     <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
-                        <table class="table table-hover table-responsive-md table-borderless">
+                        <table class="table table-hover table-borderless">
                             <thead>
                                 <tr>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i
@@ -178,7 +150,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade  bg-white" id="historial-matricula" role="tabpanel"
-                    aria-labelledby="historial-matricula-tab" style="height: 450px;">
+                    aria-labelledby="historial-matricula-tab" style="min-height: 450px;">
                     <div class="row px-3 py-1 mx-auto d-flex justify-content-between">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -195,7 +167,7 @@
                         </div>
                     </div>
                     <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
-                        <table class="table table-hover table-responsive-md table-borderless">
+                        <table class="table table-hover table-borderless">
                             <thead>
                                 <tr>
                                     <th class="bg-primary text-white sticky-top" scope="col"><i
@@ -223,17 +195,40 @@
                 </div>
                 
                 <div class="tab-pane fade  bg-white py-2" id="reposicion-matricula" role="tabpanel"
-                    aria-labelledby="reposicion-matricula-tab" style="height: 550px;">
-                    <form action=""></form>
-                    <h5 class="text-dark" style="margin-top: 13px;">Reposición de clases</h5>
-                    <div>
+                    aria-labelledby="reposicion-matricula-tab" style="min-height: 550px;">
+                    <form action="/client/reposicion/insertar" method="POST" enctype="multipart/form-data">
+                        <div class="modal fade" id="modalAgregarComprobanteReposicion" tabindex="-1"
+                        aria-labelledby="modalAgregarComprobanteReposicionLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-secondary">
+                                        <h5 class="modal-title text-white">Comprobante</h5>
+                                        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                                            <p class="m-0">Formato de documento invalido!</p>
+                                        </div>
+                                        <label for="file" class="">Subir comprobante</label>
+                                        <input type="file" class="form-control-file" name="image" id="comprobante"
+                                            placeholder="Combrobante" aria-describedby="fileHelpId">
+                                        <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF, PNG, PGJ,
+                                            JPEG
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-dark" style="margin-top: 13px;">Reposición de clases</h5>
                         <div class="card-body text-center pt-0">
                             <div class="row">
                                 <div class="col-md-6 d-block float-left">
                                     <p class="text-dark m-0 font-weight-bold">Clases perdidas</p>
                                     <div class=" text-center border rounded border-danger table mt-2"
                                         id="dataTable-1" role="grid" aria-describedby="dataTable_info" style="height: 300px; overflow-y: auto;">
-                                        <table class="table table-striped table-responsive my-0">
+                                        <table class="table table-striped my-0">
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -260,7 +255,7 @@
                                     <p class="text-dark m-0 font-weight-bold">Clases disponibles</p>
                                     <div class=" text-center border rounded border-success table mt-2"
                                         id="dataTable-2" role="grid" aria-describedby="dataTable_info" style="height: 300px; overflow-y: auto;">
-                                        <table class="table table-responsive table-striped my-0" id="dataTable">
+                                        <table class="table table-striped my-0" id="dataTable">
                                             <thead>
                                                 <tr>
                                                     <th></th>
@@ -289,18 +284,20 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" id="observacionesReposicion" name="observacionesReposicion"
+                                    <input type="text" id="observacionesReposicion" name="observacionTexto"
                                         class="form-control mb-3" placeholder="Observaciones" required=""
                                         autofocus="">
                                 </div>
                                 <div class="col text-left">
-                                    <button class="btn btn-outline-danger w-100" data-toggle="modal"
+                                    <div class="btn btn-outline-danger w-100" role="button" data-toggle="modal"
                                         data-target="#modalAgregarComprobanteReposicion">Subir
-                                        comprobante </button></div>
+                                        comprobante </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col"><button class="btn btn-primary"
-                                            type="button">Confirmar</button></div>
+                            </div>
+                            <div class="row">
+                                <input type="date" id="fechaReposicion" name="fecha_reposicion"  style="display: none;">
+                                <div class="col">
+                                    <input type="submit" class="btn btn-primary" type="button" value="Enviar solicitud">
                                 </div>
                             </div>
                         </div>

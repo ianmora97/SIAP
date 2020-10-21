@@ -3,9 +3,10 @@ function loaded_c(event) {
 }
 
 function events_c(event) {
-    cargar_clases_perdidas();
     cargar_clases_reservadas();
-
+    cargar_clases_perdidas();
+    leerComprobante();
+    checkFecha();
 }
 
 //-------------------------------------------------------Cursos a los que faltó la persona-----------------------------------------
@@ -36,8 +37,9 @@ function cargarAsistenciaPerdida(asistenciaPerdida) {
     });
 }
 function llenarAsistenciaPerdida(asistenciaPerdida) {
+
     let nivel = asistenciaPerdida.nivel;
-    let id = asistenciaPerdida.id;
+    let id = asistenciaPerdida.id_grupo;
     let codigo = asistenciaPerdida.codigo;
 
     let fecha = asistenciaPerdida.fecha; // 13-10-2020-04-42
@@ -61,9 +63,9 @@ function llenarAsistenciaPerdida(asistenciaPerdida) {
     $("#tablaClasesPerdidas").append(
         "<tr>" +
         "<td>" +
-        '<div class="">' +
-        '<input  type="radio" id="clasePerdidaRadio-' + id + '" class="" data-value="' + id + '" name="clasePerdidaRadio"' +
-        '</div>' +
+'        <div class="custom-control ">'+
+        '<input type="radio" id="clasePerdidaRadio-' + id + '" name="grupo_origen" value="'+id+'" >'+
+        '</div>'+
         "</td>" +
         "<td>" +
         codigo +
@@ -111,10 +113,11 @@ var clasesReservadas = [];
 var clasesExistentes = [];
 
 function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
+    console.log('yes_2');
     $.ajax({
         type: "GET",
         url: "/reposicion/cursosDisponiblesPorNivel",// el de la tabla de solicitudes
-        contentType: "application/json",
+        contentType: "application/json",    
     }).then((clasesReservadas_) => {
         clasesReservadas = clasesReservadas_;
         let nivel = $('#id_nivel').text();
@@ -125,8 +128,11 @@ function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
             contentType: "application/json",
         }).then((clasesExistentes_) => {
             clasesExistentes = clasesExistentes_;
-            cargarCursosDisponibles(clasesReservadas, clasesExistentes);
-
+            if(clasesReservadas.length == 0){
+                cargarCursosDisponibles_alt(clasesExistentes);
+            }else{
+                cargarCursosDisponibles(clasesReservadas, clasesExistentes);
+            }
             $('#cargarDatosSpinnerRepoDisponibles').hide(); // hay que añadie ese en el html
         },(error) => {
                 alert(error.status);
@@ -139,7 +145,7 @@ function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
         }
     );
 }
-function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
+function cargar_clases_reservadas_alt() { // ocupo unir este metodo con el de abajo
     let nivel = $('#id_nivel').text();
     $.ajax({
         type: "GET",
@@ -159,38 +165,51 @@ function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
 
 function restar_disponibles_con_reservados(clasesReservadas, clasesExistentes) {
     let cursos = [];
-    /*
-        ! en el caso en que un curso hayan cupos (que cupos_extra sea <0) y que los reservados sean menores a los campos máximos del grupo 
-        ! (porque si estan los campos extra intactos significa que nadie ha reservado aun en ese horario)
-    */
 
-    for (let i = 0; i < clasesReservadas.length; i++) {
-        for (let j = 0; j < clasesExistentes.length; j++) {
-            if (clasesReservadas[i].id_grupo == clasesExistentes[j].id_grupo &&
-                clasesReservadas[i].cupo_extra > 0 &&
-                clasesReservadas[i].cupo_extra < clasesExistentes[j].cupo_extra
-            ) {
-                cursos.push(clasesExistentes[j]);
+    let result = [];
+    let todos = [];
+    let reservados = [];
+
+    for(let i=0;i<clasesReservadas.length;i++){
+        reservados.push({id:clasesReservadas[i].grupo_reposicion, fecha: clasesReservadas[i].fecha_reposicion, cantidad:clasesReservadas[i].cuenta});
+    }
+    for(let i=0;i<clasesExistentes.length;i++){
+        todos.push({id: clasesExistentes[i].id_grupo, extra: clasesExistentes[i].cupo_extra});
+    }
+
+    for(let i=0;i<reservados.length;i++){ //filtra los cursos que estan reservados
+        for(let j=0;j<todos.length;j++){
+            if(todos[j].id == reservados[i].id){
+                if(todos[j].extra == reservados[i].cantidad){
+                    result.push(todos[j].id);
+                }
             }
         }
     }
-    console.log(cursos);
-
-    // en el caso que un horario no tenga ninguna reserva aún (o sea, no hay registro de ello en la trabla de reservas)
-    for (let i = 0; i < clasesReservadas.length; i++) {
-        let contador = 0;
-        for (let j = 0; j < clasesExistentes.length; j++) {
-            if (clasesReservadas[i].id_grupo == clasesExistentes[j].id_grupo) {
-                contador++; // guardo la cantidad de veces que un curso de las reservaciones está en los disponibles
+    result = result.filter(function(item, pos) {
+        return result.indexOf(item) == pos;
+    })
+    for(let i=0;i<todos.length;i++){
+        for(let j=0;j<result.length;j++){
+            if(todos[i].id != result[j]){
+                cursos.push(todos[i].id);
             }
-            if (contador == 0) {// si ese curso no se encuentra en las reservaciones es porque tiene todos los campos libres, entonces lo meto en el vector
-                cursos.push(clasesExistentes[j]);
-            }
-
         }
-        contador = 0;
     }
-    return cursos;
+
+    let final = [];
+    for (let i = 0; i < cursos.length; i++) {
+        for (let j = 0; j < clasesExistentes.length; j++) {
+            if (clasesExistentes[j].id_grupo == cursos[i] ){
+                final.push(clasesExistentes[j]);
+            }
+        }
+    }
+    final = final.filter(function(item, pos) {
+        return final.indexOf(item) == pos;
+    })
+
+    return final;
 }
 
 function cargarCursosDisponibles_alt(clasesExistentes) {
@@ -200,7 +219,12 @@ function cargarCursosDisponibles_alt(clasesExistentes) {
     });
 }
 function cargarCursosDisponibles(clasesReservadas,clasesExistentes) {
-    let clasesDispo = restar_disponibles_con_reservados(clasesReservadas,clasesExistentes);
+    let clasesDispo = [];
+
+    if(clasesReservadas.length = 0){
+        clasesDispo = clasesExistentes;
+    }
+    clasesDispo = restar_disponibles_con_reservados(clasesReservadas,clasesExistentes);
     $("#tablaClasesDisponibles").html("");
     clasesDispo.forEach((clasesDispo) => {
         llenarCursosDisponibles(clasesDispo);
@@ -208,18 +232,19 @@ function cargarCursosDisponibles(clasesReservadas,clasesExistentes) {
 }
 
 function llenarCursosDisponibles(cupo) {
+
     let id = cupo.id_grupo;
     let profesor = cupo.nombre.toUpperCase() +" "+ cupo.apellido.toUpperCase();
     let codigo = cupo.codigo_taller;
     let cupos = cupo.cupo_extra;
-    let fecha = '2020-10-22';
+    let fecha = cupo.dia +' ' + (cupo.hora > 12 ? (cupo.hora - 12) + 'pm' : cupo.hora + 'am');
     
 
     $("#tablaClasesDisponibles").append(
         "<tr>" +
         "<td>" +
         '<div class="">' +
-        '<input  type="radio" id="claseDisponibleRadio-' + id + '" class="" value="' + id + '" name="claseDisponibleRadio"' +
+        '<input type="radio" id="claseDisponibleRadio-' + id + '" value="' + id + '" name="grupo_reposicion" onclick="checkFecha('+id+')">' +
         '</div>' +
         "</td>" +
         "<td>" +
@@ -238,53 +263,68 @@ function llenarCursosDisponibles(cupo) {
         "</tr>"
     );
 }
-//-------------------------------------------------------------valida que los campos estén llenos----------------------------------
 
-//$(document).ready(function () {
-//    $("#boton").click(function () {
-//        if ($("#formulario input[name='edad']:radio").is(':checked')) {
-//            alert("Bien!!!, la edad seleccionada es: " + $('input:radio[name=edad]:checked').val());
-//            $("#formulario").submit();
-//        } else {
-//            alert("Selecciona la edad por favor!!!");
-//        }
-//    });
-//});
+function checkFecha(id) {
+    var Options = $("[id*=claseDisponibleRadio-]");
+    for(let i=0;i<clasesExistentes.length;i++){
+        if(clasesExistentes[i].id_grupo == id){
+            daytoWeekDay(clasesExistentes[i].dia).then((dia)=>{
+                var d = new Date();
+                d.setDate(d.getDate() + (dia + 7 - d.getDay()) % 7);
+                d.setHours(clasesExistentes[i].hora);
+                d.setMinutes(0);
+                d.setSeconds(0);
+
+                var day = ("0" + d.getDate()).slice(-2);
+                var month = ("0" + (d.getMonth() + 1)).slice(-2);
+                
+                let dateToday = d.getFullYear()+'-'+(month)+'-'+(day);
+                $('#fechaReposicion').val(dateToday);
+                console.log($('#fechaReposicion').val());
+            });
+        }   
+    }
+}
+async function daytoWeekDay(day) {
+    switch (day) {
+        case 'LUNES':
+            return 1;
+        case 'MARTES':
+            return 2;    
+        case 'MIERCOLES':
+            return 3;
+        case 'JUEVES':
+            return 4;
+        case 'VIERNES':
+            return 5;
+        case 'SABADO':
+            return 6;
+        case 'DOMINGO':
+            return 0;    
+    }
+}
 
 //----------------------------------------------------------------Parte de los commprobantes
 
-//function leerComprobante() {
-//    $("#comprobante").change(function (event) {
-//        let fileInput = event.currentTarget;
-//        let archivos = fileInput.files;
-//        let nombre = archivos[0].name;
-//        let tipo = nombre.split('.')[archivos.length];
-//        if (tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg'
-//            || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'
-//            || tipo == 'PDF' || tipo == 'pdf') {
-//            $('#fileHelpId').append(
-//                '<input type="submit" value="Subir Comprobante" id="subirComprobanteBotonModal" class="btn btn-secondary w-100 mt-4" >'
-//            );
-//            $('#formatoImagenInvalido').hide();
-//        } else {
-//            $('#formatoImagenInvalido').show();
-//        }
-//    });
-//}
-//function cargarComprobantesFotos() {
-//    $.ajax({
-//        type: "GET",
-//        url: "/client/cargarPadecimientosFotos",// acá podría la ruta que se llama /cliente/uploadRepoImage
-//        contentType: "application/json"
-//    }).then((response) => {
-//        $('#spinnerPadecimientos').toggleClass('d-block');
-//        
-//        showComprobantes(response);
-//    }, (error) => {
-//
-//    });
-//}
-//
+function leerComprobante() {
+   $("#comprobante").change(function (event) {
+       let fileInput = event.currentTarget;
+       let archivos = fileInput.files;
+       let nombre = archivos[0].name;
+       let tipo = nombre.split('.')[archivos.length];
+       if (tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg'
+           || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'
+           || tipo == 'PDF' || tipo == 'pdf') {
+           $('#fileHelpId').after(
+               '<div class="btn btn-secondary w-100 mt-4" data-dismiss="modal">Aceptar</div>'
+           );
+           $('#formatoImagenInvalido').hide();
+       } else {
+           $('#formatoImagenInvalido').show();
+       }
+   });
+}
+
 //
 //function showComprobantes(comprobantes) {
 //    $('#comprobantes').html(' ');
@@ -313,185 +353,3 @@ function llenarCursosDisponibles(cupo) {
 
 
 document.addEventListener("DOMContentLoaded", loaded_c);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
