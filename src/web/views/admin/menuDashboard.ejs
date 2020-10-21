@@ -51,12 +51,15 @@
         data-toggle="collapse" href="#collapseTalleres" role="button" aria-expanded="false" aria-controls="collapseTalleres">
             <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
         </a>
-            <div class="collapse <%if(s == 'talleres' || s == 'grupos'){%> show <%}%>" id="collapseTalleres" data-parent="#accordion-menu-lateral">
+            <div class="collapse <%if(s == 'talleres' || s == 'grupos' || s == 'reposiciones'){%> show <%}%>" id="collapseTalleres" data-parent="#accordion-menu-lateral">
                 <a href="/admin/talleres" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>">
                     <i class="fas fa-swimmer"></i>&nbsp; Talleres
                 </a>
                 <a href="/admin/grupos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>">
                     <i class="fas fa-swimmer"></i>&nbsp; Grupos
+                </a>
+                <a href="/admin/reposiciones" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reposiciones"){%> menu-active <%}%>">
+                    <i class="fas fa-swimmer"></i>&nbsp; Reposiciones
                 </a>
             </div>
         <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2"

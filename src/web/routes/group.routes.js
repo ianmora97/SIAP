@@ -17,6 +17,25 @@ router.get('/grupo',(req,res)=>{
         }
     });
 });
+router.get('/admin/getGrupos',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reposiciones';
+            var script = con.query('select * from vta_grupos',
+            (err,rows,fields)=>{
+                if(!err){
+                    res.send(rows);
+                }
+            });
+        }else{
+            res.render('indexAdmin');
+        }
+    }else{
+        res.render('indexAdmin');
+    }
+    
+});
 
 //insertar
 router.post('/grupos/insertarGrupo',(req,res)=>{

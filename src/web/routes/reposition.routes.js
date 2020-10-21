@@ -25,32 +25,23 @@ router.get('/reposicion/porEstudiante', (req, res) => {
 });
 
 
-//router.get('/client/matricula/seleccionaMatriculaEstudiante',(req,res)=>{
-//    const script = 'call prc_seleccionar_matricula_por_estudiante(?)'; 
-//    con.query(script,[req.query.cedula],
-//        (err,rows,fields)=>{
-//        if(!err){
-//            if(rows[0].lenght != 0){
-//                res.send(rows[0]);
-//            }
-//        }   
-//    });
-//});
 
-
-//--------------------------------------------------------------------------------------
-
-//  Trae los cursos reservados de la tabla de cursos disponibles para reponer 
 
 router.get('/reposicion/cursosDisponiblesPorNivel', (req, res) => {
     if (req.session.value) {
         let usuario = req.session.value;
         let v = { usuario, selected: 'clases' }
-        const script = 'call prc_seleccionar_reposiciones_por_nivel(?)';
+        const script = 'call prc_cuenta_repo_aceptada_nivel_gf(?)';
         con.query(script, [usuario.nivel], (err, rows, fields) => {
+            
             if (!err){
                 if (rows[0] != undefined) {
                     res.send(rows[0]);
+                }
+            }else{
+                if(rows == undefined){
+                    console.log(rows);
+                    res.send([]);
                 }
             }
         });
@@ -62,14 +53,26 @@ router.get('/reposicion/cursosDisponiblesPorNivel', (req, res) => {
 
 //--------------------------------------------------------------------------------------
 //Selecciona todos los reposicion
-router.get('/reposicion', (req, res) => {
-    var script = 'select * from vta_reposiciones';
-    con.query(script, (err, rows, fields) => {
-        if (err) throw err;
-        if (rows[0] != undefined) {
-            res.send(rows);
+router.get('/admin/getReposiciones', (req, res) => {
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reposiciones';
+            var script = 'select * from vta_reposiciones';
+            con.query(script, (err, rows, fields) => {
+                if(!err){
+                    res.send(rows);
+                }else{
+                    res.status(501).send('error');
+                }
+            });
+        }else{
+            res.render('indexAdmin');
         }
-    });
+    }else{
+        res.render('indexAdmin');
+    }
+    
 });
 
 //Selecciona reposicion especifico
@@ -84,17 +87,23 @@ router.get('/reposicion/seleccionarespecificos', (req, res) => {
 });
 
 //Inserta una reposicion
-router.post('/reposicion/insertar', (req, res) => {
-    var script = 'call prc_insertar_reposicion( ? , ? , ? , ? , ? )';
-    con.query(script, [req.body.idEstudiante, req.body.grupo_origen, req.body.grupo_reposicion
-        , req.body.fecha_reposicion, req.body.comprobante],
-        (err, result, fields) => {
-            if (!err) {
-                res.send(result[0]);
-            } else {
-                console.log(err.message);
-            }
+router.post('/client/reposicion/insertar', (req, res) => {
+    if (req.session.value) {
+        let usuario = req.session.value;
+        var script = 'call prc_insertar_reposicion( ? , ? , ? , ? , ? , ? )';
+        console.log(req.body, req.file.filename);
+        con.query(script, [usuario.id_estudiante, req.body.grupo_origen, req.body.grupo_reposicion
+            , req.body.fecha_reposicion, req.body.observacionTexto, req.file.filename],
+            (err, result, fields) => {
+                if (!err) {
+                    res.send(result[0]);
+                } else {
+                    console.log(err.message);
+                }
         });
+    } else {
+        res.render('index');
+    }
 });
 
 //actualizar una reposicion

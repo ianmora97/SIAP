@@ -1,0 +1,55 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="en" class="h-100">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Usuarios - Profesores</title>
+     <link rel="stylesheet" href="../../css/bootstrap.css">
+     <link rel="stylesheet" href="../../css/general.css">
+     <link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+     <link rel="stylesheet" href="../../css/animate.css">
+     <script src="../../js/jq-bs-bundle.js"></script> 
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+     <div class="d-flex" id="wrapper">
+         <%- include('menuDashboard') %>
+         <div id="page-content-wrapper">
+             <%- include('headerDashboard') %>
+             
+             <nav aria-label="breadcrumb ">
+                 <ol class="breadcrumb ">
+                     <li class="breadcrumb-item"><a href="#">Home</a></li>
+                     <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                     <li class="breadcrumb-item"><a href="#">Profesores</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Listado</li>
+                 </ol>
+             </nav>
+             <div class="container-fluid">
+
+                 
+             </div>
+             <%- include('footerDashboard') %>
+         </div>
+     </div>
+     <script src="../../js/admin/dashboard.js"></script>
+     <script src="../../js/admin/chart-dashboard.js"></script>
+ </body>
+ </html>
