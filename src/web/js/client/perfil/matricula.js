@@ -23,6 +23,7 @@ function eventSeleccionar(curso) {
     let montoCantidad = 0;
     
     cursosSeleccionados = []; //limpio el vector de cursos seleccionados
+    $('#listaCursosPush').html(''); //limpio el carrito
 
     for (let i = 0; i < all.length; i++) {
         if (all[i].checked) {
@@ -33,6 +34,7 @@ function eventSeleccionar(curso) {
             }else{
                 montoCantidad += $('#matricularCursoCheckbox-'+all[i].value).data('price');
             }
+            pushCurso(getCurso(all[i].value,cursos));
         }
     }
 
@@ -43,8 +45,8 @@ function eventSeleccionar(curso) {
     let contadorCursos = select.length; //cuenta los cursos que se seleccionaron, e.g 3 cursos (lunes1, martes11, jueves3)
     montoTotal = montoCantidad; //monto total precio
     $('#montoTotal').text(montoTotal);
-
-    if(contadorCursos == 3){ //desabilito los demas botones para que no pueda marcar mas de 3 cursos
+    console.log(contadorCursos);
+    if(contadorCursos == 5){ //desabilito los demas botones para que no pueda marcar mas de 3 cursos
         for (let i = 0; i < all.length; i++) {
             if (!(all[i].checked)) {
                 $('#matricularCursoCheckbox-'+all[i].value).attr('disabled',true);
@@ -57,6 +59,28 @@ function eventSeleccionar(curso) {
             }
         }
     }
+}
+function removeCurso(id){
+    let all = $("#matricularCursoCheckbox-"+id.split('-')[1]).prop("checked", false);
+    eventSeleccionar(0);
+    $('#'+id).remove();
+}
+function pushCurso(curso) {
+    let tipo = $('#tipo_estudiante').text();
+    let fecha = parseFecha(curso.dia,curso.hora);
+    let costo = tipo == 1 ? curso.costo : curso.costo_funcionario;
+    $('#listaCursosPush').append(
+        '<div class="d-flex justify-content-between px-2 my-3" onclick="removeCurso(\'car-'+curso.id_grupo+'\')" id="car-'+curso.id_grupo+'">'+
+        '<div class="d-flex justify-content-start align-items-start">'+
+        '<button type="button" class="btn btn-light mr-2 py-0"><i class="fas fa-minus" aria-hidden="true"></i></button>'+
+        '<div class="d-flex flex-column">'+
+        '<span>'+curso.codigo_taller+'</span>'+
+        '<span class="text-muted">'+fecha+'</span>'+
+        '</div>'+
+        '</div>'+
+        '<span class="text-muted">'+costo+'</span>'+
+        '</div>'
+    );
 }
 function dropdownhoras() {
     $("#dropdownboton").on("click", function () {
@@ -295,7 +319,6 @@ var filtradosSeleccionados = (seleccionados, filtrados) =>{
     for (let i = 0; i < filtrados.length; i++) {
         for (let w = 0; w < seleccionados.length; w++) {
             if (filtrados[i].id_grupo == seleccioados[w].id_grupo) {
-                console.log(filtrados[i].id_grupo, seleccionados[w].id_grupo);
                 result.push(filtrados[i]);
             }
         }
