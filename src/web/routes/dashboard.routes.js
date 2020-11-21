@@ -23,7 +23,7 @@ router.get('/admin/estudiantes',(req,res)=>{
         if(req.session.value.rol){
             let usuario = req.session.value;
             let s = 'estudiantes';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/estudiantes', {usuario,s});
         }else{
             res.render('indexAdmin');
         }

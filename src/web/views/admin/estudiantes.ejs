@@ -10,46 +10,244 @@
     * Marlon Freer Acevedo
     * Moises Fernandez Alfaro
  -->
- <!DOCTYPE html>
- <html lang="en" class="h-100">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
-     <meta name="apple-mobile-web-app-capable" content="yes">
-     <meta name="mobile-web-app-capable" content="yes">
-     <title>Usuarios - Estudiantes</title>
-     <link rel="stylesheet" href="../../css/bootstrap.css">
-     <link rel="stylesheet" href="../../css/general.css">
-     <link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-     <link rel="stylesheet" href="../../css/animate.css">
-     <script src="../../js/jq-bs-bundle.js"></script> 
-     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
- </head>
- <body class="page bg-light d-flex flex-column h-100">
-     <div class="d-flex" id="wrapper">
-         <%- include('menuDashboard') %>
-         <div id="page-content-wrapper">
-             <%- include('headerDashboard') %>
-             
-             <nav aria-label="breadcrumb ">
-                 <ol class="breadcrumb ">
-                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                     <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
-                     <li class="breadcrumb-item"><a href="#">Estudiantes</a></li>
-                     <li class="breadcrumb-item active" aria-current="page">Listado</li>
-                 </ol>
-             </nav>
-             <div class="container-fluid">
+<!DOCTYPE html>
+<html lang="en" class="h-100">
 
-                 
-             </div>
-             <%- include('footerDashboard') %>
-         </div>
-     </div>
-     <script src="../../js/admin/dashboard.js"></script>
-     <script src="../../js/admin/chart-dashboard.js"></script>
- </body>
- </html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Usuarios - Estudiantes</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-primary">Agregar Estudiante</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <h5>Datos del Estudiante</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cedula">Cedula</label>
+                                    <input type="text" name="cedula" id="cedula_add" class="form-control" placeholder="Cedula..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" name="nombre" id="nombre_add" class="form-control" placeholder="Nombre..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="apellido">Apellido</label>
+                                    <input type="text" name="apellido" id="apellido_add" class="form-control" placeholder="Apellido..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fecha">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha" id="fechaNacimiento_add" class="form-control" placeholder="Fecha..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="correo">Correo</label>
+                                    <input type="email" name="correo" id="correo_add" class="form-control" placeholder="Correo..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nombreusuario">Nombre de Usuario</label>
+                                    <input type="text" name="nombreusuario" id="username_add" class="form-control" placeholder="Nombre Usuario..." aria-describedby="helpId">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="celular">Telefono Celular</label>
+                                    <input type="tel" name="celular" id="celular_add" class="form-control" placeholder="Telefono Celular..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="emergencia">Telefono Emergencia</label>
+                                    <input type="tel" name="emergencia" id="telefonoEmergencia_add" class="form-control" placeholder="Telefono Celular..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="carrera">Carrera o departamento</label>
+                                    <input type="text" name="carrera" id="carrera_add" class="form-control" placeholder="Carrera departamento..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group">
+                                    <label for="carrera" class="d-block">Provincia, Canton, Distrito</label>
+                                    <select class="form-control d-inline" style="width: 32%;" name="provincia" id="provincia_add">
+                                        <optgroup label="Provincia">
+
+                                        </optgroup>
+                                    </select>
+                                    <select class="form-control d-inline" style="width: 32%;" name="canton" id="canton_add">
+                                        <optgroup label="Canton">
+
+                                        </optgroup>
+                                    </select>
+                                    <select class="form-control d-inline" style="width: 32%;" name="distrito" id="distrito_add">
+                                        <optgroup label="Distrito">
+
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="direccion">Direccion Exacta</label>
+                                    <input type="text" name="direccion" id="direccion_add" class="form-control" placeholder="Direccion Exacta..." aria-describedby="helpId">
+                                </div>
+                                <div class="form-group w-100">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Sexo</label>
+                                            <select class="form-control" id="sexo" >
+                                                <option value="0" selected>Seleccione...</option>
+                                                <option value="Masculino">Masculino</option>
+                                                <option value="Femenino">Femenino</option>
+                                                <option value="Otro">Otro</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Perfil dentro de la universidad</label>
+                                            <select class="form-control" id="perfil" >
+                                                <option value="0" selected>Seleccione...</option>
+                                                <option value="1">Estudiante</option>
+                                                <option value="2">Funcionario</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Agregar Estudiante</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+
+            <nav aria-label="breadcrumb ">
+                <ol class="breadcrumb ">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                    <li class="breadcrumb-item"><a href="#">Estudiantes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Listado</li>
+                </ol>
+            </nav>
+            <div class="container-fluid">
+                <div class="card border-0 shadow-sm my-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h2 class="font-weight-bolder">Lista de Estudiantes</h2>
+                                <small>Informacion Actualizada hace: <span class="text-success"
+                                        id="infoTiming"></span></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
+                                <small class="text-muted">Total Estudiantes &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_verificados_stats"></h4>
+                                <small class="text-muted">Estudiantes Activos &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_nuevos_stats"></h4>
+                                <small class="text-muted">Nuevos Bloqueados &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row bg-light mx-auto rounded-lg mb-3 p-3 justify-content-between">
+                            <div class="col-md-8 mt-2">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <button class="btn bg-white" type="button" id="button_search"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                    <input type="search" class="form-control border-0 shadow-none"
+                                        placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mt-2 d-flex justify-content-between">
+                                <button id="btn_agregar_estudiante" class="btn btn-success mr-3 w-75" role="button"
+                                    data-toggle="modal" data-target="#modalAgregarEstudiante"><i
+                                        class="fas fa-user-plus"></i> Agregar Estudiante</button>
+                                <div class="btn-group w-75 d-inline">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle w-75"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-filter"></i> Filtrar
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999;">
+                                        <button class="dropdown-item" type="button" id="filtrar_nuevos">Activos</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" type="button"
+                                            id="filtrar_confirmados">Bloqueados</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" type="button"
+                                            id="filtrar_funcionarios">Morosos</button>
+                                    </div>
+                                </div>
+                                <button type="button" name="actualizar_lista" id="actualizar_lista"
+                                    class="btn bg-white"><i class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="row w-100 mx-0" style="height: 550px; overflow-y: auto;">
+                            <table class="table table-hover table-responsive-md table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-address-card"></i> Cedula</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-id-card"></i> Nombre</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-user-tag"></i> Perfil</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-clock"></i> Fecha de Registro</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-toggle-on"></i> Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista_estudiantes">
+
+                                </tbody>
+                            </table>
+                            <div class="text-center w-100" id="cargarDatosSpinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/admin/dashboard.js"></script>
+    <script src="../../js/admin/chart-dashboard.js"></script>
+</body>
+
+</html>
