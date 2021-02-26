@@ -10,31 +10,29 @@
     * Marlon Freer Acevedo
     * Moises Fernandez Alfaro
  -->
-<!DOCTYPE html>
-<html lang="en" class="h-100">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Usuarios - Estudiantes</title>
-    <link rel="stylesheet" href="../../css/bootstrap.css">
-    <link rel="stylesheet" href="../../css/general.css">
-    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    <link rel="stylesheet" href="../../css/animate.css">
-    <script src="../../js/jq-bs-bundle.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
-</head>
-
-<body class="page bg-light d-flex flex-column h-100">
-    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-            <div class="modal-content">
+ <!DOCTYPE html>
+ <html lang="en" class="h-100">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Dashboard - Estudiantes</title>
+     <link rel="stylesheet" href="../../css/bootstrap.css">
+     <link rel="stylesheet" href="../../css/general.css">
+     <link rel="stylesheet" href="../../css/datatables.min.css">
+     <link rel="stylesheet" href="../../css/dashboard.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+     <link rel="stylesheet" href="../../css/animate.css">
+     <script src="../../js/jq-bs-bundle.js"></script> 
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+     <div class="modal fade" id="modalCambiarEstado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog modal-lg modal-dialog-centered">
+             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h4 class="modal-title text-white">Agregar Estudiante</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -131,122 +129,123 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Agregar Estudiante</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex" id="wrapper">
-        <%- include('menuDashboard') %>
-        <div id="page-content-wrapper">
-            <%- include('headerDashboard') %>
-
-            <nav aria-label="breadcrumb ">
-                <ol class="breadcrumb ">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
-                    <li class="breadcrumb-item"><a href="#">Estudiantes</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Listado</li>
-                </ol>
-            </nav>
-            <div class="container-fluid">
-                <div class="card border-0 shadow-sm my-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <h2 class="font-weight-bolder">Lista de Estudiantes</h2>
-                                <small>Informacion Actualizada hace: <span class="text-success"
-                                        id="infoTiming"></span></small>
-                            </div>
-                            <div class="col border-right">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
-                                <small class="text-muted">Total Estudiantes &nbsp; <i
-                                        class="fas fa-align-center text-info"></i></small>
-                            </div>
-                            <div class="col border-right">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_verificados_stats"></h4>
-                                <small class="text-muted">Estudiantes Activos &nbsp; <i
-                                        class="fas fa-align-center text-info"></i></small>
-                            </div>
-                            <div class="col">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_nuevos_stats"></h4>
-                                <small class="text-muted">Nuevos Bloqueados &nbsp; <i
-                                        class="fas fa-align-center text-info"></i></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <div class="row bg-light mx-auto rounded-lg mb-3 p-3 justify-content-between">
-                            <div class="col-md-8 mt-2">
-                                <div class="input-group flex-nowrap">
-                                    <div class="input-group-prepend">
-                                        <button class="btn bg-white" type="button" id="button_search"><i
-                                                class="fas fa-search"></i></button>
-                                    </div>
-                                    <input type="search" class="form-control border-0 shadow-none"
-                                        placeholder="Buscar..." aria-label="Username" id="barraBuscar">
-                                </div>
-                            </div>
-                            <div class="col-md-4 mt-2 d-flex justify-content-between">
-                                <button id="btn_agregar_estudiante" class="btn btn-success mr-3 w-75" role="button"
-                                    data-toggle="modal" data-target="#modalAgregarEstudiante"><i
-                                        class="fas fa-user-plus"></i> Agregar Estudiante</button>
-                                <div class="btn-group w-75 d-inline">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle w-75"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filtrar
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999;">
-                                        <button class="dropdown-item" type="button" id="filtrar_nuevos">Activos</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" type="button"
-                                            id="filtrar_confirmados">Bloqueados</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item" type="button"
-                                        id="filtrar_funcionarios">Morosos</button>
-                                    </div>
-                                </div>
-                                <button type="button" name="actualizar_lista" id="actualizar_lista"
-                                    class="btn bg-white"><i class="fas fa-sync-alt"></i></button>
-                            </div>
-                        </div>
-                        <div class="row w-100 mx-0" style="height: 550px; overflow-y: auto;">
-                            <table class="table table-hover table-responsive-md table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-dark text-white sticky-top" scope="col"><i
-                                                class="fas fa-address-card"></i> Cedula</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col"><i
-                                                class="fas fa-id-card"></i> Nombre</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col"><i
-                                                class="fas fa-user-tag"></i> Perfil</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col"><i
-                                                class="fas fa-clock"></i> Fecha de Registro</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col"><i
-                                                class="fas fa-toggle-on"></i> Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lista_estudiantes">
-
-                                </tbody>
-                            </table>
-                            <div class="text-center w-100" id="cargarDatosSpinner">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <%- include('footerDashboard') %>
-        </div>
-    </div>
-    <script src="../../js/admin/dashboard.js"></script>
-</body>
-
-</html>
+             </div>
+         </div>
+     </div>
+     <div class="d-flex" id="wrapper">
+         <%- include('menuDashboard') %>
+         <div id="page-content-wrapper">
+             <%- include('headerDashboard') %>
+             <%- include('filterEstudianteDashboard') %>
+             
+             <nav aria-label="breadcrumb ">
+                 <ol class="breadcrumb ">
+                     <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                     <li class="breadcrumb-item"><a href="#">Estudiantes</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Lista de Estudiantes</li>
+                 </ol>
+             </nav>
+             <div class="container-fluid">
+                 <div class="card border-0 shadow-sm my-3">
+                     <div class="card-body py-2">
+                         <div class="row">
+                             <div class="col-md-6 ">
+                                 <h2 class="font-weight-bolder">Lista de Estudiantes</h2>
+                                 <small class="text-muted">En esta seccion se muestra la lista de los estudiantes que se registraron <br>
+                                    y estan aprovados por un <a href="/admin/administradores">Administrador</a>.</small><br>
+                                 <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_matriculados_stats">0</h1>
+                                 <small class="text-muted">Estudiantes Matriculados &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_inactivos_stats">0</h1>
+                                 <small class="text-muted">Estudiantes Inactivos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                             <div class="col">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_morosos_stats">0</h1>
+                                 <small class="text-muted">Estudiantes Morosos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="card border-0 shadow">
+                     <div class="card-body px-2 py-2">
+                         <div class="row bg-light mx-auto rounded-lg justify-content-between py-1">
+                             <div class="col-md-8 pl-1">
+                                 <div class="input-group flex-nowrap">
+                                     <div class="input-group-prepend">
+                                         <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                     </div>
+                                     <input type="search" class="form-control border-0 shadow-none bg-white" onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                 </div>
+                                 
+                             </div>
+                             <div class="col-md-4 d-flex justify-content-around px-0">
+                                 <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                     <div class="col-8 d-flex align-items-center">
+                                         <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
+                                     </div>
+                                     <div class="col-4 d-flex align-items-center justify-content-end pr-2">
+                                         <div class="btn-group dropleft">
+                                             <button type="button" class="btn btn-secondary btn-sm mr-2" style="border-radius: 20px;" 
+                                             data-toggle="tooltip" data-placement="top" title="Filtrar"
+                                             onclick="openFilter()" id="dropdownFiltrar">
+                                                 Filtrar <i class="fas fa-filter"></i>
+                                             </button>
+                                         </div>
+ 
+                                         <button type="button" name="actualizar_lista" id="actualizar_lista" 
+                                         data-toggle="tooltip" data-placement="top" title="Actualizar lista"
+                                         class="btn bg-white btn-sm" style="border-radius: 50px;"><i class="fas fa-sync-alt"></i></button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row w-100 mx-0" style="height: 55vh; overflow-y: auto;">
+                             <table class="table table-hover table-responsive-md table-borderless" id="estudiantes_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
+                                 <thead>
+                                     <tr>
+                                         <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--Aqui va la foto-->
+                                         <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
+                                         <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-level-up"></i> Nivel</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Matricula</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Pago</th>
+                                     </tr>
+                                     </thead>
+                                     <tbody id="lista_estudiantes">
+             
+                                     </tbody>
+                             </table>
+                             <div class="d-flex align-items-center align-self-end border-info w-100">
+                                 <div class="row w-100 ml-0">
+                                     <div class="col-md-6 d-flex justify-content-start text-muted pl-0" >
+                                         <small id="informacionTable" class="d-flex align-items-end"></small>
+                                     </div>
+                                     <div class="col-md-6 d-flex justify-content-end" id="botonesCambiarTable">
+ 
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="text-center w-100" id="cargarDatosSpinner">
+                                 <div class="spinner-border" role="status">
+                                   <span class="sr-only">Loading...</span>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                     </div>
+                 </div>
+             </div>
+             <%- include('footerDashboard') %>
+         </div>
+             
+         </div>
+     </div>
+     <script src="../../js/assets/datatables.min.js"></script>
+     <script src="../../js/admin/estudiantes.js"></script>
+ </body>
+ </html>

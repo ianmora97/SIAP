@@ -14,6 +14,37 @@ function events(event){
     filtrarTodos();
     actualizar();
 }
+const animateCSS = (element, animation) =>
+    
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    let prefix = 'animate__';
+    const animationName = `${prefix}${animation}`;
+    const node = document.querySelector(element);
+    console.log(node)
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+      resolve('Animation ended');
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd, {once: true});
+});
+function closeFilter(params) {
+    $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
+    setTimeout(() => {
+        $('#containerFilter').removeClass('animate__animated animate__fadeOutRight')
+        $('#containerFilter').hide();
+    }, 1000);
+}
+function openFilter(params) {
+    $('#containerFilter').show();
+    animateCSS('#containerFilter','fadeInRight')
+}
 function filtrarX() {
     $('#filtrar_funcionarios').on('click',function(){
         let table = $('#estudiantes_TableOrder').DataTable();
@@ -168,8 +199,8 @@ function llenarListaUsuarios(u) {
         '<td>'+sexo+'</td>'+
         '<td>'+tipo+'</td>'+
         '<td>'+creado+'</td>'+
-        '<td> <button class="btn btn-'+colorEstado+' py-0 w-100" data-toggle="modal" data-target="#modalCambiarEstado" '+
-        'data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'"><i class="fas fa-sign-in-alt"></i> '+estado+'</button></td>'+
+        '<td> <span role="button" class="badge badge-'+colorEstado+' py-0" style="font-size:15px;" data-toggle="modal" data-target="#modalCambiarEstado" '+
+        'data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'">'+estado+'</span></td>'+
         '</tr>'
     );
 }
