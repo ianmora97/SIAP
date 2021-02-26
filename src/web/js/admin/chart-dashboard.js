@@ -55,6 +55,11 @@ var tallerCh = new Chart(talleresChart, {
 });
 
 var usuariosChart = document.getElementById("usuariosChart").getContext("2d");
+var gradienteColores_usuarios = usuariosChart.createLinearGradient(0, 0, 0, 600);
+
+gradienteColores_usuarios.addColorStop(0, "rgba(255%, 75%, 75%, 0.6)");
+gradienteColores_usuarios.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
 usuariosChart.height = 600;
 var usuarioCharVar = new Chart(usuariosChart, {
     type: "bar",
@@ -64,16 +69,16 @@ var usuarioCharVar = new Chart(usuariosChart, {
             {
                 label: "Principiante",
                 data: [12],
-                backgroundColor: ["rgba(255, 99, 132, 0.2)"],
-                borderColor: ["rgba(255, 99, 132, 1)"],
-                borderWidth: 1,
+                backgroundColor: gradienteColores,
+                borderColor: '#4c84ff',
+                borderWidth: 2,
             },
             {
                 label: "Intermedio-Avanzado",
                 data: [19],
-                backgroundColor: ["rgba(54, 162, 235, 0.2)"],
-                borderColor: ["rgba(54, 162, 235, 1)"],
-                borderWidth: 1,
+                backgroundColor: gradienteColores_usuarios,
+                borderColor: '#FFB6C1',
+                borderWidth: 2,
             },
         ],
     },

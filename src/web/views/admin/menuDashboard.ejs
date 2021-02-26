@@ -1,6 +1,6 @@
 <div class="hover-menu-items-parent " id="sidebar-wrapper" style="display: block;">
     <div class="sidebar-heading bg-secondary d-flex">
-        <img src="../../img/logo-vive-promocion-transparency.png" alt="UNA" class="d-inline mx-2 my-auto" height="40px" style="filter: brightness(0) invert(1);">
+        <img src="../../img/logo-vive-promocion-transparency.png" alt="UNA" class="d-inline mx-2 my-auto" height="30px" style="filter: brightness(0) invert(1);">
         <div class="text-center text-white d-flex justify-content-center align-items-center h-100 d-inline">
             <h4 class="">SIAP</h4>
         </div>
@@ -37,13 +37,13 @@
             <i class="fas fa-users"></i>&nbsp; Usuarios  <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> show <%}%>" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
-                <a href="/admin/estudiantes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "estudiantes"){%> menu-active <%}%>">
+                <a href="/admin/estudiantes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "estudiantes"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Usuarios Estudiantes">
                     <i class="fas fa-user"></i>&nbsp; Estudiantes
                 </a>
-                <a href="/admin/administradores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "administradores"){%> menu-active <%}%>">
+                <a href="/admin/administradores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "administradores"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Usuarios Administradores">
                     <i class="fas fa-user-tie"></i></i>&nbsp; Administradores
                 </a>
-                <a href="/admin/profesores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "profesores"){%> menu-active <%}%>">
+                <a href="/admin/profesores" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "profesores"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Usuarios Profesores">
                     <i class="fas fa-chalkboard-teacher"></i></i>&nbsp; Profesores
                 </a>
             </div>
@@ -52,13 +52,13 @@
             <i class="fas fa-swimmer"></i></i>&nbsp; Talleres <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'talleres' || s == 'grupos' || s == 'reposiciones'){%> show <%}%>" id="collapseTalleres" data-parent="#accordion-menu-lateral">
-                <a href="/admin/talleres" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>">
+                <a href="/admin/talleres" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "talleres"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Talleres de la piscina">
                     <i class="fas fa-swimmer"></i>&nbsp; Talleres
                 </a>
-                <a href="/admin/grupos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>">
+                <a href="/admin/grupos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "grupos"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Grupos de clase">
                     <i class="fas fa-swimmer"></i>&nbsp; Grupos
                 </a>
-                <a href="/admin/reposiciones" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reposiciones"){%> menu-active <%}%>">
+                <a href="/admin/reposiciones" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reposiciones"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Solicitud de reposiciones">
                     <i class="fas fa-swimmer"></i>&nbsp; Reposiciones
                 </a>
             </div>
@@ -66,15 +66,27 @@
         data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
             <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
         </a>
-            <div class="collapse <%if(s == 'solicitudes' || s == 'comprobacion'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
-                <a href="/admin/solicitudes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>">
-                    <i class="fas fa-bell"></i>&nbsp; Lista de estudiantes matriculados
-                </a>
-                <a href="/admin/comprobacion" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "comprobacion"){%> menu-active <%}%>">
-                    <i class="fas fa-user-check"></i>&nbsp; Comprobacion de datos
-                </a>
-            </div>
-        <a href="/admin/reportes" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "reportes"){%> menu-active <%}%>" role="button">
-            <i class="far fa-newspaper"></i>&nbsp; Reportes</a>
+        <div class="collapse <%if(s == 'solicitudes'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
+            <a href="/admin/solicitudes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Lista de estudiantes matriculados">
+                <i class="fas fa-bell"></i>&nbsp; Estudiantes matriculados
+            </a>
+        </div>
+        <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2"
+        data-toggle="collapse" href="#collapseRegistro" role="button" aria-expanded="false" aria-controls="collapseRegistro">
+            <i class="fas fa-table"></i></i>&nbsp; Registro <i class="fas fa-angle-down float-right"></i>
+        </a>
+        <div class="collapse <%if(s == 'comprobacion'){%> show <%}%>" id="collapseRegistro" data-parent="#accordion-menu-lateral">
+            <a href="/admin/comprobacion" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "comprobacion"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Comprobacion de datos">
+                <i class="fas fa-user-check"></i>&nbsp; Comprobacion
+            </a>
+        </div>
+        <a href="/admin/reportes" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "reportes"){%> menu-active <%}%>" role="button" data-toggle="tooltip" data-placement="right" title="Reportes del sistema">
+            <i class="far fa-newspaper"></i>&nbsp; Reportes
+        </a>
     </div>
 </div>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

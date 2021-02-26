@@ -81,6 +81,9 @@ hr {
 td, th {
   font-size: 0.8rem; }
 
+td {
+  padding: 0.5rem !important; }
+
 .profile-pic {
   border-radius: 50%;
   height: 150px;

@@ -10,61 +10,45 @@ function events(event){
     get_today_date();
     cambiarEstadoShow();
     cambiarEstadoSend();
-    filtrarXNuevos();
-    filtrarXConfirmados();
-    filtrarXFuncionarios();
-    filtrarXEstudiantes();
+    filtrarX();
     filtrarTodos();
-    buscar();
     actualizar();
 }
-function filtrarXFuncionarios() {
+function filtrarX() {
     $('#filtrar_funcionarios').on('click',function(){
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarFuncionarios(estudiantes));
     });
-}
-function filtrarXEstudiantes() {
     $('#filtrar_estudiantes').on('click',function(){
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarEstudiantes(estudiantes));
     });
-}
-function filtrarXConfirmados() {
     $('#filtrar_confirmados').on('click',function(){
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarConfirmados(estudiantes));
     });
-}
-function filtrarXNuevos() {
     $('#filtrar_nuevos').on('click',function(){
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarNuevos(estudiantes));
+    });
+    $('#filtrar_todos').on('click',function(){
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
+        mostrarUsuarios(estudiantes);
     });
 }
 function filtrarTodos(){
     $('#actualizar_lista').on('click',function(){
-        mostrarUsuarios(estudiantes);
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
+        traer_estudiantes();
     });
 }
-function buscar() {
-    $('#button_search').on('click',function () {
-        let texto = $('#barraBuscar').val();
-        if(texto == '') mostrarUsuarios(estudiantes);
-        else mostrarUsuarios(filtrarBuscar(estudiantes,texto));
-    });
-    $('#barraBuscar').on('keydown',function (event) {
-        if(event.which == 13){
-            let texto = $('#barraBuscar').val();
-            if(texto == '') mostrarUsuarios(estudiantes);
-            else mostrarUsuarios(filtrarBuscar(estudiantes,texto));
-        }
-    });
-    $('#barraBuscar').on('keyup',(cantidad)=>{
-        if($('#barraBuscar').val() != ''){
-            mostrarUsuarios(buscarInlcudes(estudiantes,$('#barraBuscar').val().toUpperCase()));
-        }else{
-            mostrarUsuarios(estudiantes);
-        }
-    });
-    
-}
+
 function buscarInlcudes(estudiantes, buscar) {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {
@@ -96,6 +80,12 @@ function load_stats(usuarios) {
     $('#usuarios_verificados_stats').text(verificados);
     $('#usuarios_nuevos_stats').text(nuevos);
 }
+function searchonfind() {
+    var table = $('#estudiantes_TableOrder').DataTable();
+    let val = $('#barraBuscar').val();           
+    let result = table.search( val ).draw();
+    
+}
 function traer_estudiantes() {
     let ajaxTime= new Date().getTime();
     $.ajax({
@@ -119,6 +109,45 @@ function mostrarUsuarios(usuarios) {
     usuarios.forEach(u =>{
         llenarListaUsuarios(u);
     });
+    let database = '#estudiantes_TableOrder';
+    var table = $(database).DataTable({
+        stateSave: true,
+        "language": {
+            "zeroRecords": "No se encontraron estudiantes",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "Mostrar _MENU_ registros",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first":    '«',
+                "previous": '‹',
+                "next":     '›',
+                "last":     '»'
+            },
+            "aria": {
+                "paginate": {
+                    "first":    'Primera',
+                    "previous": 'Anterior',
+                    "next":     'Siguiente',
+                    "last":     'Última'
+                }
+            }
+        }
+    });
+    $('#informacionTable').html('');
+    $('#botonesCambiarTable').html('');
+    $('#showlenghtentries').html('');
+
+    $('#estudiantes_TableOrder_filter').css('display','none');
+    $('#estudiantes_TableOrder_info').appendTo('#informacionTable');
+
+    $('#estudiantes_TableOrder_paginate').appendTo('#botonesCambiarTable');
+    $('#estudiantes_TableOrder_previous').addClass('btn  py-1');
+    $('#estudiantes_TableOrder_next').addClass('btn  py-1');
+
+    $('#estudiantes_TableOrder_length').appendTo('#showlenghtentries');
+    $('#estudiantes_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+    $('#estudiantes_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
 }
 function llenarListaUsuarios(u) {
     let id = u.id;

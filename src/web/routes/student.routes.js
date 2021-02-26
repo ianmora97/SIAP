@@ -67,7 +67,7 @@ router.put('/estudiantes/actualizarConsentimiento',(req,res)=>{
 
 
 //vista de estudiantes para administradores
-router.get('/estudiantesAdmin',(req,res)=>{
+router.get('/admin/estudiantesAdmin',(req,res)=>{
     var script = con.query('select * from vta_admin_estudiante',
     (err,rows,fields)=>{
         if(!err){

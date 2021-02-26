@@ -2,13 +2,13 @@
   overflow-x: hidden; }
 
 #menu-header {
-  height: 50px;
+  height: 40px;
   position: sticky;
   top: 0;
-  z-index: 999; }
+  z-index: 99999; }
 
 .sidebar-heading {
-  height: 50px; }
+  height: 40px; }
 
 #sidebar-wrapper {
   position: relative;
@@ -85,3 +85,73 @@
   .nav-link.col-md-3 {
     flex: 0 0 24% !important;
     max-width: 25% !important; } }
+
+#menu-toggle {
+  outline: none !important;
+  box-shadow: none !important; }
+
+.breadcrumb {
+  padding: 0.3rem 1rem !important; }
+
+.nav-card {
+  justify-content: space-between !important;
+  border-bottom: 0 !important; }
+
+.nav-card-item {
+  height: 125px;
+  padding: 1rem 0 !important;
+  margin-bottom: 0.5rem !important;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.075) !important;
+  border-radius: 20px !important;
+  background-color: #fff !important;
+  transition: all 1s; }
+
+.nav-tabs .nav-link.active {
+  border: none !important;
+  padding: 1.5rem 0rem !important;
+  height: 140px;
+  transition: all .5s; }
+
+.nav-item-in {
+  height: 80px;
+  display: flex !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  justify-content: space-around !important; }
+
+.talleres-ic {
+  background-color: aliceblue;
+  padding: 1rem;
+  border-radius: 50px; }
+
+.talleres-uc {
+  background-color: #e4f7e4;
+  padding: 1rem;
+  border-radius: 50px; }
+
+.talleres-mc {
+  background-color: beige;
+  padding: 1rem 0.9rem 1rem 1.2rem;
+  border-radius: 50px; }
+
+.talleres-rc {
+  background-color: lightpink;
+  padding: 1rem;
+  border-radius: 50px; }
+
+.cards-dash {
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  margin-top: 0.5rem !important;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.075) !important;
+  background-color: #fff !important; }
+
+.form-control:focus {
+  background-color: white !important; }
+
+.btn {
+  outline: none !important;
+  box-shadow: none !important; }
+
+.modal-backdrop.show {
+  opacity: 0.05 !important; }
