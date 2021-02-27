@@ -168,8 +168,14 @@
   outline: none !important;
   box-shadow: none !important;
 }
+
+.close{
+  outline: none !important;
+  box-shadow: none !important;
+  margin-right: 3px !important;
+}
 .modal-backdrop.show {
-  opacity: 0.05 !important;
+  opacity: 0.1 !important;
 }
 .dropdown-menu-customize{
   background-color: white;
@@ -195,4 +201,61 @@
   width: 240px;
   height: 240px;
   margin: 0 auto;
+}
+.modal-content{
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075) !important;
+  border: none !important;
+}
+.modal-header{
+  padding: 0.25rem !important;
+  z-index: 99999999;
+}
+
+.input-container-date input{
+	position:relative;
+	margin: 0;
+  display: inline-block;
+}
+.input-container{
+	position:relative;
+	margin:20px 0;
+}
+.input-container small{
+	position:absolute;
+	top:-5px;
+	left:0px;
+	color:rgb(0, 0, 0);	
+  // pointer-event:none;
+	transition: all 0.3s;
+}
+.input-container i{
+	position:absolute;
+	top:5px;
+	right:5px;
+	transition: all 0.3s;
+}
+.input-container input{ 
+  border:0;
+  border-bottom:2px solid #364C78;
+  border-radius: 2px;  
+  background:transparent;
+  width:100%;
+  padding:8px 0 5px 0;
+  font-size:16px;
+  color:rgb(0, 0, 0);
+}
+.input-container input:focus{ 
+//  border:none;	
+ outline:none;
+//  border-bottom:2px solid #B81616;	
+}
+.input-container input:focus ~ small,
+.input-container input:valid ~ small{
+	top:-12px;
+	font-size:12px;
+	// color: #B81616;
+}
+.input-container input:focus ~ i,
+.input-container input:valid ~ i{
+	// color: #B81616;
 }

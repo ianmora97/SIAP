@@ -7,6 +7,7 @@ function loaded(event){
 
 function events(event){
     getLugares();
+    openModalAdd();
 }
 const animateCSS = (element, animation) =>
     
@@ -15,7 +16,6 @@ const animateCSS = (element, animation) =>
     let prefix = 'animate__';
     const animationName = `${prefix}${animation}`;
     const node = document.querySelector(element);
-    console.log(node)
 
     node.classList.add(`${prefix}animated`, animationName);
 
@@ -28,6 +28,20 @@ const animateCSS = (element, animation) =>
 
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
+function openModalAdd(){
+    $('#modalButtonAgregarEstudiante').on('click',function(){
+        $('#modalAgregarEstudiante').modal('show')
+        animateCSS("#modalAgregarEstudiante",'fadeInUpBig')
+    })
+    $('#closeModalAgregar').on('click',function(){
+        animateCSS("#modalAgregarEstudiante",'fadeOutDownBig').then(()=>{
+            $('#modalAgregarEstudiante').modal('hide')
+        })
+    })
+    $('#modalAgregarEstudiante').on('hidePrevented.bs.modal', function (event) {
+        animateCSS("#modalAgregarEstudiante",'shakeX')
+    })
+}
 function closeFilter(params) {
     $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
     setTimeout(() => {
@@ -71,32 +85,25 @@ function procesarLugares(data) {
 }
 
 function load_provincias(data) {
+    console.log(data)
     let provincias = data;
     provincias = provincias.filter(function(item, pos) { //elimina repetidos
         return provincias.indexOf(item) == pos;
     })
-    let c = $('#provinciaSelected').attr('data-values');
 
     for (let provincia of provincias) {
-        if(provincia == c){
-            $('#provincia').append(new Option(provincia, provincia,false,true));
-        }else{
-            $('#provincia').append(new Option(provincia, provincia));
-        }
+        $('#provincia').append(new Option(provincia, provincia));
     }
 }
 function load_cantones(data) {
     let pro = $('#provinciaSelected').attr('data-values');
-    let c = $('#cantonSelected').attr('data-values');
     let cantones = data;
     cantones = filtrarCantonxProvincia(pro);
+
     $('#canton').html(' ');
+
     for (let canton of cantones) {
-        if(canton == c){
-            $('#canton').append(new Option(canton, canton,false,true));
-        }else{
-            $('#canton').append(new Option(canton, canton));
-        }
+        $('#canton').append(new Option(canton, canton));
     }
 }
 function load_distritos(data) {

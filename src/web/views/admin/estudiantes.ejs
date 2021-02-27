@@ -25,113 +25,138 @@
      <link rel="stylesheet" href="../../css/dashboard.css"/>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
      <link rel="stylesheet" href="../../css/animate.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
      <script src="../../js/jq-bs-bundle.js"></script> 
      <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
  </head>
  <body class="page bg-light d-flex flex-column h-100">
-     <div class="modal fade" id="modalCambiarEstado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-lg modal-dialog-centered">
-             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h4 class="modal-title text-white">Agregar Estudiante</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="text-white">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <h5>Datos del Estudiante</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="cedula">Cedula</label>
-                                    <input type="text" name="cedula" id="cedula_add" class="form-control" placeholder="Cedula..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="nombre">Nombre</label>
-                                    <input type="text" name="nombre" id="nombre_add" class="form-control" placeholder="Nombre..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="apellido">Apellido</label>
-                                    <input type="text" name="apellido" id="apellido_add" class="form-control" placeholder="Apellido..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="fecha">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha" id="fechaNacimiento_add" class="form-control" placeholder="Fecha..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="correo">Correo</label>
-                                    <input type="email" name="correo" id="correo_add" class="form-control" placeholder="Correo..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="nombreusuario">Nombre de Usuario</label>
-                                    <input type="text" name="nombreusuario" id="username_add" class="form-control" placeholder="Nombre Usuario..." aria-describedby="helpId">
-                                </div>
+    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
+                <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <div class="container-fluid">
+                    <h6 class="m-0">Datos del Estudiante</h6>
+                    <small class="text-muted">
+                        Ingrese los datos del estudiante en los campos correspondientes 
+                        <span class="text-danger">todos los campos son requeridos.</span>
+                    </small>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <div class="input-container">
+                                <input type="text" id="cedula_add" required autocomplete="off"/>
+                                <small>Cedula</small>		
+                                <i class="fa fa-id-card"></i>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="celular">Telefono Celular</label>
-                                    <input type="tel" name="celular" id="celular_add" class="form-control" placeholder="Telefono Celular..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="emergencia">Telefono Emergencia</label>
-                                    <input type="tel" name="emergencia" id="telefonoEmergencia_add" class="form-control" placeholder="Telefono Celular..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="carrera">Carrera o departamento</label>
-                                    <input type="text" name="carrera" id="carrera_add" class="form-control" placeholder="Carrera departamento..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group">
-                                    <label for="carrera" class="d-block">Provincia, Canton, Distrito</label>
-                                    <select class="form-control d-inline" style="width: 32%;" name="provincia" id="provincia_add">
-                                        <optgroup label="Provincia">
+                            <div class="input-container">
+                                <input type="text" id="nombre_add" required autocomplete="off">
+                                <small for="nombre">Nombre</small>
+                                <i class="fa fa-id-card"></i>
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="apellido_add" required autocomplete="off">
+                                <small for="apellido">Apellido</small>
+                                <i class="fa fa-id-card"></i>
+                            </div>
+                            <div class="input-container">
+                                <input type="date" id="fechaNacimiento_add" required autocomplete="off">
+                                <small for="fecha">Fecha de Nacimiento</small>
+                            </div>
+                            <div class="input-container">
+                                <input type="email" id="correo_add" required autocomplete="off">
+                                <small for="correo">Correo</small>
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="username_add" required autocomplete="off">
+                                <small for="nombreusuario">Nombre de Usuario</small>
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-container">
+                                <input type="tel" id="celular_add" required autocomplete="off">
+                                <small for="celular">Telefono Celular</small>
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                            </div>
+                            <div class="input-container">
+                                <input type="tel" id="telefonoEmergencia_add" required autocomplete="off">
+                                <small for="emergencia">Telefono Emergencia</small>
+                                <i class="fa fa-asterisk" aria-hidden="true"></i>
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="carrera_add" required autocomplete="off">
+                                <small for="carrera">Carrera o departamento</small>
+                                <i class="fa fa-university" aria-hidden="true"></i>
+                            </div>
+                            <div class="form-group">
+                                <small for="carrera" class="d-block">Provincia, Canton, Distrito</small>
+                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="provincia_add" required autocomplete="off">
+                                    <optgroup small="provincia">
 
-                                        </optgroup>
-                                    </select>
-                                    <select class="form-control d-inline" style="width: 32%;" name="canton" id="canton_add">
-                                        <optgroup label="Canton">
+                                    </optgroup>
+                                </select>
+                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="canton_add">
+                                    <optgroup small="canton">
 
-                                        </optgroup>
-                                    </select>
-                                    <select class="form-control d-inline" style="width: 32%;" name="distrito" id="distrito_add">
-                                        <optgroup label="Distrito">
+                                    </optgroup>
+                                </select>
+                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="distrito_add">
+                                    <optgroup small="distrito">
 
-                                        </optgroup>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="direccion">Direccion Exacta</label>
-                                    <input type="text" name="direccion" id="direccion_add" class="form-control" placeholder="Direccion Exacta..." aria-describedby="helpId">
-                                </div>
-                                <div class="form-group w-100">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Sexo</label>
-                                            <select class="form-control" id="sexo" >
-                                                <option value="0" selected>Seleccione...</option>
-                                                <option value="Masculino">Masculino</option>
-                                                <option value="Femenino">Femenino</option>
-                                                <option value="Otro">Otro</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label>Perfil dentro de la universidad</label>
-                                            <select class="form-control" id="perfil" >
-                                                <option value="0" selected>Seleccione...</option>
-                                                <option value="1">Estudiante</option>
-                                                <option value="2">Funcionario</option>
-                                            </select>
-                                        </div>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="direccion_add" required>
+                                <small>Direccion Exacta</small>
+                                <i class="fas fa-map-marked-alt    "></i>
+                            </div>
+                            <div class="form-group w-100">
+                                <div class="row">
+                                    <div class="col">
+                                        <small>Sexo</small>
+                                        <select class="form-control form-control-sm" id="sexo" >
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenino">Femenino</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <small>Perfil</small>
+                                        <select class="form-control form-control-sm" id="perfil" >
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="1">Estudiante</option>
+                                            <option value="2">Funcionario</option>
+                                        </select>
+                                        <small class="text-muted">Perfil que desempeña</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-             </div>
-         </div>
-     </div>
+            </div>
+            <div class="modal-footer py-0 pb-2">
+                <button type="button" class="btn btn-primary">
+                    Agregar
+                </button>
+            </div>
+            </div>
+            <div class="bg-white" style="width: 400px; height: 250px; display: none;"> 
+                <!--Aqui es para verificar que sea un administrador-->
+            </div>
+        </div>        
+    </div>
      <div class="d-flex" id="wrapper">
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
@@ -172,8 +197,8 @@
                  </div>
                  <div class="card border-0 shadow">
                      <div class="card-body px-2 py-2">
-                         <div class="row bg-light mx-auto rounded-lg justify-content-between py-1">
-                             <div class="col-md-8 pl-1">
+                         <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                             <div class="col-md-6 pl-1 pr-0">
                                  <div class="input-group flex-nowrap">
                                      <div class="input-group-prepend">
                                          <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
@@ -182,14 +207,18 @@
                                  </div>
                                  
                              </div>
-                             <div class="col-md-4 d-flex justify-content-around px-0">
+                             <div class="col-md-6 d-flex justify-content-around px-0">
                                  <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                     <div class="col-8 d-flex align-items-center">
+                                     <div class="col-5 d-flex align-items-center">
                                          <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
                                      </div>
-                                     <div class="col-4 d-flex align-items-center justify-content-end pr-2">
+                                     <div class="col-7 d-flex align-items-center justify-content-end pr-2" style="max-height: 40px">
+                                        <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarEstudiante"
+                                        data-toggle="tooltip" data-placement="top" title="Agregar un estudiante" 
+                                        >Agregar <i class="fas fa-plus-square"></i></button>
+                                       
                                          <div class="btn-group dropleft">
-                                             <button type="button" class="btn btn-secondary btn-sm mr-2" style="border-radius: 20px;" 
+                                             <button type="button" class="btn btn-secondary btn-sm mr-2" style="border-radius: 10px;" 
                                              data-toggle="tooltip" data-placement="top" title="Filtrar"
                                              onclick="openFilter()" id="dropdownFiltrar">
                                                  Filtrar <i class="fas fa-filter"></i>

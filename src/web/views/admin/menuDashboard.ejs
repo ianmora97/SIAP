@@ -5,6 +5,7 @@
             <h4 class="">SIAP</h4>
         </div>
     </div>
+    <!--
     <div class="photo_side_panel">
         <a class="text-decoration-none" href="/admin/perfil" >
             <div class="photo_side_panel_front p-2 d-flex flex-column" >
@@ -12,9 +13,7 @@
                 <% if (!usuario.foto) { %>
                     <i class="fas fa-user-circle text-white fa-3x" 
                     data-toggle="tooltip" data-placement="bottom" title="Cambiar foto de perfil" id="tooltipFoto"></i>
-                    <!-- <script>
-                        $('#tooltipFoto').tooltip('show');
-                    </script> -->
+                    
                 <% } %>
                 <%if (usuario.foto){%>
                     <img src="./../public/uploads/<%= usuario.foto%>" class="rounded-circle" width="50px">
@@ -28,6 +27,7 @@
             </div>
         </a>
     </div>
+    -->
     <div class="list-group list-group-flush accordion mx-0 mb-auto" id="accordion-menu-lateral">
         <a href="/admin/dashboard" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu <%if(s == "dash"){%> menu-active <%}%> text-white py-3 pl-2" role="button">
             <i class="fas fa-chart-line"></i>&nbsp; Dashboard
