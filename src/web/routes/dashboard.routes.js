@@ -36,7 +36,7 @@ router.get('/admin/administradores',(req,res)=>{
         if(req.session.value.rol){
             let usuario = req.session.value;
             let s = 'administradores';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/administradores', {usuario,s});
         }else{
             res.render('indexAdmin');
         }
