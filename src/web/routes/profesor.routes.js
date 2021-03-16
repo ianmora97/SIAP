@@ -14,7 +14,7 @@ router.post('/profesores/entrar',(req,res)=>{
             if(rows.length != 0){
                 req.session.value = rows[0];
                 console.log('[',chalk.green('OK'),']', chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                res.redirect('/profesor/inicio');
+                res.redirect('/profesores/inicio');
             }else{
                 res.render('indexProfesores', {err:'No se encuentra Registrado',id: 2});
             }
@@ -44,7 +44,7 @@ router.get('/profesores/logout',(req,res)=>{
     }
 });
 
-router.get('/profesor/inicio',(req,res)=>{ //clases es la pagina de inicio
+router.get('/profesores/inicio',(req,res)=>{ //clases es la pagina de inicio
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -62,7 +62,7 @@ router.get('/profesor/inicio',(req,res)=>{ //clases es la pagina de inicio
     }
 });
 
-router.get('/profesor/clases',(req,res)=>{ //perfil del profesor
+router.get('/profesores/clases',(req,res)=>{ //perfil del profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -80,7 +80,7 @@ router.get('/profesor/clases',(req,res)=>{ //perfil del profesor
     }
 });
 
-router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
+router.get('/profesores/grupos',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -91,6 +91,7 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
                     (err,rows,fields)=>{
                     if(!err){
                         if(rows.length != 0){                            
+                            
                             res.send(rows);
                         }else{
                             res.status(501).send('error');
@@ -110,7 +111,7 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
     }
 });
 
-router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por profesor
+router.get('/profesores/matriculaEstudiantes',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -120,10 +121,10 @@ router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por prof
                     [req.query.id],
                     (err,rows,fields)=>{
                     if(!err){
-                        if(rows.length != 0){                            
+                        if(rows.length != 0){
                             res.send(rows);
                         }else{
-                            res.status(501).send('error');
+                            res.send('vacia');
                         }
                     }else{
                         res.status(501).send('error');
@@ -139,7 +140,7 @@ router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por prof
         res.status(501).send('error');
     }
 });
-router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la informacion de un estudiante por profesor
+router.get('/profesores/informacionEstudiantesMatricula',(req,res)=>{ // trae la informacion de un estudiante por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -168,7 +169,7 @@ router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la i
         res.status(501).send('error');
     }
 });
-router.post('/profesor/crearAnotacion',(req,res)=>{ // insertar anotacion por profesor
+router.post('/profesores/crearAnotacion',(req,res)=>{ // insertar anotacion por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -193,7 +194,7 @@ router.post('/profesor/crearAnotacion',(req,res)=>{ // insertar anotacion por pr
         res.status(501).send('error');
     }
 });
-router.get('/profesor/obtenerAnotacionesPorProfesor',(req,res)=>{ // trer cursos por profesor
+router.get('/profesores/obtenerAnotacionesPorProfesor',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){

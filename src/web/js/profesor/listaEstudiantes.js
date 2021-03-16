@@ -212,7 +212,11 @@ function traerEstudantesXGrupo(){
         contentType: "application/json"
     }).then((response) => {
         g_estudiantes = response;
+        if(response == 'vacia'){
+            
+        }
     }, (error) => {
+        
     });
 }
 

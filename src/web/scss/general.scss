@@ -90,6 +90,13 @@ td{
     padding: 0.5rem !important;
 }
 
+button{
+    outline: none !important;
+    box-shadow: none !important;
+}
+.breadcrumb{
+    padding: 0.2rem 1rem !important;
+}
 @mixin object-center {
     display: flex;
     justify-content: center;

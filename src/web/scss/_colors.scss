@@ -1,11 +1,22 @@
-$primary:#364C78;
-$secondary:#B81616;
-$light:#F0F2F5;
-$gray:#4E5560;
-$dark:#27323A;
-$green:#28a745;
-$info:#4c84ff;
+// $primary:#364C7";
+// "$secondary:#B81616;
+// $light:#F0F2F5;
+// $gray:#4E5560;
+// $dark:#27323A;
+// $green:#28a745;
+// $info:#4c84ff;
 
+
+$theme-colors: (
+    "primary":#364C78,
+    "dark-primary":#25375a,
+    "secondary":#B81616,
+    "light":#F0F2F5,
+    "gray":#4E5560,
+    "dark":#27323A,
+    "green":#28a745,
+    "info":#4c84ff
+);
 // $primary:#45b4ff;
 // $secondary:#f77457;
 // $light:#F0F2F5;
