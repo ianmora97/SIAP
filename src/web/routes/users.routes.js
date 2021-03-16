@@ -1,7 +1,10 @@
 const express = require('express');
+const request = require('request-promise');
+const cheerio = require('cheerio');
 const router = express.Router();
 
 const con = require('../database');
+const { route } = require('./student.routes');
 
 router.get('/usuarios',(req,res)=>{
     var script = con.query('select * from t_usuario',
@@ -11,7 +14,27 @@ router.get('/usuarios',(req,res)=>{
         }
     });
 });
- 
+async function getRegistroPersona(url) {
+    try {
+        const $ = await request({
+            uri: url,
+            transform: body => cheerio.load(body)
+        });
+        
+        let json = $('body').html()
+        return json;
+        
+    } catch (e) {
+        console.log(e);
+    }
+}
+router.get('/buscarUsuarioRegistro',(req,res)=>{
+    console.log(req.query.id)
+    let url = 'https://apis.gometa.org/cedulas/'+req.query.id;
+    getRegistroPersona(url).then((persona)=>{
+        res.send(persona)
+    });
+});
 router.post('/usuario/registrarse',(req,res)=>{
     var script = con.query('call prc_insertar_usuario_temp(?, ?, ?, ?, ?, ?, ?, ?, ?)', 
     [req.body.cedula, req.body.nombre, req.body.apellido, 

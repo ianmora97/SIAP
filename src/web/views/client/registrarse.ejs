@@ -35,18 +35,26 @@
 		</div>
 		<div class="py-4 text-center">
 			<h2>Formulario de Registro</h2>
-			<p class="lead">
+			<small>
 				Al completar la información de registro un funcionario de la Universidad Nacional de Costa Rica le habilitará
-				el acceso a la plataforma una vez verificado su elegibilidad para matricular los talleres de la piscina. <br>		
-			</p>
+				el acceso a la plataforma una vez <br>verificado su elegibilidad para matricular los talleres de la piscina. 
+				Tendra que proporsionar una seria de datos y adicionalmente un comprobante que matricula del semestre actual.		
+			</small>
 		</div>
 		<hr>
 		<form action="" autocomplete="off">
 			<div class="row px-3 py-2">
 				<div class="col-md-6">
+					
 					<div class="form-group w-100">
 						<label>Número de cédula</label><small class="float-right text-rojo">Requerido</small>
-						<input class="form-control" type="number" id="id_registro" minlength="9" maxlength="12" min="9" max="12">
+						<div class="input-group input-group-sm">
+							<div class="input-group-prepend">
+							  <span class="input-group-text" id="cedula_inputGroup">Small</span>
+							</div>
+							<input  type="number" id="id_registro" minlength="9" maxlength="12" min="9" max="12"
+							 class="form-control" aria-label="Numero de cedula" aria-describedby="cedula_inputGroup" >
+						</div>
 						<small class="text-muted">Sin guiones ni barras(/) e.g: 123456789</small>
 					</div>
 					<style>
@@ -62,9 +70,10 @@
 						  -moz-appearance: textfield;
 						}
 					</style>
+					
 					<div class="form-group w-100">
 						<label>Nombre</label><small class="float-right text-rojo">Requerido</small>
-						<input class="form-control" type="text" id="nombre_registro" >
+						<input class="form-control" type="text" id="nombre_registro">
 						<small class="text-muted">El mismo de su documento de identificacion</small>
 					</div>	
 					<div class="form-group w-100">	

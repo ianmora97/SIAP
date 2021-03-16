@@ -15,6 +15,10 @@ app.set('views', path.join(__dirname,'views')); //se crea el path de las views
 app.set('view engine', 'ejs'); //se prepara el motor para lectura de .ejs
 
 // Middlewares
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(session({
@@ -22,7 +26,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-//middlewares
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'/public/uploads'),
     filename: (req, file, cb) => {

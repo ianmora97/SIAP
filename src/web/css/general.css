@@ -168,3 +168,6 @@ button {
 @media (min-width: 768px) {
   .text-message-a {
     width: 50% !important; } }
+
+input {
+  box-shadow: none !important; }

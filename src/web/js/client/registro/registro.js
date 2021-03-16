@@ -65,14 +65,15 @@ function llenarDatos() {
         
         if(id.length == 9){
             $('#id_registro').addClass('is-valid');
-            let url = 'https://ronaldoarriola.com/api/padroncr/'+id;
             $.ajax({
                 type: "GET",
-                url: url,
-                contentType: "application/json"
+                url: '/buscarUsuarioRegistro',
+                contentType: "application/json",
+                data: {id:id}
             }).then((response) => {
-                $('#nombre_registro').val(response.nombre);
-                $('#apellidos_registro').val(response.primerApellido+' '+response.segundoApellido);
+                let p = JSON.parse(response)
+                $('#nombre_registro').val(p.results[0].firstname1);
+                $('#apellidos_registro').val(p.results[0].lastname);
                 
                 $('#nombre_registro').addClass('is-valid');
                 $('#apellidos_registro').addClass('is-valid');
