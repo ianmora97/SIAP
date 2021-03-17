@@ -135,6 +135,7 @@ function traer_estudiantes() {
     }, (error) => {
     });
 }
+
 function mostrarUsuarios(usuarios) {
     $('#lista_usuarios_temporales').html(' ');
     usuarios.forEach(u =>{
@@ -150,10 +151,10 @@ function mostrarUsuarios(usuarios) {
             "lengthMenu": "Mostrar _MENU_ registros",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
-                "first":    '«',
-                "previous": '‹',
-                "next":     '›',
-                "last":     '»'
+                "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
+                "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
+                "next":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
+                "last":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
             },
             "aria": {
                 "paginate": {

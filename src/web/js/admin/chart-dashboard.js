@@ -7,7 +7,7 @@ gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
     data: {
-        labels: ["Principiante", "Intermedio", "Avanzado"],
+        labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
                 label: ["Cantidad de personas matriculadas por taller"],

@@ -1,3 +1,11 @@
+$primary:#364C78;
+$dark-primary:#25375a;
+$secondary:#B81616;
+$light:#F0F2F5;
+$gray:#4E5560;
+$dark:#27323A;
+$green:#28a745;
+$info:#4c84ff;
 .nav-link{
     color: white !important;
 }
@@ -194,4 +202,38 @@ button{
 
 input{
     box-shadow: none !important;
+}
+select{
+    box-shadow: none !important;
+}
+.input-group-prepend{
+    border: none !important;
+}
+
+.custom-file-label{
+    box-shadow: none !important;
+}
+.rounded-xl{
+    border-radius:0px;
+}
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { 
+    .rounded-xl{
+        border-radius: 20px !important;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { 
+
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { 
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { 
+
 }

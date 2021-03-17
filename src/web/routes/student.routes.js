@@ -131,9 +131,21 @@ router.get('/client/cargarPadecimientosFotos',(req,res)=>{
     }
 });
 
+//Muestra los Estudiantes
+router.post('/admin/usuarios/estudiantes',(req,res)=>{
+    
+    var script = con.query('call prc_insertar_estudiante(?, ?)', 
+    [req.query.departamento,req.query.usuario],
+    (err,result,fields)=>{
+        if(!err){
+            res.send(result[0]);
+        }
+    });
+});
+
 //Inserta Estudiante
 router.post('/estudiante/insertar',(req,res)=>{
-    console.log(req.query);
+    
     var script = con.query('call prc_insertar_estudiante(?, ?)', 
     [req.query.departamento,req.query.usuario],
     (err,result,fields)=>{

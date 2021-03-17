@@ -42,6 +42,7 @@ router.post('/usuario/registrarse',(req,res)=>{
         req.body.clave, req.body.sexo, req.body.tipoUser, req.body.email],
     (err,result,fields)=>{
         if(!err){
+            console.log(req.body.clave);
             console.log(result);
             res.send(result);
         }else{

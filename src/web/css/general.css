@@ -171,3 +171,19 @@ button {
 
 input {
   box-shadow: none !important; }
+
+select {
+  box-shadow: none !important; }
+
+.input-group-prepend {
+  border: none !important; }
+
+.custom-file-label {
+  box-shadow: none !important; }
+
+.rounded-xl {
+  border-radius: 0px; }
+
+@media (min-width: 576px) {
+  .rounded-xl {
+    border-radius: 20px !important; } }
