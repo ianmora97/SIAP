@@ -203,7 +203,7 @@ function change_navbar(){
 function cargarDatos() {
     $.ajax({
         type: "GET",
-        url: "/admin/stats/getTalleres",
+        url: "/admin/ajax/stats/getTalleres",
         contentType: "application/json",
     }).then(
         (response) => {

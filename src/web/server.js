@@ -48,15 +48,16 @@ app.use(multer({
 }).single('image'));
 
 //REST API --routering
-app.use(require('./routes/main.routes'));
+app.use(require('./routes/main/main.routes'));
+app.use(require('./routes/admin/admin.routes'));
+app.use(require('./routes/admin/stats.routes'));
+app.use(require('./routes/admin/admin.ajax.routes'));
+
 app.use(require('./routes/users.routes'));
-app.use(require('./routes/admin.routes'));
-app.use(require('./routes/dashboard.routes'));
 app.use(require('./routes/document.routes'));
 app.use(require('./routes/client.routes'));
 app.use(require('./routes/listaestudiantes.routes'));
 app.use(require('./routes/user_temp.routes'));
-app.use(require('./routes/stats.routes'));
 app.use(require('./routes/student.routes'));
 app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));

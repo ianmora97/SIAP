@@ -1,7 +1,22 @@
+/*
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+    * 
+    * Main routes are the manager for the main path /
+*/
+
 const express = require('express');
 const router = express.Router();
 
-const con = require('../database');
+const con = require('../../database');
 
 router.get('/', (req, res) => {
     res.render('index');
