@@ -7,11 +7,10 @@ gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
     data: {
-        labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
+        //labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
                 label: ["Cantidad de personas matriculadas por taller"],
-                // backgroundColor: "#4c84ff",
                 backgroundColor: gradienteColores,
                 borderColor: '#4c84ff',
                 borderWidth: 2,
@@ -24,23 +23,20 @@ var tallerCh = new Chart(talleresChart, {
             xAxes: [
                 {
                     gridLines: {
-                        display: false,
-                        drawTicks: false,
                         drawBorder: true,
+                        display: false,
                     },
                 },
             ],
             yAxes: [
                 {
-                    gridLines: {
-                        // display:false,
-                        drawTicks: false,
-                        drawBorder: false,
-                    },
                     ticks: {
-                        beginAtZero: true,
-                        // stepSize: 5,
-                        // max: 50,
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
+                    gridLines: {
+                        drawBorder: true,
+                        display: false,
                     },
                 },
             ],
@@ -57,27 +53,18 @@ var tallerCh = new Chart(talleresChart, {
 var usuariosChart = document.getElementById("usuariosChart").getContext("2d");
 var gradienteColores_usuarios = usuariosChart.createLinearGradient(0, 0, 0, 600);
 
-gradienteColores_usuarios.addColorStop(0, "rgba(255%, 75%, 75%, 0.6)");
+gradienteColores_usuarios.addColorStop(0, "rgba(75%, 255%, 75%, 0.6)");
 gradienteColores_usuarios.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 usuariosChart.height = 600;
 var usuarioCharVar = new Chart(usuariosChart, {
     type: "bar",
     data: {
-        labels: ["Principiante", "Intermedio-Avanzado"],
         datasets: [
             {
-                label: "Principiante",
-                data: [12],
-                backgroundColor: gradienteColores,
-                borderColor: '#4c84ff',
-                borderWidth: 2,
-            },
-            {
-                label: "Intermedio-Avanzado",
-                data: [19],
+                label: "Usuarios en el sistema",
                 backgroundColor: gradienteColores_usuarios,
-                borderColor: '#FFB6C1',
+                borderColor: '#28a745 ',
                 borderWidth: 2,
             },
         ],
@@ -94,6 +81,10 @@ var usuarioCharVar = new Chart(usuariosChart, {
             ],
             yAxes: [
                 {
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
                     gridLines: {
                         drawBorder: true,
                         display: false,
@@ -105,41 +96,27 @@ var usuarioCharVar = new Chart(usuariosChart, {
         maintainAspectRatio: false,
     },
 });
-var matriculaChart = document.getElementById("matriculaChart").getContext("2d");
-matriculaChart.height = 600;
-var matriculaChartVar = new Chart(matriculaChart, {
+var casillerosChart = document.getElementById("casillerosChart").getContext("2d");
+var gradienteColores_casilleros = casillerosChart.createLinearGradient(0, 0, 0, 600);
+
+gradienteColores_casilleros.addColorStop(0, "rgba(255%, 204%, 58%, 0.6)");
+gradienteColores_casilleros.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+casillerosChart.height = 600;
+var casillerosChartVar = new Chart(casillerosChart, {
     type: "bar",
     data: {
-        labels: [
-            "Profesores",
-            "Estudiantes",
-            "Activos",
-            "Morosos",
-            "Desmatriculados",
-        ],
         datasets: [
             {
-                label: "Cantidad de Usuarios",
-                data: [12, 19, 3, 5, 6],
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                    "rgba(54, 162, 235, 0.2)",
-                    "rgba(255, 206, 86, 0.2)",
-                    "rgba(75, 192, 192, 0.2)",
-                    "rgba(153, 102, 255, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(153, 102, 255, 1)",
-                ],
-                borderWidth: 1,
+                label: ["Uso de Casilleros"],
+                backgroundColor: gradienteColores_casilleros,
+                borderColor: '#ffc107',
+                borderWidth: 2,
             },
         ],
     },
     options: {
+        showLines: false, // disable for all datasets
         scales: {
             xAxes: [
                 {
@@ -151,6 +128,10 @@ var matriculaChartVar = new Chart(matriculaChart, {
             ],
             yAxes: [
                 {
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
                     gridLines: {
                         drawBorder: true,
                         display: false,
@@ -158,9 +139,13 @@ var matriculaChartVar = new Chart(matriculaChart, {
                 },
             ],
         },
+        animation: {},
+        tooltips: {
+            mode: "nearest",
+        },
         responsive: true,
         maintainAspectRatio: false,
-    },
+    }
 });
 var pieDonutChart = document.getElementById("pieDonutChart").getContext("2d");
 var pieDonutChartVar = new Chart(pieDonutChart, {

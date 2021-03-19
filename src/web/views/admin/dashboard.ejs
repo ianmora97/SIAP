@@ -16,7 +16,15 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
-<body class="page bg-light d-flex flex-column h-100">
+<body class="page bg-light d-flex flex-column h-100 overflow-hidden">
+    <div id="loadingPage">
+        <div class="d-flex justify-content-center flex-column">
+            <h1 class="display-1 align-self-center text-white"><strong>SIAP</strong></h1>
+            <div class="spinner-border align-self-center text-white" role="status" style="width: 100px; height: 100px;">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
@@ -31,10 +39,10 @@
             </nav>
             <div class="container-fluid">
                 <nav>
-                    <div class=" nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist">
+                    <div class=" nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist" style="height: 150px;">
                         <a class="nav-link nav-card-item col-md-3 active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in">
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes Matriculados">
                                 <div class="p-0">
                                     <i class="fas fa-swimming-pool fa-2x text-info talleres-ic"></i>
                                 </div>
@@ -47,7 +55,7 @@
                         </a>
                         <a class="nav-link nav-card-item col-md-3 " id="usuarios_chart-tab" data-toggle="tab" href="#usuarios_chart" role="tab" aria-controls="usuarios_chart" aria-selected="false">
                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in">
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Usuarios en el sistema">
                                 <div class="p-0">
                                     <i class="fas fa-users fa-2x text-success talleres-uc"></i>
                                 </div>
@@ -111,10 +119,10 @@
                                     <canvas id="usuariosChart"></canvas>
                                 </div>
                             </div>
-                            <div class="tab-pane  chart-container cards-dash" id="matricula_chart" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            <div class="tab-pane  chart-container cards-dash" id="casillerosChart" role="tabpanel" aria-labelledby="nav-contact-tab">
                                 <div class="row py-2 px-3">
                                     <div class="w-100">
-                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Matricula</h4>
+                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Casilleros</h4>
                                     </div>
                                     <small class="text-muted today-date d-block"></small>
                                 </div>

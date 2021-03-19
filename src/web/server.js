@@ -52,6 +52,7 @@ app.use(require('./routes/main/main.routes'));
 app.use(require('./routes/admin/admin.routes'));
 app.use(require('./routes/admin/stats.routes'));
 app.use(require('./routes/admin/admin.ajax.routes'));
+app.use(require('./routes/admin/casilleros/casilleros.routes'));
 
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/document.routes'));

@@ -1,7 +1,25 @@
 function loaded(event){
     events(event);
 }
-
+function onReady(callback) {
+    var intervalId = window.setInterval(function() {
+      if (document.getElementsByTagName('body')[0] !== undefined) {
+        window.clearInterval(intervalId);
+        callback.call(this);
+      }
+    }, 1000);
+  }
+  
+  function setVisible(selector, visible) {
+    document.querySelector(selector).style.display = visible ? 'block' : 'none';
+  }
+  
+  onReady(function() {
+    $('body').removeClass('overflow-hidden');
+    animateCSS('#loadingPage','fadeOutDownBig').then(()=>{
+        $('#loadingPage').hide();
+    })
+  });
 function events(event){
     cargarDatos();
     toogleMenu();
@@ -17,12 +35,10 @@ function onshowtabscharts(){
     $('a[data-toggle="tab"]').on('show.bs.tab', function (event) {
         let target = event.target // newly activated tab
         let href = $(target).attr('href') //event.relatedTarget // previous active tab
-        animateCSS(href,'bounce')
+        //animateCSS(href,'bounce')
     })
 }
 const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
   new Promise((resolve, reject) => {
     let prefix = 'animate__';
     const animationName = `${prefix}${animation}`;
@@ -116,33 +132,6 @@ function get_today_date() {
 function load_stats() {
     $.ajax({
         type: "GET",
-        url: "/admin/stats/usuarios",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios-stats').text(response.cant);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/talleres",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#talleres-stats').text(response.cant);
-    }, (error) => {
-        
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/matricula",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#matricula-stats').text(response.cant);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
         url: "/admin/stats/usuariosNuevosTabla",
         contentType: "application/json"
     }).then((response) => {
@@ -150,7 +139,6 @@ function load_stats() {
     }, (error) => {
 
     });
-    
 }
 function cargarTablaUsuariosNuevos(usuarios) {
     $('#dataListUsuariosNuevos').html('');
@@ -207,15 +195,57 @@ function cargarDatos() {
         contentType: "application/json",
     }).then(
         (response) => {
-            // addData(barChart, '# of Votes 2017', '#ff0000', [16, 14, 8]);
-            updateChart( tallerCh,response);
+            let grupos = response.grupos;
+            $('#talleres-stats').text(response.mxg.length);
+            for (var [key, value] of Object.entries(grupos)) {
+                addData(tallerCh,key, value);
+            }
+        },
+        (error) => {}
+    );
+    $.ajax({
+        type: "GET",
+        url: "/admin/ajax/stats/getUsuarios",
+        contentType: "application/json",
+    }).then(
+        (response) => {
+            let cont = 0;
+            for (var [key, value] of Object.entries(response)) {
+                addData(usuarioCharVar, key, value);
+                cont += value;
+            }
+            $('#usuarios-stats').text(cont);
+        },
+        (error) => {}
+    );
+    $.ajax({
+        type: "GET",
+        url: "/admin/ajax/stats/getCasilleros",
+        contentType: "application/json",
+    }).then(
+        (response) => {
+            // let cont = 0;
+            // for (var [key, value] of Object.entries(response)) {
+            //     addData(usuarioCharVar, key, value);
+            //     cont += value;
+            // }
+            // $('#usuarios-stats').text(cont);
         },
         (error) => {}
     );
 }
-
+function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
+}
 function updateChart(chart,data) {
     chart.data.datasets[0].data = data;
     chart.update();
 }
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 document.addEventListener("DOMContentLoaded", loaded);

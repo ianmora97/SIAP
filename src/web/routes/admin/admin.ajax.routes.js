@@ -11,6 +11,7 @@
     * Moises Fernandez Alfaro
     * 
     * Ajax routes on admin panel /admin/ajax/*
+    * General this is on Dashboard
 */
 
 const express = require('express');
@@ -22,98 +23,77 @@ const con = require('../../database');
 
 router.get('/admin/ajax/stats/getTalleres',(req,res)=>{
     let script = "call prc_seleccionar_talleres";
-    let name_groups =[];
-    var query = con.query(script,
-        (err,rows,fields)=>{
+    let name_groups = {};
+    var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
-            rows.forEach((e)=>{
-                console.log('este',e);
-                name_groups.push({'tipo':e.descripcion,'cantidad':0})
+            rows[0].forEach((row)=>{
+                name_groups[row.descripcion]=0;
+            });
+            script = "select * from vta_matriculados_por_grupo";
+            var query = con.query(script,
+                (err,rows,fields)=>{
+                if(rows != undefined){
+                    rows.forEach((row)=>{
+                        name_groups[row.descripcion]++;
+                    });
+                    res.send({'grupos':name_groups,'mxg':rows});
+                }else{
+                    res.send({err:'NotFound'});
+                }
             });
         }else{
             res.send({err:'ServerError'});
         }
     });
-    // console.log(name_groups);
-    script = "select * from vta_matriculados_por_grupo";
-    var query = con.query(script,
-        (err,rows,fields)=>{
-        if(rows != undefined){
-            
-            console.log('si');
-            rows.forEach((e)=>{
-                // if(e.descripcion == 'Principiante') principiante++;
-                // if(e.descripcion == 'Intermedio') inter++;
-                // if(e.descripcion == 'Avanzado') avanzado++;
-            });
-            let data = [];
-
-            res.send(data);
-        }else{
-            res.send({err:'NotFound'});
-        }
-    });
 });
 
 router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
-    let script = "select * from vta_matriculados_por_grupo";
-    var query = con.query(script,
-        (err,rows,fields)=>{
+    let script = "select fi_cantidad_administrativos()";
+    let tipo = {};
+    var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
-            let principiante = 0;
-            let inter = 0;
-            let avanzado = 0;
-            rows.forEach((e)=>{
-                if(e.descripcion == 'Principiante') principiante++;
-                if(e.descripcion == 'Intermedio') inter++;
-                if(e.descripcion == 'Avanzado') avanzado++;
+            for (var [key, value] of Object.entries(rows[0])) {
+                tipo['Administrativo']=value;
+            }
+            script = "select fi_cantidad_estudiantes()";
+            var query = con.query(script,
+                (err,rows,fields)=>{
+                if(rows != undefined){
+                    for (var [key, value] of Object.entries(rows[0])) {
+                        tipo['Estudiantes']=value;
+                    }
+                    script = "select fi_cantidad_profesores()";
+                    var query = con.query(script,
+                        (err,rows,fields)=>{
+                        if(rows != undefined){
+                            for (var [key, value] of Object.entries(rows[0])) {
+                                tipo['Profesores']=value;
+                            }
+                            console.log(tipo)
+                            res.send(tipo)
+                        }else{
+                            res.send({err:'NotFound'});
+                        }
+                    });
+                }else{
+                    res.send({err:'NotFound'});
+                }
             });
-            let data = [];
-            data.push(principiante);
-            data.push(inter);
-            data.push(avanzado);
-            res.send(data);
         }else{
-            res.send({err:'NotFound'});
+            res.send({err:'ServerError'});
         }
     });
 });
-
-// TODO: stats para los botones del dashboard
-// ! Estas peticiones tienen que ser cambiadas, no se manejan en esta capa
-
-router.get('/admin/stats/usuarios',(req,res)=>{
-    let script = "select count(id) as cant from t_usuario";
-    var query = con.query(script,
-        (err,rows,fields)=>{
+router.get('/admin/ajax/stats/getCasilleros',(req,res)=>{
+    let script = "call prc_seleccionar_talleres";
+    let name_groups = {};
+    var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
-            res.send(rows[0]);
+            rows[0].forEach((row)=>{
+                name_groups[row.descripcion]=0;
+            });
         }else{
-            res.send({err:'NotFound'});
-        }
-    });
-});
-
-router.get('/admin/stats/talleres',(req,res)=>{
-    let script = "select count(id) as cant from t_taller";
-    var query = con.query(script,
-        (err,rows,fields)=>{
-        if(rows != undefined){
-            res.send(rows[0]);
-        }else{
-            res.send({err:'NotFound'});
-        }
-    });
-});
-
-router.get('/admin/stats/matricula',(req,res)=>{
-    let script = "select count(id) as cant from t_matricula";
-    var query = con.query(script,
-        (err,rows,fields)=>{
-        if(rows != undefined){
-            res.send(rows[0]);
-        }else{
-            res.send({err:'NotFound'});
+            res.send({err:'ServerError'});
         }
     });
 });

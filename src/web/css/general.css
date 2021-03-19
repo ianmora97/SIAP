@@ -187,3 +187,31 @@ select {
 @media (min-width: 576px) {
   .rounded-xl {
     border-radius: 20px !important; } }
+
+#loadingPage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vw;
+  background-color: #4c84ff;
+  z-index: 999999;
+  padding-top: 20%; }
+
+.casilleroFormat {
+  color: white;
+  position: relative;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 98%;
+  margin: 0 auto;
+  height: 100px;
+  border-bottom: white 10px solid !important; }
+
+.casilleroFormat.ocupado {
+  background: #f53838 !important;
+  border: #B81616 4px solid; }
+
+.casilleroFormat.libre {
+  background: #0fbb0f !important;
+  border: #28a745 4px solid; }
