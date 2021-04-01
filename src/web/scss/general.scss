@@ -265,3 +265,10 @@ select{
     background: rgb(15, 187, 15) !important;
     border:#28a745 4px solid;
 }
+#tablaBusquedaModal .table{
+    border: none !important;
+}
+#tablaBusquedaModal table td{
+    border: none;
+    border-bottom: 1px solid #1c1c1c;
+}

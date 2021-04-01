@@ -29,6 +29,7 @@ router.post('/admin/log',(req,res)=>{ //login
         if(!err){
             if(rows.length != 0){
                 if(rows[0].rol == 2){
+                    console.log(rows[0]);
                     req.session.value = rows[0];
                     let today = new Date();
                     let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();

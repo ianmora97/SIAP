@@ -30,7 +30,80 @@ router.get('/admin/casilleros/bringCasilleros',(req,res)=>{
         }
     });
 });
-
+router.get('/admin/casilleros/bringEstudiantes',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('select * from vta_admin_estudiante',
+        (err,rows,fields)=>{
+            if(!err){
+                if(rows.length != 0){
+                    res.send(rows);
+                }else{
+                    res.render('indexAdmin', {err:'No se encuentra Registrado',id: 2});
+                }
+            }else{
+                res.render('indexAdmin', {err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
+    
+});
+router.get('/admin/casilleros/bringCasillerosEstudiantes',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('select * from vta_casilleros',
+        (err,rows,fields)=>{
+            if(!err){
+                if(rows.length != 0){
+                    res.send(rows);
+                }else{
+                    res.render('indexAdmin', {err:'No se encuentra Registrado',id: 2});
+                }
+            }else{
+                res.render('indexAdmin', {err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
+    
+});
+router.get('/admin/casilleros/asignarCasillero',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('call prc_insertar_casillero_estudiante(?, ?, ?,?)',
+        [req.query.cedula,req.query.codigo,req.query.horaEntrada,req.query.horaSalida],
+        (err,result,fields)=>{
+            if(!err){
+                res.send(result);
+            }else{
+                res.send({err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
+    
+});
+router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('call prc_eliminar_casillero_estudiante(?)',
+        [req.query.id],
+        (err,result,fields)=>{
+            if(!err){
+                res.send(result);
+            }else{
+                res.send({err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
+    
+});
 
 module.exports = router;
 

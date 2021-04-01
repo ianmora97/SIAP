@@ -69,7 +69,6 @@ router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
                             for (var [key, value] of Object.entries(rows[0])) {
                                 tipo['Profesores']=value;
                             }
-                            console.log(tipo)
                             res.send(tipo)
                         }else{
                             res.send({err:'NotFound'});

@@ -55,7 +55,44 @@
             </div>
         </div>        
     </div>
-     <div class="d-flex" id="wrapper">
+    <div class="modal fade" id="modalAsignarCasillero" tabindex="-1" aria-labelledby="modalAsignarCasilleroLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" id="modal-dialog-size">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white pl-3" id="modalAsignarCasilleroLabel">Asignar un casillero</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="asignarModal">
+                    <div class="form-group mb-0">
+                        <strong>Codigo:</strong><span class="codigoModal"></span>
+                        <input type="text" class="mt-2 form-control" id="inputBuscarEstudianteModal" placeholder="Buscar..." onkeyup="buscarModalEstudiantes()">
+                    </div>
+                    <div class="w-100 bg-white border border-top-0 rounded-bottom" style="height: 250px !important; overflow-y: auto;">
+                        <table class="table w-100" id="tablaBusquedaModal">
+                            <thead class="d-none">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTableModal"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-body" style="display: none;" id="revocarModal">
+                    <div class="d-block">
+                        <strong>Codigo:</strong><span class="codigoModal"></span>
+                        <span class="sr-only" id="idCasilleroModal"></span>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="revocarCasillero()">Revocar Casillero</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
              <%- include('headerDashboard') %>
