@@ -19,14 +19,14 @@
      <meta name="apple-mobile-web-app-capable" content="yes">
      <meta name="mobile-web-app-capable" content="yes">
      <title>Dashboard - Reportes - Morosidad</title>
-     <link rel="stylesheet" href="../../css/bootstrap.css">
-     <link rel="stylesheet" href="../../css/general.css">
-     <link rel="stylesheet" href="../../css/datatables.min.css">
-     <link rel="stylesheet" href="../../css/dashboard.css"/>
+     <link rel="stylesheet" href="../../../css/bootstrap.css">
+     <link rel="stylesheet" href="../../../css/general.css">
+     <link rel="stylesheet" href="../../../css/datatables.min.css">
+     <link rel="stylesheet" href="../../../css/dashboard.css"/>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-     <link rel="stylesheet" href="../../css/animate.css">
+     <link rel="stylesheet" href="../../../css/animate.css">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
-     <script src="../../js/jq-bs-bundle.js"></script> 
+     <script src="../../../js/jq-bs-bundle.js"></script> 
      <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -102,7 +102,8 @@
                                      <div class="input-group-prepend">
                                          <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
                                      </div>
-                                     <input type="search" class="form-control border-0 shadow-none bg-white" onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                     <input type="search" class="form-control border-0 shadow-none bg-white" 
+                                     onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
                                  </div>
                                  
                              </div>
@@ -132,19 +133,18 @@
                              </div>
                          </div>
                          <div class="row w-100 mx-0" style="height: 55vh; overflow-y: auto;">
-                             <table class="table table-hover table-responsive-md table-borderless" id="estudiantes_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
+                             <table class="table table-hover table-responsive-md table-borderless" id="morosos_Table" data-order="[[ 2, &quot;asc&quot; ]]">
                                  <thead>
                                      <tr>
-                                         <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--Aqui va la foto-->
-                                         <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
+                                         <th class="bg-dark text-white sticky-top " style="width: 40px;" scope="col">&nbsp;</th> <!--Aqui va la foto-->
                                          <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
                                          <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
-                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-level-up"></i> Nivel</th>
-                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Matricula</th>
                                          <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Pago</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Estado</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
                                      </tr>
                                      </thead>
-                                     <tbody id="lista_estudiantes">
+                                     <tbody id="lista_morosos">
              
                                      </tbody>
                              </table>
@@ -173,7 +173,7 @@
              
          </div>
      </div>
-     <script src="../../js/assets/datatables.min.js"></script>
-     <script src="../../js/admin/estudiantes.js"></script>
+     <script src="../../../js/assets/datatables.min.js"></script>
+     <script src="../../../js/admin/reporte.morosidad.js"></script>
  </body>
  </html>

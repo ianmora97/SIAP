@@ -284,4 +284,5 @@ select {
   width: 230px;
   border-radius: 5px;
   border: 1px #F0F2F5 solid;
-  min-height: 300px; }
+  min-height: 300px;
+  display: none; }
