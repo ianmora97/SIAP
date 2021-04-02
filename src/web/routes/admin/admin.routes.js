@@ -212,6 +212,20 @@ router.get('/admin/casilleros',(req,res)=>{
         res.render('indexAdmin');
     }
 });
+
+router.get('/admin/reportes/morosos',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-morosos';
+            res.render('admin/reportes/morosos', {usuario,s});
+        }else{
+            res.render('indexAdmin');
+        }
+    }else{
+        res.render('indexAdmin');
+    }
+});
 // ! ----------------------------------- inside routes ------------------------------------
 // ? ----------------------------------- nav routes ------------------------------------
 // TODO: rutas del navbar del panel administrativo

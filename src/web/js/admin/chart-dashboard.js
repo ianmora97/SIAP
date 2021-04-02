@@ -10,7 +10,6 @@ var tallerCh = new Chart(talleresChart, {
         //labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
-                label: ["Cantidad de personas matriculadas por taller"],
                 backgroundColor: gradienteColores,
                 borderColor: '#4c84ff',
                 borderWidth: 2,
@@ -18,6 +17,16 @@ var tallerCh = new Chart(talleresChart, {
         ],
     },
     options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
         showLines: false, // disable for all datasets
         scales: {
             xAxes: [
@@ -62,7 +71,6 @@ var usuarioCharVar = new Chart(usuariosChart, {
     data: {
         datasets: [
             {
-                label: "Usuarios en el sistema",
                 backgroundColor: gradienteColores_usuarios,
                 borderColor: '#28a745 ',
                 borderWidth: 2,
@@ -70,6 +78,16 @@ var usuarioCharVar = new Chart(usuariosChart, {
         ],
     },
     options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
         scales: {
             xAxes: [
                 {
@@ -108,7 +126,6 @@ var casillerosChartVar = new Chart(casillerosChart, {
     data: {
         datasets: [
             {
-                label: ["Uso de Casilleros"],
                 backgroundColor: gradienteColores_casilleros,
                 borderColor: '#ffc107',
                 borderWidth: 2,
@@ -116,6 +133,16 @@ var casillerosChartVar = new Chart(casillerosChart, {
         ],
     },
     options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
         showLines: false, // disable for all datasets
         scales: {
             xAxes: [

@@ -56,11 +56,7 @@ router.get('/admin/casilleros/bringCasillerosEstudiantes',(req,res)=>{
         var script = con.query('select * from vta_casilleros',
         (err,rows,fields)=>{
             if(!err){
-                if(rows.length != 0){
-                    res.send(rows);
-                }else{
-                    res.render('indexAdmin', {err:'No se encuentra Registrado',id: 2});
-                }
+                res.send(rows);
             }else{
                 res.render('indexAdmin', {err:'Server Error',id: 3});
             }
@@ -90,8 +86,8 @@ router.get('/admin/casilleros/asignarCasillero',(req,res)=>{
 router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        var script = con.query('call prc_eliminar_casillero_estudiante(?)',
-        [req.query.id],
+        var script = con.query('call prc_eliminar_casillero_estudiante(?,?)',
+        [req.query.id, req.query.codigo],
         (err,result,fields)=>{
             if(!err){
                 res.send(result);
@@ -103,6 +99,40 @@ router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
         res.render('index');
     }
     
+});
+
+router.get('/admin/casilleros/agregarCasillero',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('call prc_insertar_casillero(?)',
+        [req.query.codigo],
+        (err,result,fields)=>{
+            if(!err){
+                res.send(result);
+            }else{
+                res.send({err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
+});
+
+router.get('/admin/casilleros/eliminarCasillero',(req,res)=>{
+    if(req.session.value){
+        let usuario = req.session.value;
+        var script = con.query('call prc_eliminar_casillero(?)',
+        [req.query.codigo],
+        (err,result,fields)=>{
+            if(!err){
+                res.send(result);
+            }else{
+                res.send({err:'Server Error',id: 3});
+            }
+        });
+    }else{
+        res.render('index');
+    }
 });
 
 module.exports = router;

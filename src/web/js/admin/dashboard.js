@@ -43,7 +43,6 @@ const animateCSS = (element, animation) =>
     let prefix = 'animate__';
     const animationName = `${prefix}${animation}`;
     const node = document.querySelector(element);
-    console.log(node)
 
     node.classList.add(`${prefix}animated`, animationName);
 
@@ -224,12 +223,10 @@ function cargarDatos() {
         contentType: "application/json",
     }).then(
         (response) => {
-            // let cont = 0;
-            // for (var [key, value] of Object.entries(response)) {
-            //     addData(usuarioCharVar, key, value);
-            //     cont += value;
-            // }
-            // $('#usuarios-stats').text(cont);
+            console.log(response);
+            $('#casilleros-stats').text(response.total.length);
+            addData(casillerosChartVar,'En Uso', response.uso.length);
+            addData(casillerosChartVar,'Sin Usar',response.total.length - response.uso.length);
         },
         (error) => {}
     );

@@ -4,32 +4,56 @@
     </button>
     <div class="p-0" id="navbarSupportedContent">
         <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0">
-            <li class="d-inline dropdown">
+            <li class="d-inline px-3">
+                <a class=" nav-link mx-0 px-0 text-decoration-none d-flex justify-content-between" href="/admin/perfil" >
+                    <div class="" id="nombreUsuario">
+                        <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
+                        <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
+                        <h6 class="align-middle text-white mb-0">
+                            <%= usernameNombre %>&nbsp;<%= usernameApellido %> <span class="mr-2"></span>
+                            <% if (!usuario.foto) { %>
+                                <i class="fas fa-user-circle text-white" style="font-size: 20px;" 
+                                data-toggle="tooltip" data-placement="bottom" title="Cambiar foto de perfil" id="tooltipFoto"></i>
+                            <% } %>
+                            <%if (usuario.foto){%>
+                                <img src="./../public/uploads/<%= usuario.foto%>" class="rounded-circle" width="30px">
+                            <%}%>
+                        </h6>
+                    </div>
+                </a>
+            </li>
+            <li class="d-inline px-3 dropdown">
                 <div class="dropdown d-inline">
-                    <a class=" mr-2 " href="#" role="button" id="notificaciones" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" 
+                    data-toggle="tooltip" data-placement="bottom" title="Notificaciones">
                         <i class="fas fa-bell text-white" style="font-size: 20px;"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificaciones">
-                        <p class="px-auto">Notificaciones</p>
+                    <div class="dropdownNotificaciones" id="notificacionesDrop">
+                        <strong class="px-2 py-3">Notificaciones</strong>
                         <hr>
-                        <div class="container-fluid p-0" id="notifications">
+                        <div class="container-fluid px-2" id="notifications">
 
                         </div>
                         <hr>
-                        <a class="dropdown-item text-center" href="#">...</a>
+                        <a class="dropdown-item text-center mt-auto" href="#">...</a>
                     </div>
                 </div>
             </li>
-            <li class="d-inline">
-                <a class="nav-link my-auto mx-1" href="/admin/logout"><i class="fas fa-power-off"></i>&nbsp; Salir</a>
-            </li>
-            <li class="d-inline">
-                <a href=""><i class="fas fa-ellipsis-v text-white"></i></a>
+            <li class="d-inline px-3">
+                <a class="nav-link my-auto px-0 mx-0" href="/admin/logout"
+                 data-toggle="tooltip" data-placement="bottom" title="Salir"><i class="fas fa-sign-out-alt" style="font-size: 20px;"></i></a>
             </li>
         </ul>
     </div>
 </nav>
+<script>
+function cargarNotificacionesDropdrown(event){
+    $('#notificaciones').on('click',function () {
+        $('#notificacionesDrop').toggle();
+    });
+}
+document.addEventListener("DOMContentLoaded", cargarNotificacionesDropdrown);
+</script>
 <!-- <div class="progress rounded-0" style="height: 10px;">
     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 </div> -->
