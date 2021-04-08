@@ -220,10 +220,24 @@ router.get('/admin/reportes/morosos',(req,res)=>{
             let s = 'reportes-morosos';
             res.render('admin/reportes/morosos', {usuario,s});
         }else{
-            res.render('indexAdmin');
+            res.redirect('/admin');
         }
     }else{
-        res.render('indexAdmin');
+        res.redirect('/admin');
+    }
+});
+
+router.get('/admin/reportes/asistencia',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-asistencia';
+            res.render('admin/reportes/asistencia', {usuario,s});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
     }
 });
 // ! ----------------------------------- inside routes ------------------------------------

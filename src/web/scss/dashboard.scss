@@ -37,6 +37,7 @@
 }
 #page-content-wrapper {
   min-width: 100vw;
+  position: relative;
 }
 @media (min-width: 768px) { //si el ancho de la pantalla es mayor que 768px 
   #sidebar-wrapper {

@@ -3,7 +3,7 @@
         <i class="fas fa-bars text-white"></i>
     </button>
     <div class="p-0" id="navbarSupportedContent">
-        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0">
+        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0">
             <li class="d-inline px-3">
                 <a class=" nav-link mx-0 px-0 text-decoration-none d-flex justify-content-between" 
                 href="/admin/perfil"<% if (!usuario.foto) { %> data-toggle="tooltip" data-placement="bottom" title="Cambiar foto de perfil" id="tooltipFoto" <% } %>>
@@ -45,6 +45,38 @@
         </ul>
     </div>
 </nav>
+<div id="loadingPage">
+    <div class="d-flex justify-content-center flex-column">
+        <h1 class="display-1 align-self-center text-white"><strong>SIAP</strong></h1>
+        <div class="spinner-border align-self-center text-white" role="status" style="width: 100px; height: 100px;">
+          <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
+<script>
+    function onReady(callback) {
+        let cont =0;
+        var intervalId = window.setInterval(function() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalId);
+                callback.call(this);
+            }
+            cont++;
+            console.log(cont);
+        }, 1000);
+    }
+    
+    function setVisible(selector, visible) {
+        document.querySelector(selector).style.display = visible ? 'block' : 'none';
+    }
+    
+    onReady(function() {
+        $('body').removeClass('overflow-hidden');
+        animateCSS('#loadingPage','fadeOutDownBig').then(()=>{
+            $('#loadingPage').hide();
+        })
+    });
+</script>
 <script>
 function cargarNotificacionesDropdrown(event){
     $('#notificaciones').on('click',function () {

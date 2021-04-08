@@ -54,6 +54,8 @@ app.use(require('./routes/admin/stats.routes'));
 app.use(require('./routes/admin/admin.ajax.routes'));
 app.use(require('./routes/admin/casilleros/casilleros.routes'));
 app.use(require('./routes/admin/reportes/morosidad.routes'));
+app.use(require('./routes/admin/reportes/asistencia.routes'));
+app.use(require('./routes/profesor/profesores.routes'));
 
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/document.routes'));
@@ -63,7 +65,6 @@ app.use(require('./routes/user_temp.routes'));
 app.use(require('./routes/student.routes'));
 app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
-app.use(require('./routes/profesor.routes'));
 app.use(require('./routes/reposition.routes'));
 app.use(require('./routes/attendance.routes'));
 app.use(require('./routes/group.routes'));

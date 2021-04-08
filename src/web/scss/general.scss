@@ -160,6 +160,7 @@ button{
     height: 40px;
     vertical-align: middle !important;
     text-decoration: none !important;
+    border-radius: 4px;
     &:hover{
         background-color: white;
     }
@@ -232,11 +233,19 @@ select{
 .rounded-xl{
     border-radius:0px;
 }
+.footer-c{
+    position: static;
+    width: 100%;
+    bottom: 0;
+
+}
+
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) { 
     .rounded-xl{
         border-radius: 20px !important;
     }
+    
 }
 
 // Medium devices (tablets, 768px and up)
@@ -246,12 +255,12 @@ select{
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) { 
-
+    
 }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) { 
-
+    
 }
 #loadingPage{
     position: absolute;
@@ -339,4 +348,9 @@ select{
     border: 1px $light solid;
     min-height: 300px;
     display: none;
-  }
+}
+.pro-nav-link{
+    &:hover{
+        background-color: $dark-primary;
+    }
+}

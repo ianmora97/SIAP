@@ -34,7 +34,8 @@
   transition: all .25s; }
 
 #page-content-wrapper {
-  min-width: 100vw; }
+  min-width: 100vw;
+  position: relative; }
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
