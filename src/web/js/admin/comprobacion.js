@@ -1,10 +1,10 @@
 var estudiantes = [];
 
-function loaded(event){
+function loaded(event) {
     events(event);
 }
 
-function events(event){
+function events(event) {
     traer_estudiantes();
     toogleMenu();
     get_today_date();
@@ -15,25 +15,25 @@ function events(event){
     actualizar();
 }
 const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
-    console.log(node)
 
-    node.classList.add(`${prefix}animated`, animationName);
+    // We create a Promise and return it
+    new Promise((resolve, reject) => {
+        let prefix = 'animate__';
+        const animationName = `${prefix}${animation}`;
+        const node = document.querySelector(element);
+        console.log(node)
 
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
+        node.classList.add(`${prefix}animated`, animationName);
 
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
+        // When the animation ends, we clean the classes and resolve the Promise
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
+        }
+
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
 function closeFilter(params) {
     $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
     setTimeout(() => {
@@ -43,37 +43,37 @@ function closeFilter(params) {
 }
 function openFilter(params) {
     $('#containerFilter').show();
-    animateCSS('#containerFilter','fadeInRight')
+    animateCSS('#containerFilter', 'fadeInRight')
 }
 function filtrarX() {
-    $('#filtrar_funcionarios').on('click',function(){
+    $('#filtrar_funcionarios').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarFuncionarios(estudiantes));
     });
-    $('#filtrar_estudiantes').on('click',function(){
+    $('#filtrar_estudiantes').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarEstudiantes(estudiantes));
     });
-    $('#filtrar_confirmados').on('click',function(){
+    $('#filtrar_confirmados').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarConfirmados(estudiantes));
     });
-    $('#filtrar_nuevos').on('click',function(){
+    $('#filtrar_nuevos').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarNuevos(estudiantes));
     });
-    $('#filtrar_todos').on('click',function(){
+    $('#filtrar_todos').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         mostrarUsuarios(estudiantes);
     });
 }
-function filtrarTodos(){
-    $('#actualizar_lista').on('click',function(){
+function filtrarTodos() {
+    $('#actualizar_lista').on('click', function () {
         let table = $('#estudiantes_TableOrder').DataTable();
         table.destroy();
         traer_estudiantes();
@@ -83,7 +83,7 @@ function filtrarTodos(){
 function buscarInlcudes(estudiantes, buscar) {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {
-        if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar) ) {
+        if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar)) {
             result.push(estudiantes[i]);
         }
     }
@@ -101,11 +101,11 @@ function get_today_date() {
 
 function load_stats(usuarios) {
     let cantidad = usuarios.length;
-    let verificados=0;
-    let nuevos =0 ;
+    let verificados = 0;
+    let nuevos = 0;
     for (let i of usuarios) {
-        if(i.estado) verificados++;
-        if(!i.estado) nuevos++;
+        if (i.estado) verificados++;
+        if (!i.estado) nuevos++;
     }
     $('#usuarios_registrados_stats').text(cantidad);
     $('#usuarios_verificados_stats').text(verificados);
@@ -113,19 +113,19 @@ function load_stats(usuarios) {
 }
 function searchonfind() {
     var table = $('#estudiantes_TableOrder').DataTable();
-    let val = $('#barraBuscar').val();           
-    let result = table.search( val ).draw();
-    
+    let val = $('#barraBuscar').val();
+    let result = table.search(val).draw();
+
 }
 function traer_estudiantes() {
-    let ajaxTime= new Date().getTime();
+    let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/usuariostemp",
         contentType: "application/json"
     }).then((usuarios) => {
         let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime/1000);
+        let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
         $('#cargarDatosSpinner').hide();
@@ -138,7 +138,7 @@ function traer_estudiantes() {
 
 function mostrarUsuarios(usuarios) {
     $('#lista_usuarios_temporales').html(' ');
-    usuarios.forEach(u =>{
+    usuarios.forEach(u => {
         llenarListaUsuarios(u);
     });
     let database = '#estudiantes_TableOrder';
@@ -151,17 +151,17 @@ function mostrarUsuarios(usuarios) {
             "lengthMenu": "Mostrar _MENU_ registros",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
-                "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
+                "first": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
                 "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
-                "next":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
-                "last":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
+                "next": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
+                "last": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
             },
             "aria": {
                 "paginate": {
-                    "first":    'Primera',
+                    "first": 'Primera',
                     "previous": 'Anterior',
-                    "next":     'Siguiente',
-                    "last":     'Última'
+                    "next": 'Siguiente',
+                    "last": 'Última'
                 }
             }
         }
@@ -170,7 +170,7 @@ function mostrarUsuarios(usuarios) {
     $('#botonesCambiarTable').html('');
     $('#showlenghtentries').html('');
 
-    $('#estudiantes_TableOrder_filter').css('display','none');
+    $('#estudiantes_TableOrder_filter').css('display', 'none');
     $('#estudiantes_TableOrder_info').appendTo('#informacionTable');
 
     $('#estudiantes_TableOrder_paginate').appendTo('#botonesCambiarTable');
@@ -189,24 +189,24 @@ function llenarListaUsuarios(u) {
     let nacimiento = u.nacimiento;
     let sexo = u.sexo;
     let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario';
-    let creado = u.creado.substring(0,u.creado.indexOf(' '));
+    let creado = u.creado.substring(0, u.creado.indexOf(' '));
     let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
     $('#lista_usuarios_temporales').append(
-        '<tr>'+
-        '<td>'+cedula+'</td>'+
-        '<td>'+nombre+' '+apellido+'</td>'+
-        '<td>'+nacimiento+'</td>'+
-        '<td>'+sexo+'</td>'+
-        '<td>'+tipo+'</td>'+
-        '<td>'+creado+'</td>'+
-        '<td> <span role="button" class="badge badge-'+colorEstado+' py-0" style="font-size:15px;" data-toggle="modal" data-target="#modalCambiarEstado" '+
-        'data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'">'+estado+'</span></td>'+
+        '<tr>' +
+        '<td>' + cedula + '</td>' +
+        '<td>' + nombre + ' ' + apellido + '</td>' +
+        '<td>' + nacimiento + '</td>' +
+        '<td>' + sexo + '</td>' +
+        '<td>' + tipo + '</td>' +
+        '<td>' + creado + '</td>' +
+        '<td> <span role="button" class="badge badge-' + colorEstado + ' py-0" style="font-size:15px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
+        'data-cedula="' + cedula + '" data-nombre="' + nombre + ' ' + apellido + '">' + estado + '</span></td>' +
         '</tr>'
     );
 }
-function actualizar(){
-    socket.on('notificacion:nuevo_registro',function (data) {
+function actualizar() {
+    socket.on('notificacion:nuevo_registro', function (data) {
         traer_estudiantes();
     });
 }
@@ -224,7 +224,7 @@ function cambiarEstadoSend() {
         let cedula = $('#cedulaTarget').text();
         let email = 'ianmorar03@gmail.com';
         let nombre = $('#nombreTarget').text();
-        let data = {cedula, email, nombre}
+        let data = { cedula, email, nombre }
         $.ajax({
             type: "POST",
             url: "/estudiante/insertarUsuarioPermanente",
@@ -235,12 +235,12 @@ function cambiarEstadoSend() {
             $('#modalCambiarEstado').modal('hide');
             traer_estudiantes();
         }, (error) => {
-            $('#alerta_error_estado').css('display','block');
-        });        
+            $('#alerta_error_estado').css('display', 'block');
+        });
     });
     $('#CambiarEstadoRechazarBoton').on('click', function () {
         let cedula = $('#cedulaTarget').text();
-        let data = {cedula}
+        let data = { cedula }
         $.ajax({
             type: "POST",
             url: "/estudiante/rechazarEstudiante",
@@ -251,12 +251,12 @@ function cambiarEstadoSend() {
             $('#modalCambiarEstado').modal('hide');
             traer_estudiantes();
         }, (error) => {
-            $('#alerta_error_estado').css('display','block');
-        });        
+            $('#alerta_error_estado').css('display', 'block');
+        });
     });
 }
 function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle").click(function (e) {
         e.preventDefault();
         //$('#sidebar-wrapper').css('position','relative');
         $("#wrapper").toggleClass("toggled");
@@ -266,46 +266,46 @@ function toogleMenu() {
         //$("#sidebar-wrapper").animate({left:'-200'},1000);
     });
 }
-var filtrarNuevos = (estudiantes)=>{
+var filtrarNuevos = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if(!(estudiantes[i].estado)){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if (!(estudiantes[i].estado)) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarConfirmados = (estudiantes)=>{
+var filtrarConfirmados = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].estado)){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].estado)) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarEstudiantes = (estudiantes)=>{
+var filtrarEstudiantes = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario == '1')){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].tipo_usuario == '1')) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarFuncionarios = (estudiantes)=>{
+var filtrarFuncionarios = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario != '1')){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].tipo_usuario != '1')) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarBuscar = (estudiantes, s)=>{
+var filtrarBuscar = (estudiantes, s) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++) 
-        if(estudiantes[i].nombre == s.toUpperCase() || estudiantes[i].nombre == s || estudiantes[i].cedula == s) 
+    for (let i = 0; i < estudiantes.length; i++)
+        if (estudiantes[i].nombre == s.toUpperCase() || estudiantes[i].nombre == s || estudiantes[i].cedula == s)
             result.push(estudiantes[i]);
     return result;
 }

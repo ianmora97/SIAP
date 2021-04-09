@@ -23,7 +23,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-secondary">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Matricula <span id="nombreTarget"></span></h5>
+                <h5 class="modal-title text-white" id="exampleModalLabel">Matrícula <span id="nombreTarget"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -37,6 +37,16 @@
                     </div>
                     <span class="sr-only" id="cedulaTarget"></span>
                     Aqui los datos de las personas
+                    <table class="table table-hover table-responsive-md table-borderless" id="dataTableDetallado">
+                        <thead>
+                            <tr>
+                               ...
+                            </tr>
+                        </thead>
+                        <tbody id="lista-estudiantes-detallados">
+                        
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
@@ -54,7 +64,7 @@
                 <ol class="breadcrumb ">
                     <li class="breadcrumb-item"><a href="#">Matricula</a></li>
                     <li class="breadcrumb-item"><a href="#">Solicitudes de Matricula</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Lista de Estudiantes Matriculados</li>
+                    <li class="breadcrumb-item active" aria-current="page">Lista de estudiantes matriculados</li>
                 </ol>
             </nav>
             <div class="container-fluid">
@@ -249,8 +259,8 @@
                         </div>
                     </div>
                     <div class="row w-100 mx-0 px-2" style="height: 550px; overflow-y: auto;">                            
-                        <table class="table table-hover table-responsive-md table-borderless" id="dataTable">
-                            <thead>
+                        <table class="table table-hover table-responsive-md table-borderless" id="dataTableDetallado">
+                            <thead  style = "max-height: 30px;">
                                 <tr>
                                     <th class="bg-dark text-white sticky-top" scope="col">Cédula</th>
                                     <th class="bg-dark text-white sticky-top" scope="col">Nombre</th>
@@ -259,7 +269,7 @@
                                     <th class="bg-dark text-white sticky-top" scope="col">Nivel</th>
                                     <th class="bg-dark text-white sticky-top" scope="col">Profesor</th>
                                     <th class="bg-dark text-white sticky-top" scope="col">Meses</th>
-                                    <th class="bg-dark text-white sticky-top" scope="col">Fecha de matricula</th>
+                                    <th class="bg-dark text-white sticky-top" scope="col">Fecha de matrícula</th>
                                     <th class="bg-dark text-white sticky-top" scope="col">Ver</th>
                                 </tr>
                             </thead>
