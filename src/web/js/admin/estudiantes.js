@@ -206,11 +206,11 @@ function cargar_estudiante(solicitudes) {
 }
 
 
-  function moverlabel(label_id, this){
-      console.log(this)
-        $('#id_label_est_'+label_id+'').html(nivel)
-        
-        }
+function moverlabel(label_id, nivel){
+   
+      $('#id_label_est_'+label_id+'').html( nivel.value==1?'Iniciación': nivel.value==2?'Perfeccionamiento': 'Entrenamiento deportivo');
+      
+      }
 
 function llenar_Estudiantes(solicitudes) {
  
@@ -242,7 +242,7 @@ function llenar_Estudiantes(solicitudes) {
 
 
         '<label id="id_label_est_'+id+'" for="customRange_nivel">' + descripcion + '</label>' +
-        '<input onchange="moverlabel(id_label_est_'+id+', this)" type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '"></input>' +
+        '<input onchange="moverlabel('+id+', this)" type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '"></input>' +
         "</td>" +
         "<td>" +
         matricula +
