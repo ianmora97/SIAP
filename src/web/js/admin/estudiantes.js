@@ -58,22 +58,19 @@ function openModalAdd() {
 
         $('#v_nombre_usuario').val(estudiante.usuario)
         $('#v_correo').val(estudiante.correo)
-        $('#v_fec_nacimiento').val(estudiante.nacimiento )
+        $('#v_fec_nacimiento').val(estudiante.nacimiento)
         $('#v_sexo').val(estudiante.sexo)
         $('#v_telefono').val(estudiante.telefono)
-        $('#v_celular').val(estudiante.celular )
-        $('#v_rol').val(estudiante.rol )
-        $('#v_cam_nivel').val(estudiante.nivel )
-        
-       
-        
+        $('#v_celular').val(estudiante.celular)
+        $('#v_rol').val(estudiante.tipo)
+        $('#v_Dirección').val(estudiante.direccion)
+        $('#v_cam_nivel').val(estudiante.nivel)
+        $('#v_tel_emergencia').val(estudiante.telefono_emergencia)
+        $('#v_provincias').val(estudiante.provincia)
+        $('#v_canton').val(estudiante.canton)
+        $('#v_distrito').val(estudiante.distrito)
 
 
-
-//< label class="switch" >
-             //   <input type="checkbox" checked>
-             //</input>       <span class="slider round"></span>
-           //</input> </label>
 
 
 
@@ -209,19 +206,27 @@ function cargar_estudiante(solicitudes) {
 }
 
 
+function moverlabel(label_id, nivel){
+   
+      $('#id_label_est_'+label_id+'').html( nivel.value==1?'Iniciación': nivel.value==2?'Perfeccionamiento': 'Entrenamiento deportivo');
+      
+      }
 
 function llenar_Estudiantes(solicitudes) {
+ 
 
     let id = solicitudes.id;
     let cedula = solicitudes.cedula;
-    let nivel = solicitudes.descripcion;
+    let nivel = solicitudes.nivel;
+    let descripcion = solicitudes.descripcion;
     let nombre = solicitudes.nombre;
     let apellido = solicitudes.apellido;
     let matricula = solicitudes.matricula;
     let estado = solicitudes.estado == 0 ? 'Inactivo' : 'Activo';
     let color_estado = solicitudes.estado == 0 ? 'dark' : 'success';
     let color_moroso = solicitudes.moroso == 0 ? 'success' : 'secondary';
-    let moroso = solicitudes.moroso == 1 ? 'Si' : 'No';
+    let moroso = solicitudes.moroso == 1 ? "checked " : " ";
+
     $("#lista_estudiantes").append(
         "<tr>" +
         "<td>" +
@@ -234,7 +239,10 @@ function llenar_Estudiantes(solicitudes) {
         nombre + " " + apellido +
         "</td>" +
         "<td>" +
-        nivel +
+
+
+        '<label id="id_label_est_'+id+'" for="customRange_nivel">' + descripcion + '</label>' +
+        '<input onchange="moverlabel('+id+', this)" type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '"></input>' +
         "</td>" +
         "<td>" +
         matricula +
@@ -245,8 +253,13 @@ function llenar_Estudiantes(solicitudes) {
         "</td>" +
         "<td> por hacer</td>" +
         '<td>' +
-        '<button type="button" class="btn btn-' + color_moroso + '" disabled>' +
-        moroso + '</button>' +
+
+        ' <div class="custom-control custom-switch">' +
+
+        ' <input type="checkbox" class="custom-control-input" id="customSwitch_' + id + ' "  ' + moroso + ' >' +
+        ' <label class="custom-control-label" for="customSwitch_' + id + '"></label>' +
+
+        '</div>' +
         "</td>" +
         '<td class="list-action ">' +
         '<a class="btn btn-primary text-white" data-id="' + id + "Ver mas" + '" data-toggle="modal" data-target="#modalVerEstudiante">' +

@@ -1,9 +1,7 @@
 <!-- 
     * Universidad Nacional de Costa Rica
     * 2020-2021
-
     * Proyecto de Ingenieria en Sistemas I-III
-
     * Estudiantes:
     * Edso Cruz Viquez
     * Ian Mora Rodriguez
@@ -166,8 +164,7 @@
         </div>
     </div>
 
-    <div class="modal " id="modalVerEstudiante" tabindex="-1" aria-labelledby="verModalEstudiante"
-        aria-hidden="true">
+    <div class="modal " id="modalVerEstudiante" tabindex="-1" aria-labelledby="verModalEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-secondary">
@@ -178,55 +175,82 @@
                 </div>
                 <div class="modal-body">
 
-                    <table class="table table-hover table-responsive table-borderless"
-                        id="dataTableEstudianteDetallado" >
-                        <thead >
-                            <tr >
-
-                                
-                               
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Nombre de usuario</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Correo</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Fecha de nacimiento</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Sexo</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Teléfono</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">celular</th>
-                            </thead>
-                            <thead >
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Rol</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Cambiar de nivel</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Provincia</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Cantón</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Distrito</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Dirección</th>
-                                <th style= "vertical-align: middle; text-align: center" class = "bg-dark text-white  sticky-top"scope="col">Teléfono de emergencia</th>
-                                
+                    <table class="table table-hover table-responsive table-borderless" id="dataTableEstudianteDetallado"
+                        style="display:inline-table;">
+                        <thead>
+                            <tr>
 
 
+
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Nombre de usuario</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Correo</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Fecha de nacimiento</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Sexo</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Teléfono</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">celular</th>
+                        </thead>
+
+                        </tr>
+
+                        <tbody id="datos-estudiante-detallado">
+
+                            <tr>
+
+                                <td><input type="text" id="v_nombre_usuario"></td>
+                                <td><input type="text" id="v_correo"></td>
+                                <td><input type="text" id="v_fec_nacimiento"></td>
+                                <td><input type="text" id="v_sexo"></td>
+                                <td><input type="text" id="v_telefono"></td>
+                                <td><input type="text" id="v_celular"></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-hover table-responsive- table-borderless" style="display:inline-table;">
+                        <thead>
+                            <tr>
+
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Rol</th>
+
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Provincia</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Cantón</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Distrito</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Dirección</th>
+                                <th style="vertical-align: middle; text-align: center"
+                                    class="bg-dark text-white  sticky-top" scope="col">Teléfono de emergencia</th>
 
                             </tr>
                         </thead>
-                        <tbody id="datos-estudiante-detallado">
+                        <tbody">
 
-                          <tr>
-                              
-                              <td><input type="text" id="v_nombre_usuario"></td>
-                              <td><input type="text" id="v_correo"></td>
-                              <td><input type="text" id="v_fec_nacimiento"></td>
-                              <td><input type="text" id="v_sexo"></td>
-                              <td><input type="text" id="v_telefono"></td>
-                              <td><input type="text" id="v_celular"></td>
-                              <td><input type="text" id="v_rol"></td>
-                              <td><input type="text" id="v_cam_nivel"></td>
-                              <td><input type="text" id="v_provincias"></td>
-                              <td><input type="text" id="v_canton"></td>
-                              <td><input type="text" id="v_cam_nivel"></td>
-                          </tr>
-                        </tbody>
+                            <tr>
+                                <td><input type="text" id="v_rol"></td>
+                                <td><input type="text" id="v_provincias"></td>
+                                <td><input type="text" id="v_canton"></td>
+                                <td><input type="text" id="v_distrito"></td>
+                                <td><input type="text" id="v_Dirección"></td>
+                                <td><input type="text" id="v_tel_emergencia"></td>
+
+                            </tr>
+                            </tbody>
                     </table>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id= "closeModalEstudianteDetallado" data-dismiss="modal">Cancelar</button>
+                <div class="modal-footer ">
+                    <button type="button" class="btn btn-danger" id="closeModalEstudianteDetallado"
+                        data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" id="Guardar-datos-estudiante">Guardar</button>
                 </div>
             </div>
