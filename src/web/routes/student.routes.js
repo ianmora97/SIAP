@@ -12,11 +12,10 @@ const email = require('../email');
 
 //selecciona todos los estudiantes
 router.get('/estudiantes',(req,res)=>{
+	console.log(req);
     var script = con.query('select * from t_estudiante',
     (err,rows,fields)=>{
-        if(rows[0] != undefined){
-            res.send(rows);
-        }
+        res.send(rows);
     });
 });
 
