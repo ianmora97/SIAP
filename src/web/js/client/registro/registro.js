@@ -199,7 +199,7 @@ function registrar_usuario_ajax(){
         let nombreUsuario = $('#usuario_registro').val();
         let clave = $('#clave_registro').val();
         let sexo = $("#sexo option:selected" ).val();
-        let tipoUser = parseInt($("#perfil option:selected" ).val());
+        let tipoUser = $("#perfil option:selected" ).val();
         let email = $('#email').val();
 
         let data = {cedula,nombre,apellido,nacimiento,nombreUsuario,clave,sexo,tipoUser,email};

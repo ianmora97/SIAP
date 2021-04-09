@@ -15,7 +15,7 @@ var clasesPerdidas = [];
 function cargar_clases_perdidas() {
     $.ajax({
         type: "GET",
-        url: "/reposicion/porEstudiante",
+        url: "/clases/reposicion/porEstudiante",
         contentType: "application/json",
     }).then((asistenciaPerdida) => {
         clasesPerdidas = asistenciaPerdida;
@@ -26,8 +26,35 @@ function cargar_clases_perdidas() {
             alert(error.status);
         }
     );
-}
 
+    $.ajax({
+        type: "GET",
+        url: "/clases/asistencia/porEstudiante",
+        contentType: "application/json",
+    }).then((asistencias) => {
+        clasesPerdidas = asistencias;
+        cargarListaAsistencias(asistencias);
+    },
+        (error) => {
+            alert(error.status);
+        }
+    );
+}
+function cargarListaAsistencias(asistencias) {
+    $("#lista_asistencia_usuario").html("");
+    asistencias.forEach((a) => {
+        llenarAsistenciasTabla(a);
+    });
+}
+function llenarAsistenciasTabla(a) {
+    $("#lista_asistencia_usuario").append(`
+        <tr>
+            <td>Grupo ${a.id_grupo} (${a.codigo})</td>
+            <td><span style="font-size:12px;" class="w-75 badge badge-${a.estado == 'Presente'? 'success':a.estado == 'Ausente'? 'danger':'warning' }">${a.estado}</span></td>
+            <td>${a.fecha}</td>
+        </tr>
+    `);
+}
 function cargarAsistenciaPerdida(asistenciaPerdida) {
     
    asistenciaPerdida = filtra_X_ausencias_justificables(asistenciaPerdida);
@@ -56,7 +83,6 @@ function llenarAsistenciaPerdida(asistenciaPerdida) {
     let actual = new Date();
     
     let Dia = 1000*60*60*24;
-    // console.log(semana, actual);
 
     let tiempo_restante = Math.floor((semana - actual) / Dia);
 
@@ -113,7 +139,6 @@ var clasesReservadas = [];
 var clasesExistentes = [];
 
 function cargar_clases_reservadas() { // ocupo unir este metodo con el de abajo
-    console.log('yes_2');
     $.ajax({
         type: "GET",
         url: "/reposicion/cursosDisponiblesPorNivel",// el de la tabla de solicitudes
@@ -280,7 +305,6 @@ function checkFecha(id) {
                 
                 let dateToday = d.getFullYear()+'-'+(month)+'-'+(day);
                 $('#fechaReposicion').val(dateToday);
-                console.log($('#fechaReposicion').val());
             });
         }   
     }

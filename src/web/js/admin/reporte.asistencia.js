@@ -140,7 +140,7 @@ function fillNavTabs(data) {
         showTabsNavBarGroups(g,i);
         g_cantidadEstudiantes += g.cupo_actual;
     });
-    g_mediaEstudiantes = (g_cantidadEstudiantes - (g_contAusentes/g_cantidadEstudiantes)) * 100;
+    g_mediaEstudiantes = (g_cantidadEstudiantes - (g_contAusentes/g_cantidadEstudiantes));
     $('#estudiantes_ausentes_stats').html(g_contAusentes);
     $('#estudiantes_media_stats').html(g_mediaEstudiantes+'<small>%</small>');
     $('#estudiantes_total_stats').html(g_cantidadEstudiantes);

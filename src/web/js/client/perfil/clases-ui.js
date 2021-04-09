@@ -42,7 +42,7 @@ function desmatricula(){
         $('#editMatriculaActual').modal('toggle');
         let button = $(event.relatedTarget)
         let id = button.data('id')
-        console.log(id);
+
         $('#idCursoDesmatricular').attr('data-id',id);
     });
     $('#desmatricularCursoAceptar').on('click',function(){
@@ -109,6 +109,8 @@ function toWeekDay(dia) {
             return 5;
         case 'SABADO':
             return 6;
+        case 'SÁBADO':
+            return 6;
         case 'DOMINGO':
             return 7;
         default:
@@ -140,9 +142,11 @@ function filtrarCursosActuales(cursos) {
     return result;
 }
 function forEachCursosActuales(cursos){
+    
     let result = filtrarCursosActuales(cursos);
+    console.log(result);
     $('#lista_cursos_actuales').html('');
-    result.forEach((c)=>{
+    cursos.forEach((c)=>{
         mostrarCursosActuales(c);
     });
 }
@@ -163,7 +167,8 @@ function mostrarCursosActuales(c) {
         '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+hora+'</th>'+
         '<tr>'
     );
-    let weekday = toWeekDay(dia);
+    let weekday = toWeekDay(dia.toUpperCase());
+    console.log('weekday: ',weekday,dia);
     $('#calendar').fullCalendar('renderEvent', {
         title: 'Piscina Day!',
         description: 'Taller de la piscina',
@@ -173,6 +178,7 @@ function mostrarCursosActuales(c) {
         className: 'fc-bg-default',
         icon : "swimmer"
     });
+    console.log('termino',id_matricula)
 }
 function forEachCursosMatriculados(cursos) {
     $('#lista_historial_cursos').html('');

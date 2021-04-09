@@ -194,8 +194,8 @@ function showGrupos(g){
     let cupo_actual = g.cupo_actual;
     let est = cupo_actual == 1 ? 'Estudiante':'Estudiantes';
     $('#clasesLista').append(`
-    <div class="col-md-4">
-        <div class="card rounded-xl shadow border-0 mx-auto" style="width: 100%;">
+    <div class="col-md mb-5">
+        <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px;">
             <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
             <div class="card-body">
                 <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora}</h5>

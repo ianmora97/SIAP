@@ -1,5 +1,6 @@
   $( document ).ready(function() {
-    $('#calendar').fullCalendar({
+    $('#calendar').fullCalendar(
+        {
         locale: 'es',
         themeSystem: 'bootstrap4',
         defaultView: 'agendaWeek', //agendaWeek, listWeek, month, dayGridWeek, timeGridDay
@@ -12,6 +13,7 @@
             let d = new Date();
             let startDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + '1';
             let endDate = d.getFullYear() + '-' + (d.getMonth() + 2) + '-' + '2';
+            
             return {
               start: startDate,
               end: endDate //startDate.clone().add(1, 'months')
@@ -32,5 +34,7 @@
                 $('.eventUrl').attr('href',event.url);
                 $('#modal-view-event').modal();
         },
-    });
+    }
+    );
+    console.log('se construyo bien');
 });

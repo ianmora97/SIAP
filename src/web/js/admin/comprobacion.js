@@ -148,7 +148,7 @@ function mostrarUsuarios(usuarios) {
             "zeroRecords": "No se encontraron estudiantes",
             "infoEmpty": "No hay registros disponibles!",
             "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ registros",
+            "lengthMenu": "Mostrar _MENU_ ",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
                 "first": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
@@ -188,19 +188,19 @@ function llenarListaUsuarios(u) {
     let apellido = u.apellido;
     let nacimiento = u.nacimiento;
     let sexo = u.sexo;
-    let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario';
+    let tipo = u.tipo_usuario;
     let creado = u.creado.substring(0, u.creado.indexOf(' '));
     let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
     $('#lista_usuarios_temporales').append(
-        '<tr>' +
+        '<tr style="height:calc(55vh / 10);">' +
         '<td>' + cedula + '</td>' +
         '<td>' + nombre + ' ' + apellido + '</td>' +
         '<td>' + nacimiento + '</td>' +
         '<td>' + sexo + '</td>' +
         '<td>' + tipo + '</td>' +
         '<td>' + creado + '</td>' +
-        '<td> <span role="button" class="badge badge-' + colorEstado + ' py-0" style="font-size:15px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
+        '<td> <span role="button" class="badge badge-' + colorEstado + ' w-75" style="font-size:12px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
         'data-cedula="' + cedula + '" data-nombre="' + nombre + ' ' + apellido + '">' + estado + '</span></td>' +
         '</tr>'
     );
@@ -233,6 +233,8 @@ function cambiarEstadoSend() {
         }).then((response) => {
             console.log(response);
             $('#modalCambiarEstado').modal('hide');
+            let table = $('#estudiantes_TableOrder').DataTable();
+            table.destroy();
             traer_estudiantes();
         }, (error) => {
             $('#alerta_error_estado').css('display', 'block');
@@ -287,7 +289,8 @@ var filtrarConfirmados = (estudiantes) => {
 var filtrarEstudiantes = (estudiantes) => {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {
-        if ((estudiantes[i].tipo_usuario == '1')) {
+        if ((estudiantes[i].tipo_usuario == 'Estudiante')) {
+            console.log('est');
             result.push(estudiantes[i]);
         }
     }
@@ -296,7 +299,8 @@ var filtrarEstudiantes = (estudiantes) => {
 var filtrarFuncionarios = (estudiantes) => {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {
-        if ((estudiantes[i].tipo_usuario != '1')) {
+        if ((estudiantes[i].tipo_usuario == 'Funcionario')) {
+            console.log('funcionario');
             result.push(estudiantes[i]);
         }
     }

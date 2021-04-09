@@ -114,6 +114,10 @@
                     <a class="nav-link" id="reposicion-matricula-tab" data-toggle="tab" href="#reposicion-matricula"
                         role="tab" aria-controls="reposicion-matricula" aria-selected="false">Reposición de clases</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="asistencia-usuario-tab" data-toggle="tab" href="#asistencia-usuario"
+                        role="tab" aria-controls="asistencia-usuario" aria-selected="false">Asistencia</a>
+                </li>
                 <span class="ml-auto"><%= usuario.cedula%></span>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -142,11 +146,7 @@
 
                             </tbody>
                         </table>
-                        <div class="text-center w-100" id="cargarCursosActuales">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="tab-pane fade  bg-white" id="historial-matricula" role="tabpanel"
@@ -186,11 +186,7 @@
 
                             </tbody>
                         </table>
-                        <div class="text-center w-100" id="cargarHistorialCursos">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 
@@ -303,7 +299,31 @@
                         </div>
                     </form>
                 </div>
+                <div class="tab-pane fade  bg-white py-2" id="asistencia-usuario" role="tabpanel"
+                    aria-labelledby="asistencia-usuario-tab" style="min-height: 450px;">
+                    <div class="w-100 d-flex justify-content-between">
+                        <h5 class="px-2 my-auto">Asistencia Usuario</h5>
+                        <button class="btn" onclick="window.print()"><i class="fa fa-print fa-2x"
+                                aria-hidden="true"></i> </button>
+                    </div>
+                    <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
+                        <table class="table table-hover table-borderless">
+                            <thead>
+                                <tr>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i
+                                            class="fas fa-swimmer"></i> Grupo</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i
+                                            class="fas fa-qrcode"></i> Estado</th>
+                                    <th class="bg-primary text-white sticky-top" scope="col"><i
+                                            class="fas fa-calendar-day"></i> Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_asistencia_usuario">
 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
         </div>
         <div class="bg-white p-2 shadow rounded-lg mt-4 rounded-lg mb-4">
             <div class="py-2" >
