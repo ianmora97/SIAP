@@ -28,7 +28,7 @@ router.get('/profesores/logout',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let u = req.session.value.usuario;
                 req.session.destroy((err) => {
                     res.render('indexProfesores');
@@ -48,7 +48,7 @@ router.get('/profesores/inicio',(req,res)=>{ //clases es la pagina de inicio
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let v = {usuario, selected:'clases'}
                 res.render('profesor/perfil/inicio',v);
             }else{
@@ -66,7 +66,7 @@ router.get('/profesores/clases',(req,res)=>{ //perfil del profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let v = {usuario, selected:'clases'}
                 res.render('profesor/perfil/inicio',v);
             }else{
@@ -84,7 +84,7 @@ router.get('/profesores/asistencia',(req,res)=>{ //perfil del profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let v = {usuario, selected:'asistencia'}
                 res.render('profesor/perfil/pasarAsistencia',v);
             }else{
@@ -102,7 +102,7 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 console.log(req.query);
                 let script = 'call prc_insertar_asistencia(?,?,?)';
                 var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo],
@@ -128,7 +128,7 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let script = 'select * from vta_grupos where cedula = ?';
                 var query = con.query(script,
                     [req.query.cedula],
@@ -159,7 +159,7 @@ router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por prof
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let script = 'select * from vta_matriculados_por_grupo';
                 var query = con.query(script,
                     [req.query.id],
@@ -188,7 +188,7 @@ router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la i
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let script = 'select * from vta_matriculados_grupo_detalle where cedula_profesor = ?';
                 var query = con.query(script,
                     [req.query.cedula],
@@ -217,7 +217,7 @@ router.post('/profesor/crearAnotacion',(req,res)=>{ // insertar anotacion por pr
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let script = 'call prc_insertar_anotaciones(?,?,?)'; //anotacion, id profesor, id estudiante
                 var query = con.query(script,
                     [req.body.nota, req.body.profesor, req.body.estudiante],
@@ -242,7 +242,7 @@ router.get('/profesor/obtenerAnotacionesPorProfesor',(req,res)=>{ // trer cursos
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
-            if(usuario.rol == 3){
+            if(usuario.rol == 2){
                 let script = 'select * from vta_anotaciones where id_profesor = ? and id_estudiante = ?';
                 var query = con.query(script,
                     [req.query.profesor,req.query.estudiante],

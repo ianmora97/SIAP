@@ -28,7 +28,7 @@ router.post('/admin/log',(req,res)=>{ //login
         (err,rows,fields)=>{
         if(!err){
             if(rows.length != 0){
-                if(rows[0].rol == 2){
+                if(rows[0].rol == 3){
                     console.log(rows[0]);
                     req.session.value = rows[0];
                     let today = new Date();
