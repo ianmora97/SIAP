@@ -18,7 +18,7 @@ con.getConnection(function(err) {
         console.log(err);
         return;
     }else{
-        console.log('[',chalk.green('OK'),'] BD',process.env.DB_DATABASE,'conected');
+        console.log('[',chalk.green('Estamo activo papi'),'] BD',process.env.DB_DATABASE,'conected');
     }
 });
 module.exports = con;

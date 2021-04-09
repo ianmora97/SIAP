@@ -15,39 +15,32 @@ function events(event) {
 var estudiantes = [];
 
 function cargar_Estudiantes() {
-    let ajaxTime= new Date().getTime();
+    let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/matricula/listaest",
         contentType: "application/json",
-    }).then( (solicitudes) => {
+    }).then((solicitudes) => {
         let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime/1000);
+        let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
-            estudiantes = solicitudes;
-            cargarEstudiantes(solicitudes);
-            $('#cargarDatosSpinner').hide();
-        },
+        estudiantes = solicitudes;
+        cargarEstudiantes(solicitudes);
+        $('#cargarDatosSpinner').hide();
+    },
         (error) => {
             alert(error.status);
         }
     );
 }
-function buscarEscritura() {
-    $('#buscar_est_matr').on('keyup',(cantidad)=>{
-        if($('#buscar_est_matr').val() != ''){
-            cargarEstudiantes(filtrarxdia(estudiantes,[],[],$('#buscar_est_matr').val().toUpperCase()));
-        }else{
-            cargarEstudiantes(estudiantes);
-        }
-    });
-}
+
 function cargarEstudiantes(solicitudes) {
     $("#lista-estudiantes").html("");
     console.log(solicitudes);
     solicitudes.forEach((solicitudes) => {
         llenarEstudiantes(solicitudes);
+        
     });
 }
 
@@ -84,15 +77,25 @@ function llenarEstudiantes(solicitudes) {
         "<td>" +
         id_matri +
         "</td>" +
-        '<td class="list-action ">'+
-        '<a class="btn btn-success text-white" data-id="'+id_matricula+'" data-toggle="modal" data-target="#modalVerMatricula">'+
-        '<i class="fas fa-eye"></i>'+
-        '</a>'+
-        '</td>'+
+        '<td class="list-action ">' +
+        '<a class="btn btn-success text-white" data-id="' + id_matricula + '" data-toggle="modal" data-target="#modalVerMatricula">' +
+        '<i class="fas fa-eye"></i>' +
+        '</a>' +
+        '</td>' +
         "</tr>"
     );
 }
 
+
+function buscarEscritura() {
+    $('#buscar_est_matr').on('keyup', (cantidad) => {
+        if ($('#buscar_est_matr').val() != '') {
+            cargarEstudiantes(filtrarxdia(estudiantes, [], [], $('#buscar_est_matr').val().toUpperCase()));
+        } else {
+            cargarEstudiantes(estudiantes);
+        }
+    });
+}
 //------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Fin---
 
 function dropdownhoras() {
@@ -151,7 +154,7 @@ var filtrarxdia = (estudiantes, dias, horas, buscar) => {
 
         if (horas.length == 0 && dias.length == 0 && buscar) {
             for (let i = 0; i < estudiantes.length; i++) {
-                if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar) ) {
+                if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar)) {
                     result.push(estudiantes[i]);
                 }
             }
