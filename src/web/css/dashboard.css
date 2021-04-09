@@ -34,7 +34,8 @@
   transition: all .25s; }
 
 #page-content-wrapper {
-  min-width: 100vw; }
+  min-width: 100vw;
+  position: relative; }
 
 @media (min-width: 768px) {
   #sidebar-wrapper {
@@ -159,7 +160,7 @@
   margin-right: 3px !important; }
 
 .modal-backdrop.show {
-  opacity: 0.1 !important; }
+  opacity: 0.4 !important; }
 
 .dropdown-menu-customize {
   background-color: white;

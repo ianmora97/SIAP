@@ -69,7 +69,6 @@ router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
                             for (var [key, value] of Object.entries(rows[0])) {
                                 tipo['Profesores']=value;
                             }
-                            console.log(tipo)
                             res.send(tipo)
                         }else{
                             res.send({err:'NotFound'});
@@ -85,12 +84,17 @@ router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
     });
 });
 router.get('/admin/ajax/stats/getCasilleros',(req,res)=>{
-    let script = "call prc_seleccionar_talleres";
-    let name_groups = {};
+    let script = "SELECT * FROM vta_casilleros";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
-            rows[0].forEach((row)=>{
-                name_groups[row.descripcion]=0;
+            script = "select * from t_casillero";
+            var query = con.query(script, (err,rows1,fields)=>{
+                if(rows1 != undefined){
+                    script = "select * from t_casillero";
+                    res.send({'uso':rows,'total':rows1});
+                }else{
+                    res.send({err:'ServerError'});
+                }
             });
         }else{
             res.send({err:'ServerError'});

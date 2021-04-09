@@ -29,6 +29,7 @@ router.post('/admin/log',(req,res)=>{ //login
         if(!err){
             if(rows.length != 0){
                 if(rows[0].rol == 2){
+                    console.log(rows[0]);
                     req.session.value = rows[0];
                     let today = new Date();
                     let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -209,6 +210,34 @@ router.get('/admin/casilleros',(req,res)=>{
         }
     }else{
         res.render('indexAdmin');
+    }
+});
+
+router.get('/admin/reportes/morosos',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-morosos';
+            res.render('admin/reportes/morosos', {usuario,s});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
+
+router.get('/admin/reportes/asistencia',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-asistencia';
+            res.render('admin/reportes/asistencia', {usuario,s});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
     }
 });
 // ! ----------------------------------- inside routes ------------------------------------

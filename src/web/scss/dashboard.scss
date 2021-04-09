@@ -37,6 +37,7 @@
 }
 #page-content-wrapper {
   min-width: 100vw;
+  position: relative;
 }
 @media (min-width: 768px) { //si el ancho de la pantalla es mayor que 768px 
   #sidebar-wrapper {
@@ -175,7 +176,7 @@
   margin-right: 3px !important;
 }
 .modal-backdrop.show {
-  opacity: 0.1 !important;
+  opacity: 0.4 !important;
 }
 .dropdown-menu-customize{
   background-color: white;

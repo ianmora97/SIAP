@@ -1,0 +1,81 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Clases</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body style="overflow-x:hidden ;">
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <%- include('perfilHeader') %>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0" id="breadcrumbPages">
+            <li class="breadcrumb-item active"><a href="#">Grupos</a></li>
+            <li class="breadcrumb-item" id="breadcrum-item-listaestudiantes" style="display: none;"><a href="#">Lista de Estudiantes</a></li>
+        </ol>
+    </nav>
+    <div class="container mt-3 ">
+        <div class="alert alert-warning alert-dismissible fade" role="alert" style="display: none;">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
+        </div>
+        <div class="justify-content-between mx-3 p-2 bg-light rounded">
+            <h5 class="font-weight-bold m-0"><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h5>
+        </div>
+        <nav class="d-flex justify-content-between" aria-label="breadcrumb" style="height: 40px;">
+            <button type="button" class="btn" data-page="0" id="pag_ant" style="display: none;"><i class="fas fa-chevron-left"></i></button>
+        </nav>
+        <div id="contentLista" style="min-height: 800px;">
+            <div id="clasesLista">
+                
+            </div>
+            <div id="EstudiantesPorClaseLista" style="display: none;">
+                <ul class="list-group" id="listaUlEstudiantes">
+
+                </ul>
+            </div>
+            <div id="estudianteInformacionLista" style="display: none;">
+                
+            </div>
+        </div>
+    </div>
+    <!-- 
+
+        <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+        </div>
+     -->
+    <%- include('perfilFooter') %>
+    <script src="../../../js/profesor/asistencia.js"></script>
+</body>
+</html>

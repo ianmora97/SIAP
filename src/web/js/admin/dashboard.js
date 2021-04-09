@@ -1,25 +1,7 @@
 function loaded(event){
     events(event);
 }
-function onReady(callback) {
-    var intervalId = window.setInterval(function() {
-      if (document.getElementsByTagName('body')[0] !== undefined) {
-        window.clearInterval(intervalId);
-        callback.call(this);
-      }
-    }, 1000);
-  }
-  
-  function setVisible(selector, visible) {
-    document.querySelector(selector).style.display = visible ? 'block' : 'none';
-  }
-  
-  onReady(function() {
-    $('body').removeClass('overflow-hidden');
-    animateCSS('#loadingPage','fadeOutDownBig').then(()=>{
-        $('#loadingPage').hide();
-    })
-  });
+
 function events(event){
     cargarDatos();
     toogleMenu();
@@ -43,7 +25,6 @@ const animateCSS = (element, animation) =>
     let prefix = 'animate__';
     const animationName = `${prefix}${animation}`;
     const node = document.querySelector(element);
-    console.log(node)
 
     node.classList.add(`${prefix}animated`, animationName);
 
@@ -224,12 +205,10 @@ function cargarDatos() {
         contentType: "application/json",
     }).then(
         (response) => {
-            // let cont = 0;
-            // for (var [key, value] of Object.entries(response)) {
-            //     addData(usuarioCharVar, key, value);
-            //     cont += value;
-            // }
-            // $('#usuarios-stats').text(cont);
+            console.log(response);
+            $('#casilleros-stats').text(response.total.length);
+            addData(casillerosChartVar,'En Uso', response.uso.length);
+            addData(casillerosChartVar,'Sin Usar',response.total.length - response.uso.length);
         },
         (error) => {}
     );

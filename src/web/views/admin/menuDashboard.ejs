@@ -5,29 +5,7 @@
             <h4 class="">SIAP</h4>
         </div>
     </div>
-    <!--
-    <div class="photo_side_panel">
-        <a class="text-decoration-none" href="/admin/perfil" >
-            <div class="photo_side_panel_front p-2 d-flex flex-column" >
-
-                <% if (!usuario.foto) { %>
-                    <i class="fas fa-user-circle text-white fa-3x" 
-                    data-toggle="tooltip" data-placement="bottom" title="Cambiar foto de perfil" id="tooltipFoto"></i>
-                    
-                <% } %>
-                <%if (usuario.foto){%>
-                    <img src="./../public/uploads/<%= usuario.foto%>" class="rounded-circle" width="50px">
-                <%}%>
-                <div class="nombre-usuario-pos-0 mt-auto" id="nombreUsuario">
-                    <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
-                    <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
-                    <h6 class="align-middle text-white mb-0"><%= usernameNombre %>&nbsp;<%= usernameApellido %></h6>
-                    <span class="text-white" style="font-size: 0.8em;"><%= usuario.correo%></span>
-                </div>
-            </div>
-        </a>
-    </div>
-    -->
+    
     <div class="list-group list-group-flush accordion mx-0 mb-auto" id="accordion-menu-lateral">
         <a href="/admin/dashboard" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu <%if(s == "dash"){%> menu-active <%}%> text-white py-3 pl-2" role="button">
             <i class="fas fa-chart-line"></i>&nbsp; Dashboard
@@ -80,9 +58,21 @@
                 <i class="fas fa-user-check"></i>&nbsp; Comprobacion
             </a>
         </div>
-        <a href="/admin/reportes" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "reportes"){%> menu-active <%}%>" role="button" data-toggle="tooltip" data-placement="right" title="Reportes del sistema">
-            <i class="far fa-newspaper"></i>&nbsp; Reportes
+        <a class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2"
+        data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
+            <i class="far fa-newspaper"></i></i>&nbsp; Reportes <i class="fas fa-angle-down float-right"></i>
         </a>
+            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-asistencia'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
+                <a href="/admin/reportes/sistema" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-sistema"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes del Sistema">
+                    <i class="far fa-newspaper"></i>&nbsp; Sistema
+                </a>
+                <a href="/admin/reportes/morosos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-morosos"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de Morosidad">
+                    <i class="far fa-newspaper"></i>&nbsp; Morosos
+                </a>
+                <a href="/admin/reportes/asistencia" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-asistencia"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de Asistencia">
+                    <i class="far fa-newspaper"></i>&nbsp; Asistencia
+                </a>
+            </div>
         <a href="/admin/casilleros" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "casilleros"){%> menu-active <%}%>" role="button" data-toggle="tooltip" data-placement="right" title="Administracion de Casilleros">
             <i class="fas fa-lock"></i>&nbsp; Casilleros
         </a>
