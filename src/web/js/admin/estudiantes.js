@@ -45,13 +45,12 @@ function openModalAdd() {
     })
 
     $('#modalVerEstudiante').on('show.bs.modal', function (event) {
-        animateCSS("#modalVerEstudiante", 'shakeX')
+        animateCSS("#modalVerEstudiante", 'fadeInUpBig')
 
         var button = $(event.relatedTarget)
         var recipient = button.data('id')
         let estudiante = g_estudiantes_map.get(parseInt(recipient))
 
-        console.log(g_estudiantes_map)
         var modal = $(this)
         modal.find('.modal-title').text(estudiante.nombre + " " + estudiante.apellido)
         modal.find('.modal-body input').val(recipient)
@@ -69,15 +68,7 @@ function openModalAdd() {
         $('#v_provincias').val(estudiante.provincia)
         $('#v_canton').val(estudiante.canton)
         $('#v_distrito').val(estudiante.distrito)
-
-
-
-
-
     })
-
-
-
 }
 function closeFilter(params) {
     $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
@@ -119,7 +110,7 @@ function procesarLugares(data) {
     load_distritos(distritos);
 }
 function load_provincias(data) {
-    console.log(data)
+    
     let provincias = data;
     provincias = provincias.filter(function (item, pos) { //elimina repetidos
         return provincias.indexOf(item) == pos;
@@ -132,7 +123,6 @@ function load_provincias(data) {
 function load_cantones(data) {
     let pro = $('#provinciaSelected').attr('data-values');
     let cantones = data;
-    cantones = filtrarCantonxProvincia(pro);
 
     $('#canton').html(' ');
 
@@ -162,9 +152,6 @@ function load_stats(solicitudes) {
         if (!i.estado) inactivos++;
         if (i.moroso) morosos++;
     }
-    console.log(cantidad);
-    console.log(inactivos);
-    console.log(morosos);
 
     $('#estudiantes_matriculados_stats').text(cantidad);
     $('#estudiantes_inactivos_stats').text(inactivos);
@@ -173,6 +160,8 @@ function load_stats(solicitudes) {
 
 var estudiantes = [];
 var g_estudiantes_map = new Map();
+var g_talleres = new Map();
+var g_talleresA = [];
 
 function cargar_estudiantes() {
     let ajaxTime = new Date().getTime();
@@ -190,31 +179,102 @@ function cargar_estudiantes() {
         load_stats(solicitudes);
         $('#cargarDatosSpinner-usuarios-estudiantes').hide();
     }, (error) => {
-        alert(error.status);
+    }
+    );
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/getTalleres", //este es un path nuevo, hay que hacerlo
+        contentType: "appication/json",
+    }).then((talleres) => {
+        g_talleresA = talleres;
+        talleres.forEach((t)=>{
+            g_talleres.set(t.nivel,t);
+        })
+    }, (error) => {
     }
     );
 }
 
 function cargar_estudiante(solicitudes) {
     $("#lista_estudiantes").html("");
-    console.log(solicitudes);
+    
     solicitudes.forEach((solicitudes) => {
         llenar_Estudiantes(solicitudes);
         g_estudiantes_map.set(solicitudes.id, solicitudes);
 
     });
+    $('#estudiantes_TableOrder').DataTable({
+        stateSave: true,
+        "language": {
+            "zeroRecords": "No se encontraron estudiantes",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "Mostrar _MENU_ registros",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
+                "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
+                "next":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
+                "last":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
+            },
+            "aria": {
+                "paginate": {
+                    "first":    'Primera',
+                    "previous": 'Anterior',
+                    "next":     'Siguiente',
+                    "last":     'Última'
+                }
+            }
+        }
+    });
+    $(`#estudiantes_TableOrder_length`).css('display','none');
+    $(`#estudiantes_TableOrder_filter`).css('display','none');
+
+    $(`#estudiantes_TableOrder_info`).appendTo(`#informacionTable`);
+    $(`#estudiantes_TableOrder_paginate`).appendTo(`#botonesCambiarTable`);
+
 }
-
-
 function moverlabel(label_id, nivel){
-   
-      $('#id_label_est_'+label_id+'').html( nivel.value==1?'Iniciación': nivel.value==2?'Perfeccionamiento': 'Entrenamiento deportivo');
-      
-      }
+    let valor = g_talleres.get(parseInt(nivel.value));
+    $('#id_label_est_'+label_id+'').html(valor.descripcion);    
+    $('#guardar_rango_'+label_id+'').removeClass('disabled');
+    $('#guardar_rango_'+label_id+'').prop('disabled',false);
+}
+function guardarEstadoRango(id,cedula) {
+    let valor = $('#id_label_est_'+id+'').html();
+    let nivel = 0;
+    g_talleresA.forEach((t)=>{
+        if(t.descripcion == valor){
+            nivel = t.nivel;
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarNivel", 
+        data: {nivel,cedula},
+        contentType: "appication/json",
+    }).then((response) => {
+        location.href = '/admin/estudiantes';
+    }, (error) => {
+    }
+    );
+}
+function cambiarMorosidadEst(estado,cedula) {
+    let morosidad = estado.checked == true ? 1:0;
 
+    console.log(morosidad)
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarMorosidad", 
+        data: {morosidad,cedula},
+        contentType: "appication/json",
+    }).then((response) => {
+        location.href = '/admin/estudiantes';
+    }, (error) => {
+    }
+    );
+}
 function llenar_Estudiantes(solicitudes) {
- 
-
     let id = solicitudes.id;
     let cedula = solicitudes.cedula;
     let nivel = solicitudes.nivel;
@@ -239,24 +299,21 @@ function llenar_Estudiantes(solicitudes) {
         nombre + " " + apellido +
         "</td>" +
         "<td>" +
-
-
-        '<label id="id_label_est_'+id+'" for="customRange_nivel">' + descripcion + '</label>' +
-        '<input onchange="moverlabel('+id+', this)" type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '"></input>' +
-        "</td>" +
-        "<td>" +
-        matricula +
+        "<div class='d-flex justify-content-between'>" +
+            '<label id="id_label_est_'+id+'" for="customRange_nivel">' + descripcion + '</label>' +
+            '<button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_'+id+'" disabled onclick="guardarEstadoRango('+id+','+cedula+')"><i class="far fa-save"></i></button>' +
+        "</div>" +
+        '<input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '" onchange="moverlabel('+id+', this)"></input>' +
         "</td>" +
         '<td>' +
-        '<button type="button" class="btn btn-' + color_estado + '" disabled>' +
-        estado + '</button>' +
+        '<span class="w-75 badge badge-' + color_estado + '" disabled>' +
+        estado + '</span>' +
         "</td>" +
-        "<td> por hacer</td>" +
         '<td>' +
 
         ' <div class="custom-control custom-switch">' +
 
-        ' <input type="checkbox" class="custom-control-input" id="customSwitch_' + id + ' "  ' + moroso + ' >' +
+        ' <input type="checkbox" class="custom-control-input" id="customSwitch_' + id + '"  ' + moroso + ' onclick="cambiarMorosidadEst(this,'+cedula+')">' +
         ' <label class="custom-control-label" for="customSwitch_' + id + '"></label>' +
 
         '</div>' +
@@ -270,23 +327,4 @@ function llenar_Estudiantes(solicitudes) {
     );
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", loaded);
