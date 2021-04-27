@@ -58,6 +58,7 @@ app.use(require('./routes/admin/reportes/asistencia.routes'));
 app.use(require('./routes/admin/estudiante/admin.routes'));
 app.use(require('./routes/profesor/profesores.routes'));
 app.use(require('./routes/estudiante/reposition.routes'));
+app.use(require('./routes/admin/talleres/talleres.routes'));
 
 
 app.use(require('./routes/users.routes'));

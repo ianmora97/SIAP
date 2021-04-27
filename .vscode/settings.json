@@ -2,5 +2,20 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
+    ],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "52.171.213.23",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "siap",
+            "database": "siapd",
+            "username": "proyecto",
+            "password": "proyecto"
+        }
     ]
 }

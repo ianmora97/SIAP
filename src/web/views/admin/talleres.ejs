@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Dashboard - Talleres</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" href="../../css/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="modal fade" id="modalEditTaller" tabindex="-1" aria-labelledby="modalEditTallerLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white" id="modalEditTallerLabel">Editar Taller</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert"
+                        id="alertaTaller">
+                        No se pudo actualizar el taller!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="container-fluid">
+                        <span class="sr-only" id="idTallerModal"></span>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="descripcion">Descripcion</label>
+                                    <input type="text" class="form-control" id="descripcionModalTaller" placeholder="Descripcion..">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nivel">Nivel</label>
+                                    <input type="text" class="form-control" id="nivelModalTaller" placeholder="Nivel..">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="costoestudiante">Costo Estudiante</label>
+                                    <input type="text" class="form-control" id="costoestudianteModalTaller" placeholder="Costo Estudiante..">
+                                </div>
+                                <div class="form-group">
+                                    <label for="costofuncionario">Costo Funcionario</label>
+                                    <input type="text" class="form-control" id="costofuncionarioModalTaller" placeholder="Costo Funcionario..">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-sm" id="actualizarTaller" onclick="actualizarDatosTaller()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+            <div id="page-content-wrapper">
+                <%- include('headerDashboard') %>
+                <nav aria-label="breadcrumb ">
+                    <ol class="breadcrumb ">
+                        <li class="breadcrumb-item"><a href="#">Talleres</a></li>
+                        <li class="breadcrumb-item"><a href="#">Talleres</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Lista de Talleres</li>
+                    </ol>
+                </nav>
+                <div class="container-fluid">
+                    <div class="card border-0 shadow-sm my-3">
+                        <div class="card-body py-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2 class="font-weight-bolder">Lista de Talleres</h2>
+                                    <small class="text-muted">En esta seccion se muestra la lista de los talleres
+                                        de la piscina, donde podra gestionar todos los  <br>
+                                        horarios, y los grupos de la piscina.</small><br>
+                                    <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
+                                </div>
+                                <div class="col border-right">
+                                    <h1 class="m-0 font-weight-bolder text-primary" id="grupos_stats">0</h1>
+                                    <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                </div>
+                                <div class="col border-right">
+                                    <h1 class="m-0 font-weight-bolder text-primary" id="horarios_stats">0</h1>
+                                    <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                </div>
+                                <div class="col">
+                                    <h1 class="m-0 font-weight-bolder text-primary" id="talleres_stats">0</h1>
+                                    <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow">
+                        <nav>
+                            <div class="nav bg-light" id="nav-tab" role="tablist">
+                                <a class="nav-link-casilleros active" id="nav-talleres-tab" data-toggle="tab" 
+                                href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="true">Talleres</a>
+                                <a class="nav-link-casilleros" id="nav-horarios-tab" data-toggle="tab" 
+                                href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">Horarios</a>
+                                <a class="nav-link-casilleros" id="nav-grupos-tab" data-toggle="tab" 
+                                href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">Grupos</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-talleres" role="tabpanel" aria-labelledby="nav-talleres-tab">
+                                <div class="card-body px-2 py-2">
+                                    <div class="row mx-0">
+                                        <div class="col-lg-8 px-2 py-2">
+                                            <h2 class="font-weight-bolder">Talleres</h2>
+                                            <p class="text-muted">
+                                                Aqui se muestran todos los talleres que se imparten en la piscina.
+                                                Estos talleres tendran un nivel, una descripcion y un <strong>codigo</strong>, el cual 
+                                                va a diferenciar de los demas talleres.
+                                                Los talleres tienen un costo por estudiante y por funcionario.
+                                            </p>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-8 px-1">
+                                            <div class="input-group flex-nowrap">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn bg-white" type="button" id="button_search"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+                                                <input type="search" class="form-control border-0 shadow-none bg-white "
+                                                    onkeyup="searchonfind(this)" data-type="talleres" placeholder="Buscar..."
+                                                    aria-label="Username" id="barraBuscar_talleres">
+                                            </div>
+        
+                                        </div>
+                                        <div class="col-md-4 d-flex justify-content-around px-0">
+                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-start">
+                                                <div class="col-lg-9 flex-column">
+                                                    <div id="lenghtTable_talleres" class="px-1 m-0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
+                                                    <button type="button" name="agregarTaller" id="agregarTaller"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-plus"></i></button>
+                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Actualizar lista" class="btn bg-white btn-sm"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-sync-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                        <table class="table table-hover table-responsive-md table-borderless"
+                                            id="talleres_table" >
+                                            <thead>
+                                                <tr>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><strong>#</strong></th>
+                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-barcode"></i> Codigo</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-align-justify"></i> Descripcion</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Nivel</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="far fa-money-bill-alt"></i> Costo Estudiante</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="far fa-money-bill-alt"></i> Costo Funcionario</th>
+                                                    <th class="bg-dark text-white sticky-top text-center" scope="col"><i class="fas fa-pen"></i> Edit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="talleres_list">
+        
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex align-items-center align-self-end border-info w-100">
+                                            <div class="row w-100 ml-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                    <small id="infoTable_talleres" class="d-flex align-items-end"></small>
+                                                </div>
+                                                <div class="col-md-6 d-flex justify-content-end"
+                                                    id="botonesTable_talleres">
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-horarios" role="tabpanel" aria-labelledby="nav-horarios-tab">
+                                <div class="card-body px-2 py-2">
+                                    <div class="row mx-0">
+                                        <div class="col-lg-8 px-2 py-2">
+                                            <h2 class="font-weight-bolder">Horarios</h2>
+                                            <p class="text-muted">
+                                                En esta seccion se muestran los horarios disponibles para un grupo 
+                                                en especifico, donde estos muestran el dia y la hora que el grupo se imparte.
+                                            </p>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-8 pl-1">
+                                            <div class="input-group flex-nowrap">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn bg-white" type="button" id="button_search"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+                                                <input type="search" class="form-control border-0 shadow-none bg-white "
+                                                    onkeyup="searchonfind(this)" data-type="horarios" placeholder="Buscar..."
+                                                    aria-label="Username" id="barraBuscar_horarios">
+                                            </div>
+        
+                                        </div>
+                                        <div class="col-md-4 d-flex justify-content-around px-0">
+                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                                <div class="col-lg-9">
+                                                    <div id="lenghtTable_horarios" class="px-1 m-0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
+                                                    <button type="button" name="agregarTaller" id="agregarTaller"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-plus"></i></button>
+                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Actualizar lista" class="btn bg-white btn-sm"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-sync-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                        <table class="table table-hover table-responsive-md table-borderless"
+                                            id="horarios_table" data-order="[[ 1, &quot;asc&quot; ]]">
+                                            <thead>
+                                                <tr>
+                                                    <th class="bg-dark text-white sticky-top " scope="col"><strong>#</strong></th>
+                                                    <th class="bg-dark text-white sticky-top text-center" data-class-name="priority" scope="col"><i class="fas fa-calendar-day"></i> Dia</th>
+                                                    <th class="bg-dark text-white sticky-top text-center" scope="col"><i class="far fa-clock"></i> Hora</th>
+                                                    <th class="bg-dark text-white sticky-top text-right" scope="col"><i class="fas fa-pen"></i></th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody id="horarios_list">
+        
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex align-items-center align-self-end border-info w-100">
+                                            <div class="row w-100 ml-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                    <small id="infoTable_horarios" class="d-flex align-items-end"></small>
+                                                </div>
+                                                <div class="col-md-6 d-flex justify-content-end"
+                                                    id="botonesTable_horarios">
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-grupos" role="tabpanel" aria-labelledby="nav-grupos-tab">
+                                <div class="card-body px-2 py-2">
+                                    <div class="row mx-0">
+                                        <div class="col-lg-8 px-2 py-2">
+                                            <h2 class="font-weight-bolder">Grupos</h2>
+                                            <p class="text-muted">
+                                                En esta seccion se muestran los diferentes grupos que se encuentran en la piscina,
+                                                estos grupos se conforman de un profesor un horario y un taller. Estos grupos se 
+                                                diferencian por numero o por horario.
+                                            </p>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-8 pl-1">
+                                            <div class="input-group flex-nowrap">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn bg-white" type="button" id="button_search"><i
+                                                            class="fas fa-search"></i></button>
+                                                </div>
+                                                <input type="search" class="form-control border-0 shadow-none bg-white "
+                                                    onkeyup="searchonfind(this)" data-type="grupos" placeholder="Buscar..."
+                                                    aria-label="Username" id="barraBuscar_grupos">
+                                            </div>
+        
+                                        </div>
+                                        <div class="col-md-4 d-flex justify-content-around px-0">
+                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                                <div class="col-lg-9">
+                                                    <div id="lenghtTable_grupos" class="px-1 m-0">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
+                                                    <button type="button" name="agregarTaller" id="agregarTaller"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-plus"></i></button>
+                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Actualizar lista" class="btn bg-white btn-sm"
+                                                        style="border-radius: 50px;"><i
+                                                            class="fas fa-sync-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                        <table class="table table-hover table-responsive-md table-borderless"
+                                            id="grupos_table" data-order="[[ 1, &quot;asc&quot; ]]">
+                                            <thead>
+                                                <tr>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><strong>#</strong></th>
+                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-calendar-day"></i> Horario</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-tie"></i> Profesor</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-swimmer"></i> Taller</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clipboard-list"></i> Cupo</th>
+                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-ticket-alt"></i> Extra</th>
+                                                    <th class="bg-dark text-white sticky-top text-right" scope="col"><i class="fas fa-pen"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="grupos_list">
+        
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex align-items-center align-self-end border-info w-100">
+                                            <div class="row w-100 ml-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                    <small id="infoTable_grupos" class="d-flex align-items-end"></small>
+                                                </div>
+                                                <div class="col-md-6 d-flex justify-content-end"
+                                                    id="botonesTable_grupos">
+        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <%- include('footerDashboard') %>
+            </div>
+
+    </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+
+    <script src="../../js/admin/talleres.js"></script>
+</body>
+
+</html>

@@ -181,10 +181,14 @@ function cargar_estudiantes() {
     }, (error) => {
     }
     );
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
-        url: "/admin/estudiante/getTalleres", //este es un path nuevo, hay que hacerlo
+        url: "/admin/estudiante/getTalleres", 
         contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((talleres) => {
         g_talleresA = talleres;
         talleres.forEach((t)=>{
