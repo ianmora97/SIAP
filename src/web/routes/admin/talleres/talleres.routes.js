@@ -58,7 +58,6 @@ router.get('/admin/talleres/actualizarGrupo',ensureToken,(req,res)=>{
         [req.query.id, req.query.descripcion, req.query.nivel, req.query.costo, req.query.costo_funcionario],
          (err,rows,fields)=>{
         if(rows != undefined){
-            validarMorosidad(118887123);
             res.send(rows)
         }else{
             res.send({err:'NotFound'});

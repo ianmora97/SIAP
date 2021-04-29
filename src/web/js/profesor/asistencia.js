@@ -2,6 +2,8 @@
 var g_estudiantes = [];
 var g_grupos = [];
 var g_informacionEstudiantes = [];
+var g_mapGrupos = new Map();
+var g_mapAsistencia = new Map();
 
 function loaded(event){
     events(event);
@@ -12,11 +14,50 @@ function events(event){
     traerGrupos();
     traerInformacionDeEstudiante();
     movePageBack();
+    modalsOpen();
+}
+const animateCSS = (element, animation) =>
+    
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    let prefix = 'animate__';
+    const animationName = `${prefix}${animation}`;
+    const node = document.querySelector(element);
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+      resolve('Animation ended');
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd, {once: true});
+});
+function modalsOpen() {
+    $('#asistenciaModal').on('show.bs.modal', function (event) {
+        animateCSS("#asistenciaModal", 'fadeInUpBig');
+    })
+    $('#asistenciaModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('grupo') 
+        var grupo = g_mapGrupos.get(parseInt(id));
+        $('#grupoIdModal').html('Grupo ' + id);
+        buildAsistenciaTable(grupo);
+      })
+}
+function buildAsistenciaTable(grupo) {
+    console.log();
+    let id = grupo.id_grupo;
+    // let asistencia = g_mapAsistencia.get(parseInt(id));
+
 }
 
 function movePageBack() {
     $('#pag_ant').on('click',function(){
         let page = $('#pag_ant').attr('data-page');
+        $('#buttonTriggerModalAsistencia').hide();
         if(page == 1){
             $('#breadcrum-item-listaestudiantes').hide();
             $('#pag_ant').attr('data-page','0');
@@ -92,15 +133,33 @@ function abrirEstudiante(id){
 }
 
 function traerEstudantesXGrupo(){
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/profesor/matriculaEstudiantes",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_estudiantes = response;
         if(response == 'vacia'){
             
         }
+    }, (error) => {
+        
+    });
+    $.ajax({
+        type: "GET",
+        url: "/profesor/asistencia/getAsistencia",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        response.forEach((e =>{
+            g_mapAsistencia.get(e.id_asistencia,e);
+        }))
     }, (error) => {
         
     });
@@ -116,6 +175,9 @@ function filtrarEstudiantesxGrupo(grupo) {
     return result;
 }
 function forEachEstudiantesxGrupo(grupo){
+    $('#buttonTriggerModalAsistencia').show();
+    $('#buttonTriggerModalAsistencia').attr("data-grupo",grupo);
+
     let result = filtrarEstudiantesxGrupo(grupo);
     $('#listaUlEstudiantes').html('');
     result.forEach((c)=>{
@@ -127,7 +189,10 @@ function updateStatus(estudiante,estado,grupo) {
         type: "GET",
         url: "/profesor/asistencia/actualizarEstudiante",
         data: {estado,estudiante,grupo},
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
 
     }, (error) => {
@@ -157,7 +222,7 @@ function mostrarCursosActuales(c) {
                 <small>${c.dia} ${hora}</small>
             </div>
             <div class="col-2 px-1 d-flex flex-column">
-                <span>${foto}</span>
+                <div class="mx-auto">${foto}</div>
                 <button class="btn btn-primary btn-sm mt-4 mx-auto" id="idEstudiantexGrupo-${id_usuario}" onclick="abrirEstudiante(${cedula})"><i class="fas fa-info-circle"></i></button>
             </div>
         </li>
@@ -165,13 +230,17 @@ function mostrarCursosActuales(c) {
 }
 
 function traerGrupos(){
+    let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
     $.ajax({
         type: "GET",
         url: "/profesor/grupos",
         data: data,
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_grupos = response;
         eachGrupos(response);
@@ -183,6 +252,7 @@ function eachGrupos(grupos) {
     grupos.forEach((e)=>{
         if(e.cupo_actual != 0){
             showGrupos(e);
+            g_mapGrupos.set(e.id_grupo,e);
         }
     });
 }
@@ -210,13 +280,17 @@ function showGrupos(g){
 
 
 function traerInformacionDeEstudiante(){
+    let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
     $.ajax({
         type: "GET",
         url: "/profesor/informacionEstudiantesMatricula",
         data: data,
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_informacionEstudiantes = response;
     }, (error) => {

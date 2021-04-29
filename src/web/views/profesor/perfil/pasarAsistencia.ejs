@@ -18,7 +18,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
-    <title>Clases</title>
+    <title>Asistencia</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/general.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
@@ -28,6 +28,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
 <body style="overflow-x:hidden ;">
+    <div class="modal" id="asistenciaModal" data-backdrop="static" data-keyboard="false" 
+    tabindex="-1" aria-labelledby="asistenciaModalLabel" aria-hidden="true">
+        <div class=" modal-dialog-centered modal-fs">
+            <div class="modal-content h-100">
+                <div class="modal-body">
+                    <h4 id="grupoIdModal">Grupo</h4>
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
     <%- include('perfilHeader') %>
     <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
@@ -44,8 +57,12 @@
           </button>
           <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
         </div>
-        <div class="justify-content-between mx-3 p-2 bg-light rounded">
+        <div class="justify-content-between mx-3 p-2 bg-light rounded d-flex">
             <h5 class="font-weight-bold m-0"><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h5>
+            <button type="button" class="btn btn-primary btn-sm" id="buttonTriggerModalAsistencia" 
+            style="display: none;" data-grupo="null" data-toggle="modal" data-target="#asistenciaModal">
+                Ver Asistencia
+            </button>
         </div>
         <nav class="d-flex justify-content-between" aria-label="breadcrumb" style="height: 40px;">
             <button type="button" class="btn" data-page="0" id="pag_ant" style="display: none;"><i class="fas fa-chevron-left"></i></button>
@@ -64,17 +81,6 @@
             </div>
         </div>
     </div>
-    <!-- 
-
-        <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-        </div>
-     -->
     <%- include('perfilFooter') %>
     <script src="../../../js/profesor/asistencia.js"></script>
 </body>
