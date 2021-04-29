@@ -4,6 +4,7 @@ var g_grupos = [];
 var g_informacionEstudiantes = [];
 var g_mapGrupos = new Map();
 var g_mapAsistencia = new Map();
+var g_asistencia = [];
 
 function loaded(event){
     events(event);
@@ -14,8 +15,11 @@ function events(event){
     traerGrupos();
     traerInformacionDeEstudiante();
     movePageBack();
-    modalsOpen();
+    modalsOpen();;
 }
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 const animateCSS = (element, animation) =>
     
   // We create a Promise and return it
@@ -41,17 +45,80 @@ function modalsOpen() {
     })
     $('#asistenciaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var id = button.data('grupo') 
+        var id = $('#idGrupoTemp').html();
+        console.log(id);
         var grupo = g_mapGrupos.get(parseInt(id));
-        $('#grupoIdModal').html('Grupo ' + id);
+        
         buildAsistenciaTable(grupo);
-      })
+    })
+}
+function searchonfind(barra){
+    let bar = $(barra);
+    var table = $('#tablaModalAsistencia').DataTable();
+    let val = bar.val();           
+    let result = table.search( val ).draw();
+}
+function borrarFecha() {
+    let val = $('#datepicker').val('');
+    var table = $('#tablaModalAsistencia').DataTable();         
+    let result = table.search( '' ).draw();
+}
+function buscarFechaAsistencia() {
+    let val = $('#datepicker').val();
+    let fecha = moment(val,'DD/MM/YYYY hh:mm:ss').format('DD/MM/YYYY hh:mm:ss');
+    var table = $('#tablaModalAsistencia').DataTable();         
+    let result = table.search( fecha ).draw();
 }
 function buildAsistenciaTable(grupo) {
-    console.log();
-    let id = grupo.id_grupo;
-    // let asistencia = g_mapAsistencia.get(parseInt(id));
-
+    let id = parseInt(grupo.id_grupo);
+    $('#bodyTableModal').html('');
+    g_asistencia.forEach((e)=>{
+        if(e.id_grupo == id){
+            let foto = e.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
+            '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+e.foto+'" style="height:40px;">';
+            let fecha = moment(e.fecha).format('DD/MM/YYYY hh:mm:ss');
+            $('#bodyTableModal').append(`
+            <tr>
+                <td>${foto}</td>
+                <td>${e.cedula}</td>
+                <td>${e.nombre.toUpperCase() +' '+e.apellido.toUpperCase()}</td>
+                <td>${fecha}</td>
+                <td>
+                    <h4><span class="w-100 badge badge-${e.estado == 'Presente' ? 'success' : e.estado == 'Tarde' ? 'warning' : 'danger'}">${e.estado}</span></h4>
+                </td>
+            </tr>
+            `);
+        }
+    });
+    $('#tablaModalAsistencia').DataTable({
+        stateSave: true,
+        "language": {
+            "zeroRecords": "No se encontraron Asistencias para este grupo",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "_MENU_ ",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first": 'Primera',
+                    "previous": 'Anterior',
+                    "next": 'Siguiente',
+                    "last": 'Última'
+                }
+            }
+        }
+    });
+    $(`#tablaModalAsistencia_info`).appendTo(`#informacionTable`);
+    $(`#tablaModalAsistencia_paginate`).appendTo(`#botonesCambiarTable`);
+    $('#tablaModalAsistencia_length').find('select').removeClass('custom-select-sm');
+    $('#tablaModalAsistencia_length').find('select') .appendTo(`#showlenghtentries`);
+    $('#tablaModalAsistencia_filter').html('');
 }
 
 function movePageBack() {
@@ -159,7 +226,8 @@ function traerEstudantesXGrupo(){
     }).then((response) => {
         response.forEach((e =>{
             g_mapAsistencia.get(e.id_asistencia,e);
-        }))
+        }));
+        g_asistencia = response;
     }, (error) => {
         
     });
@@ -177,7 +245,8 @@ function filtrarEstudiantesxGrupo(grupo) {
 function forEachEstudiantesxGrupo(grupo){
     $('#buttonTriggerModalAsistencia').show();
     $('#buttonTriggerModalAsistencia').attr("data-grupo",grupo);
-
+    $('#grupoIdModal').html('Grupo ' + grupo);
+    $('#idGrupoTemp').html( grupo);
     let result = filtrarEstudiantesxGrupo(grupo);
     $('#listaUlEstudiantes').html('');
     result.forEach((c)=>{
