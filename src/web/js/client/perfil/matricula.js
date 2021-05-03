@@ -196,7 +196,7 @@ function llenarCurso(cupo) {
     let profesor = cupo.nombre.toUpperCase() +" "+ cupo.apellido.toUpperCase();
     let cod_t = cupo.codigo_taller;
     let costo = tipo == 1 ? cupo.costo : cupo.costo_funcionario;
-    let nivel = cupo.nivel == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+    let nivel = cupo.descripcion;
     let cupos = cupo.cupo_base - cupo.cupo_actual > 0 ? 'Cupo Disponible' : 'No hay cupos';
     let cantidad = cupo.cupo_base - cupo.cupo_actual;
     let cupos_t = cupo.cupo_base - cupo.cupo_actual > 0 ? 'success' : 'danger';

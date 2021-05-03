@@ -2,6 +2,12 @@
 var g_estudiantes = [];
 var g_grupos = [];
 var g_informacionEstudiantes = [];
+var g_mapGrupos = new Map();
+var g_mapAsistencia = new Map();
+var g_asistencia = [];
+var g_profesorAsistencia = [];
+var g_MapprofesorAsistencia = new Map();
+var g_grupoAbierto ='';
 
 function loaded(event){
     events(event);
@@ -12,11 +18,124 @@ function events(event){
     traerGrupos();
     traerInformacionDeEstudiante();
     movePageBack();
+    modalsOpen();
+    bringDB();
+}
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+const animateCSS = (element, animation) =>
+    
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    let prefix = 'animate__';
+    const animationName = `${prefix}${animation}`;
+    const node = document.querySelector(element);
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+      resolve('Animation ended');
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd, {once: true});
+});
+function modalsOpen() {
+    $('#asistenciaModal').on('show.bs.modal', function (event) {
+        animateCSS("#asistenciaModal", 'fadeInUpBig');
+    })
+    $('#asistenciaModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = $('#idGrupoTemp').html();
+        console.log(id);
+        var grupo = g_mapGrupos.get(parseInt(id));
+        
+        buildAsistenciaTable(grupo);
+    })
+    $('#asistenciaModal').on('hide.bs.modal', function (event) {
+        let table = $('#tablaModalAsistencia').DataTable();
+        table.destroy();
+    })
+}
+function searchonfind(barra){
+    let bar = $(barra);
+    var table = $('#tablaModalAsistencia').DataTable();
+    let val = bar.val();           
+    let result = table.search( val ).draw();
+}
+function borrarFecha() {
+    let val = $('#datepicker').val('');
+    var table = $('#tablaModalAsistencia').DataTable();         
+    let result = table.search( '' ).draw();
+}
+function buscarFechaAsistencia() {
+    let val = $('#datepicker').val();
+    let fecha = moment(val,'DD/MM/YYYY hh').format('DD/MM/YYYY hh');
+    var table = $('#tablaModalAsistencia').DataTable();         
+    let result = table.search( fecha ).draw();
+}
+function buildAsistenciaTable(grupo) {
+    let id = parseInt(grupo.id_grupo);
+    $('#bodyTableModal').html('');
+    g_asistencia.forEach((e)=>{
+        if(e.id_grupo == id){
+            let foto = e.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
+            '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+e.foto+'" style="height:40px;">';
+            let fecha = moment(e.fecha).format('DD/MM/YYYY hh:mm');
+            $('#bodyTableModal').append(`
+            <tr>
+                <td>${foto}</td>
+                <td>${e.cedula}</td>
+                <td>${e.nombre.toUpperCase() +' '+e.apellido.toUpperCase()}</td>
+                <td>${fecha}</td>
+                <td>
+                    <h4><span class="w-100 badge badge-${e.estado == 'Presente' ? 'success' : e.estado == 'Tarde' ? 'warning' : 'danger'}">${e.estado}</span></h4>
+                </td>
+            </tr>
+            `);
+        }
+    });
+    $('#tablaModalAsistencia').DataTable({
+        stateSave: true,
+        "language": {
+            "zeroRecords": "No se encontraron Asistencias para este grupo",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "_MENU_ ",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first": 'Primera',
+                    "previous": 'Anterior',
+                    "next": 'Siguiente',
+                    "last": 'Última'
+                }
+            }
+        }
+    });
+    $('#showlenghtentries').html('');
+    $('#informacionTable').html('');
+    $('#botonesCambiarTable').html('');
+    $(`#tablaModalAsistencia_info`).appendTo(`#informacionTable`);
+    $(`#tablaModalAsistencia_paginate`).appendTo(`#botonesCambiarTable`);
+    $('#tablaModalAsistencia_length').find('select').removeClass('custom-select-sm');
+    $('#tablaModalAsistencia_length').find('select') .appendTo(`#showlenghtentries`);
+    $('#tablaModalAsistencia_filter').html('');
 }
 
 function movePageBack() {
     $('#pag_ant').on('click',function(){
         let page = $('#pag_ant').attr('data-page');
+        $('#buttonTriggerModalAsistencia').hide();
         if(page == 1){
             $('#breadcrum-item-listaestudiantes').hide();
             $('#pag_ant').attr('data-page','0');
@@ -27,6 +146,7 @@ function movePageBack() {
                 $('#EstudiantesPorClaseLista').hide();
             },500);
             setTimeout(()=>{
+                $('#listaFiltarClases').show();
                 $('#clasesLista').show();
                 $('#clasesLista').removeClass('animate__bounceOutLeft');
                 $('#clasesLista').addClass('animate__bounceInLeft');
@@ -52,14 +172,17 @@ function movePageBack() {
 }
 
 function abrirCurso(grupo){
+    g_grupoAbierto = grupo;
     let curso = $('#idGrupo-'+grupo);
     $('html').scrollTop(0);
     forEachEstudiantesxGrupo(grupo);
+    revisarAsistenciaProfesor(grupo);
     $('#clasesLista').removeClass('animate__bounceInLeft');
     $('#EstudiantesPorClaseLista').removeClass('animate__bounceOutRight');
     
     $('#clasesLista').addClass('animate__animated animate__bounceOutLeft');
     setTimeout(()=>{
+        $('#listaFiltarClases').hide();
         $('#clasesLista').hide();
         $('#pag_ant').attr('data-page','1');
         $('#breadcrum-item-listaestudiantes').show();
@@ -90,22 +213,139 @@ function abrirEstudiante(id){
         $('#estudianteInformacionLista').addClass('animate__animated animate__bounceInRight');
     },500);
 }
-
+async function traerEstudantesXGrupoAfter() {
+    return new Promise((resolve, reject) => {
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/profesor/matriculaEstudiantes",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            g_estudiantes = response;
+            $.ajax({
+                type: "GET",
+                url: "/profesor/asistencia/getAsistencia",
+                contentType: "application/json",
+                headers:{
+                    'Authorization':bearer
+                }
+            }).then((response) => {
+                g_mapAsistencia.clear();
+                response.forEach((e =>{
+                    g_mapAsistencia.get(e.id_asistencia,e);
+                }));
+                g_asistencia = response;
+                resolve('done');
+            }, (error) => {
+                
+            });
+        }, (error) => {
+            
+        });
+    })
+}
 function traerEstudantesXGrupo(){
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/profesor/matriculaEstudiantes",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_estudiantes = response;
-        if(response == 'vacia'){
-            
+    }, (error) => {
+        
+    });
+    $.ajax({
+        type: "GET",
+        url: "/profesor/asistencia/getAsistencia",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
         }
+    }).then((response) => {
+        g_mapAsistencia.clear();
+        response.forEach((e =>{
+            g_mapAsistencia.get(e.id_asistencia,e);
+        }));
+        g_asistencia = response;
+    }, (error) => {
+        
+    });
+}
+function ingresarAsitenciaProfesor(){
+    let bearer = 'Bearer '+g_token;
+
+    let estado = 'Presente';
+    let idProfesor = parseInt($('#id_profesor').text());
+    let fecha = new Date();
+    fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate();
+    let grupo = parseInt(g_grupoAbierto);
+    $.ajax({
+        type: "GET",
+        url: "/profesor/asistenciaProfesor/insertarAsistencia",
+        data: {estado,fecha,idProfesor,grupo},
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        bringDB()
+        traerEstudantesXGrupo()
     }, (error) => {
         
     });
 }
 
+function bringDB() {
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/profesor/asistenciaProfesor/getAsistencia",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        g_profesorAsistencia = response;
+
+    }, (error) => {
+        
+    });
+    
+}
+function revisarAsistenciaProfesor(grupo) {
+    let data = g_profesorAsistencia;
+    let today = new Date();
+    today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+    let filter = filtrarAsistenciasPorProfesor($('#id_cedula').html(), grupo);
+    let flag = true;
+    if(filter.length != 0){
+        filter.every((e)=>{
+            if(today == e.fecha){
+                console.log(g_grupoAbierto,e.id_grupo)
+                flag= false;
+                return false;
+            }else{
+                flag=true;
+            }
+        });
+    }else{
+        flag=true;
+    }
+    if(flag){
+        $('#pasarAsistenciaProfesor').modal('show')
+    }
+}
+function filtrarAsistenciasPorProfesor(cedula, grupo) {
+    let result= g_profesorAsistencia.filter(e => e.cedula == cedula);
+    return result.filter(e => e.id_grupo == grupo);
+}
 function filtrarEstudiantesxGrupo(grupo) {
     let result=[];
     for(let i=0;i<g_estudiantes.length; i++){
@@ -116,20 +356,69 @@ function filtrarEstudiantesxGrupo(grupo) {
     return result;
 }
 function forEachEstudiantesxGrupo(grupo){
-    let result = filtrarEstudiantesxGrupo(grupo);
-    $('#listaUlEstudiantes').html('');
-    result.forEach((c)=>{
-        mostrarCursosActuales(c);
+    setTimeout(() => {
+        $('#buttonTriggerModalAsistencia').show();
+    }, 2000);
+    $('#buttonTriggerModalAsistencia').attr("data-grupo",grupo);
+    $('#grupoIdModal').html('Grupo ' + grupo);
+    $('#idGrupoTemp').html( grupo);
+    traerEstudantesXGrupoAfter().then((response) => {
+        let result = filtrarEstudiantesxGrupo(grupo);
+        $('#listaUlEstudiantes').html('');
+        result.forEach((c)=>{
+            mostrarCursosActuales(c);
+        });
     });
 }
-function updateStatus(estudiante,estado,grupo) {
+function updateStatus(estudiante,estado,grupo,) {
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/profesor/asistencia/actualizarEstudiante",
         data: {estado,estudiante,grupo},
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
-
+        let est = g_estudiantes.filter(e => e.id_estudiante == estudiante)[0];
+        est = est.nombre.toUpperCase() + ' ' + est.apellido.toUpperCase();
+        switch (estado) {
+            case 'Presente':
+                $(`#listaAsistencia_${estudiante}_${grupo}`).append(`
+                    <div class="d-block w-100 h-100 bg-success">
+                    <h4 class="text-white text-center pt-4">${est} - Presente</h4>
+                    </div>
+                `);
+                $(`#listaAsistencia_${estudiante}_${grupo}`).show();
+                animateCSS(`#listaAsistencia_${estudiante}_${grupo}`,'bounceInLeft')
+                break;
+        case 'Ausente':
+                $(`#listaAsistencia_${estudiante}_${grupo}`).append(`
+                    <div class="d-block w-100 h-100 bg-danger">
+                    <h4 class="text-white text-center pt-2">${est} - Ausente</h4>
+                    <div class="d-block w-100">
+                    <button type="button" class="btn btn-sm btn-outline-light mx-auto d-block mb-2" onclick="updateStatus('${estudiante}','Tarde',${grupo},1)">Cambiar a tarde</button>
+                    <small class="text-white text-center d-block">Esto solo puede cambiar si el estudiante se presenta tarde</small>
+                    </div>
+                    </div>
+                `);
+                $(`#listaAsistencia_${estudiante}_${grupo}`).show();
+                animateCSS(`#listaAsistencia_${estudiante}_${grupo}`,'bounceInLeft')
+                break;
+        case 'Tarde':
+                $(`#listaAsistencia_${estudiante}_${grupo}`).html('');
+                $(`#listaAsistencia_${estudiante}_${grupo}`).append(`
+                    <div class="d-block w-100 h-100 bg-warning">
+                    <h4 class="text-white text-center pt-4">${est} - Tarde</h4>
+                    </div>
+                `);
+                $(`#listaAsistencia_${estudiante}_${grupo}`).show();
+                animateCSS(`#listaAsistencia_${estudiante}_${grupo}`,'bounceInLeft')
+                break;
+            default:
+                break;
+        }
     }, (error) => {
         
     });
@@ -143,7 +432,10 @@ function mostrarCursosActuales(c) {
     '<img class="rounded-circle mx-auto d-block" src="../public/uploads/'+c.foto+'" style="height:40px;">'
     let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
     $('#listaUlEstudiantes').append(`
-        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2" style="min-height:120px;">
+        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 bg-light border-0" style="min-height:120px; position:relative;">
+            <div class="w-100 h-100" style="position:absolute; opacity:0.9; z-index:3; display:none;" id="listaAsistencia_${id_estudiante}_${id_grupo}">
+                
+            </div>
             <div class="col-2 pr-0">
                 <div class="btn-group-vertical" role="group" aria-label="Actualizar Estado">
                     <button type="button" class="btn btn-sm btn-success" onclick="updateStatus('${id_estudiante}','Presente',${id_grupo})">P</button>
@@ -157,66 +449,123 @@ function mostrarCursosActuales(c) {
                 <small>${c.dia} ${hora}</small>
             </div>
             <div class="col-2 px-1 d-flex flex-column">
-                <span>${foto}</span>
-                <button class="btn btn-primary btn-sm mt-4 mx-auto" id="idEstudiantexGrupo-${id_usuario}" onclick="abrirEstudiante(${cedula})"><i class="fas fa-info-circle"></i></button>
+                <div class="mx-auto" id="idEstudiantexGrupo-${id_estudiante}" onclick="abrirEstudiante(${cedula})" role="button">${foto}</div>
             </div>
         </li>
     `);
 }
 
 function traerGrupos(){
+    let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
     $.ajax({
         type: "GET",
         url: "/profesor/grupos",
         data: data,
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_grupos = response;
         eachGrupos(response);
     }, (error) => {
     });
 }
-function eachGrupos(grupos) {
+function eachGrupos(grupos,filtro = "HOY") {
     $('#clasesLista').html('');
+    g_mapGrupos.clear();
     grupos.forEach((e)=>{
         if(e.cupo_actual != 0){
-            showGrupos(e);
+            showGrupos(e,filtro);
+            g_mapGrupos.set(e.id_grupo,e);
         }
     });
 }
-function showGrupos(g){
+async function showGrupos(g,filtro){
     let id = g.id_grupo;
     let dia = g.dia;
     let hora = g.hora > 12 ? g.hora - 12 + 'pm' : g.hora + 'am';
     let nivel = g.descripcion;
     let cupo_actual = g.cupo_actual;
     let est = cupo_actual == 1 ? 'Estudiante':'Estudiantes';
-    $('#clasesLista').append(`
-    <div class="col-md mb-5">
-        <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px;">
-            <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
-            <div class="card-body">
-                <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6>
-                <p class="card-text">${cupo_actual} ${est}</p>
-                <button class="btn btn-primary" data-grupo="${id}" id="idGrupo-${id}" onclick="abrirCurso(${id})">Pasar Asistencia</button>
+    let today = new Date();
+    let diaSemana = await daytoWeekDay(dia);
+    let allow = diaSemana == today.getUTCDay();
+    let hoy = diaSemana == today.getUTCDay() ? '<div class="circleHoy"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/279/fire_1f525.png" width="30"></div>' : '';
+
+    if(filtro == 'HOY'){
+        if(allow){
+            $('#clasesLista').append(`
+            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
+                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
+                    <div class="position-absolute" style="right:-20px; top:-20px;">${hoy}</div>
+                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6>
+                        <p class="card-text">${cupo_actual} ${est}</p>
+                        <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    `);
+            `);
+            
+        }else{
+        }
+    }else{
+        $('#clasesLista').append(`
+            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
+                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
+                    <div class="position-absolute" style="right:-20px; top:-20px;">${hoy}</div>
+                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6>
+                        <p class="card-text">${cupo_actual} ${est}</p>
+                        <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
+                    </div>
+                </div>
+            </div>
+        `);
+    }
 }
-
-
+function daytoWeekDay(day) {
+    return new Promise((resolve, reject) => {
+        switch (day) {
+            case 'LUNES':
+                resolve(1);
+            case 'MARTES':
+                resolve(2);    
+            case 'MIERCOLES':
+                resolve(3);
+            case 'JUEVES':
+                resolve(4);
+            case 'VIERNES':
+                resolve(5);
+            case 'SABADO':
+                resolve(6);
+            case 'DOMINGO':
+                resolve(0);    
+        }
+    })
+}
+function mostartClasesFiltro(fil) {
+    eachGrupos(g_grupos,fil.value)
+}
 function traerInformacionDeEstudiante(){
+    let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
     $.ajax({
         type: "GET",
         url: "/profesor/informacionEstudiantesMatricula",
         data: data,
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         g_informacionEstudiantes = response;
     }, (error) => {

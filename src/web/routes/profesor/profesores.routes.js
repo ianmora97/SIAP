@@ -1,9 +1,12 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../../database');
 
+
+// ? ----------------------------------- LOGIN LOGOUT ------------------------------------
 //Selecciona todos los profesores
 router.post('/profesores/entrar',(req,res)=>{
     let script = 'select * from vta_profesores where cedula = ? and clave = sha1(?)';
@@ -12,9 +15,19 @@ router.post('/profesores/entrar',(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             if(rows.length != 0){
-                req.session.value = rows[0];
-                console.log('[',chalk.green('OK'),']', chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                res.redirect('/profesores/inicio');
+                if(rows[0].rol == 2){
+                    const userLogged = rows[0];
+                    jwt.sign({userLogged},'secretKeyTokenTeacher',(err,token)=>{
+                        req.session.value = rows[0];
+                        req.session.token = token;
+                        console.log('[',chalk.green('OK'),']', chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                        let usuario = req.session.value;
+                        let selected = 'dash';
+                        res.render('profesor/perfil/inicio',{usuario,selected,token});
+                    });
+                }else{
+                    res.render('indexProfesores', {err:'No tiene acceso a este sitio',id: 1});
+                }
             }else{
                 res.render('indexProfesores', {err:'No se encuentra Registrado',id: 2});
             }
@@ -43,13 +56,15 @@ router.get('/profesores/logout',(req,res)=>{
         res.render('indexProfesores');
     }
 });
-
-router.get('/profesores/inicio',(req,res)=>{ //clases es la pagina de inicio
+// ? ----------------------------------- LOGIN LOGOUT! ------------------------------------
+// ? ----------------------------------- ROUTES MENU ------------------------------------
+router.get('/profesores/inicio',(req,res)=>{ // !esta ruta se elimina
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                let v = {usuario, selected:'clases'}
+                let token = req.session.token;
+                let v = {usuario, selected:'clases',token}
                 res.render('profesor/perfil/inicio',v);
             }else{
                 res.render('indexProfesores');
@@ -67,7 +82,8 @@ router.get('/profesores/clases',(req,res)=>{ //perfil del profesor
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                let v = {usuario, selected:'clases'}
+                let token = req.session.token;
+                let v = {usuario, selected:'clases',token}
                 res.render('profesor/perfil/inicio',v);
             }else{
                 res.render('indexProfesores');
@@ -85,7 +101,8 @@ router.get('/profesores/asistencia',(req,res)=>{ //perfil del profesor
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                let v = {usuario, selected:'asistencia'}
+                let token = req.session.token;
+                let v = {usuario, selected:'asistencia',token}
                 res.render('profesor/perfil/pasarAsistencia',v);
             }else{
                 res.render('indexProfesores');
@@ -98,21 +115,46 @@ router.get('/profesores/asistencia',(req,res)=>{ //perfil del profesor
     }
 });
 
+router.get('/profesores/reponer',(req,res)=>{ //perfil del profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let token = req.session.token;
+                let v = {usuario, selected:'reponer',token}
+                res.render('profesor/perfil/reponer',v);
+            }else{
+                res.render('indexProfesores');
+            }    
+        }else{
+            res.render('indexProfesores');
+        }
+    }else{
+        res.render('indexProfesores');
+    }
+});
+// ? ----------------------------------- ROUTES MENU! ------------------------------------
+
+// ? ----------------------------------- peticiones ------------------------------------
+// TODO: selects, updates, deletes, inserts
+
 router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                console.log(req.query);
-                let script = 'call prc_insertar_asistencia(?,?,?)';
-                var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo],
-                    (err,result,fields)=>{
-                    if(!err){
-                        res.send(result);
-                    }else{
-                        res.status(501).send('error');
-                    }
-                });
+                let fecha = new Date();
+                fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate() + ' '+ fecha.getHours() + ':00';
+                let script = 'call prc_insertar_asistencia(?,?,?,?)';
+                // var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo, fecha],
+                //     (err,result,fields)=>{
+                //     if(!err){
+                //         res.send(result);
+                //     }else{
+                //         res.status(501).send('error');
+                //     }
+                // });
+                res.send(req.query);
             }else{
                 res.render('indexProfesores');
             }    
@@ -124,6 +166,91 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
     }
 });
 
+router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_asistencia';
+                var query = con.query(script,
+                    [req.query.id],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){
+                            res.send(rows);
+                        }else{
+                            res.send('vacia');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.status(501).send('error');
+            }    
+        }else{
+            res.status(501).send('error');
+        }
+    }else{
+        res.status(501).send('error');
+    }
+});
+
+router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_profesor_asistencias';
+                var query = con.query(script,
+                    [req.query.id],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){
+                            res.send(rows);
+                        }else{
+                            res.send('vacia');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'call prc_insertar_profesor_asistencia(?,?,?,?)';
+                var query = con.query(script,
+                    [req.query.estado, req.query.fecha, req.query.idProfesor, req.query.grupo],
+                    (err,result,fields)=>{
+                    if(!err){
+                        res.send(result);
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
 router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
@@ -145,13 +272,43 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
                     }
                 });
             }else{
-                res.status(501).send('error');
+                res.render('notAllowedAdmin');
             }    
         }else{
-            res.status(501).send('error');
+            res.render('notAllowedAdmin');
         }
     }else{
-        res.status(501).send('error');
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/reponer/profesores',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_profesores';
+                var query = con.query(script,
+                    [req.query.cedula],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){
+                            res.send(rows);
+                        }else{
+                            res.status(501).send('error');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
     }
 });
 
@@ -264,5 +421,20 @@ router.get('/profesor/obtenerAnotacionesPorProfesor',(req,res)=>{ // trer cursos
     }
 });
 
-
+// ! ----------------------------------- SECURITY ------------------------------------
+function ensureToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader === undefined) {
+        res.redirect('/api/not_allowed');
+    }else{
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+}
+router.get('/api/not_allowed',(req,res)=>{ //logout
+    res.render('notAllowedAdmin');
+});
+// ! ----------------------------------- SECURITY! ------------------------------------
 module.exports = router;

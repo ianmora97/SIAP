@@ -323,3 +323,50 @@ CREATE TABLE IF NOT EXISTS `siapd`.`t_anotaciones` (
     REFERENCES `siapd`.`t_estudiante` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+
+-- -----------------------------------------------------
+-- Table `siapd`.`t_profesor_asistencia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `siapd`.`t_profesor_asistencia` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `estado` INT NOT NULL,
+  `fecha` VARCHAR(30) NOT NULL,
+  `profesor` INT NOT NULL,
+  `grupo` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_t_profesor_t_profesor_idx` (`profesor`),
+  INDEX `fk_t_asistencia_t_grupo2_idx` (`grupo`) ,
+  CONSTRAINT `fk_t_profesor_t_profesor`
+    FOREIGN KEY (`profesor`)
+    REFERENCES `siapd`.`t_profesor` (`id`),
+  CONSTRAINT `fk_t_asistencia_t_grupo2`
+    FOREIGN KEY (`grupo`)
+    REFERENCES `siapd`.`t_grupo` (`id`)
+);
+
+
+-- -----------------------------------------------------
+-- Table `siapd`.`t_profesor_reposicion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `siapd`.`t_profesor_reposicion` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `profesor_origen` INT NOT NULL,
+    `profesor_reposicion` INT NOT NULL,
+    `fecha_reposicion` VARCHAR(30) NOT NULL,
+    `grupo_origen` INT NOT NULL,
+    `grupo_reposicion` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `fk_t_profesor_t_profesor1_idx` (`profesor_origen`),
+    INDEX `fk_t_profesor_t_profesor2_idx` (`profesor_reposicion`),
+    INDEX `fk_t_reposicion_t_grupo2_idx` (`grupo_origen`),
+    INDEX `fk_t_reposicion_t_grupo1_idx` (`grupo_reposicion`),
+    CONSTRAINT `fk_t_profesor_reposicion_t_profesor1` FOREIGN KEY (`profesor_origen`)
+        REFERENCES `siapd`.`t_profesor` (`id`),
+	CONSTRAINT `fk_t_profesor_reposicion_t_profesor2` FOREIGN KEY (`profesor_reposicion`)
+        REFERENCES `siapd`.`t_profesor` (`id`),
+    CONSTRAINT `fk_t_profesor_reposicion_t_grupo2` FOREIGN KEY (`grupo_origen`)
+        REFERENCES `siapd`.`t_grupo` (`id`),
+    CONSTRAINT `fk_t_profesor_reposicion_t_grupo1` FOREIGN KEY (`grupo_reposicion`)
+        REFERENCES `siapd`.`t_grupo` (`id`)
+);

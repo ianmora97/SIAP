@@ -14,10 +14,12 @@
 */
 
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../../database');
+
 // ? ----------------------------------- LOGIN LOGOUT ------------------------------------
 // TODO: rutas para login y logout
 router.post('/admin/log',(req,res)=>{ //login
@@ -29,14 +31,20 @@ router.post('/admin/log',(req,res)=>{ //login
         if(!err){
             if(rows.length != 0){
                 if(rows[0].rol == 3){
-                    console.log(rows[0]);
-                    req.session.value = rows[0];
-                    let today = new Date();
-                    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    let dateTime = date+' '+time;
-                    console.log('[',chalk.green('OK'),']',chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                    res.redirect('/admin/dashboard');
+                    const userLogged = rows[0];
+                    jwt.sign({userLogged},'secretKeyToken',(err,token)=>{
+                        req.session.value = rows[0];
+                        req.session.token = token;
+                        let today = new Date();
+                        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        let dateTime = date+' '+time;
+                        console.log('[',chalk.green('OK'),']',chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                        let usuario = req.session.value;
+                        let s = 'dash';
+                        res.render('admin/dashboard', {usuario,s,token});
+                    }); //json web token
+                    
                 }else{
                     res.render('indexAdmin',{err:'No tiene permisos',id: 1});
                 }
@@ -61,17 +69,19 @@ router.get('/admin/logout',(req,res)=>{ //logout
     }
 });
 
+
 // ! ----------------------------------- LOGIN LOGOUT ------------------------------------
 // ? ----------------------------------- inside routes ------------------------------------
 // TODO: rutas que manejan el menu
 
 
-router.get('/admin/dashboard',(req,res)=>{
+router.get('/admin/dashboard', (req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'dash';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/dashboard', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -84,9 +94,10 @@ router.get('/admin/dashboard',(req,res)=>{
 router.get('/admin/estudiantes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'estudiantes';
-            res.render('admin/estudiantes', {usuario,s});
+            res.render('admin/estudiantes', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -97,9 +108,10 @@ router.get('/admin/estudiantes',(req,res)=>{
 router.get('/admin/administradores',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'administradores';
-            res.render('admin/administradores', {usuario,s});
+            res.render('admin/administradores', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -110,9 +122,10 @@ router.get('/admin/administradores',(req,res)=>{
 router.get('/admin/profesores',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'profesores';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/dashboard', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -122,23 +135,25 @@ router.get('/admin/profesores',(req,res)=>{
 });
 router.get('/admin/talleres',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){        
+        if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'talleres';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/talleres', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.redirect('/admin');
         }
     }else{
-        res.render('indexAdmin');
+        res.redirect('/admin');
     }
 });
 router.get('/admin/grupos',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'grupos';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/dashboard', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -149,9 +164,10 @@ router.get('/admin/grupos',(req,res)=>{
 router.get('/admin/reposiciones',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reposiciones';
-            res.render('admin/reposiciones', {usuario,s});
+            res.render('admin/reposiciones', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -162,9 +178,10 @@ router.get('/admin/reposiciones',(req,res)=>{
 router.get('/admin/solicitudes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'solicitudes';
-            res.render('admin/solicitudes', {usuario,s});
+            res.render('admin/solicitudes', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -176,9 +193,10 @@ router.get('/admin/solicitudes',(req,res)=>{
 router.get('/admin/comprobacion',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'comprobacion';
-            res.render('admin/comprobacionDatos', {usuario,s});
+            res.render('admin/comprobacionDatos', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -189,9 +207,10 @@ router.get('/admin/comprobacion',(req,res)=>{
 router.get('/admin/reportes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes';
-            res.render('admin/dashboard', {usuario,s});
+            res.render('admin/dashboard', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -202,9 +221,10 @@ router.get('/admin/reportes',(req,res)=>{
 router.get('/admin/casilleros',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'casilleros';
-            res.render('admin/casilleros', {usuario,s});
+            res.render('admin/casilleros', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -216,9 +236,10 @@ router.get('/admin/casilleros',(req,res)=>{
 router.get('/admin/reportes/morosos',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-morosos';
-            res.render('admin/reportes/morosos', {usuario,s});
+            res.render('admin/reportes/morosos', {usuario,s,token});
         }else{
             res.redirect('/admin');
         }
@@ -230,9 +251,10 @@ router.get('/admin/reportes/morosos',(req,res)=>{
 router.get('/admin/reportes/asistencia',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-asistencia';
-            res.render('admin/reportes/asistencia', {usuario,s});
+            res.render('admin/reportes/asistencia', {usuario,s,token});
         }else{
             res.redirect('/admin');
         }
