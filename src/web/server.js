@@ -53,8 +53,12 @@ app.use(require('./routes/admin/admin.routes'));
 app.use(require('./routes/admin/stats.routes'));
 app.use(require('./routes/admin/admin.ajax.routes'));
 app.use(require('./routes/admin/casilleros/casilleros.routes'));
+
 app.use(require('./routes/admin/reportes/morosidad.routes'));
 app.use(require('./routes/admin/reportes/asistencia.routes'));
+app.use(require('./routes/admin/reportes/sistema.routes'));
+app.use(require('./routes/admin/reportes/contabilidad.routes'));
+
 app.use(require('./routes/admin/estudiante/admin.routes'));
 app.use(require('./routes/profesor/profesores.routes'));
 app.use(require('./routes/estudiante/reposition.routes'));

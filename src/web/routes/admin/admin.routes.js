@@ -240,6 +240,32 @@ router.get('/admin/reportes/asistencia',(req,res)=>{
         res.redirect('/admin');
     }
 });
+router.get('/admin/reportes/sistema',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-sistema';
+            res.render('admin/reportes/sistema', {usuario,s});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
+router.get('/admin/reportes/contabilidad',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let s = 'reportes-contabilidad';
+            res.render('admin/reportes/contabilidad', {usuario,s});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
 // ! ----------------------------------- inside routes ------------------------------------
 // ? ----------------------------------- nav routes ------------------------------------
 // TODO: rutas del navbar del panel administrativo

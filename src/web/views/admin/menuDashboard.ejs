@@ -62,7 +62,7 @@
         data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
             <i class="far fa-newspaper"></i></i>&nbsp; Reportes <i class="fas fa-angle-down float-right"></i>
         </a>
-            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-asistencia'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
+            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-asistencia'| s == 'reportes-contabilidad'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
                 <a href="/admin/reportes/asistencia" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-asistencia"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de Asistencia">
                     <i class="far fa-newspaper"></i>&nbsp; Asistencia
                 </a>
@@ -71,6 +71,9 @@
                 </a>
                 <a href="/admin/reportes/sistema" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-sistema"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes del Sistema">
                     <i class="far fa-newspaper"></i>&nbsp; Sistema
+                </a>
+                <a href="/admin/reportes/contabilidad" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-contabilidad"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de contabilidad">
+                    <i class="far fa-newspaper"></i>&nbsp; Contabilidad
                 </a>
             </div>
         <a href="/admin/casilleros" class="menu-items-var list-group-item list-group-item-action border-0 bg-menu text-white py-3 pl-2 <%if(s == "casilleros"){%> menu-active <%}%>" role="button" data-toggle="tooltip" data-placement="right" title="Administracion de Casilleros">
