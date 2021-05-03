@@ -272,6 +272,9 @@ function traerCursosEstudiante(){
     }).then((response) => {
         g_grupos = response;
         eachGrupos(response);
+        if(response.length){
+            $('#alertaNoHay').hide();
+        }
     }, (error) => {
     });
 }

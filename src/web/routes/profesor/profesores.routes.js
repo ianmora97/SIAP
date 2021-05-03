@@ -114,6 +114,25 @@ router.get('/profesores/asistencia',(req,res)=>{ //perfil del profesor
         res.render('indexProfesores');
     }
 });
+
+router.get('/profesores/reponer',(req,res)=>{ //perfil del profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let token = req.session.token;
+                let v = {usuario, selected:'reponer',token}
+                res.render('profesor/perfil/reponer',v);
+            }else{
+                res.render('indexProfesores');
+            }    
+        }else{
+            res.render('indexProfesores');
+        }
+    }else{
+        res.render('indexProfesores');
+    }
+});
 // ? ----------------------------------- ROUTES MENU! ------------------------------------
 
 // ? ----------------------------------- peticiones ------------------------------------
@@ -124,16 +143,18 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                console.log(req.query);
-                let script = 'call prc_insertar_asistencia(?,?,?)';
-                var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo],
-                    (err,result,fields)=>{
-                    if(!err){
-                        res.send(result);
-                    }else{
-                        res.status(501).send('error');
-                    }
-                });
+                let fecha = new Date();
+                fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate() + ' '+ fecha.getHours() + ':00';
+                let script = 'call prc_insertar_asistencia(?,?,?,?)';
+                // var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo, fecha],
+                //     (err,result,fields)=>{
+                //     if(!err){
+                //         res.send(result);
+                //     }else{
+                //         res.status(501).send('error');
+                //     }
+                // });
+                res.send(req.query);
             }else{
                 res.render('indexProfesores');
             }    
@@ -175,6 +196,61 @@ router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{ // trer
     }
 });
 
+router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_profesor_asistencias';
+                var query = con.query(script,
+                    [req.query.id],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){
+                            res.send(rows);
+                        }else{
+                            res.send('vacia');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'call prc_insertar_profesor_asistencia(?,?,?,?)';
+                var query = con.query(script,
+                    [req.query.estado, req.query.fecha, req.query.idProfesor, req.query.grupo],
+                    (err,result,fields)=>{
+                    if(!err){
+                        res.send(result);
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
 router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
@@ -196,13 +272,43 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
                     }
                 });
             }else{
-                res.status(501).send('error');
+                res.render('notAllowedAdmin');
             }    
         }else{
-            res.status(501).send('error');
+            res.render('notAllowedAdmin');
         }
     }else{
-        res.status(501).send('error');
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/reponer/profesores',ensureToken,(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_profesores';
+                var query = con.query(script,
+                    [req.query.cedula],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){
+                            res.send(rows);
+                        }else{
+                            res.status(501).send('error');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
     }
 });
 
