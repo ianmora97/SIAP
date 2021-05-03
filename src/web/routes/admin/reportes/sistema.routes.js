@@ -32,6 +32,17 @@ router.get('/admin/registro/sistema',(req,res)=>{
     });
 });
 
-
+router.get('/admin/registro/sistemaCanAdmin',(req,res)=>{
+    let script = "select * from vta_administradores";
+    var query = con.query(script, (err,rows,fields)=>{
+        if(rows != undefined){
+            if(rows.length != 0){
+                res.send(rows)
+            }
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
 module.exports = router;
 

@@ -4,12 +4,37 @@ function loaded(event) {
 
 function events(event) {
 cargar_registros();
-
+cargar_administradores();
 }
 
 //------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
-var registro = [];
 
+
+function cargar_administradores(){
+
+  
+    $.ajax({
+        type: "GET",
+        url: "/admin/registro/sistemaCanAdmin",
+        //url: "/admin/estudiante/getTalleres",
+        
+        contentType: "application/json",
+    }).then((solicitudes) => {
+        
+        
+        cantidad_administrativos
+        $('#cantidad_administrativos').html(solicitudes.length);
+       
+    },
+        (error) => {
+            alert(error.status);
+        }
+    );
+
+
+
+}
+var registro = [];
 function cargar_registros() {
     let ajaxTime = new Date().getTime();
     $.ajax({
