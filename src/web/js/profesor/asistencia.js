@@ -8,6 +8,7 @@ var g_asistencia = [];
 var g_profesorAsistencia = [];
 var g_MapprofesorAsistencia = new Map();
 var g_grupoAbierto ='';
+var g_grupoReposicion = [];
 
 function loaded(event){
     events(event);
@@ -296,10 +297,30 @@ function ingresarAsitenciaProfesor(){
         }
     }).then((response) => {
         bringDB()
-        traerEstudantesXGrupo()
+        traerEstudantesXGrupo();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+          
+        Toast.fire({
+            icon: 'success',
+            title: 'Asistencia Agregada'
+        })
     }, (error) => {
         
     });
+}
+function saltarAsitenciaProfesor() {
+    $('#pasarAsistenciaProfesor').modal('hide');
+    $('#pag_ant').click();
 }
 
 function bringDB() {
@@ -461,7 +482,7 @@ function traerGrupos(){
     let data = {cedula}
     $.ajax({
         type: "GET",
-        url: "/profesor/grupos",
+        url: "/profesor/grupos/getGrupos",
         data: data,
         contentType: "application/json",
         headers:{
@@ -471,6 +492,27 @@ function traerGrupos(){
         g_grupos = response;
         eachGrupos(response);
     }, (error) => {
+    });
+    $.ajax({ // trae los grupos de la semana de reposicion que se le asignaron al profesor
+        type: "GET",
+        url: "/profesor/grupos/getReposicion",
+        data: data,
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        console.log(response);
+        g_grupoReposicion = response;
+        eachGruposRepo(g_grupoReposicion,"REPO");
+    }, (error) => {
+    });
+}
+function eachGruposRepo(grupos,filtro) {
+    grupos.forEach((e)=>{
+        if(e.cupo_actual != 0){
+            showGrupos(e,filtro);
+        }
     });
 }
 function eachGrupos(grupos,filtro = "HOY") {
@@ -494,6 +536,7 @@ async function showGrupos(g,filtro){
     let diaSemana = await daytoWeekDay(dia);
     let allow = diaSemana == today.getUTCDay();
     let hoy = diaSemana == today.getUTCDay() ? '<div class="circleHoy"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/279/fire_1f525.png" width="30"></div>' : '';
+    let rep = '<div class="circleRepo"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/279/umbrella-on-ground_26f1-fe0f.png" width="30"></div>';
 
     if(filtro == 'HOY'){
         if(allow){
@@ -514,6 +557,25 @@ async function showGrupos(g,filtro){
             
         }else{
         }
+    }else if(filtro == "REPO"){
+        $('#clasesLista').append(`
+            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
+                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
+                    <div class="position-absolute" style="right:-20px; top:-20px;">${rep}</div>
+                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6> 
+                        <p class="card-text">${cupo_actual} ${est}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" 
+                            id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
+                            <h6 class="m-0"><span class="badge badge-info">REPOSICION</span></h6> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
     }else{
         $('#clasesLista').append(`
             <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
@@ -553,6 +615,7 @@ function daytoWeekDay(day) {
 }
 function mostartClasesFiltro(fil) {
     eachGrupos(g_grupos,fil.value)
+    eachGruposRepo(g_grupoReposicion,"REPO")
 }
 function traerInformacionDeEstudiante(){
     let bearer = 'Bearer '+g_token;

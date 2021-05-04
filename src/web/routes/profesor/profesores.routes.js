@@ -251,7 +251,7 @@ router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,re
         res.render('notAllowedAdmin');
     }
 });
-router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/grupos/getGrupos',(req,res)=>{ // trer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -282,7 +282,38 @@ router.get('/profesor/grupos',(req,res)=>{ // trer cursos por profesor
     }
 });
 
-router.get('/profesor/reponer/profesores',ensureToken,(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/grupos/getReposicion',(req,res)=>{ // trer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'select * from vta_profesor_reposiciones where cedula_origen = ?';
+                var query = con.query(script,
+                    [req.query.cedula],
+                    (err,rows,fields)=>{
+                    if(!err){
+                        if(rows.length != 0){                            
+                            
+                            res.send(rows);
+                        }else{
+                            res.status(501).send('error');
+                        }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/reponer/profesores',ensureToken,(req,res)=>{ // traer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -297,6 +328,32 @@ router.get('/profesor/reponer/profesores',ensureToken,(req,res)=>{ // trer curso
                         }else{
                             res.status(501).send('error');
                         }
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
+            }else{
+                res.render('notAllowedAdmin');
+            }    
+        }else{
+            res.render('notAllowedAdmin');
+        }
+    }else{
+        res.render('notAllowedAdmin');
+    }
+});
+
+router.get('/profesor/reponer/reponerClase',ensureToken,(req,res)=>{ // traer cursos por profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let script = 'call prc_insertar_profesor_reposicion(?,?,?,?)';
+                var query = con.query(script,
+                    [req.query.idProfesor, req.query.profesorRepo, req.query.fecha, req.query.grupo],
+                    (err,result,fields)=>{
+                    if(!err){
+                        res.send(result);
                     }else{
                         res.status(501).send('error');
                     }
@@ -370,18 +427,21 @@ router.get('/profesor/informacionEstudiantesMatricula',(req,res)=>{ // trae la i
         res.status(501).send('error');
     }
 });
-router.post('/profesor/crearAnotacion',(req,res)=>{ // insertar anotacion por profesor
+router.post('/profesor/crearAnotacion',ensureToken,(req,res)=>{ // insertar anotacion por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
+                console.log(req.body)
                 let script = 'call prc_insertar_anotaciones(?,?,?)'; //anotacion, id profesor, id estudiante
                 var query = con.query(script,
                     [req.body.nota, req.body.profesor, req.body.estudiante],
                     (err,rows,fields)=>{
                     if(!err){
+
                         res.send('send');
                     }else{
+                        console.log(err);
                         res.status(501).send('error');
                     }
                 });
@@ -395,7 +455,7 @@ router.post('/profesor/crearAnotacion',(req,res)=>{ // insertar anotacion por pr
         res.status(501).send('error');
     }
 });
-router.get('/profesor/obtenerAnotacionesPorProfesor',(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/obtenerAnotacionesPorProfesor',(req,res)=>{ // traer cursos por profesor
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){

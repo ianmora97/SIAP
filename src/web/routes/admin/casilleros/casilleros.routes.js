@@ -73,6 +73,7 @@ router.get('/admin/casilleros/asignarCasillero',(req,res)=>{
         [req.query.cedula,req.query.codigo,req.query.horaEntrada,req.query.horaSalida],
         (err,result,fields)=>{
             if(!err){
+                logSistema(req.session.value.cedula, `${req.query.cedula} ASIGNAR CASILLERO -> ${req.query.codigo}`, 'INSERT', 'T_CASILLERO_ESTUDIANTE');
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -90,6 +91,7 @@ router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
         [req.query.id, req.query.codigo],
         (err,result,fields)=>{
             if(!err){
+                logSistema(req.session.value.cedula, `${req.query.id} REVOCAR CASILLERO -> ${req.query.codigo}`, 'DELETE', 'T_CASILLERO_ESTUDIANTE');
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -108,6 +110,7 @@ router.get('/admin/casilleros/agregarCasillero',(req,res)=>{
         [req.query.codigo],
         (err,result,fields)=>{
             if(!err){
+                logSistema(req.session.value.cedula, `AGREGAR CASILLERO -> ${req.query.codigo}`, 'INSERT', 'T_CASILLERO');
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -125,6 +128,7 @@ router.get('/admin/casilleros/eliminarCasillero',(req,res)=>{
         [req.query.codigo],
         (err,result,fields)=>{
             if(!err){
+                logSistema(req.session.value.cedula, `ELIMINAR CASILLERO -> ${req.query.codigo}`, 'DELETE', 'T_CASILLERO');
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -135,6 +139,16 @@ router.get('/admin/casilleros/eliminarCasillero',(req,res)=>{
     }
 });
 
+
+function logSistema(usuario, descripcion, ddl, tabla) {
+    con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{
+        if(!err){
+            console.log(`[ ${chalk.green('OK')} ] ${chalk.yellow('ACTIVITY')} (${usuario}) @ ${descripcion} | ${ddl} ON ${tabla}`);
+        }else{
+            console.log(err);
+        }
+    });
+}
 module.exports = router;
 
 

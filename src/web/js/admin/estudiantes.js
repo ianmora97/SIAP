@@ -208,7 +208,6 @@ function cargar_estudiante(solicitudes) {
 
     });
     $('#estudiantes_TableOrder').DataTable({
-        stateSave: true,
         "language": {
             "zeroRecords": "No se encontraron estudiantes",
             "infoEmpty": "No hay registros disponibles!",
@@ -292,7 +291,7 @@ function llenar_Estudiantes(solicitudes) {
     let moroso = solicitudes.moroso == 1 ? "checked " : " ";
 
     $("#lista_estudiantes").append(
-        "<tr>" +
+        `<tr style="height:calc(55vh / 10);"> ` +
         "<td>" +
         id +
         " </td>" +

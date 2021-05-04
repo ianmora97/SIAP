@@ -60,16 +60,16 @@ app.use(require('./routes/admin/reportes/sistema.routes'));
 app.use(require('./routes/admin/reportes/contabilidad.routes'));
 
 app.use(require('./routes/admin/estudiante/admin.routes'));
-app.use(require('./routes/profesor/profesores.routes'));
-app.use(require('./routes/estudiante/reposition.routes'));
 app.use(require('./routes/admin/talleres/talleres.routes'));
+app.use(require('./routes/admin/comprobacion/admin.routes'));
 
+app.use(require('./routes/estudiante/reposition.routes'));
+app.use(require('./routes/profesor/profesores.routes'));
 
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/document.routes'));
 app.use(require('./routes/client.routes'));
 app.use(require('./routes/listaestudiantes.routes'));
-app.use(require('./routes/user_temp.routes'));
 app.use(require('./routes/student.routes'));
 app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));

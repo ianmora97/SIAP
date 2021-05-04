@@ -32,7 +32,6 @@ con.getConnection(function(err) {
                     
                     rows.forEach((e)=>{
                         if(hoy.getFullYear() == e.pago.split('-')[0] && hoy.getMonth() + 1 == e.pago.split('-')[1] && hoy.getDate() >= e.pago.split('-')[2]){
-                            console.log('moroso, pague la picha')
                             var mailOptions = {
                                 name:'SIAP',
                                 from: 'siapduna2020@gmail.com',
@@ -42,7 +41,7 @@ con.getConnection(function(err) {
                                     '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
                                     '</div>' +
                                     '<h1>' + e.nombre +'</h1>' +
-                                    '<p>PAGUE LA OSTIA</p>'+
+                                    '<p>Debe de pagar la mensualidad de la piscina, tiene 5 dias para realizar el pago en FUNDAUNA.</p>'+
                                     ''
                             };
                             email.sendMail(mailOptions, function(error, info){
