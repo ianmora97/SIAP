@@ -22,7 +22,7 @@ function cargar_administradores(){
     }).then((solicitudes) => {
         
         
-        cantidad_administrativos
+        
         $('#cantidad_administrativos').html(solicitudes.length);
        
     },
@@ -68,7 +68,6 @@ function cargar_registro_Estudiantes(solicitudes) {
     console.log(solicitudes);
     solicitudes.forEach((solicitudes) => {
         llenar_registro_Estudiantes(solicitudes);
-        
     });
 }
 function cargar_registro_Cursos(solicitudes) {
