@@ -37,7 +37,7 @@ router.get('/admin/estudiante/actualizarNivel',(req,res)=>{
     var query = con.query(script,[req.query.cedula,req.query.nivel],
         (err,rows,fields)=>{
         if(!err){
-            logSistema(req.session.value.cedula, `DATA: ${req.query.cedula} -> ${req.query.nivel}`, 'UPDATE', 'T_ESTUDIANTE');
+            logSistema(req.session.value.cedula, `${req.query.cedula} NIVEL -> ${req.query.nivel}`, 'UPDATE', 'T_ESTUDIANTE');
             res.send(rows);
         }
     });

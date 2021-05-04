@@ -1,6 +1,7 @@
 $primary:#364C78;
 $dark-primary:#25375a;
 $secondary:#B81616;
+$dark-secondary:#a31616;
 $light:#F0F2F5;
 $gray:#4E5560;
 $dark:#27323A;
@@ -355,7 +356,7 @@ select{
 }
 .pro-nav-link{
     &:hover{
-        background-color: $dark-primary;
+        background-color: $dark-secondary;
     }
 }
 .circleHoy{
@@ -365,3 +366,13 @@ select{
     border-radius: 50px;
     padding: 0.5rem 0.6rem;
 }
+.circleRepo{
+    background: #358bdc;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    padding: 0.5rem 0.6rem;
+}
+/* 
+    ! --------- VISTA PROFESOR
+*/

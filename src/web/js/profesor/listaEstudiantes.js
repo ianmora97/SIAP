@@ -36,7 +36,7 @@ function getAnotaciones_alt(e){
 }
 function getAnotaciones(){
     $('#modalAnotaciones').on('show.bs.modal', function (event) {
-        let profesor = parseInt($('#id_usuario').text());
+        let profesor = parseInt($('#id_profesor').text());
         let estudiante = parseInt($('#cedulaEstudianteGet').text());
         let data = {profesor,estudiante}
         $.ajax({
@@ -71,11 +71,12 @@ function showAnotacion(e){
 
 }
 function sendAnotacion_alt(){
+    let bearer = 'Bearer '+g_token;
     $('erroresAlert').text('');
     $('#i_send').removeClass('fa-paper-plane');
     $('#i_send').addClass('spinner-border spinner-border-sm');
     let nota = $('#anotacionEstudiante').val();
-    let profesor = $('#id_usuario').text();
+    let profesor = $('#id_profesor').text();
     let estudiante = $('#cedulaEstudianteGet').text();
     let data = {nota,profesor,estudiante}
 
@@ -84,7 +85,10 @@ function sendAnotacion_alt(){
             type: "POST",
             url: "/profesor/crearAnotacion",
             data: JSON.stringify(data),
-            contentType: "application/json"
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
         }).then((response) => {
             getAnotaciones_alt(data);
             $('#anotacionEstudiante').val('');
@@ -266,7 +270,7 @@ function traerCursosEstudiante(){
     let data = {cedula}
     $.ajax({
         type: "GET",
-        url: "/profesor/grupos",
+        url: "/profesor/grupos/getGrupos",
         data: data,
         contentType: "application/json"
     }).then((response) => {

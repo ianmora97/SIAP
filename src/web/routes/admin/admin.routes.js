@@ -35,6 +35,7 @@ router.post('/admin/log',(req,res)=>{ //login
                     jwt.sign({userLogged},'secretKeyToken',(err,token)=>{
                         req.session.value = rows[0];
                         req.session.token = token;
+                        logSistema(req.session.value.cedula, `INICIO SESION`, 'LOG', 'T_ADMINISTRATIVO');
                         let today = new Date();
                         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -308,6 +309,16 @@ router.get('/admin/perfil',(req,res)=>{
 });
 
 // ! ----------------------------------- nav routes ------------------------------------
+
+function logSistema(usuario, descripcion, ddl, tabla) {
+    con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{
+        if(!err){
+            console.log(`[ ${chalk.green('OK')} ] ${chalk.yellow('ACTIVITY')} (${usuario}) @ ${descripcion} | ${ddl} ON ${tabla}`);
+        }else{
+            console.log(err);
+        }
+    });
+}
 
 module.exports = router;
 

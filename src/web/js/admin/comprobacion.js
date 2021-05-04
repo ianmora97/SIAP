@@ -143,7 +143,6 @@ function mostrarUsuarios(usuarios) {
     });
     let database = '#estudiantes_TableOrder';
     var table = $(database).DataTable({
-        stateSave: true,
         "language": {
             "zeroRecords": "No se encontraron estudiantes",
             "infoEmpty": "No hay registros disponibles!",
@@ -227,12 +226,12 @@ function cambiarEstadoSend() {
         let data = { cedula, email, nombre }
         $.ajax({
             type: "POST",
-            url: "/estudiante/insertarUsuarioPermanente",
+            url: "/admin/comprobacion/insertarUsuarioPermanente",
             data: JSON.stringify(data),
             contentType: "application/json"
         }).then((response) => {
             console.log(response);
-            $('#modalCambiarEstado').modal('hide');
+            location.href = "/admin/comprobacion";
             let table = $('#estudiantes_TableOrder').DataTable();
             table.destroy();
             traer_estudiantes();
@@ -245,13 +244,15 @@ function cambiarEstadoSend() {
         let data = { cedula }
         $.ajax({
             type: "POST",
-            url: "/estudiante/rechazarEstudiante",
+            url: "/admin/comprobacion/rechazarEstudiante",
             data: JSON.stringify(data),
             contentType: "application/json"
         }).then((response) => {
             console.log(response);
+            location.href = "/admin/comprobacion";
             $('#modalCambiarEstado').modal('hide');
-            traer_estudiantes();
+            let table = $('#estudiantes_TableOrder').DataTable();
+            table.destroy();
         }, (error) => {
             $('#alerta_error_estado').css('display', 'block');
         });

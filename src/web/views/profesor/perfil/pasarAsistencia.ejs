@@ -30,16 +30,18 @@
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.all.min.js"></script>
 </head>
 <body style="overflow-x:hidden ;">
-    <div class="modal fade" id="pasarAsistenciaProfesor" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="pasarAsistenciaProfesor" data-backdrop="static" 
+    data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
                     <h5><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h5>
                 </div>
                 <div class="w-100 row mx-0">
-                    <button type="button" class="w-50 rounded-0 btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="w-50 rounded-0 btn btn-secondary" onclick="saltarAsitenciaProfesor()">Cerrar</button>
                     <button type="button" class="w-50 rounded-0 btn btn-primary" onclick="ingresarAsitenciaProfesor()">Presente</button>
                 </div>
             </div>
@@ -157,7 +159,6 @@
                 
             </div>
             <div id="EstudiantesPorClaseLista" style="display: none;">
-                
                 <ul class="list-group" id="listaUlEstudiantes">
 
                 </ul>
