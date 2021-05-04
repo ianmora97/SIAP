@@ -23,8 +23,8 @@ router.get('/admin/registro/sistema',(req,res)=>{
     let script = "call prc_seleccionar_actividad()";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
-            if(rows.length != 0){
-                res.send(rows)
+            if(rows[0].length != 0){
+                res.send(rows[0])
             }
         }else{
             res.send({err:'NotFound'});

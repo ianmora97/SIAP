@@ -14,7 +14,8 @@
 // ! Estas rutas tienen que ser eliminadas, los stats se hacen en la capa logica no fetch
 
 const express = require('express');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const chalk = require('chalk');
 const router = express.Router();
 
 const con = require('../../../database');
@@ -36,6 +37,7 @@ router.get('/admin/estudiante/actualizarNivel',(req,res)=>{
     var query = con.query(script,[req.query.cedula,req.query.nivel],
         (err,rows,fields)=>{
         if(!err){
+            logSistema(req.session.value.cedula, `DATA: ${req.query.cedula} -> ${req.query.nivel}`, 'UPDATE', 'T_ESTUDIANTE');
             res.send(rows);
         }
     });
@@ -46,12 +48,23 @@ router.get('/admin/estudiante/actualizarMorosidad',(req,res)=>{
     var query = con.query(script,[req.query.cedula,req.query.morosidad],
         (err,rows,fields)=>{
         if(!err){
+            logSistema(req.session.value.cedula, `${req.query.cedula} MOROSIDAD -> ${req.query.morosidad}`, 'UPDATE', 'T_ESTUDIANTE');
             res.send(rows);
         }else{
             res.send(err)
         }
     });
 });
+
+function logSistema(usuario, descripcion, ddl, tabla) {
+    con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{
+        if(!err){
+            console.log(`[ ${chalk.green('OK')} ] ${chalk.yellow('ACTIVITY')} (${usuario}) @ ${descripcion} | ${ddl} ON ${tabla}`);
+        }else{
+            console.log(err);
+        }
+    });
+}
 
 function ensureToken(req,res,next) {
     const bearerHeader = req.headers['authorization'];

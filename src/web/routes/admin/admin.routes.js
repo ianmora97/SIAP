@@ -265,9 +265,10 @@ router.get('/admin/reportes/asistencia',(req,res)=>{
 router.get('/admin/reportes/sistema',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-sistema';
-            res.render('admin/reportes/sistema', {usuario,s});
+            res.render('admin/reportes/sistema', {usuario,s,token});
         }else{
             res.redirect('/admin');
         }
