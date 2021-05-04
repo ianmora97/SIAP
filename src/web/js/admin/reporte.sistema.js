@@ -22,7 +22,7 @@ function cargar_administradores(){
     }).then((solicitudes) => {
         
         
-        cantidad_administrativos
+        
         $('#cantidad_administrativos').html(solicitudes.length);
        
     },

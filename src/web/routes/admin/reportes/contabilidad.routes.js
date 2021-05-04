@@ -18,8 +18,8 @@ const router = express.Router();
 
 const con = require('../../../database');
 
-router.get('/admin/reportes/sistema/getUsuarios',(req,res)=>{
-    let script = "SELECT * FROM vta_grupos";
+router.get('/admin/reportes/contabilidad/getUsuarios',(req,res)=>{
+    let script = "SELECT * FROM siapd.t_estudiante";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
             if(rows.length != 0){

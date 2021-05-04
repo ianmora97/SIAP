@@ -268,7 +268,7 @@ router.get('/admin/reportes/sistema',(req,res)=>{
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-sistema';
-            res.render('admin/reportes/sistema', {usuario,s,token});
+            res.render('admin/reportes/sistema', {usuario,s, token});
         }else{
             res.redirect('/admin');
         }
@@ -279,9 +279,10 @@ router.get('/admin/reportes/sistema',(req,res)=>{
 router.get('/admin/reportes/contabilidad',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
+            let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-contabilidad';
-            res.render('admin/reportes/contabilidad', {usuario,s});
+            res.render('admin/reportes/contabilidad', {usuario,s, token});
         }else{
             res.redirect('/admin');
         }
