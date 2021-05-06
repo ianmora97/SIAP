@@ -53,8 +53,8 @@ function cargar_registros() {
         $('#infoTiming').text(t);
         registro = solicitudes;
         let est = registro.filter( element => element.tabla == 'T_ESTUDIANTE');
-        let curs = registro.filter( element => element.tabla == 't_grupo');
-        let prof = registro.filter( element => element.tabla == 't_profesor');
+        let curs = registro.filter( element => element.tabla == 'T_GRUPO');
+        let prof = registro.filter( element => element.tabla == 'T_ADMINISTRATIVO');
        // var otr = registro.filter( (x)=> x.tabla == 't_estudiante');
         cargar_registro_Estudiantes(est);
         cargar_registro_Cursos(curs);

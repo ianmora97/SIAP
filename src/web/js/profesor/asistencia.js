@@ -509,11 +509,27 @@ function traerGrupos(){
     });
 }
 function eachGruposRepo(grupos,filtro) {
-    grupos.forEach((e)=>{
+    let vec = filtrarRepoPorProfesor(grupos,$('#id_cedula').text())
+    // vec = filtrarPorFecha(vec);
+    vec.forEach((e)=>{
         if(e.cupo_actual != 0){
             showGrupos(e,filtro);
         }
     });
+}
+function filtrarRepoPorProfesor(grupo,cedula) {
+    return grupo.filter(e => e.cedula_origen != cedula);
+}
+function filtrarPorFecha(grupo) {//fecha_reposicion
+    let res = [];
+    grupo.forEach(e=>{
+        let f = new Date();
+        f = f.getFullYear() + '-' + (f.getMonth() + 1) + '-' + f.getDate();
+        if(f > e.fecha_reposicion){
+            res.push(e);
+        }
+    })
+    return res;
 }
 function eachGrupos(grupos,filtro = "HOY") {
     $('#clasesLista').html('');

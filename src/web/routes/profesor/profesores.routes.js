@@ -146,14 +146,14 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
                 let fecha = new Date();
                 fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate() + ' '+ fecha.getHours() + ':00';
                 let script = 'call prc_insertar_asistencia(?,?,?,?)';
-                // var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo, fecha],
-                //     (err,result,fields)=>{
-                //     if(!err){
-                //         res.send(result);
-                //     }else{
-                //         res.status(501).send('error');
-                //     }
-                // });
+                var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo, fecha],
+                    (err,result,fields)=>{
+                    if(!err){
+                        res.send(result);
+                    }else{
+                        res.status(501).send('error');
+                    }
+                });
                 res.send(req.query);
             }else{
                 res.render('indexProfesores');
@@ -287,9 +287,8 @@ router.get('/profesor/grupos/getReposicion',(req,res)=>{ // trer cursos por prof
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
             if(usuario.rol == 2){
-                let script = 'select * from vta_profesor_reposiciones where cedula_origen = ?';
+                let script = 'select * from vta_profesor_reposiciones';
                 var query = con.query(script,
-                    [req.query.cedula],
                     (err,rows,fields)=>{
                     if(!err){
                         if(rows.length != 0){                            
