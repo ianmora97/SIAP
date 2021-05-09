@@ -18,3 +18,55 @@ const animateCSS = (element, animation) =>
 
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
+
+function loaded(event){
+  events(event);
+}
+
+function events(event){
+
+}
+function toogleMenu() {
+  $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      //$('#sidebar-wrapper').css('position','relative');
+      $("#wrapper").toggleClass("toggled");
+      //$("#side-panel").css('margin-left','-12px');
+      //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+      //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+      //$("#sidebar-wrapper").animate({left:'-200'},1000);
+  });
+}
+$(function () {
+  $('[data-toggle="popover"]').popover();
+})
+
+function revocarCasillero() {
+  let bearer = 'Bearer '+g_token;
+  $.ajax({
+      type: "GET",
+      url: "/admin/administrador/getTables",
+      contentType: "appication/json",
+      headers:{
+          'Authorization':bearer
+      }
+    }).then((response) => {
+        listTables(response);
+    }, (error) => {
+  });
+}
+
+function listTables(data) {
+  let tables = filterByTable();
+  let views = filterByView();
+
+  tables.forEach(element => {
+    showTableTree(element);
+  });
+  views.forEach(element => {
+    showviewTree(element);
+  });
+}
+
+
+document.addEventListener("DOMContentLoaded", loaded);

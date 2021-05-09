@@ -60,6 +60,7 @@ app.use(require('./routes/admin/reportes/sistema.routes'));
 app.use(require('./routes/admin/reportes/contabilidad.routes'));
 
 app.use(require('./routes/admin/estudiante/admin.routes'));
+app.use(require('./routes/admin/administradores/admin.routes'));
 app.use(require('./routes/admin/talleres/talleres.routes'));
 app.use(require('./routes/admin/comprobacion/admin.routes'));
 
@@ -81,6 +82,9 @@ app.use(express.static(path.join(__dirname,'/public')));
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
+    console.log('[',chalk.green('Client'),']',chalk.yellow("http://localhost/"));
+    console.log('[',chalk.green('Admin'),']',chalk.yellow("http://localhost/admin"));
+    console.log('[',chalk.green('Teacher'),']',chalk.yellow("http://localhost/profesores"));
 });
 
 const io = SocketIo(server);

@@ -30,12 +30,12 @@ router.post('/admin/log',(req,res)=>{ //login
         (err,rows,fields)=>{
         if(!err){
             if(rows.length != 0){
-                if(rows[0].rol == 3){
+                if(rows[0].rol >= 3){
                     const userLogged = rows[0];
                     jwt.sign({userLogged},'secretKeyToken',(err,token)=>{
                         req.session.value = rows[0];
                         req.session.token = token;
-                        logSistema(req.session.value.cedula, `INICIO SESION`, 'LOG', 'T_ADMINISTRATIVO');
+                        //logSistema(req.session.value.cedula, `INICIO SESION`, 'LOG', 'T_ADMINISTRATIVO');
                         let today = new Date();
                         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
