@@ -31,17 +31,90 @@ router.get('/admin/administrador/getAdministradores',ensureToken,(req,res)=>{
     });
 });
 
-router.get('/admin/administrador/getTables',ensureToken,(req,res)=>{
-    let script = "SELECT * FROM information_schema.tables WHERE table_schema = 'siapd'";
+router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
+    let script = "call prc_insertar_usuario(?,?,?,?,?,?,?,?)";
     var query = con.query(script,
+        [req.query.cedula, req.query.nombre,
+        req.query.apellidos, "", req.query.usuario,
+        req.query.clave, req.query.sexo, req.query.correo],
         (err,rows,fields)=>{
         if(!err){
-            console.log(rows)
-            res.send(rows);
+            if(rows != undefined){
+                res.send(rows);
+            }
         }
     });
 });
 
+router.get('/admin/administrador/getTables', ensureToken,(req,res)=>{
+    con.query("SELECT * FROM information_schema.tables WHERE table_schema = 'siapd'",
+        (err,rows,fields)=>{
+        if(!err){
+            getColumnsTables(rows).then(resTables=>{
+                let tables = resTables;
+                getColumnsViews(rows).then(resViews=>{
+                    let views = resViews;
+                    res.send({tables,views});
+                })
+            })
+        }
+    });
+});
+
+router.get('/admin/administrador/runScript', ensureToken,(req,res)=>{
+    con.query(req.query.text,
+        (err,rows,fields)=>{
+        if(!err){
+            let [filas,campos,type] = [rows,fields,'good'];
+            res.send({filas,campos,type});
+        }else{
+            let error={
+                text: err,
+                type: 'error'
+            }
+            res.send(error);
+        }
+    });
+});
+
+function getColumnsTables(data) {
+    return new Promise((resolve,reject) => {
+        let tablesVec = data.filter(e => e.TABLE_TYPE == 'BASE TABLE'); //vector de tablas
+        let resTables = [];
+        let cont1 = 0;
+        tablesVec.forEach(e => {
+            con.query(`SHOW FULL COLUMNS FROM ${e.TABLE_NAME}`,
+                (err1,tableColumn,fields1)=>{
+                if(!err1){
+                    resTables.push({'name':e.TABLE_NAME, 'rows':tableColumn});
+                    cont1++;
+                    if(cont1 == tablesVec.length){
+                        resolve(resTables);
+                    }
+                }
+            });
+        })
+    })
+}
+function getColumnsViews(data) {
+    return new Promise((resolve,reject) => {
+        let tablesVec = data.filter(e => e.TABLE_TYPE == 'VIEW'); //vector de vistas
+        let resTables = [];
+        let cont1 = 0;
+        tablesVec.forEach(e => {
+            con.query(`SHOW FULL COLUMNS FROM ${e.TABLE_NAME}`,
+                (err1,tableColumn,fields1)=>{
+                if(!err1){
+                    resTables.push({'name':e.TABLE_NAME, 'rows':tableColumn});
+                    cont1++;
+                    if(cont1 == tablesVec.length){
+                        resolve(resTables);
+                    }
+                }
+            });
+        })
+    })
+}
 router.get('/admin/administrador/actualizarMorosidad',(req,res)=>{
     let script = "CALL prc_actualizar_moroso_estudiante(?,?)";
     var query = con.query(script,[req.query.cedula,req.query.morosidad],

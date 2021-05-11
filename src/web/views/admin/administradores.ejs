@@ -23,7 +23,10 @@
      <link rel="stylesheet" href="../../css/general.css">
      <link rel="stylesheet" href="../../css/datatables.min.css">
      <link rel="stylesheet" href="../../css/dashboard.css"/>
+     <link rel="stylesheet" href="../../css/adminPanel.css"/>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
      <link rel="stylesheet" href="../../css/animate.css">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
      <script src="../../js/jq-bs-bundle.js"></script> 
@@ -33,130 +36,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
  </head>
  <body class="page bg-light d-flex flex-column h-100">
-    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+    <% if(usuario.rol > 3){ %>
+    <div class="modal fade" id="modalAdd" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-            <div class="modal-header bg-dark">
-                <h6 class="modal-title text-white pl-2">Agregar Administradores</h6>
-                <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body pb-0">
-                <div class="container-fluid">
-                    <h6 class="m-0">Datos del Administrador</h6>
-                    <small class="text-muted">
-                        Ingrese los datos del Administrador en los campos correspondientes 
-                        <span class="text-danger">todos los campos son requeridos.</span>
-                    </small>
-                    <div class="row mt-2">
-                        <div class="col-md-6">
-                            <div class="input-container">
-                                <input type="text" id="cedula_add" required autocomplete="off"/>
-                                <small>Cedula</small>		
-                                <i class="fa fa-id-card"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="text" id="nombre_add" required autocomplete="off">
-                                <small for="nombre">Nombre</small>
-                                <i class="fa fa-id-card"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="text" id="apellido_add" required autocomplete="off">
-                                <small for="apellido">Apellido</small>
-                                <i class="fa fa-id-card"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="date" id="fechaNacimiento_add" required autocomplete="off">
-                                <small for="fecha">Fecha de Nacimiento</small>
-                            </div>
-                            <div class="input-container">
-                                <input type="email" id="correo_add" required autocomplete="off">
-                                <small for="correo">Correo</small>
-                                <i class="fa fa-envelope"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="text" id="username_add" required autocomplete="off">
-                                <small for="nombreusuario">Nombre de Usuario</small>
-                                <i class="fa fa-user"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-container">
-                                <input type="tel" id="celular_add" required autocomplete="off">
-                                <small for="celular">Telefono Celular</small>
-                                <i class="fa fa-phone" aria-hidden="true"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="tel" id="telefonoEmergencia_add" required autocomplete="off">
-                                <small for="emergencia">Telefono Emergencia</small>
-                                <i class="fa fa-asterisk" aria-hidden="true"></i>
-                            </div>
-                            <div class="input-container">
-                                <input type="text" id="carrera_add" required autocomplete="off">
-                                <small for="carrera">Carrera o departamento</small>
-                                <i class="fa fa-university" aria-hidden="true"></i>
+                <div class="modal-header py-1 pl-3">
+                    <h5 class="modal-title ml-3" id="staticBackdropLabel">Agregar un administrador</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Datos del administrador</h4>
+                    <div class="row mx-auto">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="cedulaAdd">Cedula</label>
+                                <input type="text" class="form-control" id="cedulaAdd">
                             </div>
                             <div class="form-group">
-                                <small for="carrera" class="d-block">Provincia, Canton, Distrito</small>
-                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="provincia_add" required autocomplete="off">
-                                    <optgroup small="provincia">
-
-                                    </optgroup>
-                                </select>
-                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="canton_add">
-                                    <optgroup small="canton">
-
-                                    </optgroup>
-                                </select>
-                                <select class="form-control form-control-sm d-inline" style="width: 32%;" id="distrito_add">
-                                    <optgroup small="distrito">
-
-                                    </optgroup>
+                                <label for="NombreAdd">Nombre</label>
+                                <input type="text" class="form-control" id="NombreAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidosAdd">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidosAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="correoAdd">Correo</label>
+                                <input type="text" class="form-control" id="correoAdd">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="claveAdd">Clave de acceso</label>
+                                <input type="password" class="form-control" id="claveAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="sexoAdd">Sexo</label>
+                                <select class="custom-select" id="sexoAdd">
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
                                 </select>
                             </div>
-                            <div class="input-container">
-                                <input type="text" id="direccion_add" required>
-                                <small>Direccion Exacta</small>
-                                <i class="fas fa-map-marked-alt    "></i>
+                            <div class="form-group">
+                                <label for="UsuarioAdd">Usuario</label>
+                                <input type="text" class="form-control" id="UsuarioAdd">
                             </div>
-                            <div class="form-group w-100">
-                                <div class="row">
-                                    <div class="col">
-                                        <small>Sexo</small>
-                                        <select class="form-control form-control-sm" id="sexo" >
-                                            <option value="0" selected>Seleccione...</option>
-                                            <option value="Masculino">Masculino</option>
-                                            <option value="Femenino">Femenino</option>
-                                            <option value="Otro">Otro</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <small>Perfil</small>
-                                        <select class="form-control form-control-sm" id="perfil" >
-                                            <option value="0" selected>Seleccione...</option>
-                                            <option value="1">Estudiante</option>
-                                            <option value="2">Funcionario</option>
-                                        </select>
-                                        <small class="text-muted">Perfil que desempeña</small>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label for="rolAdd">Rol</label>
+                                <select class="custom-select" id="rolAdd">
+                                    <option value="3">3 Administrador</option>
+                                    <option value="4">4 Administrador con privilegios</option>
+                                    <option value="5">5 Super Usuario</option>
+                                </select>
                             </div>
                         </div>
                     </div>
+                    
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarUsuario()">Agregar Administrador</button>
                 </div>
             </div>
-            <div class="modal-footer py-0 pb-2">
-                <button type="button" class="btn btn-primary">
-                    Agregar
-                </button>
-            </div>
-            </div>
-            <div class="bg-white" style="width: 400px; height: 250px; display: none;"> 
-                <!--Aqui es para verificar que sea un administrador-->
-            </div>
-        </div>        
+        </div>
     </div>
+    <%}%>
      <div class="d-flex" id="wrapper">
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
@@ -199,7 +146,7 @@
                             href="#nav-lista" role="tab" aria-controls="nav-lista" aria-selected="true">Lista</a>
                             <% if(usuario.rol == 5){ %>
                             <a class="nav-link-casilleros" id="nav-querys-tab" data-toggle="tab" 
-                            href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false">Querys</a>
+                            href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false"><i class="ri-terminal-line text-info"></i> Panel de administracion</a>
                             <%}%>
                         </div>
                     </nav>
@@ -212,7 +159,8 @@
                                             <div class="input-group-prepend">
                                                 <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
                                             </div>
-                                            <input type="search" class="form-control border-0 shadow-none bg-white" onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                            <input type="search" class="form-control border-0 shadow-none bg-white" 
+                                            onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
                                         </div>
                                         
                                     </div>
@@ -222,36 +170,28 @@
                                                 <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
                                             </div>
                                             <div class="col-7 d-flex align-items-center justify-content-end pr-2" style="max-height: 40px">
-                                                <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarEstudiante"
-                                                data-toggle="tooltip" data-placement="top" title="Agregar un estudiante" 
+                                                <% if(usuario.rol > 3){ %>
+                                                <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarAdmin"
+                                                data-toggle="modal" data-target="#modalAdd"
                                                 >Agregar <i class="fas fa-plus-square"></i></button>
-                                            
-                                                <div class="btn-group dropleft">
-                                                    <button type="button" class="btn btn-secondary btn-sm mr-2" style="border-radius: 10px;" 
-                                                    data-toggle="tooltip" data-placement="top" title="Filtrar"
-                                                    onclick="openFilter()" id="dropdownFiltrar">
-                                                        Filtrar <i class="fas fa-filter"></i>
-                                                    </button>
-                                                </div>
-        
-                                                <button type="button" name="actualizar_lista" id="actualizar_lista" 
+                                                <%}%>
+                                                <a href="/admin/administradores" name="actualizar_lista" id="actualizar_lista" 
                                                 data-toggle="tooltip" data-placement="top" title="Actualizar lista"
-                                                class="btn bg-white btn-sm" style="border-radius: 50px;"><i class="fas fa-sync-alt"></i></button>
+                                                class="btn bg-white btn-sm" style="border-radius: 50px;"><i class="fas fa-sync-alt"></i></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row w-100 mx-0" style="height: 55vh; overflow-y: auto;">
+                                <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
                                     <table class="table table-hover table-responsive-md table-borderless" id="administradores_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
                                         <thead>
                                             <tr>
                                                 <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--Aqui va la foto-->
-                                                <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
                                                 <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
-                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-level-up"></i> Nivel</th>
-                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Matricula</th>
-                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Pago</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-level-up"></i> Usuario</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Correo</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Rol</th>
                                             </tr>
                                             </thead>
                                             <tbody id="lista_administradores">
@@ -274,43 +214,57 @@
                         <% if(usuario.rol == 5){ %>
                         <div class="tab-pane fade" id="nav-querys" role="tabpanel" aria-labelledby="nav-querys-tab">
                             <div class="card-body px-2 py-2" style="height: 65vh; overflow-y: auto;">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="scripts">Ejecutar Scripts a la base de datos</label>
-                                        <textarea class="form-control" name="scripts" id="scripts" rows="10"></textarea>
+                                <div class="row mx-0 pl-0">
+                                    <div class="col-lg-5 pl-0" style="height: 60vh; overflow-y: auto;">
+                                        <h4>Base de datos</h4>
+                                        <ul class="pl-0" id="myUL">
+                                            <li><span class="caret pl-0"><i class="fas fa-chevron-right"></i> siapd</span>
+                                                <ul class="nested">
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Tables</span>
+                                                        <ul class="nested" id="ulTables">
+                                                            
+                                                        </ul>
+                                                    </li>  
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Views</span>
+                                                        <ul class="nested" id="ulViews">
+
+                                                        </ul>
+                                                    </li>  
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Procedures</span>
+                                                        <ul class="nested" id="ulProde">
+
+                                                        </ul>
+                                                    </li>  
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        
+                                        <script>
+                                            
+                                        </script>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 border-right">
-                                    <ul id="myUL">
-                                        <li><span class="caret">siapd</span>
-                                          <ul class="nested">
-                                            <li><span class="caret">Tables</span>
-                                                <ul class="nested" id="ulTables">
-                                                </ul>
-                                            </li>  
-                                            <li><span class="caret">Views</span>
-                                                <ul class="nested" id="ulNested">
-                                                </ul>
-                                            </li>  
-                                            <li><span class="caret">Procedures</span>
-                                              <ul class="nested" id="ulProde">
-                                              </ul>
-                                            </li>  
-                                          </ul>
-                                        </li>
-                                      </ul>
-                                      
-                                      <script>
-                                        let toggler = document.getElementsByClassName("caret");
-                                        
-                                        
-                                        for (let i = 0; i < toggler.length; i++) {
-                                            toggler[i].addEventListener("click", function() {
-                                            this.parentElement.querySelector(".nested").classList.toggle("active");
-                                            this.classList.toggle("caret-down");
-                                            });
-                                        }
-                                      </script>
+                                    <div class="col-lg-7 border-right right-stick">
+                                        <div class="form-group">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <label for="scripts">Ejecutar Scripts a la base de datos</label>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btn btn-info btn-sm" onclick="runQueryIntoBase()">Run Query</button>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div contenteditable="true" class="form-control mt-2" 
+                                            id="scripts" style="height: 20vh; overflow-y: auto;">
+                                                
+                                            </div>
+                                            <div class="border rounded mt-3" 
+                                            id="resultScript" style="height: 30vh; overflow-y: auto;">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +277,8 @@
              
          </div>
      </div>
-     <script src="../../js/assets/datatables.min.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
      <script src="../../js/admin/administradores.js"></script>
  </body>
  </html>
