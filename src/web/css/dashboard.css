@@ -5,7 +5,7 @@
   height: 40px;
   position: sticky;
   top: 0;
-  z-index: 99999; }
+  z-index: 100; }
 
 .sidebar-heading {
   height: 40px; }

@@ -1,3 +1,4 @@
+var g_mapAdmins = new Map();
 
 const animateCSS = (element, animation) =>
     
@@ -28,6 +29,9 @@ function events(event){
   bringDB();
   toogleMenu();
   modals();
+  llenarDatos();
+  verificar_correo();
+  verificar_clave();
 }
 function toogleMenu() {
   $("#menu-toggle").click(function(e) {
@@ -44,8 +48,115 @@ $(function () {
   $('[data-toggle="popover"]').popover();
 })
 function modals() {
-  
+  $('#modalAdd').on('hide.bs.modal', function (event) {
+    limpiarCampos();
+  })
+  $('#modalEdit').on('show.bs.modal', function (event) {
+    let id = $('#idAdministradorEdit').html();
+    let admintemp = g_mapAdmins.get(id);
+    $('#editLabelTitle').html(`${admintemp.nombre} (${admintemp.cedula})`);
+  })
+}  
+function openModalEdit(id) {
+  $('#idAdministradorEdit').html(id)
+  $('#modalEdit').modal('show');
 }
+
+function llenarDatos() {
+  $('#cedulaAdd').on('keyup',(cantidad)=>{
+      let id = $('#cedulaAdd').val();
+      
+      if(id.length == 9){
+          // $('#id_registro').addClass('is-valid');
+          $.ajax({
+              type: "GET",
+              url: '/buscarUsuarioRegistro',
+              contentType: "application/json",
+              data: {id:id}
+          }).then((response) => {
+              let p = JSON.parse(response)
+              $('#NombreAdd').val(p.results[0].firstname1);
+              $('#apellidosAdd').val(p.results[0].lastname);
+              
+              // $('#NombreAdd').addClass('is-valid');
+              // $('#apellidosAdd').addClass('is-valid');
+
+              $('#NombreAdd').attr('disabled', true);
+              $('#apellidosAdd').attr('disabled', true);
+          }, (error) => {
+          
+          });
+      }
+      else if(id.length == 12){ //revisar si es residente
+          // $('#id_registro').addClass('is-valid');
+      }else{ // si no se encontro
+          // $('#id_registro').removeClass('is-valid');
+
+          // $('#NombreAdd').removeClass('is-valid');
+          // $('#apellidosAdd').removeClass('is-valid');
+
+          $('#NombreAdd').attr('disabled', false);
+          $('#apellidosAdd').attr('disabled', false);
+      }
+  });
+}
+function verificar_correo(){
+  $('#correoAdd').on('keyup', ()=>{
+      let email = $('#correoAdd').val();
+      if(email != ""){
+        let c = email.substring(0, email.indexOf('@'));
+        $('#UsuarioAdd').val(c);
+      }
+  });
+}
+function verificar_clave(){
+  $('#claveAdd').on('keyup',function (event){
+      var p = $('#claveAdd').val();
+      var l = (p.length / 20 * 100) + "%";
+      $('#cantidad_caracteres').text('');
+      $('#cantidad_caracteres').text(p.length);
+      $('#progreso_clave').css('width',l);
+      if(p.length >= 8){
+          $('#progreso_clave').removeClass("bg-rojo");
+          $('#progreso_clave').addClass('bg-green');
+      }else if(p.length < 8){
+          $('#progreso_clave').removeClass('bg-green');
+          $('#progreso_clave').addClass("bg-rojo");
+      }
+  });
+}
+function limpiarCampos(){
+  $('#cedulaAdd').val('');
+  $('#NombreAdd').val('');
+  $('#apellidosAdd').val('');
+  $('#correoAdd').val('');
+  $('#claveAdd').val('');
+  $('#UsuarioAdd').val('');
+  $('#NombreAdd').attr('disabled', false);
+  $('#apellidosAdd').attr('disabled', false);
+}
+function eliminarAdmin(){
+  let bearer = 'Bearer '+g_token;
+  let id = $('#idAdministradorEdit').html();
+  let cedula = g_mapAdmins.get(id).cedula;
+
+  $.ajax({
+      type: "GET",
+      url: "/admin/administrador/eliminarAdministrador",
+      data: {cedula},
+      contentType: "appication/json",
+      headers:{
+          'Authorization':bearer
+      }
+    }).then((response) => {
+      setTimeout(() => {
+        location.href = "/admin/administradores"
+      }, 2500);
+      
+    }, (error) => {
+      
+  }); 
+}// 	moiso0499@outlook.com  	117410572
 function agregarUsuario(){
   let bearer = 'Bearer '+g_token;
   let cedula = $('#cedulaAdd').val();
@@ -55,7 +166,11 @@ function agregarUsuario(){
   let clave = $('#claveAdd').val();
   let sexo = $('#sexoAdd option:selected').val();
   let usuario = $('#UsuarioAdd').val();
-  let rol = $('#rolAdd option:selected').val();
+  let rol = parseInt($('#rolAdd option:selected').val());
+  $('#agregarBotonAdmin').show();
+  // if(){
+
+  // }
   $.ajax({
       type: "GET",
       url: "/admin/administrador/agregarAdministrador",
@@ -65,8 +180,14 @@ function agregarUsuario(){
           'Authorization':bearer
       }
     }).then((response) => {
-      location.href = "/admin/administradores"
+      $('#agregarBotonAdmin').show();
+      limpiarCampos();
+      setTimeout(() => {
+        location.href = "/admin/administradores"
+      }, 2500);
+      
     }, (error) => {
+      
   });
 }
 
@@ -102,6 +223,7 @@ function searchonfind() {
 function showAdminList(data){
   $('#lista_administradores').html();
   data.forEach(e=>{
+    g_mapAdmins.set(e.cedula,e);
     showRowAdminList(e)
   })
   $('#administradores_TableOrder').DataTable({
@@ -140,9 +262,11 @@ function showAdminList(data){
 
 }
 function showRowAdminList(data){
+  let foto = data.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
+    '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+data.foto+'" style="height:40px;">'
   $('#lista_administradores').append(`
-    <tr>
-      <td>${data.id}</td>
+    <tr ondblclick="openModalEdit(${data.cedula})">
+      <td class="text-center">${foto}</td>
       <td>${data.cedula}</td>
       <td>${data.nombre.toUpperCase() + ' '+ data.apellido.toUpperCase()}</td>
       <td>${data.usuario}</td>
@@ -231,77 +355,77 @@ function addTableToQuery(table) {
   let valMoment = $('#scripts').html();
   $('#scripts').html(valMoment + table);
 }
-const editor = document.getElementById('scripts');
-const selectionOutput = document.getElementById('selection');
+// const editor = document.getElementById('scripts');
+// const selectionOutput = document.getElementById('selection');
 
-function getTextSegments(element) {
-    const textSegments = [];
-    Array.from(element.childNodes).forEach((node) => {
-        switch(node.nodeType) {
-            case Node.TEXT_NODE:
-                textSegments.push({text: node.nodeValue, node});
-                break;
+// function getTextSegments(element) {
+//     const textSegments = [];
+//     Array.from(element.childNodes).forEach((node) => {
+//         switch(node.nodeType) {
+//             case Node.TEXT_NODE:
+//                 textSegments.push({text: node.nodeValue, node});
+//                 break;
                 
-            case Node.ELEMENT_NODE:
-                textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
-                break;
+//             case Node.ELEMENT_NODE:
+//                 textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
+//                 break;
                 
-            default:
-                throw new Error(`Unexpected node type: ${node.nodeType}`);
-        }
-    });
-    return textSegments;
-}
+//             default:
+//                 throw new Error(`Unexpected node type: ${node.nodeType}`);
+//         }
+//     });
+//     return textSegments;
+// }
 
 
 
-function updateEditor() {
-    const sel = window.getSelection();
-    const textSegments = getTextSegments(editor);
-    const textContent = textSegments.map(({text}) => text).join('');
-    let anchorIndex = null;
-    let focusIndex = null;
-    let currentIndex = 0;
-    textSegments.forEach(({text, node}) => {
-        if (node === sel.anchorNode) {
-            anchorIndex = currentIndex + sel.anchorOffset;
-        }
-        if (node === sel.focusNode) {
-            focusIndex = currentIndex + sel.focusOffset;
-        }
-        currentIndex += text.length;
-    });
+// function updateEditor() {
+//     const sel = window.getSelection();
+//     const textSegments = getTextSegments(editor);
+//     const textContent = textSegments.map(({text}) => text).join('');
+//     let anchorIndex = null;
+//     let focusIndex = null;
+//     let currentIndex = 0;
+//     textSegments.forEach(({text, node}) => {
+//         if (node === sel.anchorNode) {
+//             anchorIndex = currentIndex + sel.anchorOffset;
+//         }
+//         if (node === sel.focusNode) {
+//             focusIndex = currentIndex + sel.focusOffset;
+//         }
+//         currentIndex += text.length;
+//     });
     
-    editor.innerHTML = renderText(textContent);
+//     editor.innerHTML = renderText(textContent);
     
-    restoreSelection(anchorIndex, focusIndex);
-}
+//     restoreSelection(anchorIndex, focusIndex);
+// }
 
-function restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
-    const sel = window.getSelection();
-    const textSegments = getTextSegments(editor);
-    let anchorNode = editor;
-    let anchorIndex = 0;
-    let focusNode = editor;
-    let focusIndex = 0;
-    let currentIndex = 0;
-    textSegments.forEach(({text, node}) => {
-        const startIndexOfNode = currentIndex;
-        const endIndexOfNode = startIndexOfNode + text.length;
-        if (startIndexOfNode <= absoluteAnchorIndex && absoluteAnchorIndex <= endIndexOfNode) {
-            anchorNode = node;
-            anchorIndex = absoluteAnchorIndex - startIndexOfNode;
-        }
-        if (startIndexOfNode <= absoluteFocusIndex && absoluteFocusIndex <= endIndexOfNode) {
-            focusNode = node;
-            focusIndex = absoluteFocusIndex - startIndexOfNode;
-        }
-        currentIndex += text.length;
-    });
+// function restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
+//     const sel = window.getSelection();
+//     const textSegments = getTextSegments(editor);
+//     let anchorNode = editor;
+//     let anchorIndex = 0;
+//     let focusNode = editor;
+//     let focusIndex = 0;
+//     let currentIndex = 0;
+//     textSegments.forEach(({text, node}) => {
+//         const startIndexOfNode = currentIndex;
+//         const endIndexOfNode = startIndexOfNode + text.length;
+//         if (startIndexOfNode <= absoluteAnchorIndex && absoluteAnchorIndex <= endIndexOfNode) {
+//             anchorNode = node;
+//             anchorIndex = absoluteAnchorIndex - startIndexOfNode;
+//         }
+//         if (startIndexOfNode <= absoluteFocusIndex && absoluteFocusIndex <= endIndexOfNode) {
+//             focusNode = node;
+//             focusIndex = absoluteFocusIndex - startIndexOfNode;
+//         }
+//         currentIndex += text.length;
+//     });
     
-    sel.setBaseAndExtent(anchorNode,anchorIndex,focusNode,focusIndex);
-}
-
+//     sel.setBaseAndExtent(anchorNode,anchorIndex,focusNode,focusIndex);
+// }
+// editor.addEventListener('input', updateEditor);
 function renderText(text) {
     const words = text.split(/(\s+)/);
     const output = words.map((word) => {
@@ -430,6 +554,6 @@ function printTableRow(data) {
     resolve('row_created');
   })
 }
-editor.addEventListener('input', updateEditor);
+
 
 document.addEventListener("DOMContentLoaded", loaded);

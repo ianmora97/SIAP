@@ -16,6 +16,15 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
+const nodemailer = require('nodemailer');
+
+var email = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'siapduna2020@gmail.com',
+    pass: 'Perroloco123!'
+  }
+});
 
 const con = require('../../../database');
 
@@ -31,17 +40,61 @@ router.get('/admin/administrador/getAdministradores',ensureToken,(req,res)=>{
     });
 });
 
-router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
-    let script = "call prc_insertar_usuario(?,?,?,?,?,?,?,?)";
-    var query = con.query(script,
-        [req.query.cedula, req.query.nombre,
-        req.query.apellidos, "", req.query.usuario,
-        req.query.clave, req.query.sexo, req.query.correo],
+router.get('/admin/administrador/eliminarAdministrador',ensureToken,(req,res)=>{
+    let script = "call prc_eliminar_administrativo(?)";
+    con.query(script,[req.query.cedula],
         (err,rows,fields)=>{
         if(!err){
-            if(rows != undefined){
-                res.send(rows);
+            res.send(rows);
+        }else{
+            console.log(err)
+        }
+    });
+});
+
+router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
+    let script = "call prc_insertar_administrador(?,?,?,?,?,?,?,?)";
+    
+    var query = con.query(script,
+        [req.query.cedula, req.query.nombre,
+        req.query.apellidos, req.query.usuario,
+        req.query.clave, req.query.sexo, req.query.correo, req.query.rol],
+        (err,rows,fields)=>{
+        if(!err){
+            var mailOptions = {
+                name:'SIAP - Registro',
+                from: 'siapduna2020@gmail.com',
+                to: req.query.correo,
+                subject: 'Sistema de Administracion de la Piscina',
+                html: '<div style="background:white;color:black;"><div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
+                    '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
+                    '</div>' +
+                    '<h1>' + req.query.nombre + ' ' + req.query.apellidos +'</h1>' +
+                    `<p>Usted ha sido agregado como administrador en el SIAP.<br>
+                    Ingrese con las siguientes credenciales:<br>
+                    Cedula: ${req.query.cedula}<br>
+                    Clave: ${req.query.clave}<br>        
+                    </p><br>
+                    <h4 style="color:red;">Estos accesos solo los debe mantener su persona.</h4>
+                    </div>
+                    `
+            };
+            email.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+            });
+            logSistema(req.session.value.cedula, 'AGREGAR ADMINISTRATIVo -> '+req.query.cedula, 'AGREGAR', 'T_ADMINISTRATIVO');
+            res.send(rows)
+        }else{
+            
+            let error = {
+                err:err,
+                status:501
             }
+            res.send(error);
         }
     });
 });
@@ -115,18 +168,6 @@ function getColumnsViews(data) {
         })
     })
 }
-router.get('/admin/administrador/actualizarMorosidad',(req,res)=>{
-    let script = "CALL prc_actualizar_moroso_estudiante(?,?)";
-    var query = con.query(script,[req.query.cedula,req.query.morosidad],
-        (err,rows,fields)=>{
-        if(!err){
-            logSistema(req.session.value.cedula, `${req.query.cedula} MOROSIDAD -> ${req.query.morosidad}`, 'UPDATE', 'T_ESTUDIANTE');
-            res.send(rows);
-        }else{
-            res.send(err)
-        }
-    });
-});
 
 function logSistema(usuario, descripcion, ddl, tabla) {
     con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{

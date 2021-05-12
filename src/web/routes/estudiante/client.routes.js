@@ -2,7 +2,7 @@ const express = require('express');
 const chalk = require('chalk');
 const router = express.Router();
 
-const con = require('../database');
+const con = require('../../database');
 
 router.get('/client/home',(req,res)=>{
     if(req.session.value){

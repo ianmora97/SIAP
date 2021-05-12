@@ -298,8 +298,9 @@ router.get('/admin/perfil',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
             let usuario = req.session.value;
+            let token = req.session.token;
             let s = 'dash';
-            res.render('admin/editarDatos', {usuario,s});
+            res.render('admin/editarDatos', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }

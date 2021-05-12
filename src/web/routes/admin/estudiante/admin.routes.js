@@ -32,7 +32,7 @@ router.get('/admin/estudiante/getTalleres',ensureToken,(req,res)=>{
     });
 });
 
-router.get('/admin/estudiante/actualizarNivel',(req,res)=>{
+router.get('/admin/estudiante/actualizarNivel',ensureToken,(req,res)=>{
     let script = "CALL prc_actualizar_nivel_estudiante(?,?)";
     var query = con.query(script,[req.query.cedula,req.query.nivel],
         (err,rows,fields)=>{
@@ -43,7 +43,20 @@ router.get('/admin/estudiante/actualizarNivel',(req,res)=>{
     });
 });
 
-router.get('/admin/estudiante/actualizarMorosidad',(req,res)=>{
+router.get('/admin/estudiante/actualizarMorosidad',ensureToken,(req,res)=>{
+    let script = "CALL prc_actualizar_moroso_estudiante(?,?)";
+    var query = con.query(script,[req.query.cedula,req.query.morosidad],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `${req.query.cedula} MOROSIDAD -> ${req.query.morosidad}`, 'UPDATE', 'T_ESTUDIANTE');
+            res.send(rows);
+        }else{
+            res.send(err)
+        }
+    });
+});
+
+router.get('/admin/estudiante/actualizarEstado',ensureToken,(req,res)=>{
     let script = "CALL prc_actualizar_moroso_estudiante(?,?)";
     var query = con.query(script,[req.query.cedula,req.query.morosidad],
         (err,rows,fields)=>{

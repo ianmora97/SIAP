@@ -81,6 +81,11 @@ function openFilter(params) {
     $('#containerFilter').show();
     animateCSS('#containerFilter', 'fadeInRight')
 }
+function searchonfind() {
+    var table = $('#estudiantes_TableOrder').DataTable();
+    let val = $('#barraBuscar').val();
+    let result = table.search(val).draw();
+  }
 function getLugares() {
     $.ajax({
         type: "GET",
@@ -164,11 +169,15 @@ var g_talleres = new Map();
 var g_talleresA = [];
 
 function cargar_estudiantes() {
+    let bearer = 'Bearer '+g_token;
     let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/usuarios/listaEstudiantes", //este es un path nuevo, hay que hacerlo
         contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((solicitudes) => {
         let totalTime = new Date().getTime() - ajaxTime;
         let a = Math.ceil(totalTime / 1000);
@@ -181,7 +190,7 @@ function cargar_estudiantes() {
     }, (error) => {
     }
     );
-    let bearer = 'Bearer '+g_token;
+    
     $.ajax({
         type: "GET",
         url: "/admin/estudiante/getTalleres", 
@@ -199,12 +208,12 @@ function cargar_estudiantes() {
     );
 }
 
-function cargar_estudiante(solicitudes) {
+function cargar_estudiante(data) {
     $("#lista_estudiantes").html("");
     
-    solicitudes.forEach((solicitudes) => {
-        llenar_Estudiantes(solicitudes);
-        g_estudiantes_map.set(solicitudes.id, solicitudes);
+    data.forEach((e) => {
+        llenar_Estudiantes(e);
+        g_estudiantes_map.set(e.id, e);
 
     });
     $('#estudiantes_TableOrder').DataTable({
@@ -215,10 +224,10 @@ function cargar_estudiante(solicitudes) {
             "lengthMenu": "Mostrar _MENU_ registros",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
-                "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
-                "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
-                "next":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
-                "last":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
+                "first":    '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next":     '<i class="fas fa-angle-right"></i>',
+                "last":     '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
@@ -244,6 +253,7 @@ function moverlabel(label_id, nivel){
     $('#guardar_rango_'+label_id+'').prop('disabled',false);
 }
 function guardarEstadoRango(id,cedula) {
+    let bearer = 'Bearer '+g_token;
     let valor = $('#id_label_est_'+id+'').html();
     let nivel = 0;
     g_talleresA.forEach((t)=>{
@@ -256,6 +266,9 @@ function guardarEstadoRango(id,cedula) {
         url: "/admin/estudiante/actualizarNivel", 
         data: {nivel,cedula},
         contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         location.href = '/admin/estudiantes';
     }, (error) => {
@@ -263,6 +276,7 @@ function guardarEstadoRango(id,cedula) {
     );
 }
 function cambiarMorosidadEst(estado,cedula) {
+    let bearer = 'Bearer '+g_token;
     let morosidad = estado.checked == true ? 1:0;
 
     console.log(morosidad)
@@ -271,63 +285,60 @@ function cambiarMorosidadEst(estado,cedula) {
         url: "/admin/estudiante/actualizarMorosidad", 
         data: {morosidad,cedula},
         contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         location.href = '/admin/estudiantes';
     }, (error) => {
     }
     );
 }
-function llenar_Estudiantes(solicitudes) {
-    let id = solicitudes.id;
-    let cedula = solicitudes.cedula;
-    let nivel = solicitudes.nivel;
-    let descripcion = solicitudes.descripcion;
-    let nombre = solicitudes.nombre;
-    let apellido = solicitudes.apellido;
-    let matricula = solicitudes.matricula;
-    let estado = solicitudes.estado == 0 ? 'Inactivo' : 'Activo';
-    let color_estado = solicitudes.estado == 0 ? 'dark' : 'success';
-    let color_moroso = solicitudes.moroso == 0 ? 'success' : 'secondary';
-    let moroso = solicitudes.moroso == 1 ? "checked " : " ";
-
-    $("#lista_estudiantes").append(
-        `<tr style="height:calc(55vh / 10);"> ` +
-        "<td>" +
-        id +
-        " </td>" +
-        "<td>" +
-        cedula +
-        "</td>" +
-        "<td>" +
-        nombre + " " + apellido +
-        "</td>" +
-        "<td>" +
-        "<div class='d-flex justify-content-between'>" +
-            '<label id="id_label_est_'+id+'" for="customRange_nivel">' + descripcion + '</label>' +
-            '<button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_'+id+'" disabled onclick="guardarEstadoRango('+id+','+cedula+')"><i class="far fa-save"></i></button>' +
-        "</div>" +
-        '<input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="' + nivel + '" onchange="moverlabel('+id+', this)"></input>' +
-        "</td>" +
-        '<td>' +
-        '<span class="w-75 badge badge-' + color_estado + '" disabled>' +
-        estado + '</span>' +
-        "</td>" +
-        '<td>' +
-
-        ' <div class="custom-control custom-switch">' +
-
-        ' <input type="checkbox" class="custom-control-input" id="customSwitch_' + id + '"  ' + moroso + ' onclick="cambiarMorosidadEst(this,'+cedula+')">' +
-        ' <label class="custom-control-label" for="customSwitch_' + id + '"></label>' +
-
-        '</div>' +
-        "</td>" +
-        '<td class="list-action ">' +
-        '<a class="btn btn-primary text-white" data-id="' + id + "Ver mas" + '" data-toggle="modal" data-target="#modalVerEstudiante">' +
-        '<i class="fas fa-eye"></i>' +
-        '</a>' +
-        '</td>' +
-        "</tr>"
+function cambiarEstadoEstudiante(id) {
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarEstado", 
+        data: {morosidad,cedula},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        location.href = '/admin/estudiantes';
+    }, (error) => {
+    }
     );
+}
+function llenar_Estudiantes(data) {
+    let foto = data.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
+    '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+data.foto+'" style="height:40px;">';
+
+    $("#lista_estudiantes").append(`
+        <tr style="height:calc(55vh / 10);">
+            <td class="align-center">${foto}</td>
+            <td>${data.cedula}</td>
+            <td>${data.nombre + " " + data.apellido}</td>
+            <td>
+                <div class="d-flex justify-content-between">
+                    <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
+                    <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
+                    disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
+                </div>
+                <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
+            </td>
+            <td><button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')">${data.estado == 0 ? 'Inactivo' : 'Activo'}</button></td>
+            <td class="d-flex justify-content-center">
+                <label class="switch-cus" for="customSwitch_${data.id}">
+                    <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
+                    <span class="slider-cus round-cus"></span>
+                </label>
+            </td>
+            <td>
+                <button class="btn btn-sm d-block w-100 btn-info" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante"><i class="fas fa-eye"></i></button>
+            </td>
+        </tr>
+    S`);
 
 }
 document.addEventListener("DOMContentLoaded", loaded);

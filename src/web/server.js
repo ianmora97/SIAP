@@ -65,17 +65,20 @@ app.use(require('./routes/admin/talleres/talleres.routes'));
 app.use(require('./routes/admin/comprobacion/admin.routes'));
 
 app.use(require('./routes/estudiante/reposition.routes'));
+app.use(require('./routes/estudiante/medica.routes'));
+app.use(require('./routes/estudiante/client.routes'));
+app.use(require('./routes/estudiante/enrollment.routes'));
+
 app.use(require('./routes/profesor/profesores.routes'));
 
-app.use(require('./routes/users.routes'));
-app.use(require('./routes/document.routes'));
-app.use(require('./routes/client.routes'));
+app.use(require('./routes/registro/registro.routes'));
+
 app.use(require('./routes/listaestudiantes.routes'));
 app.use(require('./routes/student.routes'));
-app.use(require('./routes/enrollment.routes'));
+app.use(require('./routes/estudiante/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
-app.use(require('./routes/attendance.routes'));
 app.use(require('./routes/group.routes'));
+
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
@@ -90,9 +93,7 @@ const server = app.listen(app.get('port'), () =>{
 const io = SocketIo(server);
 
 io.on('connection', (socket) =>{
-    console.log('nueva conecion');
     socket.on('notificacion:nuevo_registro', (data) => {
         io.sockets.emit('notificacion:nuevo_registro',data);
     });
-
 });
