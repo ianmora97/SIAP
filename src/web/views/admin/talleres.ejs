@@ -31,13 +31,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert"
-                        id="alertaTaller">
-                        No se pudo actualizar el taller!
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
                     <div class="container-fluid">
                         <div id="feedbackEditarTaller"></div>
                         <span class="sr-only" id="idTallerModal"></span>
@@ -169,6 +162,63 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEditHoraio" tabindex="-1" aria-labelledby="modalEditHoraioLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="modalEditHoraioLabel">Editar Horario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="feedbackHorarioEditar"></div>
+                    <span class="sr-only" id="idHorarioModal"></span>
+                    <div class="form-group">
+                        <label for="codigoHorarioModaleditar">Dia</label>
+                        <select class="custom-select" id="diaeditarHorarioModal">
+                            <option value="LUNES">LUNES</option>
+                            <option value="MARTES">MARTES</option>
+                            <option value="MIERCOLES">MIERCOLES</option>
+                            <option value="JUEVES">JUEVES</option>
+                            <option value="VIERNES">VIERNES</option>
+                            <option value="SABADO">SABADO</option>
+                            <option value="DOMINGO">DOMINGO</option>
+                        </select>
+                        <small class="text-muted">Dia de la semana</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionHorarioModaleditar">Hora</label>
+                        <select class="custom-select" id="horaeditarHorarioModal">
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                        </select>
+                        <small class="text-muted">5 - 21 horas</small>
+                    </div>
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarHorario()">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="actualizarHorario" onclick="actualizarDatosHorario()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
@@ -191,17 +241,17 @@
                                         horarios, y los grupos de la piscina.</small><br>
                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
                                 </div>
-                                <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="grupos_stats">0</h1>
-                                    <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                <div class="col">
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
+                                    <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col border-right">
                                     <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="horarios_stats">0</h1>
                                     <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
-                                <div class="col">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
-                                    <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                <div class="col border-right">
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="grupos_stats">0</h1>
+                                    <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                             </div>
                         </div>

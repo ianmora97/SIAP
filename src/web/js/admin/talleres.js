@@ -111,6 +111,18 @@ function openModal(){
         $('#costoestudianteModalTaller').val(taller.costo);
         $('#costofuncionarioModalTaller').val(taller.costo_funcionario);
     })
+    $('#modalEditHoraio').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var horario = g_mapHorarios.get(parseInt(id));
+        console.log(horario);
+        var modal = $(this)
+        modal.find('.modal-title').text('Horario #' + id)
+        $('#idHorarioModal').html(id)
+
+        $('#diaeditarHorarioModal').val(horario.dia);
+        $('#horaeditarHorarioModal').val(horario.hora);
+    })
 }
 function agregarHorario() {
     let dia = $('#diaAgregarHorarioModal').val();
@@ -157,6 +169,69 @@ function agregarHorario() {
         `);
     }
 }
+function actualizarDatosHorario() {
+    let id = $('#idHorarioModal').html();
+    let dia = $('#diaeditarHorarioModal').val();
+    let hora = parseInt($('#horaeditarHorarioModal').val());
+    let bearer = 'Bearer '+g_token;
+    if(dia && hora){
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/actualizarHorario", 
+            data:{id,dia,hora},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            location.href = "/admin/talleres";
+        }, (error) => {
+        });
+    }else{
+        $('#feedbackHorarioEditar').html('');
+        $('#feedbackHorarioEditar').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function eliminarHorario() {
+    let id = $('#idHorarioModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarHorario", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }else{
+            $('#feedbackHorarioEditar').html('');
+            if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+                $('#feedbackHorarioEditar').append(`
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Existe un grupo con este Horario debe 
+                        eliminar primero el grupo antes de eliminar el horario.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `);
+            }
+        }
+    }, (error) => {
+    });
+}
+
+// ? -----------------Taller CRUD----------
 function agregarTaller() {
     let codigo = $('#codigoTallerModalAgregar').val();
     let descripcion = $('#descripcionTallerModalAgregar').val();
@@ -249,7 +324,22 @@ function eliminarTaller() {
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = "/admin/talleres";
+        $('#feedbackEditarTaller').html('')
+        console.log();
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+        if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+            $('#feedbackEditarTaller').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Existe un grupo con este Taller, debe 
+                    eliminar primero el grupo antes de eliminar el Taller.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+        }
     }, (error) => {
     });
 }
@@ -308,7 +398,7 @@ function showTalleres(data) {
         createRowTalleres(e)
     });
     $('#talleres_table').DataTable({
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron talleres",
             "infoEmpty": "No hay registros disponibles!",
@@ -346,7 +436,7 @@ function showHorarios(data) {
         createRowHorarios(e)
     });
     $('#horarios_table').DataTable({
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron horarios",
             "infoEmpty": "No hay registros disponibles!",
@@ -384,7 +474,7 @@ function showGrupos(data) {
         createRowGrupos(e)
     });
     $('#grupos_table').DataTable({
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron grupos",
             "infoEmpty": "No hay registros disponibles!",
@@ -440,7 +530,7 @@ function createRowHorarios(e) {
         <td class="text-center">${e.hora}:00</td>
         <td class="text-right">
             <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditHorario" >
+            data-id="${e.id}" data-toggle="modal" data-target="#modalEditHoraio" >
                 Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
             </button>
         </td>

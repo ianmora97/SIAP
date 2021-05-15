@@ -35,9 +35,11 @@ router.get('/admin/talleres/eliminarTaller',ensureToken,(req,res)=>{
         [req.query.id],
          (err,rows,fields)=>{
         if(!err){
-            res.send(rows)
+            let r = rows;
+            res.send({fb:'good',rows:r});
         }else{
-            res.send({err:'NotFound'});
+            let error = err;
+            res.send({err:'NotFound',fb:error});
         }
     });
 });
@@ -48,9 +50,11 @@ router.get('/admin/talleres/actualizarTaller',ensureToken,(req,res)=>{
         [req.query.id, req.query.descripcion, req.query.nivel, req.query.costo, req.query.costo_funcionario],
          (err,rows,fields)=>{
         if(!err){
-            res.send(rows)
+            let r = rows;
+            res.send({fb:'good',rows:r});
         }else{
-            res.send({err:'NotFound'});
+            let error = err;
+            res.send({err:'NotFound',fb:error});
         }
     });
 });
@@ -78,6 +82,35 @@ router.get('/admin/talleres/getHorarios',ensureToken,(req,res)=>{
             res.send(rows[0])
         }else{
             res.send({err:'NotFound'});
+        }
+    });
+});
+
+router.get('/admin/talleres/actualizarHorario',ensureToken,(req,res)=>{
+    con.query("call prc_actualizar_horario(?,?,?)", 
+        [req.query.id, req.query.dia, req.query.hora],
+        (err,rows,fields)=>{
+        if(!err){
+            let r = rows;
+            res.send({fb:'good',rows:r});
+        }else{
+            let error = err;
+            res.send({err:'NotFound',fb:error});
+        }
+    });
+});
+
+router.get('/admin/talleres/eliminarHorario',ensureToken,(req,res)=>{
+    let script = "call prc_eliminar_horario(?)";
+    var query = con.query(script, 
+        [req.query.id],
+         (err,rows,fields)=>{
+        if(!err){
+            let r = rows;
+            res.send({fb:'good',rows:r});
+        }else{
+            let error = err;
+            res.send({err:'NotFound',fb:error});
         }
     });
 });
