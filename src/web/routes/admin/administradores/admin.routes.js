@@ -33,15 +33,20 @@ router.get('/admin/administrador/getAdministradores',ensureToken,(req,res)=>{
 
 router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
     let script = "call prc_insertar_usuario(?,?,?,?,?,?,?,?)";
-    var query = con.query(script,
+    con.query(script,
         [req.query.cedula, req.query.nombre,
         req.query.apellidos, "", req.query.usuario,
         req.query.clave, req.query.sexo, req.query.correo],
         (err,rows,fields)=>{
         if(!err){
-            if(rows != undefined){
-                res.send(rows);
-            }
+            let script = "call prc_insertar_usuario(?,?,?,?,?,?,?,?)";
+            con.query(script,
+                [req.query.cedula],
+                (err1,rows1,fields1)=>{
+                if(!err1){
+                    
+                }
+            });
         }
     });
 });

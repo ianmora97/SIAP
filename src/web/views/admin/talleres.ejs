@@ -24,9 +24,9 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h5 class="modal-title text-white" id="modalEditTallerLabel">Editar Taller</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="modalEditTallerLabel">Editar Taller</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -39,6 +39,7 @@
                         </button>
                     </div>
                     <div class="container-fluid">
+                        <div id="feedbackEditarTaller"></div>
                         <span class="sr-only" id="idTallerModal"></span>
                         <div class="row">
                             <div class="col-lg-6">
@@ -64,8 +65,106 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarTaller()">Eliminar</button>
                     <button type="button" class="btn btn-success btn-sm" id="actualizarTaller" onclick="actualizarDatosTaller()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="agregarTaller" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="exampleModalLabel">Agregar Taller</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="feedback"></div>
+                    <div class="form-group">
+                        <label for="codigoTallerModalAgregar">Codigo Taller</label>
+                        <input type="text" name="codigoTallerModalAgregar" pattern="NAT.+" id="codigoTallerModalAgregar" class="form-control" placeholder="Codigo">
+                        <small class="text-muted">eg: NAT008</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionTallerModalAgregar">Descripcion</label>
+                        <input type="text" name="descripcionTallerModalAgregar" id="descripcionTallerModalAgregar" class="form-control" placeholder="Descripcion">
+                        <small class="text-muted">Nombre del taller en la piscina</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="nivelTallerModalAgregar">Nivel</label>
+                        <input type="number" name="nivelTallerModalAgregar" id="nivelTallerModalAgregar" class="form-control" placeholder="Nivel">
+                        <small class="text-muted">Nivel del taller</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="costoEstTallerModalAgregar">Costo Estudiante</label>
+                        <input type="number" name="costoEstTallerModalAgregar" id="costoEstTallerModalAgregar" class="form-control" placeholder="Costo Estudiante">
+                        <small class="text-muted">Costo mensual de la piscina por estudiante</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="costoFunTallerModalAgregar">Costo Funcionario</label>
+                        <input type="number" name="costoFunTallerModalAgregar" id="costoFunTallerModalAgregar" class="form-control" placeholder="Costo Funcionarios">
+                        <small class="text-muted">Costo mensual de la piscina por funcionario</small>
+                    </div>
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-success" onclick="agregarTaller()"><i class="fas fa-plus"></i> Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="agregarHorario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="exampleModalLabel">Agregar Horario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="feedbackHorarioAgregar"></div>
+                    <div class="form-group">
+                        <label for="codigoHorarioModalAgregar">Dia</label>
+                        <select class="custom-select" id="diaAgregarHorarioModal">
+                            <option value="LUNES">LUNES</option>
+                            <option value="MARTES">MARTES</option>
+                            <option value="MIERCOLES">MIERCOLES</option>
+                            <option value="JUEVES">JUEVES</option>
+                            <option value="VIERNES">VIERNES</option>
+                            <option value="SABADO">SABADO</option>
+                            <option value="DOMINGO">DOMINGO</option>
+                        </select>
+                        <small class="text-muted">Dia de la semana</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionHorarioModalAgregar">Hora</label>
+                        <select class="custom-select" id="horaAgregarHorarioModal">
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                        </select>
+                        <small class="text-muted">5 - 21 horas</small>
+                    </div>
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-success" onclick="agregarHorario()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
         </div>
@@ -85,7 +184,7 @@
                     <div class="card border-0 shadow-sm my-3">
                         <div class="card-body py-2">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-2">
                                     <h2 class="font-weight-bolder">Lista de Talleres</h2>
                                     <small class="text-muted">En esta seccion se muestra la lista de los talleres
                                         de la piscina, donde podra gestionar todos los  <br>
@@ -93,15 +192,15 @@
                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
                                 </div>
                                 <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary" id="grupos_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="grupos_stats">0</h1>
                                     <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary" id="horarios_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="horarios_stats">0</h1>
                                     <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col">
-                                    <h1 class="m-0 font-weight-bolder text-primary" id="talleres_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
                                     <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                             </div>
@@ -155,13 +254,13 @@
                                                     <button type="button" name="agregarTaller" id="agregarTaller"
                                                         data-toggle="tooltip" data-placement="top"
                                                         title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-plus"></i></button>
-                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                        style="border-radius: 50px;" onclick="openmodal('#agregarTaller')"><i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
                                                         data-toggle="tooltip" data-placement="top"
                                                         title="Actualizar lista" class="btn bg-white btn-sm"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-sync-alt"></i></button>
+                                                        style="border-radius: 50px;"><i class="fas fa-sync-alt"></i>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +318,7 @@
                                                 </div>
                                                 <input type="search" class="form-control border-0 shadow-none bg-white "
                                                     onkeyup="searchonfind(this)" data-type="horarios" placeholder="Buscar..."
-                                                    aria-label="Username" id="barraBuscar_horarios">
+                                                    id="barraBuscar_horarios">
                                             </div>
         
                                         </div>
@@ -230,22 +329,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
-                                                    <button type="button" name="agregarTaller" id="agregarTaller"
+                                                    <button type="button" name="agregarHorario" id="agregarHorario"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-plus"></i></button>
-                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                        title="Agregar nuevo Horario" onclick="openmodal('#agregarHorario')" class="btn bg-success btn-sm text-white"
+                                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
+                                                    </button>
+
+                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
                                                         data-toggle="tooltip" data-placement="top"
                                                         title="Actualizar lista" class="btn bg-white btn-sm"
                                                         style="border-radius: 50px;"><i
-                                                            class="fas fa-sync-alt"></i></button>
+                                                            class="fas fa-sync-alt"></i></a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                                        <table class="table table-hover table-responsive-md table-borderless"
+                                        <table class="table table-hover table-responsive-md table-borderless w-100"
                                             id="horarios_table" data-order="[[ 1, &quot;asc&quot; ]]">
                                             <thead>
                                                 <tr>
@@ -309,30 +409,30 @@
                                                 <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
                                                     <button type="button" name="agregarTaller" id="agregarTaller"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
+                                                        title="Agregar un Grupo" class="btn bg-success btn-sm text-white"
                                                         style="border-radius: 50px;"><i
                                                             class="fas fa-plus"></i></button>
-                                                    <button type="button" name="actualizar_lista" onclick="actualizarDatos()"
+                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
                                                         data-toggle="tooltip" data-placement="top"
                                                         title="Actualizar lista" class="btn bg-white btn-sm"
                                                         style="border-radius: 50px;"><i
-                                                            class="fas fa-sync-alt"></i></button>
+                                                            class="fas fa-sync-alt"></i></a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                    <div class="row w-100 mx-0" style="height: 75vh; overflow-y: auto;">
                                         <table class="table table-hover table-responsive-md table-borderless"
                                             id="grupos_table" data-order="[[ 1, &quot;asc&quot; ]]">
                                             <thead>
                                                 <tr>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><strong>#</strong></th>
-                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-calendar-day"></i> Horario</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-tie"></i> Profesor</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-swimmer"></i> Taller</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clipboard-list"></i> Cupo</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-ticket-alt"></i> Extra</th>
-                                                    <th class="bg-dark text-white sticky-top text-right" scope="col"><i class="fas fa-pen"></i></th>
+                                                    <th class="bg-dark text-white sticky-top"><strong>#</strong></th>
+                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority"><i class="fas fa-calendar-day"></i> Horario</th>
+                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-user-tie"></i> Profesor</th>
+                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-swimmer"></i> Taller</th>
+                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-clipboard-list"></i> Cupo</th>
+                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-ticket-alt"></i> Extra</th>
+                                                    <th class="bg-dark text-white sticky-top text-right"><i class="fas fa-pen"></i></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="grupos_list">

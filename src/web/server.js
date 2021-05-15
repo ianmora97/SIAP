@@ -26,6 +26,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+//Archivos estaticos
+app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname,'/public')));
+
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'/public/uploads'),
     filename: (req, file, cb) => {
@@ -76,9 +81,7 @@ app.use(require('./routes/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
 app.use(require('./routes/attendance.routes'));
 app.use(require('./routes/group.routes'));
-//Archivos estaticos
-app.use(express.static(path.join(__dirname)));
-app.use(express.static(path.join(__dirname,'/public')));
+
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
@@ -90,7 +93,6 @@ const server = app.listen(app.get('port'), () =>{
 const io = SocketIo(server);
 
 io.on('connection', (socket) =>{
-    console.log('nueva conecion');
     socket.on('notificacion:nuevo_registro', (data) => {
         io.sockets.emit('notificacion:nuevo_registro',data);
     });
