@@ -219,6 +219,118 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="agregarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="exampleModalLabel">Agregar Grupo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="feedbackAgregarGrupo"></div>
+                    <div class="form-group">
+                        <label for="codigoTallerModalAgregar">Horario</label>
+                        <select class="custom-select" id="horarioSelectGrupo">
+                            
+                        </select>
+                        <small class="text-muted">Seleccione la fecha en la que se impartira este grupo</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionTallerModalAgregar">Taller</label>
+                        <select class="custom-select" id="talleresSelectGrupo">
+                            
+                        </select>
+                        <small class="text-muted">Seleccione el taller que imparte este grupo</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="nivelTallerModalAgregar">Profesor</label>
+                        <select class="custom-select" id="profesoresSelectGrupo">
+                            
+                        </select>
+                        <small class="text-muted">Seleccione el profesor que impartira el grupo</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="cupobaseAgregarModal">Cupos por grupo</label>
+                        <input type="number" name="cupobaseAgregarModal" id="cupobaseAgregarModal" class="form-control" placeholder="Cupo Base">
+                        <small class="text-muted">Cantidad de alumnos por grupo</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="cupoExtraAgregarModal">Cupo Extra</label>
+                        <input type="number" name="cupoExtraAgregarModal" id="cupoExtraAgregarModal" class="form-control" placeholder="Extras">
+                        <small class="text-muted">Cupos extra para reposicion</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodoAgregarModal">Fecha de conclusion</label>
+                        <input type="date" name="periodoAgregarModal" id="periodoAgregarModal" class="form-control" placeholder="Periodo">
+                        <small class="text-muted">Fecha en la que termina el curso</small>
+                    </div>
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-success" onclick="agregarGrupo()"><i class="fas fa-plus"></i> Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="actualizarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3" id="modalEditGrupoLabel">Editar Grupo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="feedbackActualizarGrupo"></div>
+                    <span class="sr-only" id="idGrupoModal"></span>
+                    <div class="toogleFormActualizar">
+                        <div class="form-group">
+                            <label for="horarioInputActualizar">Horario</label>
+                            <select class="custom-select" id="horarioInputActualizar">
+                                
+                            </select>
+                            <small class="text-muted">Seleccione la fecha en la que se impartira este grupo</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="talleresSelectGrupoActualizar">Taller</label>
+                            <select class="custom-select" id="talleresSelectGrupoActualizar">
+                                
+                            </select>
+                            <small class="text-muted">Seleccione el taller que imparte este grupo</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="profesoresSelectGrupoActualizar">Profesor</label>
+                            <select class="custom-select" id="profesoresSelectGrupoActualizar">
+                                
+                            </select>
+                            <small class="text-muted">Seleccione el profesor que impartira el grupo</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="cupobaseActualizarModal">Cupos por grupo</label>
+                            <input type="number" name="cupobaseActualizarModal" id="cupobaseActualizarModal" class="form-control" placeholder="Cupo Base">
+                            <small class="text-muted">Cantidad de alumnos por grupo</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="cupoExtraActualizarModal">Cupo Extra</label>
+                            <input type="number" name="cupoExtraActualizarModal" id="cupoExtraActualizarModal" class="form-control" placeholder="Extras">
+                            <small class="text-muted">Cupos extra para reposicion</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="periodoActualizarModal">Fecha de conclusion</label>
+                            <input type="date" name="periodoActualizarModal" id="periodoActualizarModal" class="form-control" placeholder="Periodo">
+                            <small class="text-muted">Fecha en la que termina el curso</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-0 toogleFormActualizar">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarGrupo()">Eliminar</button>
+                    <button type="button" class="btn btn-success btn-sm" id="actualizarTaller" onclick="actualizarDatosGrupo()">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
@@ -241,7 +353,7 @@
                                         horarios, y los grupos de la piscina.</small><br>
                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
                                 </div>
-                                <div class="col">
+                                <div class="col border-right">
                                     <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
                                     <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
@@ -249,7 +361,7 @@
                                     <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="horarios_stats">0</h1>
                                     <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
-                                <div class="col border-right">
+                                <div class="col ">
                                     <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="grupos_stats">0</h1>
                                     <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
@@ -459,9 +571,9 @@
                                                 <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
                                                     <button type="button" name="agregarTaller" id="agregarTaller"
                                                         data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar un Grupo" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-plus"></i></button>
+                                                        title="Agregar un Grupo" onclick="openmodal('#agregarGrupo')" class="btn bg-success btn-sm text-white"
+                                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
+                                                    </button>
                                                     <a type="button" name="actualizar_lista" href="/admin/talleres"
                                                         data-toggle="tooltip" data-placement="top"
                                                         title="Actualizar lista" class="btn bg-white btn-sm"

@@ -123,7 +123,28 @@ function openModal(){
         $('#diaeditarHorarioModal').val(horario.dia);
         $('#horaeditarHorarioModal').val(horario.hora);
     })
+    $('#actualizarGrupo').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var grupo = g_mapGrupos.get(parseInt(id));
+        console.log(grupo);
+        var modal = $(this)
+        modal.find('.modal-title').text('Grupo #' + id)
+        $('#idGrupoModal').html(id)
+
+        $('#horarioInputActualizar').val(grupo.id_horario);
+        $('#talleresSelectGrupoActualizar').val(grupo.id_taller);
+        $('#profesoresSelectGrupoActualizar').val(grupo.id_profesor);
+        
+        $('#cupobaseActualizarModal').val(grupo.cupo_base);
+        $('#cupoExtraActualizarModal').val(grupo.cupo_extra);
+        $('#periodoActualizarModal').val(grupo.periodo);
+
+
+    })
 }
+// ? ------------------------------------- Horario CRUD ------------------------------
+
 function agregarHorario() {
     let dia = $('#diaAgregarHorarioModal').val();
     let hora = parseInt($('#horaAgregarHorarioModal').val());
@@ -231,7 +252,7 @@ function eliminarHorario() {
     });
 }
 
-// ? -----------------Taller CRUD----------
+// ? ------------------------------------- Taller CRUD ------------------------------
 function agregarTaller() {
     let codigo = $('#codigoTallerModalAgregar').val();
     let descripcion = $('#descripcionTallerModalAgregar').val();
@@ -281,7 +302,7 @@ function agregarTaller() {
     }
 }
 function actualizarDatosTaller() {
-    let id = $('#idTallerModal').val();
+    let id = $('#idTallerModal').html();
     let descripcion =  $('#descripcionModalTaller').val();
     let nivel = $('#nivelModalTaller').val();
     let costo = $('#costoestudianteModalTaller').val();
@@ -313,7 +334,7 @@ function actualizarDatosTaller() {
     }
 }
 function eliminarTaller() {
-    let id = $('#idTallerModal').val();
+    let id = $('#idTallerModal').html();
     let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
@@ -343,9 +364,169 @@ function eliminarTaller() {
     }, (error) => {
     });
 }
+// ? ------------------------------------- Grupo CRUD ------------------------------
+function agregarGrupo() {
+    let horario = parseInt($('#horarioSelectGrupo').val());
+    let profesor = parseInt($('#profesoresSelectGrupo').val());
+    let taller = parseInt($('#talleresSelectGrupo').val());
+    let cupobase = parseInt($('#cupobaseAgregarModal').val());
+    let cupoextra = parseInt($('#cupoExtraAgregarModal').val());
+    let periodo = $('#periodoAgregarModal').val();
+
+    let bearer = 'Bearer '+g_token;
+    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/ingresarGrupo", 
+            data:{horario,profesor,taller,cupobase,cupoextra,periodo},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response.fb == "good"){
+                location.href = "/admin/talleres";
+            }else{
+                $('#feedbackAgregarGrupo').html('')
+                if(response.fb.code == "ER_DUP_ENTRY"){
+                    $('#feedbackAgregarGrupo').append(`
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Ya existe un grupo con .
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
+                }
+            }
+        }, (error) => {
+            
+        });
+        console.log('lleno');
+    }else{
+        $('#feedbackAgregarGrupo').html('')
+        $('#feedbackAgregarGrupo').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function actualizarDatosGrupo() {
+    let id = $('#idGrupoModal').html();
+    let horario = parseInt($('#horarioInputActualizar').val());
+    let taller = parseInt($('#talleresSelectGrupoActualizar').val());
+    let profesor = parseInt($('#profesoresSelectGrupoActualizar').val());
+    let cupobase = parseInt($('#cupobaseActualizarModal').val());
+    let cupoextra = parseInt($('#cupoExtraActualizarModal').val());
+    let periodo = $('#periodoActualizarModal').val();
+
+    let bearer = 'Bearer '+g_token;
+    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/actualizarGrupo", 
+            data:{id,horario,profesor,taller,cupobase,cupoextra,periodo},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            location.href = "/admin/talleres";
+        }, (error) => {
+        });
+    }else{
+        $('#feedbackEditarTaller').html('')
+        $('#feedbackEditarTaller').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function eliminarGrupo() {
+    let id = $('#idGrupoModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarGrupo", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        $('#feedbackActualizarGrupo').html('')
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+        else if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+            $('.toogleFormActualizar').hide();
+            $('#feedbackActualizarGrupo').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Existen estudiantes matriculados en este grupo, o reposiciones asociadas a este 
+                    grupo. <strong>¿Desea eliminar definitivamente las 
+                    matriculas y todo lo asociado a este grupo?</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+            $('#feedbackActualizarGrupo').append(`
+                <div class="mx-auto">
+                    <small class="text-muted">Al eliminar todas las referencias a este grupo, pueden existir inconsistencias en el sistema. 
+                    Es recomendable primero eliminar todo lo que este asociado a este grupo.</small><br>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="eliminarDefGrupo()">
+                        Eliminar definitivamente
+                    </button>
+                </div>
+            `)
+        }
+    }, (error) => {
+    });
+}
+function eliminarDefGrupo() {
+    let id = $('#idGrupoModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarCascadeGrupo", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        $('.toogleFormActualizar').show();  
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+    }, (error) => {
+    });
+}
+
+// ! ---------------------------------------- CRUD ------------------------------
 function loadFromDb() {
     let ajaxTime = new Date().getTime();
     let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/getProfesores", 
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((profesores) => {
+        selectProfesoresFromGrupo(profesores);
+    }, (error) => {
+
+    });
     $.ajax({
         type: "GET",
         url: "/admin/talleres/getTalleres", 
@@ -353,9 +534,10 @@ function loadFromDb() {
         headers:{
             'Authorization':bearer
         }
-    }).then((response) => {
-        $('#talleres_stats').html(response.length)
-        showTalleres(response);
+    }).then((talleres) => {
+        $('#talleres_stats').html(talleres.length)
+        showTalleres(talleres);
+        selectTallerFromGrupo(talleres);
         $.ajax({
             type: "GET",
             url: "/admin/talleres/getHorarios", 
@@ -363,9 +545,10 @@ function loadFromDb() {
             headers:{
                 'Authorization':bearer
             }
-        }).then((response) => {
-            $('#horarios_stats').html(response.length)
-            showHorarios(response);
+        }).then((horarios) => {
+            $('#horarios_stats').html(horarios.length)
+            showHorarios(horarios);
+            selectHorarioFromGrupo(horarios);
             $.ajax({
                 type: "GET",
                 url: "/admin/talleres/getGrupos", 
@@ -373,13 +556,13 @@ function loadFromDb() {
                 headers:{
                     'Authorization':bearer
                 }
-            }).then((response) => {
-                $('#grupos_stats').html(response.length)
+            }).then((grupos) => {
+                $('#grupos_stats').html(grupos.length)
                 let totalTime = new Date().getTime() - ajaxTime;
                 let a = Math.ceil(totalTime / 1000);
                 let t = a == 1 ? a + ' segundo' : a + ' segundos';
                 $('#infoTiming').text(t);
-                showGrupos(response);
+                showGrupos(grupos);
             }, (error) => {
             });
         }, (error) => {
@@ -389,7 +572,42 @@ function loadFromDb() {
     });
     
 }
-
+function selectProfesoresFromGrupo(profesores) {
+    profesores.forEach(e => {
+        $('#profesoresSelectGrupo').append(`
+            <option value="${e.id_profesor}">${e.nombre} ${e.apellido} - ${e.cedula}</option>
+        `)
+    });
+    profesores.forEach(e => {
+        $('#profesoresSelectGrupoActualizar').append(`
+            <option value="${e.id_profesor}">${e.nombre} ${e.apellido} - ${e.cedula}</option>
+        `)
+    });
+}
+function selectTallerFromGrupo(talleres) {
+    talleres.forEach(e => {
+        $('#talleresSelectGrupo').append(`
+            <option value="${e.id}">${e.descripcion} Nivel: ${e.nivel}</option>
+        `)
+    });
+    talleres.forEach(e => {
+        $('#talleresSelectGrupoActualizar').append(`
+            <option value="${e.id}">${e.descripcion} Nivel: ${e.nivel}</option>
+        `)
+    });
+}
+function selectHorarioFromGrupo(horarios) {
+    horarios.forEach(e => {
+        $('#horarioSelectGrupo').append(`
+            <option value="${e.id}">${e.dia} ${e.hora}</option>
+        `)
+    });
+    horarios.forEach(e => {
+        $('#horarioInputActualizar').append(`
+            <option value="${e.id}">${e.dia} ${e.hora}</option>
+        `)
+    });
+}
 function showTalleres(data) {
     data.forEach(e => {
         g_mapTalleres.set(e.id, e);
@@ -565,7 +783,7 @@ function createRowGrupos(e) {
         <td>${e.cupo_extra}</td>
         <td class="text-center">
             <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditGrupo" >
+            data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo" >
                 Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
             </button>
         </td>

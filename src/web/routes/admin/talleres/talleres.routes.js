@@ -143,13 +143,61 @@ router.get('/admin/talleres/getGrupos',ensureToken,(req,res)=>{
     });
 });
 
-router.get('/admin/talleres/actualizarGrupo',ensureToken,(req,res)=>{
-    let script = "call prc_actualizar_taller(?,?,?,?,?)";
-    var query = con.query(script, 
-        [req.query.id, req.query.descripcion, req.query.nivel, req.query.costo, req.query.costo_funcionario],
+router.get('/admin/talleres/ingresarGrupo',ensureToken,(req,res)=>{
+    con.query("call prc_insertar_grupo(?,?,?,?,?,?)", 
+        [req.query.horario, req.query.profesor, req.query.taller, 
+            req.query.cupobase, req.query.cupoextra, req.query.periodo],
          (err,rows,fields)=>{
-        if(rows != undefined){
-            res.send(rows)
+        if(!err){
+            let r = rows;
+            res.send({fb:'good',rows:r});
+        }else{
+            let error = err;
+            res.send({err:'NotFound',fb:error});
+        }
+    });
+});
+
+router.get('/admin/talleres/actualizarGrupo',ensureToken,(req,res)=>{
+    let script = "call prc_actualizar_grupo(?,?,?,?,?,?,?)";
+    var query = con.query(script, 
+        [req.query.id, req.query.horario, req.query.profesor,req.query.taller, 
+            req.query.cupobase, req.query.cupoextra, req.query.periodo],
+         (err,rows,fields)=>{
+        if(!err){
+            let r = rows;
+            res.send({fb:'good',rows:r});
+        }else{
+            let error = err;
+            res.send({err:'NotFound',fb:error});
+        }
+    });
+});
+
+router.get('/admin/talleres/eliminarGrupo',ensureToken,(req,res)=>{
+    con.query("call prc_eliminar_grupo(?)", 
+        [req.query.id],
+         (err,rows,fields)=>{
+        if(!err){
+            let r = rows;
+            res.send({fb:'good',rows:r});
+        }else{
+            let error = err;
+            res.send({err:'NotFound',fb:error});
+        }
+    });
+});
+
+// ? ----------------------------- PROFESORES -----------------------------
+
+router.get('/admin/talleres/getProfesores',ensureToken,(req,res)=>{
+    con.query("select * from vta_profesores", (err,rows,fields)=>{
+        if(!err){
+            if(rows != undefined){
+                res.send(rows)
+            }else{
+                res.send({err:'NotFound'});
+            }
         }else{
             res.send({err:'NotFound'});
         }
