@@ -26,6 +26,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+//Archivos estaticos
+app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname,'/public')));
+
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'/public/uploads'),
     filename: (req, file, cb) => {
@@ -82,6 +87,7 @@ app.use(require('./routes/group.routes'));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
+
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));

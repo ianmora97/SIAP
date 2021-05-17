@@ -61,19 +61,27 @@ const animateCSS = (element, animation) =>
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
 
+function openmodal(modal) {
+    $(modal).modal('show');
+}
+
 function searchonfind(barra) {
     let bar = $(barra);
     switch (bar.data('type')) {
         case 'talleres':
-            var table = $('#talleres_table').DataTable();
-            let val = bar.val();           
-            let result = table.search( val ).draw();
+            var table1 = $('#talleres_table').DataTable();
+            let val1 = bar.val();           
+            let result1 = table1.search( val1 ).draw();
             break;
         case 'horarios':
-            console.log('horarios')
+            var table2 = $('#horarios_table').DataTable();
+            let val2 = bar.val();           
+            let result2 = table2.search( val2 ).draw();
             break;
         case 'grupos':
-            console.log('grupos')
+            var table3 = $('#grupos_table').DataTable();
+            let val3 = bar.val();           
+            let result3 = table3.search( val3 ).draw();
             break;
         default:
             break;
@@ -83,9 +91,9 @@ function searchonfind(barra) {
 function actualizarDatos() {
     let table = $('#talleres_table').DataTable();
     table.destroy();
-    let table1 = $('#talleres_table').DataTable();
+    let table1 = $('#horarios_table').DataTable();
     table1.destroy();
-    let table2 = $('#talleres_table').DataTable();
+    let table2 = $('#grupos_table').DataTable();
     table2.destroy();
     loadFromDb();
 }
@@ -103,29 +111,422 @@ function openModal(){
         $('#costoestudianteModalTaller').val(taller.costo);
         $('#costofuncionarioModalTaller').val(taller.costo_funcionario);
     })
+    $('#modalEditHoraio').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var horario = g_mapHorarios.get(parseInt(id));
+        console.log(horario);
+        var modal = $(this)
+        modal.find('.modal-title').text('Horario #' + id)
+        $('#idHorarioModal').html(id)
+
+        $('#diaeditarHorarioModal').val(horario.dia);
+        $('#horaeditarHorarioModal').val(horario.hora);
+    })
+    $('#actualizarGrupo').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id');
+        var grupo = g_mapGrupos.get(parseInt(id));
+        console.log(grupo);
+        var modal = $(this)
+        modal.find('.modal-title').text('Grupo #' + id)
+        $('#idGrupoModal').html(id)
+
+        $('#horarioInputActualizar').val(grupo.id_horario);
+        $('#talleresSelectGrupoActualizar').val(grupo.id_taller);
+        $('#profesoresSelectGrupoActualizar').val(grupo.id_profesor);
+        
+        $('#cupobaseActualizarModal').val(grupo.cupo_base);
+        $('#cupoExtraActualizarModal').val(grupo.cupo_extra);
+        $('#periodoActualizarModal').val(grupo.periodo);
+
+
+    })
 }
-function actualizarDatosTaller() {
-    let id = $('#idTallerModal').val();
-    let descripcion =  $('#descripcionModalTaller').val();
-    let nivel = $('#nivelModalTaller').val();
-    let costo = $('#costoestudianteModalTaller').val();
-    let costo_funcionario = $('#costofuncionarioModalTaller').val();
+// ? ------------------------------------- Horario CRUD ------------------------------
+
+function agregarHorario() {
+    let dia = $('#diaAgregarHorarioModal').val();
+    let hora = parseInt($('#horaAgregarHorarioModal').val());
+    let bearer = 'Bearer '+g_token;
+    if(dia && hora){
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/ingresarHorario", 
+            data:{dia,hora},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response.fb == "good"){
+                location.href = "/admin/talleres";
+            }else{
+                $('#feedbackHorarioAgregar').html('')
+                if(response.fb.code == "ER_DUP_ENTRY"){
+                    $('#feedbackHorarioAgregar').append(`
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Ya existe un horario con ${dia + ' ' + hora}.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
+                }
+            }
+        }, (error) => {
+            
+        });
+        console.log('lleno');
+    }else{
+        $('#feedbackHorarioAgregar').html('')
+        $('#feedbackHorarioAgregar').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function actualizarDatosHorario() {
+    let id = $('#idHorarioModal').html();
+    let dia = $('#diaeditarHorarioModal').val();
+    let hora = parseInt($('#horaeditarHorarioModal').val());
+    let bearer = 'Bearer '+g_token;
+    if(dia && hora){
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/actualizarHorario", 
+            data:{id,dia,hora},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            location.href = "/admin/talleres";
+        }, (error) => {
+        });
+    }else{
+        $('#feedbackHorarioEditar').html('');
+        $('#feedbackHorarioEditar').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function eliminarHorario() {
+    let id = $('#idHorarioModal').html();
     let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
-        url: "/admin/talleres/actualizarGrupo", 
-        data:{id,descripcion,nivel,costo,costo_funcionario},
+        url: "/admin/talleres/eliminarHorario", 
+        data:{id},
         contentType: "appication/json",
         headers:{
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = "/admin/talleres";
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }else{
+            $('#feedbackHorarioEditar').html('');
+            if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+                $('#feedbackHorarioEditar').append(`
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Existe un grupo con este Horario debe 
+                        eliminar primero el grupo antes de eliminar el horario.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `);
+            }
+        }
     }, (error) => {
     });
 }
-function loadFromDb() {
+
+// ? ------------------------------------- Taller CRUD ------------------------------
+function agregarTaller() {
+    let codigo = $('#codigoTallerModalAgregar').val();
+    let descripcion = $('#descripcionTallerModalAgregar').val();
+    let nivel = parseInt($('#nivelTallerModalAgregar').val());
+    let costoEst = parseInt($('#costoEstTallerModalAgregar').val());
+    let costoFun = parseInt($('#costoFunTallerModalAgregar').val());
     let bearer = 'Bearer '+g_token;
+    if(codigo && descripcion && nivel && costoEst && costoFun){
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/ingresarTaller", 
+            data:{codigo,descripcion,nivel,costoEst,costoFun},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response.fb == "good"){
+                location.href = "/admin/talleres";
+            }else{
+                $('#feedback').html('')
+                if(response.fb.code == "ER_DUP_ENTRY"){
+                    $('#feedback').append(`
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Ya existe un codigo con ${codigo}.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
+                }
+            }
+        }, (error) => {
+            
+        });
+        console.log('lleno');
+    }else{
+        $('#feedback').html('')
+        $('#feedback').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function actualizarDatosTaller() {
+    let id = $('#idTallerModal').html();
+    let descripcion =  $('#descripcionModalTaller').val();
+    let nivel = $('#nivelModalTaller').val();
+    let costo = $('#costoestudianteModalTaller').val();
+    let costo_funcionario = $('#costofuncionarioModalTaller').val();
+    let bearer = 'Bearer '+g_token;
+    if(descripcion && nivel && costo && costo_funcionario){
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/actualizarTaller", 
+            data:{id,descripcion,nivel,costo,costo_funcionario},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            location.href = "/admin/talleres";
+        }, (error) => {
+        });
+    }else{
+        $('#feedbackEditarTaller').html('')
+        $('#feedbackEditarTaller').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function eliminarTaller() {
+    let id = $('#idTallerModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarTaller", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        $('#feedbackEditarTaller').html('')
+        console.log();
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+        if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+            $('#feedbackEditarTaller').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Existe un grupo con este Taller, debe 
+                    eliminar primero el grupo antes de eliminar el Taller.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+        }
+    }, (error) => {
+    });
+}
+// ? ------------------------------------- Grupo CRUD ------------------------------
+function agregarGrupo() {
+    let horario = parseInt($('#horarioSelectGrupo').val());
+    let profesor = parseInt($('#profesoresSelectGrupo').val());
+    let taller = parseInt($('#talleresSelectGrupo').val());
+    let cupobase = parseInt($('#cupobaseAgregarModal').val());
+    let cupoextra = parseInt($('#cupoExtraAgregarModal').val());
+    let periodo = $('#periodoAgregarModal').val();
+
+    let bearer = 'Bearer '+g_token;
+    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/ingresarGrupo", 
+            data:{horario,profesor,taller,cupobase,cupoextra,periodo},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response.fb == "good"){
+                location.href = "/admin/talleres";
+            }else{
+                $('#feedbackAgregarGrupo').html('')
+                if(response.fb.code == "ER_DUP_ENTRY"){
+                    $('#feedbackAgregarGrupo').append(`
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> Ya existe un grupo con .
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
+                }
+            }
+        }, (error) => {
+            
+        });
+        console.log('lleno');
+    }else{
+        $('#feedbackAgregarGrupo').html('')
+        $('#feedbackAgregarGrupo').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function actualizarDatosGrupo() {
+    let id = $('#idGrupoModal').html();
+    let horario = parseInt($('#horarioInputActualizar').val());
+    let taller = parseInt($('#talleresSelectGrupoActualizar').val());
+    let profesor = parseInt($('#profesoresSelectGrupoActualizar').val());
+    let cupobase = parseInt($('#cupobaseActualizarModal').val());
+    let cupoextra = parseInt($('#cupoExtraActualizarModal').val());
+    let periodo = $('#periodoActualizarModal').val();
+
+    let bearer = 'Bearer '+g_token;
+    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/actualizarGrupo", 
+            data:{id,horario,profesor,taller,cupobase,cupoextra,periodo},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            location.href = "/admin/talleres";
+        }, (error) => {
+        });
+    }else{
+        $('#feedbackEditarTaller').html('')
+        $('#feedbackEditarTaller').append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> Tiene que llenar todos los campos.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    }
+}
+function eliminarGrupo() {
+    let id = $('#idGrupoModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarGrupo", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        $('#feedbackActualizarGrupo').html('')
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+        else if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+            $('.toogleFormActualizar').hide();
+            $('#feedbackActualizarGrupo').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Existen estudiantes matriculados en este grupo, o reposiciones asociadas a este 
+                    grupo. <strong>¿Desea eliminar definitivamente las 
+                    matriculas y todo lo asociado a este grupo?</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+            $('#feedbackActualizarGrupo').append(`
+                <div class="mx-auto">
+                    <small class="text-muted">Al eliminar todas las referencias a este grupo, pueden existir inconsistencias en el sistema. 
+                    Es recomendable primero eliminar todo lo que este asociado a este grupo.</small><br>
+                    <button type="button" class="btn btn-sm btn-warning" onclick="eliminarDefGrupo()">
+                        Eliminar definitivamente
+                    </button>
+                </div>
+            `)
+        }
+    }, (error) => {
+    });
+}
+function eliminarDefGrupo() {
+    let id = $('#idGrupoModal').html();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/eliminarCascadeGrupo", 
+        data:{id},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        $('.toogleFormActualizar').show();  
+        if(response.fb == "good"){
+            location.href = "/admin/talleres";
+        }
+    }, (error) => {
+    });
+}
+
+// ! ---------------------------------------- CRUD ------------------------------
+function loadFromDb() {
+    let ajaxTime = new Date().getTime();
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/getProfesores", 
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((profesores) => {
+        selectProfesoresFromGrupo(profesores);
+    }, (error) => {
+
+    });
     $.ajax({
         type: "GET",
         url: "/admin/talleres/getTalleres", 
@@ -133,8 +534,10 @@ function loadFromDb() {
         headers:{
             'Authorization':bearer
         }
-    }).then((response) => {
-        showTalleres(response);
+    }).then((talleres) => {
+        $('#talleres_stats').html(talleres.length)
+        showTalleres(talleres);
+        selectTallerFromGrupo(talleres);
         $.ajax({
             type: "GET",
             url: "/admin/talleres/getHorarios", 
@@ -142,8 +545,10 @@ function loadFromDb() {
             headers:{
                 'Authorization':bearer
             }
-        }).then((response) => {
-            showHorarios(response);
+        }).then((horarios) => {
+            $('#horarios_stats').html(horarios.length)
+            showHorarios(horarios);
+            selectHorarioFromGrupo(horarios);
             $.ajax({
                 type: "GET",
                 url: "/admin/talleres/getGrupos", 
@@ -151,8 +556,13 @@ function loadFromDb() {
                 headers:{
                     'Authorization':bearer
                 }
-            }).then((response) => {
-                showGrupos(response);
+            }).then((grupos) => {
+                $('#grupos_stats').html(grupos.length)
+                let totalTime = new Date().getTime() - ajaxTime;
+                let a = Math.ceil(totalTime / 1000);
+                let t = a == 1 ? a + ' segundo' : a + ' segundos';
+                $('#infoTiming').text(t);
+                showGrupos(grupos);
             }, (error) => {
             });
         }, (error) => {
@@ -162,7 +572,42 @@ function loadFromDb() {
     });
     
 }
-
+function selectProfesoresFromGrupo(profesores) {
+    profesores.forEach(e => {
+        $('#profesoresSelectGrupo').append(`
+            <option value="${e.id_profesor}">${e.nombre} ${e.apellido} - ${e.cedula}</option>
+        `)
+    });
+    profesores.forEach(e => {
+        $('#profesoresSelectGrupoActualizar').append(`
+            <option value="${e.id_profesor}">${e.nombre} ${e.apellido} - ${e.cedula}</option>
+        `)
+    });
+}
+function selectTallerFromGrupo(talleres) {
+    talleres.forEach(e => {
+        $('#talleresSelectGrupo').append(`
+            <option value="${e.id}">${e.descripcion} Nivel: ${e.nivel}</option>
+        `)
+    });
+    talleres.forEach(e => {
+        $('#talleresSelectGrupoActualizar').append(`
+            <option value="${e.id}">${e.descripcion} Nivel: ${e.nivel}</option>
+        `)
+    });
+}
+function selectHorarioFromGrupo(horarios) {
+    horarios.forEach(e => {
+        $('#horarioSelectGrupo').append(`
+            <option value="${e.id}">${e.dia} ${e.hora}</option>
+        `)
+    });
+    horarios.forEach(e => {
+        $('#horarioInputActualizar').append(`
+            <option value="${e.id}">${e.dia} ${e.hora}</option>
+        `)
+    });
+}
 function showTalleres(data) {
     data.forEach(e => {
         g_mapTalleres.set(e.id, e);
@@ -171,11 +616,7 @@ function showTalleres(data) {
         createRowTalleres(e)
     });
     $('#talleres_table').DataTable({
-        "columnDefs": [
-            { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] },
-            { "orderable": false, "targets": [6] }
-        ],
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron talleres",
             "infoEmpty": "No hay registros disponibles!",
@@ -213,11 +654,7 @@ function showHorarios(data) {
         createRowHorarios(e)
     });
     $('#horarios_table').DataTable({
-        "columnDefs": [
-            { "orderable": true, "targets": [0, 1, 2] },
-            { "orderable": false, "targets": [3] }
-        ],
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron horarios",
             "infoEmpty": "No hay registros disponibles!",
@@ -255,11 +692,7 @@ function showGrupos(data) {
         createRowGrupos(e)
     });
     $('#grupos_table').DataTable({
-        "columnDefs": [
-            { "orderable": true, "targets": [0, 1, 2] },
-            { "orderable": false, "targets": [3] }
-        ],
-        stateSave: true,
+        
         "language": {
             "zeroRecords": "No se encontraron grupos",
             "infoEmpty": "No hay registros disponibles!",
@@ -315,7 +748,7 @@ function createRowHorarios(e) {
         <td class="text-center">${e.hora}:00</td>
         <td class="text-right">
             <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditHorario" >
+            data-id="${e.id}" data-toggle="modal" data-target="#modalEditHoraio" >
                 Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
             </button>
         </td>
@@ -324,7 +757,6 @@ function createRowHorarios(e) {
 }
 function createRowGrupos(e) {
     let h = g_mapHorarios.get(e.id_horario);
-    console.log(h,e.id_horario)
     let p = e.nombre + e.apellido;
     $('#grupos_list').append(`
     <tr style="height:calc(52vh / 10);">
@@ -351,7 +783,7 @@ function createRowGrupos(e) {
         <td>${e.cupo_extra}</td>
         <td class="text-center">
             <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditGrupo" >
+            data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo" >
                 Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
             </button>
         </td>

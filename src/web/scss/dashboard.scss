@@ -6,7 +6,7 @@
   height: 40px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 999;
 }
 .sidebar-heading{
   height: 40px;
@@ -63,16 +63,16 @@
   } 
 }
 .menu-items-var{
-  background-color: #263655;
+  background-color: #27323A;
     &:hover{
-      background-color: #364C78;    
+      background-color: #252d33;    
     }
     &:focus{
-      background-color: #364C78 !important;    
+      background-color: #252d33 !important;    
     }
 }
 .hover-menu-items-parent {
-  background-color: #263655;
+  background-color: #27323A;
 }
 
 .photo_side_panel{

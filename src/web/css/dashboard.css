@@ -5,7 +5,7 @@
   height: 40px;
   position: sticky;
   top: 0;
-  z-index: 100; }
+  z-index: 999; }
 
 .sidebar-heading {
   height: 40px; }
@@ -57,14 +57,14 @@
     transition: all .25s; } }
 
 .menu-items-var {
-  background-color: #263655; }
+  background-color: #27323A; }
   .menu-items-var:hover {
-    background-color: #364C78; }
+    background-color: #252d33; }
   .menu-items-var:focus {
-    background-color: #364C78 !important; }
+    background-color: #252d33 !important; }
 
 .hover-menu-items-parent {
-  background-color: #263655; }
+  background-color: #27323A; }
 
 .photo_side_panel {
   background: url(../img/UNA-VVE-logo-3.png);
