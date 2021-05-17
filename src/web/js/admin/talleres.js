@@ -98,6 +98,7 @@ function actualizarDatos() {
     loadFromDb();
 }
 function openModal(){
+    // ! on open
     $('#modalEditTaller').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id');
@@ -105,7 +106,8 @@ function openModal(){
 
         var modal = $(this)
         modal.find('.modal-title').text('Taller #' + id)
-        $('#idTallerModal').val(id)
+        $('#idTallerModal').html(id)
+
         $('#descripcionModalTaller').val(taller.descripcion);
         $('#nivelModalTaller').val(taller.nivel);
         $('#costoestudianteModalTaller').val(taller.costo);
@@ -115,7 +117,7 @@ function openModal(){
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id');
         var horario = g_mapHorarios.get(parseInt(id));
-        console.log(horario);
+
         var modal = $(this)
         modal.find('.modal-title').text('Horario #' + id)
         $('#idHorarioModal').html(id)
@@ -127,7 +129,7 @@ function openModal(){
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id');
         var grupo = g_mapGrupos.get(parseInt(id));
-        console.log(grupo);
+        
         var modal = $(this)
         modal.find('.modal-title').text('Grupo #' + id)
         $('#idGrupoModal').html(id)
@@ -141,6 +143,28 @@ function openModal(){
         $('#periodoActualizarModal').val(grupo.periodo);
 
 
+    })
+    // ! on close
+    $('#modalEditHoraio').on('hide.bs.modal', function (event) {
+        $('#feedbackHorarioEditar').html('')
+    })
+    $('#agregarHorario').on('hide.bs.modal', function (event) {
+        $('#feedbackHorarioAgregar').html('')
+    })
+
+    $('#agregarTaller').on('hide.bs.modal', function (event) {
+        $('#feedback').html('')
+    })
+    $('#modalEditTaller').on('hide.bs.modal', function (event) {
+        $('#feedbackEditarTaller').html('')
+    })
+    
+    $('#agregarGrupo').on('hide.bs.modal', function (event) {
+        $('#feedbackAgregarGrupo').html('')
+    })
+    $('#actualizarGrupo').on('hide.bs.modal', function (event) {
+        $('#feedbackActualizarGrupo').html('')
+        $('#toogleFormActualizar').show();
     })
 }
 // ? ------------------------------------- Horario CRUD ------------------------------
@@ -177,7 +201,7 @@ function agregarHorario() {
         }, (error) => {
             
         });
-        console.log('lleno');
+        
     }else{
         $('#feedbackHorarioAgregar').html('')
         $('#feedbackHorarioAgregar').append(`
@@ -288,7 +312,6 @@ function agregarTaller() {
         }, (error) => {
             
         });
-        console.log('lleno');
     }else{
         $('#feedback').html('')
         $('#feedback').append(`
@@ -334,7 +357,7 @@ function actualizarDatosTaller() {
     }
 }
 function eliminarTaller() {
-    let id = $('#idTallerModal').html();
+    let id = parseInt($('#idTallerModal').text());
     let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
@@ -345,12 +368,11 @@ function eliminarTaller() {
             'Authorization':bearer
         }
     }).then((response) => {
-        $('#feedbackEditarTaller').html('')
-        console.log();
         if(response.fb == "good"){
             location.href = "/admin/talleres";
         }
         if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
+            $('#feedbackEditarTaller').html('')
             $('#feedbackEditarTaller').append(`
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     Existe un grupo con este Taller, debe 
@@ -402,7 +424,6 @@ function agregarGrupo() {
         }, (error) => {
             
         });
-        console.log('lleno');
     }else{
         $('#feedbackAgregarGrupo').html('')
         $('#feedbackAgregarGrupo').append(`
@@ -451,6 +472,36 @@ function actualizarDatosGrupo() {
     }
 }
 function eliminarGrupo() {
+    $('#toogleFormActualizar').hide();
+    $('#feedbackActualizarGrupo').html('')
+    $('#feedbackActualizarGrupo').append(`
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Existen estudiantes matriculados en este grupo, o reposiciones asociadas a este 
+            grupo. <strong>¿Desea eliminar definitivamente las 
+            matriculas y todo lo asociado a este grupo?</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    `);
+    $('#feedbackActualizarGrupo').append(`
+        <div class="mx-auto">
+            <small class="text-muted">Al eliminar todas las referencias a este grupo, pueden existir inconsistencias en el sistema. 
+            Es recomendable primero eliminar todo lo que este asociado a este grupo.</small><br>
+            <button type="button" class="btn btn-sm btn-warning" onclick="eliminarDefGrupo()">
+                Eliminar definitivamente
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" onclick="cancelarEliminarGrupo()">
+                Cancelar
+            </button>
+        </div>
+    `)
+}
+function cancelarEliminarGrupo() {
+    $('#toogleFormActualizar').show();
+    $('#feedbackActualizarGrupo').html('');
+}
+function eliminarDefGrupo() {
     let id = $('#idGrupoModal').html();
     let bearer = 'Bearer '+g_token;
     $.ajax({
@@ -462,51 +513,7 @@ function eliminarGrupo() {
             'Authorization':bearer
         }
     }).then((response) => {
-        $('#feedbackActualizarGrupo').html('')
-        if(response.fb == "good"){
-            location.href = "/admin/talleres";
-        }
-        else if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
-            $('.toogleFormActualizar').hide();
-            $('#feedbackActualizarGrupo').append(`
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    Existen estudiantes matriculados en este grupo, o reposiciones asociadas a este 
-                    grupo. <strong>¿Desea eliminar definitivamente las 
-                    matriculas y todo lo asociado a este grupo?</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `);
-            $('#feedbackActualizarGrupo').append(`
-                <div class="mx-auto">
-                    <small class="text-muted">Al eliminar todas las referencias a este grupo, pueden existir inconsistencias en el sistema. 
-                    Es recomendable primero eliminar todo lo que este asociado a este grupo.</small><br>
-                    <button type="button" class="btn btn-sm btn-warning" onclick="eliminarDefGrupo()">
-                        Eliminar definitivamente
-                    </button>
-                </div>
-            `)
-        }
-    }, (error) => {
-    });
-}
-function eliminarDefGrupo() {
-    let id = $('#idGrupoModal').html();
-    let bearer = 'Bearer '+g_token;
-    $.ajax({
-        type: "GET",
-        url: "/admin/talleres/eliminarCascadeGrupo", 
-        data:{id},
-        contentType: "appication/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        $('.toogleFormActualizar').show();  
-        if(response.fb == "good"){
-            location.href = "/admin/talleres";
-        }
+        location.href = "/admin/talleres";
     }, (error) => {
     });
 }
@@ -563,6 +570,7 @@ function loadFromDb() {
                 let t = a == 1 ? a + ' segundo' : a + ' segundos';
                 $('#infoTiming').text(t);
                 showGrupos(grupos);
+                fillCalendar(grupos);
             }, (error) => {
             });
         }, (error) => {
@@ -790,4 +798,53 @@ function createRowGrupos(e) {
     </tr>
     `);
 }
+function toWeekDay(dia) {
+    switch (dia) {
+        case 'LUNES':
+            return 1;
+        case 'MARTES':
+            return 2;
+        case 'MIERCOLES':
+            return 3;
+        case 'JUEVES':
+            return 4;
+        case 'VIERNES':
+            return 5;
+        case 'SABADO':
+            return 6;
+        case 'SÁBADO':
+            return 6;
+        case 'DOMINGO':
+            return 7;
+        default:
+            break;
+    }
+}
+function fillCalendar(grupos) {
+    grupos.forEach(e => {
+        let id_matricula = e.id_matricula;
+        let grupo = e.id_grupo;
+        let codigo = e.codigo_taller;
+        let descripcion = e.descripcion;
+        // let titulo = e.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+        let dia = e.dia;
+        let hora = e.hora > 12 ? e.hora - 12 + 'pm' : e.hora + 'am';
+        let horaF = e.hora > 12 ? e.hora - 12 +':00': e.hora +':00' ;
+        let horaFi = e.hora > 12 ? e.hora - 11 +':00': e.hora + 1 +':00' ;
+        let weekday = toWeekDay(dia.toUpperCase());
+        
+        
+        $('#calendar').fullCalendar('renderEvent', {
+            title: descripcion,
+            description: codigo,
+            start: horaF,
+            end: horaFi,
+            dow: [ weekday ], 
+            className: 'fc-bg-default',
+            icon : "swimmer"
+        });
+    })
+   
+}
+
 document.addEventListener("DOMContentLoaded", loaded);

@@ -1363,10 +1363,6 @@ a.fc-more:hover {
 .datepicker {
   z-index: 123456; }
 
-.card {
-  border: 0;
-  background: transparent; }
-
 .fc-toolbar .btn {
   font-size: 15px !important;
   text-transform: uppercase;

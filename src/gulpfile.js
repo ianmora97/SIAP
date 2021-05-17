@@ -28,9 +28,27 @@ gulp.task('js', function() {
         .pipe(gulp.dest('web/js'));
 });
 
+// fullCalendar JS
+gulp.task('fcjs', function() {
+    return gulp.src([
+            'node_modules/fullcalendar/main.js'
+        ])
+        .pipe(concat('fullcalendar.js'))
+        .pipe(gulp.dest('web/js'));
+});
+
+// fullCalendar CSS
+gulp.task('fccss', function() {
+    return gulp.src([
+            'node_modules/fullcalendar/main.css'
+        ])
+        .pipe(concat('fullcalendar.css'))
+        .pipe(gulp.dest('web/css'));
+});
+
 
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate', function() {
+gulp.task('serve', gulp.series('sass','js','animate','fcjs','fccss', function() {
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
 }));
 // gulp.task('dev', gulp.series('sass','js','animate','nodemon', function() {

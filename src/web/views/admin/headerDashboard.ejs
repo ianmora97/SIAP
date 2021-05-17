@@ -54,28 +54,27 @@
     </div>
 </div>
 <script>
-    function onReady(callback) {
-        let cont =0;
-        var intervalId = window.setInterval(function() {
-            if (document.getElementsByTagName('body')[0] !== undefined) {
-                window.clearInterval(intervalId);
-                callback.call(this);
-            }
-            cont++;
-            console.log(cont);
-        }, 1000);
-    }
+    // function onReady(callback) {
+    //     let cont =0;
+    //     var intervalId = window.setInterval(function() {
+    //         if (document.getElementsByTagName('body')[0] !== undefined) {
+    //             window.clearInterval(intervalId);
+    //             callback.call(this);
+    //         }
+    //         cont++;
+    //         console.log(cont);
+    //     }, 1000);
+    // }
     
-    function setVisible(selector, visible) {
-        document.querySelector(selector).style.display = visible ? 'block' : 'none';
-    }
-    
-    onReady(function() {
+    // function setVisible(selector, visible) {
+    //     document.querySelector(selector).style.display = visible ? 'block' : 'none';
+    // }
+    setTimeout(() => {
         $('body').removeClass('overflow-hidden');
         animateCSS('#loadingPage','fadeOutDownBig').then(()=>{
             $('#loadingPage').hide();
         })
-    });
+    }, 1500);
 </script>
 <script>
 function cargarNotificacionesDropdrown(event){
