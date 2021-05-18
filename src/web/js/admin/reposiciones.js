@@ -38,7 +38,7 @@ function cargarFoto() {
     let foto = $('#usuario_foto').data('value');
     if(!foto){
         $('.avatar-bg').css({
-            'background':'url(../../img/default-user-image.png)',
+            'background':'url(/public/uploads/default-avatar.png)',
             'background-size':'cover',
             'background-position': '50% 50%'
         });

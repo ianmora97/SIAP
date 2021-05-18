@@ -262,8 +262,7 @@ function showAdminList(data){
 
 }
 function showRowAdminList(data){
-  let foto = data.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
-    '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+data.foto+'" style="height:40px;">'
+  let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px">';
   $('#lista_administradores').append(`
     <tr ondblclick="openModalEdit(${data.cedula})">
       <td class="text-center">${foto}</td>

@@ -3,36 +3,24 @@ function loaded(event) {
 }
 
 function events(event) {
-cargar_registros();
-cargar_administradores();
+    cargar_registros();
+    cargar_administradores();
 }
-
-//------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
-
-
+function searchonfind(barra) {
+    var table = $('#table_reportes').DataTable();
+    let val = $('#barraBuscar').val();           
+    let result1 = table.search( val ).draw();
+}
 function cargar_administradores(){
-
-  
     $.ajax({
         type: "GET",
         url: "/admin/registro/sistemaCanAdmin",
-        //url: "/admin/estudiante/getTalleres",
-        
         contentType: "application/json",
     }).then((solicitudes) => {
-        
-        
-        
         $('#cantidad_administrativos').html(solicitudes.length);
-       
-    },
-        (error) => {
-            alert(error.status);
-        }
-    );
-
-
-
+    },(error) => {
+        alert(error.status);
+    });
 }
 var registro = [];
 function cargar_registros() {
@@ -45,44 +33,27 @@ function cargar_registros() {
         headers:{
             'Authorization':bearer
         }
-    }).then((solicitudes) => {
-        console.log(solicitudes);
+    }).then((reportes) => {
         let totalTime = new Date().getTime() - ajaxTime;
         let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
-        registro = solicitudes;
-        let est = registro.filter( element => element.tabla == 'T_ESTUDIANTE');
-        let curs = registro.filter( element => element.tabla == 'T_GRUPO');
-        let prof = registro.filter( element => element.tabla == 'T_ADMINISTRATIVO');
-       // var otr = registro.filter( (x)=> x.tabla == 't_estudiante');
-        cargar_registro_Estudiantes(est);
-        cargar_registro_Cursos(curs);
-        cargar_registro_Profesores(prof);
-       
-    },
-        (error) => {
-            alert(error.status);
-        }
-    );
-}
-function cargar_registro_Estudiantes(solicitudes) {
-    $("#lista-registro-estudiantes").html("");
-    
-    solicitudes.forEach((element) => {
-        llenar_registro_Estudiantes(element);
-        
+        registro = reportes;
+        reportesList(reportes);
+    },(error) => {
+      
     });
-    /*
-                "columnDefs": [
-            { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] },
-            { "orderable": false, "targets": [6] }
-        ],
-    */
-    $('#table_estudiantes').DataTable({
-        stateSave: true,
+}
+function reportesList(data) {
+    $("#lista_reportes").html("");
+    if(data){
+        data.forEach((e) => {
+            showReportesList(e); 
+        });
+    }
+    $('#table_reportes').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron talleres",
+            "zeroRecords": "No se encontraron reportes",
             "infoEmpty": "No hay registros disponibles!",
             "infoFiltered": "(filtrado de _MAX_ registros)",
             "lengthMenu": "_MENU_ ",
@@ -103,110 +74,27 @@ function cargar_registro_Estudiantes(solicitudes) {
             }
         }
     });
-    $('#table_estudiantes_info').appendTo('#infoTable_estudiantes');
+    $('#table_reportes_info').appendTo('#infoTable_reportes');
+    $('#table_reportes_paginate').appendTo('#botonesTable_reportes');
+    $('#table_reportes_length').find('select').removeClass('custom-select-sm');
+    $('#table_reportes_length').find('select').appendTo('#showlenghtentries');
+    $('#table_reportes_length').html('');
+    $('#table_reportes_filter').html('');
 }
-function cargar_registro_Cursos(solicitudes) {
-    $("#lista_registro-cursos").html("");
-    
-    solicitudes.forEach((element) => {
-        llenar_registro_Cursos(element);
-        
-    });
-}
-function cargar_registro_Profesores(solicitudes) {
-    $("#lista_registro-profesores").html("");
-    
-    solicitudes.forEach((element) => {
-        llenar_registro_Profesores(element);
-        
-    });
-}
-function cargar_registro_Otros(solicitudes) {
-    $("#lista_registro-").html("");
-    
-    solicitudes.forEach((element) => {
-        llenar_registro_(element);
-        
-    });
-
-}
-function llenar_registro_Estudiantes(data) {
-    let id_registro = data.id;
-    let usuario_registro = data.usuario;
-    let ddl_registro = data.ddl;
-    let descripcion_registro = data.descripcion;
-    let fecha_registro = data.created_at;
-    $("#lista-registro-estudiantes").append(
-        "<tr>" +
-        "<td>" +
-        id_registro +
-        " </td>" +
-        "<td>" +
-        usuario_registro +
-        "</td>" +
-        "<td>" +
-        descripcion_registro +
-        "</td>" +
-        "<td>" +
-        ddl_registro +
-        "</td>" +
-        "<td>" +
-        fecha_registro +
-        "</td>" +
-        "</tr>"
-    );
-}
-function llenar_registro_Cursos(solicitudes) {
-    let id_registro = solicitudes.id;
-    let usuario_registro = solicitudes.usuario;
-    let ddl_registro = solicitudes.ddl;
-    let descripcion_registro = solicitudes.descripcion;
-    let fecha_registro = solicitudes.created_at;
-    $("#lista_registro-cursos").append(
-        "<tr>" +
-        "<td>" +
-        id_registro +
-        " </td>" +
-        "<td>" +
-        usuario_registro +
-        "</td>" +
-        "<td>" +
-        descripcion_registro +
-        "</td>" +
-        "<td>" +
-        ddl_registro +
-        "</td>" +
-        "<td>" +
-        fecha_registro +
-        "</td>" +
-        "</tr>"
-    );
-}
-function llenar_registro_Profesores(solicitudes) {
-    let id_registro = solicitudes.id;
-    let usuario_registro = solicitudes.usuario;
-    let ddl_registro = solicitudes.ddl;
-    let descripcion_registro = solicitudes.descripcion;
-    let fecha_registro = solicitudes.created_at;
-    $("#lista_registro-profesores").append(
-        "<tr>" +
-        "<td>" +
-        id_registro +
-        " </td>" +
-        "<td>" +
-        usuario_registro +
-        "</td>" +
-        "<td>" +
-        descripcion_registro +
-        "</td>" +
-        "<td>" +
-        ddl_registro +
-        "</td>" +
-        "<td>" +
-        fecha_registro +
-        "</td>" +
-        "</tr>"
-    );
+function showReportesList(data) {
+    let badge = data.ddl == 'ELIMINAR' ? 'danger' : 
+                data.ddl == 'AGREGAR' ? 'success' : 
+                data.ddl == 'ACTUALIZAR' ? 'warning' : 'info';
+    $("#lista_reportes").append(`
+        <tr style="height:calc(60vh/10);">
+            <td>${data.id}</td>
+            <td>${data.usuario}</td>
+            <td><h5 class="m-0"><span class="badge badge-${badge}">${data.ddl}</span></h5></td>
+            <td>${data.descripcion}</td>
+            <td>${data.tabla}</td>
+            <td>${data.created_at}</td>
+        </tr>
+    `);
 }
 const animateCSS = (element, animation) =>
     

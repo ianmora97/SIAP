@@ -22,7 +22,7 @@ function events(event){
 function cargarFoto() {
     let foto = $('#usuario_foto').data('value');
     $('.avatar-bg').css({
-        'background':'url(./../public/uploads/'+foto+')',
+        'background':'url(/public/uploads/'+foto+')',
         'background-size':'cover',
         'background-position': '50% 50%'
     });

@@ -22,9 +22,15 @@ const con = require('../../../database');
 router.get('/admin/registro/sistema',(req,res)=>{
     let script = "call prc_seleccionar_actividad()";
     var query = con.query(script, (err,rows,fields)=>{
-        if(rows != undefined){
-            if(rows[0].length != 0){
-                res.send(rows[0])
+        if(!err){
+            if(rows[0] != undefined){
+                if(rows[0].length != 0){
+                    res.send(rows[0])
+                }else{
+                    res.send(rows[0])
+                }
+            }else{
+                res.send({err:'NotFound'});
             }
         }else{
             res.send({err:'NotFound'});
@@ -35,9 +41,13 @@ router.get('/admin/registro/sistema',(req,res)=>{
 router.get('/admin/registro/sistemaCanAdmin',(req,res)=>{
     let script = "select * from vta_administradores";
     var query = con.query(script, (err,rows,fields)=>{
-        if(rows != undefined){
-            if(rows.length != 0){
-                res.send(rows)
+        if(!err){
+            if(rows != undefined){
+                if(rows.length != 0){
+                    res.send(rows)
+                }
+            }else{
+                res.send({err:'NotFound'});
             }
         }else{
             res.send({err:'NotFound'});

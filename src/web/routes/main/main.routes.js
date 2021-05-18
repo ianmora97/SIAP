@@ -22,16 +22,8 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
-router.get('/prueba', (req, res) => {
-    let usuario = req.session.value;
-
-        let v = { usuario, selected: 'home' }
-        res.render('client/perfil/lo_que_voy_a_probar',v);
-    });
-
-
-router.get('/pruebaImage', (req, res) => {
-    res.render('pruebaImage');
+router.get('/cambiarClave', (req, res) => {
+    res.render('solicitudCambioClave');
 });
 
 router.get('/admin', (req, res) => {

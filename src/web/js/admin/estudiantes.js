@@ -8,8 +8,9 @@ function loaded(event) {
 function events(event) {
     getLugares();
     openModalAdd();
-    cargar_estudiantes();
-
+    loadFromDb();
+    changeProfilePhoto();
+    fotoonChange();
 }
 const animateCSS = (element, animation) =>
 
@@ -30,6 +31,13 @@ const animateCSS = (element, animation) =>
 
         node.addEventListener('animationend', handleAnimationEnd, { once: true });
     });
+function openModalCameras() {
+    setTimeout(() => {
+        $('#modalTakePic').modal('show');
+    }, 2000);
+}
+var t_modalCedulaEstudiante = "";
+
 function openModalAdd() {
     $('#modalButtonAgregarEstudiante').on('click', function () {
         $('#modalAgregarEstudiante').modal('show')
@@ -43,6 +51,20 @@ function openModalAdd() {
     $('#modalAgregarEstudiante').on('hidePrevented.bs.modal', function (event) {
         animateCSS("#modalAgregarEstudiante", 'shakeX')
     })
+    
+    $('#modalTakePic').on('hidden.bs.modal', function (event) {
+        
+        if(f_videoRecording){
+            var videoEl = document.getElementById('theVideo');
+            stream = videoEl.srcObject;
+            tracks = stream.getTracks();
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+            videoEl.srcObject = null;
+        }
+       
+    })
 
     $('#modalVerEstudiante').on('show.bs.modal', function (event) {
         animateCSS("#modalVerEstudiante", 'fadeInUpBig')
@@ -54,6 +76,17 @@ function openModalAdd() {
         var modal = $(this)
         modal.find('.modal-title').text(estudiante.nombre + " " + estudiante.apellido)
         modal.find('.modal-body input').val(recipient)
+
+        $('#idEstudiante').val(estudiante.id)
+        $('#cedulaEstudiante').val(estudiante.cedula)
+
+        $('#cedulaEstudiante').val(estudiante.cedula)
+        $('#cambiarclaveID').val(estudiante.cedula)
+        $('#claveCedulaID').html(estudiante.cedula)
+        t_modalCedulaEstudiante = estudiante.cedula;
+
+        $('#estadoModalactualizar').val(estudiante.estado)
+        $('#nivelModalactualizar').val(estudiante.nivel);
 
         $('#v_nombre_usuario').val(estudiante.usuario)
         $('#v_correo').val(estudiante.correo)
@@ -168,12 +201,12 @@ var g_estudiantes_map = new Map();
 var g_talleres = new Map();
 var g_talleresA = [];
 
-function cargar_estudiantes() {
+function loadFromDb() {
     let bearer = 'Bearer '+g_token;
     let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
-        url: "/admin/usuarios/listaEstudiantes", //este es un path nuevo, hay que hacerlo
+        url: "/admin/estudiante/listaEstudiantes", //este es un path nuevo, hay que hacerlo
         contentType: "appication/json",
         headers:{
             'Authorization':bearer
@@ -188,8 +221,7 @@ function cargar_estudiantes() {
         load_stats(solicitudes);
         $('#cargarDatosSpinner-usuarios-estudiantes').hide();
     }, (error) => {
-    }
-    );
+    });
     
     $.ajax({
         type: "GET",
@@ -202,10 +234,12 @@ function cargar_estudiantes() {
         g_talleresA = talleres;
         talleres.forEach((t)=>{
             g_talleres.set(t.nivel,t);
+            $('#nivelModalactualizar').append(`
+                <option value="${t.nivel}">${t.descripcion}</option>
+            `);
         })
     }, (error) => {
-    }
-    );
+    });
 }
 
 function cargar_estudiante(data) {
@@ -252,15 +286,10 @@ function moverlabel(label_id, nivel){
     $('#guardar_rango_'+label_id+'').removeClass('disabled');
     $('#guardar_rango_'+label_id+'').prop('disabled',false);
 }
-function guardarEstadoRango(id,cedula) {
+function actualizarNivel() {
     let bearer = 'Bearer '+g_token;
-    let valor = $('#id_label_est_'+id+'').html();
-    let nivel = 0;
-    g_talleresA.forEach((t)=>{
-        if(t.descripcion == valor){
-            nivel = t.nivel;
-        }
-    });
+    let nivel = $('#nivelModalactualizar').val();
+    let cedula = $('#cedulaEstudiante').val();
     $.ajax({
         type: "GET",
         url: "/admin/estudiante/actualizarNivel", 
@@ -294,12 +323,14 @@ function cambiarMorosidadEst(estado,cedula) {
     }
     );
 }
-function cambiarEstadoEstudiante(id) {
+function cambiarEstadoEstudiante() {
+    let estado = parseInt($('#estadoModalactualizar').val());
+    let cedula = $('#cedulaEstudiante').val();
     let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/admin/estudiante/actualizarEstado", 
-        data: {morosidad,cedula},
+        data: {estado,cedula},
         contentType: "appication/json",
         headers:{
             'Authorization':bearer
@@ -310,35 +341,140 @@ function cambiarEstadoEstudiante(id) {
     }
     );
 }
-function llenar_Estudiantes(data) {
-    let foto = data.foto == null ? '<i class="fas fa-user-circle fa-3x"></i>' : 
-    '<img class="rounded-circle mx-auto d-block" src="../../public/uploads/'+data.foto+'" style="height:40px;">';
+function openImageModal(foto,cedula) {
+    $('#modalImage').modal('show');
+    $('#cedulaHiddenCambiarFotoModal').val(cedula);
 
+    $('.avatar-bg').css({
+        'background':'url('+foto+')',
+        'background-size':'cover',
+        'background-position': '50% 50%'
+    });
+    $('#contentImageModal').attr('src',foto);
+}
+
+function readURL(input) { 
+    if (input.files && input.files[0]) {
+        var reader = new FileReader(); 
+        reader.onload = function (e) {
+            $('.avatar-bg').css({
+                'background':'url('+e.target.result+')',
+                'background-size':'cover',
+                'background-position': '50% 50%'
+            });
+        }; 
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function changeProfilePhoto() {
+    $("#profileImageChange").click(function(e) {
+        $("#fileFoto").click();
+    });
+}
+function cambiarClaveModal() {
+    $('#modalcambiarclave').modal('show');
+    let cedula = t_modalCedulaEstudiante;
+    console.log(cedula);
+    $('#cambiarclaveID').val(cedula);
+    $('#claveCedulaID').html(cedula);
+}
+function fotoonChange() {
+    $("#fileFoto").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+            readURL(this);
+            $('#fileFoto').after(
+                '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
+                'id="btn_cambiar_foto" type="submit" '+
+                'style="display: none;">Cambiar foto</button>'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+                    
+    });
+}
+var f_videoRecording = false;
+function openModalToTakePhoto(){
+    $('#theVideo').show();
+    f_videoRecording = true;
+    var videoWidth = 640;
+    var videoHeight = 480;
+    var videoTag = document.getElementById('theVideo');
+    var canvasTag = document.getElementById('theCanvas');
+    var btnCapture = document.getElementById("btnCapture");
+    var btnDownloadImage = document.getElementById("btnDownloadImage");
+    videoTag.setAttribute('width', videoWidth);
+    videoTag.setAttribute('height', videoHeight);
+    canvasTag.setAttribute('width', videoWidth);
+    canvasTag.setAttribute('height', videoHeight);
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: videoWidth,
+            height: videoHeight
+        }
+    }).then(stream => {
+        videoTag.srcObject = stream;
+        
+    }).catch(e => {
+        document.getElementById('errorTxt').innerHTML = 'ERROR: ' + e.toString();
+    });
+    var canvasContext = canvasTag.getContext('2d');
+    btnCapture.addEventListener("click", () => {
+        canvasContext.drawImage(videoTag, 0, 0, videoWidth, videoHeight);
+        var videoEl = document.getElementById('theVideo');
+        stream = videoEl.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        videoEl.srcObject = null;
+        f_videoRecording = false;
+        setTimeout(() => {
+            $('#theVideo').hide();
+        }, 1500);
+    });
+    btnDownloadImage.addEventListener("click", () => {
+        var link = document.createElement('a');
+        link.download = 'capturedImage.png';
+        link.href = canvasTag.toDataURL();
+        link.click();
+    });
+}
+function llenar_Estudiantes(data) {
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
     $("#lista_estudiantes").append(`
         <tr style="height:calc(55vh / 10);">
-            <td class="align-center">${foto}</td>
+            <td class="align-center">${foto} &nbsp;&nbsp;${data.nombre + " " + data.apellido}</td>
             <td>${data.cedula}</td>
-            <td>${data.nombre + " " + data.apellido}</td>
-            <td>
-                <div class="d-flex justify-content-between">
-                    <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
-                    <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
-                    disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
-                </div>
-                <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
-            </td>
-            <td><button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')">${data.estado == 0 ? 'Inactivo' : 'Activo'}</button></td>
+            <td>${data.descripcion}</td>
+            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
             <td class="d-flex justify-content-center">
+                <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
                 <label class="switch-cus" for="customSwitch_${data.id}">
                     <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
                     <span class="slider-cus round-cus"></span>
                 </label>
             </td>
-            <td>
-                <button class="btn btn-sm d-block w-100 btn-info" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante"><i class="fas fa-eye"></i></button>
+            <td class="text-center">
+                <span class="w-75 mx-auto d-block" role="button" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante"><i class="fas fa-ellipsis-v"></i></span>
             </td>
         </tr>
     S`);
+    /*
+    <button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')"></button>
 
+    <div class="d-flex justify-content-between">
+        <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
+        <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
+        disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
+    </div>
+    <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
+    */
 }
 document.addEventListener("DOMContentLoaded", loaded);

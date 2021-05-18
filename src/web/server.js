@@ -54,6 +54,8 @@ app.use(multer({
 
 //REST API --routering
 app.use(require('./routes/main/main.routes'));
+app.use(require('./routes/main/solicitudes.routes'));
+
 app.use(require('./routes/admin/admin.routes'));
 app.use(require('./routes/admin/stats.routes'));
 app.use(require('./routes/admin/admin.ajax.routes'));

@@ -4,6 +4,28 @@ const router = express.Router();
 
 const con = require('../../database');
 
+
+router.post('/client/login',(req,res)=>{
+    let script = "select * from vta_cliente_estudiante "+
+    "where cedula = ? " +
+    "and clave = sha1(?)";
+    var query = con.query(script,
+        [req.body.cedula, req.body.clave],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows.length != 0){
+                req.session.value = rows[0];
+                res.redirect('/client/perfil');
+            }else{
+                res.render('index',{err:'No se encuentra registrado',id: 1});
+            }
+        }else{
+            res.render('index',{err:'Error en servidor',id: 2});
+        }
+    });
+});
+
+
 router.get('/client/home',(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
@@ -134,25 +156,7 @@ router.get('/client/cargarCursosMatriculadosCliente',(req,res)=>{
         }
     });
 });
-router.post('/client/login',(req,res)=>{
-    let script = "select * from vta_cliente_estudiante "+
-    "where cedula = ? " +
-    "and clave = sha1(?)";
-    var query = con.query(script,
-        [req.body.cedula, req.body.clave],
-        (err,rows,fields)=>{
-        if(!err){
-            if(rows.length != 0){
-                req.session.value = rows[0];
-                res.redirect('/client/perfil');
-            }else{
-                res.render('index',{err:'No se encuentra registrado',id: 1});
-            }
-        }else{
-            res.render('index',{err:'Error en servidor',id: 2});
-        }
-    });
-});
+
 
 router.post('/client/matricularCursos',(req,res)=>{
     if(req.session.value){

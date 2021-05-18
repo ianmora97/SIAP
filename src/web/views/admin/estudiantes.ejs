@@ -35,6 +35,82 @@
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
+    <div class="modal fade" id="modalTakePic" tabindex="-1" aria-labelledby="modalTakePic" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-info mr-3" onclick="openModalToTakePhoto()">Abrir Camara</button>
+                        <button class="btn btn-info mr-3" id="btnCapture">Capturar</button>
+                        <button class="btn btn-secondary" id="btnDownloadImage">Descargar Imagen</button>
+                    </div>
+                    <p id="errorTxt"></p>
+                    <div class="mx-auto">
+                        <video id="theVideo" autoplay></video>
+                        <canvas id="theCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" onclick="openModalCameras()"><i class="fas fa-camera"></i></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <form action="/admin/listEstudiantes/cambiarfotoperfil" method="POST" enctype="multipart/form-data">
+                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                                <p class="m-0">Formato de Imagen invalida!</p>
+                            </div>
+                            <span class="sr-only" id="usuario_foto"></span>
+                            <label for="image" role="button" id="profileImageChange" class="d-block">
+                                <div class="avatar-bg center profile-pic mx-auto mt-4 "style="width: 450px;height: 450px;">
+                                    <span class="fas fa-camera"></span>
+                                    <span class="user-select-none">Cambiar Imagen</span>
+                                </div>
+                            </label>
+                            <input type="text" name="cedula" id="cedulaHiddenCambiarFotoModal" hidden>
+                            <input type="file" id="fileFoto" name="image" style="visibility: hidden;">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalcambiarclave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title pl-3">Solicitud de Cambio de clave a <span id="claveCedulaID"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/estudiantes/cambiarClave" method="post">
+                        <div class="form-group">
+                            <label for="cambiarclaveinput">Clave</label>
+                            <input type="text" class="form-control" name="clave" id="cambiarclaveinput" value="1234">
+                            <input type="text" class="form-control" name="cedula" id="cambiarclaveID" hidden>
+                            <small class="text-muted">Debe cambiar la clave.</small>
+                        </div>
+                        <button type="submit" class="btn btn-success">Cambiar Clave</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false"
         aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -167,16 +243,18 @@
     <div class="modal " id="modalVerEstudiante" tabindex="-1" aria-labelledby="verModalEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-secondary">
-                    <h5 class="modal-title text-white">Detalles de la persona <span id="nombreTarget"></span></h5>
+                <div class="modal-header px-3">
+                    <h5 class="modal-title pl-3">Detalles de la persona <span id="nombreTarget"></span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container-fluid">
+                    <div class="container-fluid px-0">
                         <div class="row mx-0 w-100">
                             <div class="col-lg-4">
+                                <span class="sr-only" id="idEstudiante"></span>
+                                <span class="sr-only" id="cedulaEstudiante"></span>
                                 <div class="form-group">
                                     <label for="v_nombre_usuario">Nombre de usuario</label>
                                     <input type="text" class="form-control" id="v_nombre_usuario">
@@ -232,12 +310,43 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
                 </div>
-                <div class="modal-footer ">
-                    <button type="button" class="btn btn-danger" id="closeModalEstudianteDetallado"
-                        data-dismiss="modal">Cancelar</button>
+                <div class="border border-top">
+                    <div class="container">
+                        <div class="row mx-0 w-100">
+                            <div class="col-lg-6 w-100 py-2 border-right">
+                                <div class="form-group w-100">
+                                    <label for="estadoModalactualizar">Estado</label>
+                                    <div class="input-group ">
+                                        <div class="input-group-append flex-grow-1">
+                                            <select id="estadoModalactualizar" class="form-control rounded-0" name="estadoModalactualizar">
+                                                <option value="1">Activo</option>
+                                                <option value="0">Inactivo</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm py-1" onclick="cambiarEstadoEstudiante()"><i class="far fa-save"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 py-2 w-100">
+                                <div class="form-group w-100">
+                                    <label for="nivelModalactualizar">Nivel</label>
+                                    <div class="input-group ">
+                                        <div class="input-group-append flex-grow-1">
+                                            <select id="nivelModalactualizar" class="form-control rounded-0" name="nivelModalactualizar">
+                                                
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm py-1" onclick="actualizarNivel()"><i class="far fa-save"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Contraseña</button>
+                    <button type="button" class="btn btn-danger" id="closeModalEstudianteDetallado" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" id="Guardar-datos-estudiante">Guardar</button>
                 </div>
             </div>
@@ -312,12 +421,17 @@
                                     </div>
                                     <div class="col-7 d-flex align-items-center justify-content-end pr-2"
                                         style="max-height: 40px">
-                                        <button type="button" class="btn btn-primary btn-sm mr-2"
+                                        <button type="button" name="agregarTaller" id="modalButtonAgregarEstudiante"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Agregar un estudiante" onclick="openmodal('#agregarGrupo')" class="btn bg-success btn-sm text-white mr-2"
+                                            style="border-radius: 50px;"><i class="fas fa-plus"></i>
+                                        </button>
+                                        <!-- <button type="button" class="btn btn-primary btn-sm mr-2"
                                             style="border-radius: 10px;" id="modalButtonAgregarEstudiante"
                                             data-toggle="tooltip" data-placement="top"
                                             title="Agregar un estudiante">Agregar
                                             <i class="fas fa-plus-square"></i>
-                                        </button>
+                                        </button> -->
 
                                         <a href="/admin/estudiantes" name="actualizar_lista" id="actualizar_lista"
                                             data-toggle="tooltip" data-placement="top"
@@ -328,17 +442,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row w-100 mx-0" style="height: 89vh; overflow-y: auto;">
-                            <table class="table table-hover table-responsive-md table-borderless" id="estudiantes_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
+                        <div class="row w-100 mx-0" style="height: 70vh; overflow-y: auto;">
+                            <table class="table table-hover table-responsive-md table-borderless" id="estudiantes_TableOrder" data-order="[[ 0, &quot;asc&quot; ]]">
                                 <thead>
                                     <tr>
-                                        <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--Aqui va la foto-->
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-id-card"></i> Nombre</th> <!--Aqui va la foto-->
                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cédula</th>
-                                        <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
                                         <th class="bg-dark text-white sticky-top" scope="col">Nivel</th>
                                         <th class="bg-dark text-white sticky-top" scope="col">Estado</th>
                                         <th class="bg-dark text-white sticky-top" scope="col">Moroso</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Ver más</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th>
                                     </tr>
                                 </thead>
                                 <tbody id="lista_estudiantes">

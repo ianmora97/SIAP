@@ -309,6 +309,42 @@ router.get('/admin/perfil',(req,res)=>{
     }
 });
 
+router.post('/admin/cambiarfotoperfil',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let token = req.session.token;
+            let s = 'dash';
+            var script = con.query('call prc_actualizar_foto_usuario(?, ?)',
+            [req.session.value.cedula,req.file.filename],(err,rows,fields)=>{
+                if(!err){
+                    con.query("select * from vta_administradores where cedula = ? ",
+                    [usuario.cedula], (er,row,fields)=>{
+                        if(!er){
+                            if(row != undefined){
+                                req.session.value = row[0];
+                                let usuario = req.session.value;
+                                res.render('admin/editarDatos', {usuario,s,token});
+                            }else{
+                                res.render('admin/editarDatos', {usuario,s,token});
+                            }
+                        }else{
+                            res.render('admin/editarDatos', {usuario,s,token});
+                        }
+                    });
+                }else{
+                    res.render('admin/editarDatos', {usuario,s,token});
+                }
+            });
+            res.render('admin/editarDatos', {usuario,s,token});
+        }else{
+            res.render('indexAdmin');
+        }
+    }else{
+        res.render('indexAdmin');
+    }
+});
+
 // ! ----------------------------------- nav routes ------------------------------------
 
 function logSistema(usuario, descripcion, ddl, tabla) {

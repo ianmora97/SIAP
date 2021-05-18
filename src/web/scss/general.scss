@@ -92,11 +92,13 @@ hr {
     margin-bottom: 0 !important;
 }
 
-td,th{
+th{
     font-size: 0.8rem;
 }
 td{
-    padding: 0.5rem !important;
+    line-height: 1.8;
+    font-size: 1rem;
+    padding: 0.2rem !important;
 }
 
 button{

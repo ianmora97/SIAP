@@ -16,6 +16,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
 
+const {logSistema, DDL, TABLE} = require('../../../systemLogs');
+
 const con = require('../../../database');
 // ? ---------------------------------------------------------- TALLERES CRUD ----------------------------------------------------------
 
@@ -36,6 +38,7 @@ router.get('/admin/talleres/eliminarTaller',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.id}`, DDL.DELETE, TABLE.TALLER);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -51,6 +54,7 @@ router.get('/admin/talleres/actualizarTaller',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.descripcion}`, DDL.UPDATE, TABLE.TALLER);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -66,6 +70,7 @@ router.get('/admin/talleres/ingresarTaller',ensureToken,(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.descripcion}`, DDL.INSERT, TABLE.TALLER);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -92,6 +97,7 @@ router.get('/admin/talleres/actualizarHorario',ensureToken,(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.dia} ${req.query.hora}`, DDL.UPDATE, TABLE.HORARIO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -107,6 +113,7 @@ router.get('/admin/talleres/eliminarHorario',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.id}`, DDL.DELETE, TABLE.HORARIO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -121,6 +128,7 @@ router.get('/admin/talleres/ingresarHorario',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.dia} ${req.query.hora}`, DDL.INSERT, TABLE.HORARIO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -150,6 +158,7 @@ router.get('/admin/talleres/ingresarGrupo',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.horario} ${req.query.profesor} ${req.query.taller}`, DDL.INSERT, TABLE.GRUPO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -166,6 +175,7 @@ router.get('/admin/talleres/actualizarGrupo',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.id}`, DDL.UPDATE, TABLE.GRUPO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -180,6 +190,7 @@ router.get('/admin/talleres/eliminarGrupo',ensureToken,(req,res)=>{
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
+            logSistema(req.session.value.cedula, `${req.query.id}`, DDL.DELETE, TABLE.GRUPO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -221,10 +232,6 @@ function ensureToken(req,res,next) {
 router.get('/api/not_allowed',(req,res)=>{ //logout
     res.render('notAllowedAdmin');
 });
-
-function actividadSistema(user,ddl,table,desc) {
-    con.query("call prc_insertar_actividad(?,?,?,?)",[user,ddl,table,desc], (err,result)=>{});
-}
 
 module.exports = router;
 

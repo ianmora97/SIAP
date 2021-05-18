@@ -35,154 +35,100 @@
  </head>
  
  <body class="page bg-light d-flex flex-column h-100">
- 
-     <div class="d-flex" id="wrapper">
-         <%- include('../menuDashboard') %>
-             <div id="page-content-wrapper">
-                 <%- include('../headerDashboard') %>
-                 <nav aria-label="breadcrumb ">
-                     <ol class="breadcrumb ">
-                         <li class="breadcrumb-item"><a href="#">Reportes</a></li>
-                         <li class="breadcrumb-item"><a href="#">Sistema</a></li>
-                         <li class="breadcrumb-item active" aria-current="page">Registro de uso</li>
-                     </ol>
-                 </nav>
-                 <div class="container-fluid ">
-                     <div class="card border-0 shadow-sm my-3">
-                         <div class="card-body py-2">
-                             <div class="row">
-                                 <div class="col-md-6 ">
-                                     <h2 class="font-weight-bolder">Registro de uso del sistema</h2>
-                                     <small class="text-muted">En esta seccion se muestra la lista de acciones
-                                         realizadas por el personal administrativo</small><br>
-                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
-                                 </div>
-                                 <div class="col">
-                                     <h1 class="m-0 font-weight-bolder text-primary" id="cantidad_administrativos"></h1>
-                                     <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                     title="Cantidad de funcionarios administativos autorizados para manipular el sistema">Cantidad de administrativos &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="card border-0 shadow px-2">
-                         <div class="nav bg-light" id="myTab" role="tablist">
-                             <a class="nav-link-casilleros active" id="reportes-estudiantes-tab" data-toggle="tab" href="#reportes-estudiantes" role="tab" aria-controls="reportes-estudiantes" aria-selected="true">Estudiantes</a>
-                             <a class="nav-link-casilleros" id="reportes-cursos-tab" data-toggle="tab" href="#reportes-cursos" role="tab" aria-controls="reportes-cursos" aria-selected="false">Cursos</a>
-                             <a class="nav-link-casilleros" id="reportes-profesores-tab" data-toggle="tab" href="#reportes-profesores" role="tab" aria-controls="reportes-profesores" aria-selected="false">Profesores</a>
-                             <a class="nav-link-casilleros" id="reportes-otros-tab" data-toggle="tab" href="#reportes-otros" role="tab" aria-controls="reportes-otros" aria-selected="false">Otros...</a>
-                         </div>
-                         <div class="tab-content" id="myTabContent">
-                             <div class="tab-pane fade show active bg-white py-2" id="reportes-estudiantes" role="tabpanel" aria-labelledby="reportes-estudiantes-tab" style="min-height: 450px;">
-                                 <div class="w-100 mb-2">
-                                     <h2><strong>Estudiantes</strong></h2>
-                                     <small class="text-muted">Registro de acciones realizadas en la base de datos de estudiantes</small>
-                                 </div>
-                                 <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                                     <table class="table table-hover table-responsive-md table-borderless" id="table_estudiantes">
-                                         <thead>
-                                             <tr>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-hashtag"></i> Id</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-clock"></i> Nombre del administrador</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-bullhorn"></i> Acción realizada</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card "></i> Registro</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha</th>
-                                             </tr>
-                                         </thead>
-                                         <tbody id="lista-registro-estudiantes">
- 
-                                         </tbody>
-                                     </table>
-                                     <div class="d-flex align-items-center align-self-end border-info w-100">
-                                         <div class="row w-100 ml-0">
-                                             <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
-                                                 <small id="infoTable_estudiantes" class="d-flex align-items-end"></small>
-                                             </div>
-                                             <div class="col-md-6 d-flex justify-content-end"
-                                                 id="botonesTable_estudiantes">
-     
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="tab-pane fade bg-white py-2" id="reportes-cursos" role="tabpanel" aria-labelledby="reportes-cursos-tab" style="min-height: 450px;">
-                                 <div class="w-100 mb-2" style="padding: 10px;">
-                                     <h2><strong>Cursos</strong></h2>
-                                     <small class="text-muted">Registro de acciones realizadas en la base de datos de los cursos</small>
-                                 </div>
-                                 <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                                     <table class="table table-hover table-responsive-md table-borderless" id="table_cursos">
-                                         <thead>
-                                             <tr>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-hashtag"></i> Id</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-clock"></i> Nombre del administrador</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-bullhorn"></i> Acción realizada</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card "></i> Registro</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha</th>
-                                             </tr>
-                                         </thead>
-                                         <tbody id="lista_registro-cursos">
- 
-                                         </tbody>
-                                     </table>
-                                 </div>
-                             </div>
-                             <div class="tab-pane fade bg-white py-2" id="reportes-profesores" role="tabpanel" aria-labelledby="reportes-profesores-tab" style="min-height: 450px;">
-                                 <div class="w-100 mb-2" style="padding: 10px;">
-                                     <h2><strong>Profesores</strong></h2>
-                                     <small class="text-muted">Registro de acciones realizadas en la base de datos de los profesores</small>
-                                 </div>
-                                 <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                                     <table class="table table-hover table-responsive-md table-borderless" id="table_profesor">
-                                         <thead>
-                                             <tr>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-hashtag"></i> Id</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-clock"></i> Nombre del administrador</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-bullhorn"></i> Acción realizada</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card "></i> Registro</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha</th>
-                                             </tr>
-                                         </thead>
-                                         <tbody id="lista_registro-profesores">
- 
-                                         </tbody>
-                                     </table>
-                                 </div>
-                             </div>
-                             <div class="tab-pane fade bg-white py-2" id="reportes-otros" role="tabpanel" aria-labelledby="reportes-otros-tab" style="min-height: 450px;">
-                                 <div class="w-100 mb-2" style="padding: 10px;">
-                                     <h2><strong>Otros</strong></h2>
-                                     <small class="text-muted">Registro de acciones realizadas en la base de datos de los otros</small>
-                                 </div>
-                                 <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                                     <table class="table table-hover table-responsive-md table-borderless" id="table_otros">
-                                         <thead>
-                                             <tr>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-hashtag"></i> Id</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-user-clock"></i> Nombre del administrador</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-bullhorn"></i> Acción realizada</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card "></i> Registro</th>
-                                                 <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha</th>
-                                             </tr>
-                                         </thead>
-                                         <tbody id="lista_registro-">
- 
-                                         </tbody>
-                                     </table>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <%- include('../footerDashboard') %>
-             </div>
- 
-     </div>
-     </div>
-     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
-     <script src="../../../js/admin/reporte.sistema.js"></script>
+    <div class="d-flex" id="wrapper">
+        <%- include('../menuDashboard') %>
+            <div id="page-content-wrapper">
+                <%- include('../headerDashboard') %>
+                <nav aria-label="breadcrumb ">
+                    <ol class="breadcrumb ">
+                        <li class="breadcrumb-item"><a href="#">Reportes</a></li>
+                        <li class="breadcrumb-item"><a href="#">Sistema</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Registro de uso</li>
+                    </ol>
+                </nav>
+                <div class="container-fluid ">
+                    <div class="card border-0 shadow-sm my-3">
+                        <div class="card-body py-2">
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <h2 class="font-weight-bolder">Registro de uso del sistema</h2>
+                                    <small class="text-muted">En esta seccion se muestra la lista de acciones
+                                        realizadas por el personal administrativo</small><br>
+                                    <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                                </div>
+                                <div class="col">
+                                    <h1 class="m-0 font-weight-bolder text-primary" id="cantidad_administrativos"></h1>
+                                    <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                    title="Cantidad de funcionarios administativos autorizados para manipular el sistema">Cantidad de administrativos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow px-2">
+                        <div class="card-body px-2 py-2">
+                        <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                            <div class="col-md-6 pl-1 pr-0">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-white"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-around px-0">
+                                <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                    <div class="col-8 d-flex justify-content-around">
+                                        <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
+                                        <div id="filtrarDrop" class="d-flex align-items-center m-0">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-4 d-flex align-items-center justify-content-end pr-2"style="max-height: 40px">
+                                        <a href="/admin/reportes/sistema" name="actualizar_lista" id="actualizar_lista"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Actualizar lista" class="btn bg-white btn-sm"
+                                            style="border-radius: 50px;"><i class="fas fa-sync-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                            <table class="table table-hover table-responsive-md table-borderless px-0" id="table_reportes">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-dark text-white sticky-top" scope="col" style="width: 20px;"><i class="fas fa-hashtag"></i></th>
+                                        <th class="bg-dark text-white sticky-top" scope="col" style="width: 125px;"><i class="fas fa-user-clock"></i> Administrador</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col" style="width: 135px;"><i class="fas fa-bullhorn"></i> Acción realizada</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-database"></i> Dato</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-table"></i> Tabla</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col" style="width: 150px;"><i class="fas fa-clock"></i> Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista_reportes">
+
+                                </tbody>
+                            </table>
+                            <div class="d-flex align-items-center align-self-end border-info w-100">
+                                <div class="row w-100 ml-0">
+                                    <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                        <small id="infoTable_reportes" class="d-flex align-items-end"></small>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-end" id="botonesTable_reportes"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <%- include('../footerDashboard') %>
+            </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="../../../js/admin/reporte.sistema.js"></script>
  </body>
- 
- </html>
+</html>
