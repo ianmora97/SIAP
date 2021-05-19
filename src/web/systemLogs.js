@@ -19,10 +19,10 @@ con.getConnection(function(err) {
 });
 
 const DDL = {
-    DELETE: 'ELIMINAR',
-    INSERT: 'AGREGAR',
-    UPDATE: 'ACTUALIZAR',
-    SELECT: 'VISUALIZAR'
+    DELETE: 'ELIMINAR', //Referencia al "DELETE" de MySQL
+    INSERT: 'AGREGAR', //Referencia al "INSERT" de MySQL
+    UPDATE: 'ACTUALIZAR', //Referencia al "UPDATE" de MySQL
+    SELECT: 'VISUALIZAR' //Referencia al "SELECT" de MySQL
 }
 const TABLE = {
     TALLER : 'T_TALLER',

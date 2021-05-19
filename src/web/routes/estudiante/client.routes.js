@@ -162,7 +162,7 @@ router.post('/client/matricularCursos',(req,res)=>{
     if(req.session.value){
         let script = "call prc_insertar_matricula(?,?)";
         let c = req.body;
-        console.log(c);
+
         var query = con.query(script,
             [c.id, c.estudiante],
             (err,result,fields)=>{
@@ -180,11 +180,11 @@ router.post('/client/matricularCursos',(req,res)=>{
 });
 router.post('/client/cursos/desmatricular',(req,res)=>{
     if(req.session.value){
-        let script = "call prc_actualizar_matricula_estudiante(?)";
+        let script = "call prc_actualizar_matricula_estudiante(?,?)";
         let c = req.body;
-        console.log(c);
+
         var query = con.query(script,
-            [c.curso_id,], (err,result,fields)=>{
+            [c.curso_id,0], (err,result,fields)=>{
             if(err){
                 console.log(err);
                 res.status(501).send('error'); 

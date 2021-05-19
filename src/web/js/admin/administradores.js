@@ -252,13 +252,14 @@ function showAdminList(data){
   $('#informacionTable').html('');
   $('#botonesCambiarTable').html('');
   $('#showlenghtentries').html('');
-
+  
   $('#administradores_TableOrder_filter').css('display', 'none');
   $('#administradores_TableOrder_info').appendTo('#informacionTable');
-
+  
   $('#administradores_TableOrder_paginate').appendTo('#botonesCambiarTable');
   
   $('#administradores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
+  $('#administradores_TableOrder_length').html('');
 
 }
 function showRowAdminList(data){
@@ -504,7 +505,7 @@ function buildtable() {
   return new Promise((resolve, reject) => {
     $('#resultScript').html('');
     $('#resultScript').append(`
-      <table class="table table-hover table-responsive-md table-borderedless" id="resultTableScript" data-order="[[ 1, &quot;asc&quot; ]]">
+      <table class="table custom-table table-responsive-md table-borderedless" id="resultTableScript" data-order="[[ 1, &quot;asc&quot; ]]">
         <thead>
           <tr id="headerTableScript">
             

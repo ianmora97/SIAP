@@ -196,6 +196,8 @@ function cargarDatos() {
                 cont += value;
             }
             $('#usuarios-stats').text(cont);
+            $('#estudiantestotales-stats').text(response.Estudiantes);
+
         },
         (error) => {}
     );
@@ -205,13 +207,35 @@ function cargarDatos() {
         contentType: "application/json",
     }).then(
         (response) => {
-            console.log(response);
             $('#casilleros-stats').text(response.total.length);
             addData(casillerosChartVar,'En Uso', response.uso.length);
             addData(casillerosChartVar,'Sin Usar',response.total.length - response.uso.length);
         },
         (error) => {}
     );
+    
+    $.ajax({
+        type: "GET",
+        url: "/admin/ajax/stats/getReportes",
+        contentType: "application/json",
+    }).then(
+        (reportes) => {
+            let todos = reportes.Agregados + reportes.Eliminados + reportes.Actualizados;
+            $('#statReportesNotificacion').text(todos);
+            addData(pieDonutChartVar,'Agregados', reportes.Agregados);
+            addData(pieDonutChartVar,'Eliminados', reportes.Eliminados);
+            addData(pieDonutChartVar,'Actualizados', reportes.Actualizados);
+        },
+        (error) => {}
+    );
+    $.ajax({
+        type: "GET",
+        url: "/admin/getReposiciones",
+        contentType: "application/json"
+    }).then((response) => {
+        $('#statHorarioNotificacion').text(response.length);
+    }, (error) => {
+    });
 }
 function addData(chart, label, data) {
     chart.data.labels.push(label);

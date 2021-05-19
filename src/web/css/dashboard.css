@@ -5,7 +5,7 @@
   height: 40px;
   position: sticky;
   top: 0;
-  z-index: 999; }
+  z-index: 1040; }
 
 .sidebar-heading {
   height: 40px; }
@@ -55,6 +55,43 @@
     height: 100vh;
     margin-left: -13rem;
     transition: all .25s; } }
+
+.custom-table thead th {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+  border-top: 4px solid #fff !important;
+  border-bottom: 8px solid #fff !important; }
+
+.custom-table tbody td {
+  line-height: 2.5;
+  font-size: 1rem;
+  padding: 0.2rem !important;
+  border-top: 2px solid #fff !important;
+  border-bottom: 2px solid #fff !important;
+  color: gray;
+  font-weight: bold; }
+
+.custom-table thead th:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px; }
+
+.custom-table thead th:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px; }
+
+.custom-table tbody tr {
+  background-color: #F0F2F5 !important;
+  border-radius: 20px !important; }
+  .custom-table tbody tr:hover {
+    background-color: #dfdfdf !important; }
+
+.custom-table tbody td:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px; }
+
+.custom-table tbody td:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px; }
 
 .menu-items-var {
   background-color: #27323A; }
@@ -233,3 +270,12 @@
 .input-container input:valid ~ small {
   top: -12px;
   font-size: 12px; }
+
+.button-circle {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+  display: block;
+  background-color: #fff;
+  border-radius: 100%;
+  box-shadow: 0 5px 5px -1px rgba(0, 0, 0, 0.05); }

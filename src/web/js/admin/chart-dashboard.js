@@ -114,6 +114,8 @@ var usuarioCharVar = new Chart(usuariosChart, {
         maintainAspectRatio: false,
     },
 });
+
+
 var casillerosChart = document.getElementById("casillerosChart").getContext("2d");
 var gradienteColores_casilleros = casillerosChart.createLinearGradient(0, 0, 0, 600);
 
@@ -173,36 +175,36 @@ var casillerosChartVar = new Chart(casillerosChart, {
         responsive: true,
         maintainAspectRatio: false,
     }
+
+
 });
+
+
+
+
 var pieDonutChart = document.getElementById("pieDonutChart").getContext("2d");
 var pieDonutChartVar = new Chart(pieDonutChart, {
-    type: "pie",
+    type: "doughnut",
     data: {
-        labels: [
-            "Agregados",
-            "Eliminados",
-            "Actualizados"
-        ],
         datasets: [
-            {
-                label: "Reportes",
-                data: [12, 19, 3],
+            {                
                 borderWidth: [2],
                 backgroundColor: [
+                    '#28a745',
                     "#4c84ff",
-                    "#28a745",
-                    "#ffc107",
+                    '#ffc107',
                 ],
                 borderColor: [
-                    "#fff",
-                    "#fff",
-                    "#fff",
+                    "#28a745",
+                    "#4c84ff",
+                    "#ffc107",
                 ],
                 borderWidth: 1,
             },
         ],
     },
     options:{
+        cutoutPercentage: 70,
         responsive: true,
         maintainAspectRatio: false,
     }

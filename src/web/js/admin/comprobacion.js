@@ -12,7 +12,6 @@ function events(event) {
     cambiarEstadoSend();
     filtrarX();
     filtrarTodos();
-    actualizar();
 }
 const animateCSS = (element, animation) =>
 
@@ -150,10 +149,10 @@ function mostrarUsuarios(usuarios) {
             "lengthMenu": "Mostrar _MENU_ ",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
-                "first": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
-                "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
-                "next": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
-                "last": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
@@ -173,8 +172,7 @@ function mostrarUsuarios(usuarios) {
     $('#estudiantes_TableOrder_info').appendTo('#informacionTable');
 
     $('#estudiantes_TableOrder_paginate').appendTo('#botonesCambiarTable');
-    $('#estudiantes_TableOrder_previous').addClass('btn  py-1');
-    $('#estudiantes_TableOrder_next').addClass('btn  py-1');
+
 
     $('#estudiantes_TableOrder_length').appendTo('#showlenghtentries');
     $('#estudiantes_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
@@ -199,16 +197,12 @@ function llenarListaUsuarios(u) {
         '<td>' + sexo + '</td>' +
         '<td>' + tipo + '</td>' +
         '<td>' + creado + '</td>' +
-        '<td> <span role="button" class="badge badge-' + colorEstado + ' w-75" style="font-size:12px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
+        '<td> <span role="button" class="badge badge-' + colorEstado + ' w-75" style="font-size:14px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
         'data-cedula="' + cedula + '" data-nombre="' + nombre + ' ' + apellido + '">' + estado + '</span></td>' +
         '</tr>'
     );
 }
-function actualizar() {
-    socket.on('notificacion:nuevo_registro', function (data) {
-        traer_estudiantes();
-    });
-}
+
 function cambiarEstadoShow() {
     $('#modalCambiarEstado').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);

@@ -34,7 +34,7 @@ const animateCSS = (element, animation) =>
 function openModalCameras() {
     setTimeout(() => {
         $('#modalTakePic').modal('show');
-    }, 2000);
+    }, 1000);
 }
 var t_modalCedulaEstudiante = "";
 
@@ -118,7 +118,7 @@ function searchonfind() {
     var table = $('#estudiantes_TableOrder').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
-  }
+}
 function getLugares() {
     $.ajax({
         type: "GET",
@@ -327,6 +327,7 @@ function cambiarEstadoEstudiante() {
     let estado = parseInt($('#estadoModalactualizar').val());
     let cedula = $('#cedulaEstudiante').val();
     let bearer = 'Bearer '+g_token;
+    console.log(cedula);
     $.ajax({
         type: "GET",
         url: "/admin/estudiante/actualizarEstado", 
@@ -403,8 +404,8 @@ var f_videoRecording = false;
 function openModalToTakePhoto(){
     $('#theVideo').show();
     f_videoRecording = true;
-    var videoWidth = 640;
-    var videoHeight = 480;
+    var videoWidth = 500;
+    var videoHeight = 500;
     var videoTag = document.getElementById('theVideo');
     var canvasTag = document.getElementById('theCanvas');
     var btnCapture = document.getElementById("btnCapture");
@@ -452,9 +453,9 @@ function llenar_Estudiantes(data) {
         <tr style="height:calc(55vh / 10);">
             <td class="align-center">${foto} &nbsp;&nbsp;${data.nombre + " " + data.apellido}</td>
             <td>${data.cedula}</td>
-            <td>${data.descripcion}</td>
+            <td><i class="fas fa-flag text-info"></i>&nbsp;&nbsp; ${data.descripcion}</td>
             <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
-            <td class="d-flex justify-content-center">
+            <td class="">
                 <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
                 <label class="switch-cus" for="customSwitch_${data.id}">
                     <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
@@ -462,7 +463,9 @@ function llenar_Estudiantes(data) {
                 </label>
             </td>
             <td class="text-center">
-                <span class="w-75 mx-auto d-block" role="button" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante"><i class="fas fa-ellipsis-v"></i></span>
+                <span class="button-circle" role="button" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante">
+                    <i class="fas fa-ellipsis-v"></i>
+                </span>
             </td>
         </tr>
     S`);

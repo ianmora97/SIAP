@@ -32,7 +32,7 @@
             </nav>
             <div class="container-fluid">
                 <nav>
-                    <div class=" nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist" style="min-height: 150px;">
+                    <div class=" nav nav-tabs justify-content-around border-bottom-0" id="nav-tab" role="tablist" style="min-height: 150px;">
                         <a class="nav-link nav-card-item col-md-3 active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
                             <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes Matriculados">
@@ -72,15 +72,15 @@
                             </div>
                             
                         </a>
-                        <a class="nav-link nav-card-item col-md-3" id="reportes_chart-tab" data-toggle="tab" href="#reportes_chart" role="tab" aria-controls="reportes_chart" aria-selected="false">
-                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in">
+                         <a class="nav-link nav-card-item col-md-3" id="estudiantes-tab" data-toggle="tab" href="#estudiantes" role="tab" aria-controls="estudiantes" aria-selected="false">
+                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes actuales">
                                 <div class="p-0">
-                                    <i class="fas fa-newspaper fa-2x text-danger talleres-rc"></i>
+                                    <i class="fas fa-users fa-2x text-danger talleres-rc"></i>
                                 </div>
                                 <div class="p-0">
-                                    <h1 id="reportes-stats" class="text-center text-dark">0</h1>
-                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Reportes</label>
+                                    <h1 id="estudiantestotales-stats" class="text-center text-dark">0</h1>
+                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Estudiantes</label>
                                 </div>
                             </div>
                             
@@ -127,6 +127,21 @@
                     </div>
                     <div class="col-md-4 px-1">
                         <div class="cards-dash" style="height: 503px;">
+                            <div class="row py-2 px-3">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="row py-2 px-3" style="height:400px;">
+                                <canvas id="pieDonutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-auto mt-2 mb-4">
+                    <div class="col-md-4 px-1 mb-3">
+                        <div class="w-100 bg-white rounded shadow p-3" style="height: 500px;">
                             <h4 class="font-weight-bold mt-2">Notificaciones</h4>
                             <div class="row py-2 mt-4">
                                 <div class="w-100 d-flex flex-column">
@@ -148,19 +163,19 @@
                                         <div class="ml-3 d-inline">
                                             Nuevos usuarios matriculados
                                         </div>
-                                        <div class="float-right d-inline">
-                                            12
+                                        <div class="float-right d-inline" id="statNuevoUsusariosMatriculadosNotificacion">
+                                            0
                                         </div>
                                     </a>
-                                    <a href="#" class="list-group-item list-group-item-action border-0 py-4">
+                                    <a href="/admin/reportes/sistema" class="list-group-item list-group-item-action border-0 py-4">
                                         <div class="rounded-circle d-inline bg-warning" style="padding: 10px 13px; padding-right: 7px;">
                                             <i class="fas fa-id-card-alt text-white"></i>
                                         </div>
                                         <div class="ml-3 d-inline">
                                             Reportes de uso
                                         </div>
-                                        <div class="float-right d-inline">
-                                            25
+                                        <div class="float-right d-inline" id="statReportesNotificacion">
+                                            0
                                         </div>
                                     </a>
                                     <a href="#" class="list-group-item list-group-item-action border-0 py-4">
@@ -170,26 +185,11 @@
                                         <div class="ml-3 d-inline">
                                             Solicitudes cambio de horario
                                         </div>
-                                        <div class="float-right d-inline">
-                                            8
+                                        <div class="float-right d-inline" id="statHorarioNotificacion">
+                                            0
                                         </div>
                                     </a>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mx-auto mt-2 mb-4">
-                    <div class="col-md-4 px-1 mb-3">
-                        <div class="w-100 bg-white rounded shadow p-3" style="height: 500px;">
-                            <div class="row py-2 px-3">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
-                                </div>
-                                <small class="text-muted today-date d-block"></small>
-                            </div>
-                            <div class="row py-2 px-3" style="height:400px;">
-                                <canvas id="pieDonutChart"></canvas>
                             </div>
                         </div>
                     </div>

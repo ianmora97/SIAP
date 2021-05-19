@@ -18,6 +18,9 @@ const express = require('express');
 const router = express.Router();
 
 const con = require('../../database');
+
+const {logSistema, DDL, TABLE} = require('../../systemLogs');
+
 // ? ----------------------------------- Dashboard ------------------------------------
 // TODO: peticiones para los "CHARTS"
 
@@ -101,6 +104,34 @@ router.get('/admin/ajax/stats/getCasilleros',(req,res)=>{
         }
     });
 });
+
+router.get('/admin/ajax/stats/getReportes',(req,res)=>{
+    let script = "call prc_seleccionar_actividad()";
+    var query = con.query(script, (err,rows,fields)=>{
+        if(!err){
+            if(rows[0] != undefined){
+                if(rows[0].length != 0){
+                    let reportes = rows[0];
+                    let [el,ac,ins] = [0,0,0];
+                    reportes.forEach( r => {
+                        if(r.ddl == DDL.DELETE)el+=1;
+                        if(r.ddl == DDL.INSERT)ins+=1;
+                        if(r.ddl == DDL.UPDATE)ac+=1;
+                    })
+                    res.send({'Agregados':ins,'Eliminados':el,'Actualizados':ac})
+                }else{
+                    res.send(rows[0])
+                }
+            }else{
+                res.send({err:'NotFound'});
+            }
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
+
+
 // TODO: para las notificaciones
 router.get('/admin/stats/usuariosNuevosTabla',(req,res)=>{ // ! tiene que ser eliminado -> para la tabla del dashboard
     let script = "select cedula, nombre, apellido, tipo_usuario as tipo, creado as registro from vta_usuario_temp where estado = 0";

@@ -1,14 +1,13 @@
+
 function loaded(event) {
     events(event);
 }
 
 function events(event) {
     toogleMenu();
-    cargar_Estudiantes();
-    dropdownhoras();
-    filtrarXdia();
-    toogleMenuAplicar();
-    buscarEscritura();
+    loadFromDb();
+    openModalShow();
+    onChangeSelectsMatricula();
 }
 const animateCSS = (element, animation) =>
     
@@ -29,224 +28,272 @@ const animateCSS = (element, animation) =>
 
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
-//------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Inicio---
-var estudiantes = [];
+function onChangeSelectsMatricula() {
+    $('#EstudiantesModalMatricular').on('change',function(event) {
+        let dropdown = $(event.currentTarget);
+        let card = $('#tiqueteMatricula');
+        card.find('.card-title').text(dropdown.find('option:selected').text());
+    });
+    $('#GrupoModalMatricular').on('change',function(event) {
+        let dropdown = $(event.currentTarget);
+        let card = $('#tiqueteMatricula');
+        let curso = dropdown.find('option:selected').text().split(' ')[0];
+        let fecha = dropdown.find('option:selected').text().split(' ')[1];
+        let hora = dropdown.find('option:selected').text().split(' ')[2];
 
-function cargar_Estudiantes() {
-    let ajaxTime = new Date().getTime();
-    $.ajax({
-        type: "GET",
-        url: "/admin/matricula/listaest",
-        contentType: "application/json",
-    }).then((solicitudes) => {
-        let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime / 1000);
-        let t = a == 1 ? a + ' segundo' : a + ' segundos';
-        $('#infoTiming').text(t);
-        estudiantes = solicitudes;
-        cargarEstudiantes(solicitudes);
-        $('#cargarDatosSpinner').hide();
-    },
-        (error) => {
-            alert(error.status);
-        }
-    );
-}
-
-function cargarEstudiantes(solicitudes) {
-    $("#lista-estudiantes").html("");
-    console.log(solicitudes);
-    solicitudes.forEach((solicitudes) => {
-        llenarEstudiantes(solicitudes);
-        
+        card.find('.texto-matricular').text(`Nivel: ${curso}`);
+        card.find('.texto-fecha').text(`Fecha: ${fecha} ${hora}`);
     });
 }
-
-function llenarEstudiantes(solicitudes) {
-    let id_matricula = solicitudes.id_matricula;
-    let nrc = solicitudes.codigo_taller;
-    let nivel = solicitudes.nivel_taller == 1 ? 'Principiante' : solicitudes.nivel_taller == 2 ? 'Intermedio' : 'Avanzado';
-    let nombre_pro = solicitudes.nombre_profesor;
-    let id_matri = solicitudes.created_at;
-    let cedul = solicitudes.cedula;
-    let nomb = solicitudes.nombre.toUpperCase() + " " + solicitudes.apellido.toUpperCase();
-    let horario = solicitudes.dia.toUpperCase() + " " + solicitudes.hora + "-" + parseInt(solicitudes.hora + 1);
-    $("#lista-estudiantes").append(
-        "<tr>" +
-        "<td>" +
-        cedul +
-        " </td>" +
-        "<td>" +
-        nomb +
-        "</td>" +
-        "<td>" +
-        nrc +
-        "</td>" +
-        "<td>" +
-        horario +
-        "</td>" +
-        "<td>" +
-        nivel +
-        "</td>" +
-        "<td>" +
-        nombre_pro +
-        "</td>" +
-        "<td> por hacer</td>" +
-        "<td>" +
-        id_matri +
-        "</td>" +
-        '<td class="list-action ">' +
-        '<a class="btn btn-success text-white" data-id="' + id_matricula + '" data-toggle="modal" data-target="#modalVerMatricula">' +
-        '<i class="fas fa-eye"></i>' +
-        '</a>' +
-        '</td>' +
-        "</tr>"
-    );
-}
-
-
-function buscarEscritura() {
-    $('#buscar_est_matr').on('keyup', (cantidad) => {
-        if ($('#buscar_est_matr').val() != '') {
-            cargarEstudiantes(filtrarxdia(estudiantes, [], [], $('#buscar_est_matr').val().toUpperCase()));
-        } else {
-            cargarEstudiantes(estudiantes);
-        }
-    });
-}
-//------------------------Cargar todos los estudiantes matriculados en al menos un curso-----------------------------Fin---
-
-function dropdownhoras() {
-    $("#dropdownboton").on("click", function () {
-        $("#dropdownhoras").toggle();
-    });
-}
-
 function toogleMenu() {
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
 }
-
-function toogleMenuAplicar() {
-    $("#aplicarFiltro").on("click", function () { $("#dropdownhoras").hide(); });
+function searchonfind() {
+    var table = $('#matriculasTable').DataTable();
+    let val = $('#barraBuscar').val();
+    let result = table.search(val).draw();
 }
+function openModalShow(){
+    $('#modalVerMatricula').on('show.bs.modal', function (event) {
+        
+        var button = $(event.relatedTarget)
+        var recipient = button.data('id')+"";
+        var id_matricula = button.data('matricula');
+        let estudiante = g_MapEstudiantes.get(recipient);
 
+        var modal = $(this)
+        modal.find('.modal-title').text(estudiante.nombre + " " + estudiante.apellido)
+        $('#cedulaTarget').html(estudiante.cedula);
+        $('#idCursoDesmatricular').html(id_matricula);
+       
+    })
+}
+var g_VecMatrestudiantes = [];
+var g_MapEstudiantes = new Map();
+var g_MapTalleres = new Map();
+var g_VecTalleres = [];
+var g_VecEstudiantes = [];
 
-//--------------------------------------------------------------Partde de los filtros--
-function filtrarXdia() {
-    //primero obtiene los elementos marcados
-    $("#aplicarFiltro").on("click", function () {
-        let dias = [];
-        let horas = [];
-        let seleccionadosDias = $("[id*=filter_lista_dias_]");
-        let seleccionadoHoras = $("[id*=horas-]")
-        let buscar = $('#buscar_est_matr').val().toUpperCase();
-
-        for (let i = 0; i < seleccionadosDias.length; i++) {
-            if (seleccionadosDias[i].checked) {
-                dias.push(seleccionadosDias[i].name.toUpperCase());
-            }
+function loadFromDb() {
+    let bearer = 'Bearer '+g_token;
+    let ajaxTime = new Date().getTime();
+    $.ajax({
+        type: "GET",
+        url: "/admin/matricula/listaest",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
         }
-
-        for (let i = 0; i < seleccionadoHoras.length; i++) {
-            if (seleccionadoHoras[i].checked) {
-                horas.push(seleccionadoHoras[i].name);
-            }
+    }).then((matriculas) => {
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime / 1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').text(t);
+        g_VecMatrestudiantes = matriculas;
+        
+        cargarEstudiantes(matriculas);
+        $('#cargarDatosSpinner').hide();
+    },(error) => {
+        alert(error.status);
+    });
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/listaEstudiantes",
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
         }
-
-
-        if (horas.length != 0 || dias.length != 0 || buscar) {
-            cargarEstudiantes(filtrarxdia(estudiantes, dias, horas, buscar));
-        } else {
-            cargarEstudiantes(estudiantes);
+    }).then((estudiantes) => {
+        g_VecEstudiantes = estudiantes;
+        fillSelected(estudiantes);
+    }, (error) => {
+    });
+    
+    $.ajax({
+        type: "GET",
+        url: "/admin/talleres/getGrupos", 
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
         }
+    }).then((talleres) => {
+        g_VecTalleres = talleres;
+        fillSelectGrupo(talleres);
+    }, (error) => {
+    });
+}
+function cambiarEstadoMatricula(est) {
+    let bearer = 'Bearer '+g_token;
+    let curso_id = parseInt($('#idCursoDesmatricular').html());
+    let estudiante = $('#exampleModalLabel').html();
+    let estado = est;
+    let data = {
+        curso_id: curso_id,
+        estado: estado,
+        estudiante: estudiante
+    }
+    $.ajax({
+        type: "POST",
+        url: "/admin/matricula/cambiarEstado/matricula",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        location.href = "/admin/solicitudes";
+    }, (error) => {
+        $('#feedbackdesmatricula').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> No se pudo cambiar el estado de matricula de este estudiante.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
     });
 }
 
-var filtrarxdia = (estudiantes, dias, horas, buscar) => {
-    let result = [];
-
-    if (buscar) {
-
-        if (horas.length == 0 && dias.length == 0 && buscar) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar)) {
-                    result.push(estudiantes[i]);
-                }
-            }
+function desmatricular() {
+    let bearer = 'Bearer '+g_token;
+    let curso_id = parseInt($('#idCursoDesmatricular').html());
+    let estudiante = $('#exampleModalLabel').html();
+    let data = {curso_id: curso_id,estudiante: estudiante}
+    $.ajax({
+        type: "POST",
+        url: "/admin/matricula/desmatricular",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
         }
-
-        if (horas.length == 0 && dias.length != 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let j = 0; j < dias.length; j++) {
-                    if (estudiantes[i].dia == dias[j] && (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar))) {
-                        result.push(estudiantes[i]);
-                    }
-                }
-            }
-        }
-
-        if (horas.length != 0 && dias.length == 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let w = 0; w < horas.length; w++) {
-                    if (estudiantes[i].hora == horas[w] && (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar))) {
-                        result.push(estudiantes[i]);
-                    }
-                }
-            }
-        }
-
-        if (horas.length != 0 && dias.length != 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let j = 0; j < dias.length; j++) {
-                    for (let w = 0; w < horas.length; w++) {
-                        if (estudiantes[i].dia == dias[j] && estudiantes[i].hora == horas[w] && (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar))) {
-                            result.push(estudiantes[i]);
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-
-        if (horas.length == 0 && dias.length != 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let j = 0; j < dias.length; j++) {
-                    if (estudiantes[i].dia == dias[j]) {
-                        result.push(estudiantes[i]);
-                    }
-                }
-            }
-        }
-
-        if (horas.length != 0 && dias.length == 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let w = 0; w < horas.length; w++) {
-                    if (estudiantes[i].hora == horas[w]) {
-                        result.push(estudiantes[i]);
-                    }
-                }
-            }
-        }
-
-        if (horas.length != 0 && dias.length != 0) {
-            for (let i = 0; i < estudiantes.length; i++) {
-                for (let j = 0; j < dias.length; j++) {
-                    for (let w = 0; w < horas.length; w++) {
-                        if (estudiantes[i].dia == dias[j] && estudiantes[i].hora == horas[w]) {
-                            result.push(estudiantes[i]);
-                        }
-                    }
-                }
-            }
-        }
+    }).then((response) => {
+        location.href = "/admin/solicitudes";
+    }, (error) => {
+        $('#feedbackdesmatricula').append(`
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> No se pudo cambiar el estado de matricula de este estudiante.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `);
+    });
+}
+function matricularCursos(){
+    let bearer = 'Bearer '+g_token;
+    let estudiante = parseInt($('#EstudiantesModalMatricular').val());
+    let grupo = parseInt($('#GrupoModalMatricular').val());
+    let data = {
+        estudiante: estudiante,
+        grupo: grupo
     }
-    return result;
-};
+    $.ajax({
+        type: "POST",
+        url: "/admin/matricula/matricularCursos",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        location.href = '/admin/solicitudes';
+    }, (error) => {
+        $("#alertadanger").fadeIn('slow');   
+    });
+}
+function fillSelected(data) {
+    data.forEach(e => {
+        g_MapEstudiantes.set(e.cedula,e);
+        $('#EstudiantesModalMatricular').append(`
+            <option value="${e.id_estudiante}">${e.nombre + " " + e.apellido}</option>
+        `);
+    })
+}
+function fillSelectGrupo(data) {
+    let cont = 0;
+    data.forEach(e => {
+        if(e.cupo_actual < e.cupo_base ){
+            cont+= (e.cupo_base - e.cupo_actual);
+            $('#GrupoModalMatricular').append(`
+                <option value="${e.id_grupo}">${e.descripcion + " " + e.dia + " "+e.hora}</option>
+            `);
+        }
+    })
+    $('#cursos_stats').text(cont);
+}
+function openmodal(modal) {
+    $(modal).modal('show');
+}
+function cargarEstudiantes(matricula) {
+    $("#lista-estudiantes").html("");
+    let cont = 0;
+    matricula.forEach((m) => {
+        if(m.activa) cont ++;
+        llenarEstudiantes(m);
+    });
+    $('#est_activos_stats').text(cont);
+    $('#est_inactivos_stats').text(matricula.length - cont);
 
+    $('#matriculasTable').DataTable({
+        "language": {
+            "zeroRecords": "No se encontraron matriculas",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "Mostrar _MENU_ registros",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first":    '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next":     '<i class="fas fa-angle-right"></i>',
+                "last":     '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first":    'Primera',
+                    "previous": 'Anterior',
+                    "next":     'Siguiente',
+                    "last":     'Última'
+                }
+            }
+        }
+    });
+    $(`#matriculasTable_length`).css('display','none');
+    $(`#matriculasTable_filter`).css('display','none');
 
+    $(`#matriculasTable_info`).appendTo(`#informacionTable`);
+    $(`#matriculasTable_paginate`).appendTo(`#botonesCambiarTable`);
+}
 
-
+function llenarEstudiantes(data) {
+    let id_matricula = data.id_matricula;
+    let nivel = data.descripcion;
+    let nombre_pro = data.nombre_profesor;
+    let fecha = data.created_at.split(' ')[0];
+    let cedul = data.cedula;
+    let nomb = data.nombre.toUpperCase() + " " + data.apellido.toUpperCase();
+    let horario = data.dia.toUpperCase() + " " + data.hora + "-" + parseInt(data.hora + 1);
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px">`;
+    
+    $("#lista-estudiantes").append(`
+        <tr>
+            <td>${foto}&nbsp;&nbsp; ${nomb}</td>
+            <td>${cedul}</td>
+            <td>${horario}</td>
+            <td>${nivel}</td>
+            <td>${nombre_pro.split(' ')[0]}</td>
+            <td>${fecha}</td>
+            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.activa ? 'success' : 'danger'}"></i>&nbsp; ${data.activa ? 'Activo' : 'Inactivo'}</td>
+            <td class="text-center">
+                <span class="button-circle" role="button" data-id="${cedul}" 
+                data-matricula="${id_matricula}" data-toggle="modal" data-target="#modalVerMatricula">
+                    <i class="fas fa-ellipsis-v"></i>
+                </span>
+            </td>
+        </tr>
+    `);
+}
 document.addEventListener("DOMContentLoaded", loaded);

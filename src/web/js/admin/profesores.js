@@ -381,7 +381,7 @@ function buildtable() {
   return new Promise((resolve, reject) => {
     $('#resultScript').html('');
     $('#resultScript').append(`
-      <table class="table table-hover table-responsive-md table-borderedless" id="resultTableScript" data-order="[[ 1, &quot;asc&quot; ]]">
+      <table class="table custom-table table-responsive-md table-borderedless" id="resultTableScript" data-order="[[ 1, &quot;asc&quot; ]]">
         <thead>
           <tr id="headerTableScript">
             

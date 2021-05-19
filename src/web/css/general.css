@@ -36,7 +36,7 @@
   border: 3px solid #B81616 !important; }
 
 .menu-active {
-  border-right: 8px #fff solid !important;
+  border-left: 7px #fff solid !important;
   color: #fff;
   font-size: 16px; }
 
@@ -77,14 +77,6 @@
 hr {
   margin-top: 0 !important;
   margin-bottom: 0 !important; }
-
-th {
-  font-size: 0.8rem; }
-
-td {
-  line-height: 1.8;
-  font-size: 1rem;
-  padding: 0.2rem !important; }
 
 button {
   outline: none !important;
@@ -290,12 +282,12 @@ select {
 
 .dropdownNotificaciones {
   position: absolute;
-  top: 40px;
-  right: -15px;
+  top: 35px;
+  right: -25px;
   background-color: white;
   width: 230px;
   border-radius: 5px;
-  border: 1px #F0F2F5 solid;
+  border: 1px #cacaca solid;
   min-height: 300px;
   display: none; }
 

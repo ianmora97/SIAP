@@ -80,6 +80,8 @@ app.use(require('./routes/profesor/profesores.routes'));
 
 app.use(require('./routes/registro/registro.routes'));
 
+app.use(require('./routes/admin/matricula/matriula.routes'));
+
 app.use(require('./routes/listaestudiantes.routes'));
 app.use(require('./routes/student.routes'));
 app.use(require('./routes/estudiante/enrollment.routes'));
@@ -93,15 +95,19 @@ app.use(express.static(path.join(__dirname,'/public')));
 
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),'] Servidor en',app.get('host')+':'+ app.get('port'));
-    console.log('[',chalk.green('Client'),']',chalk.yellow("http://localhost/"));
-    console.log('[',chalk.green('Admin'),']',chalk.yellow("http://localhost/admin"));
-    console.log('[',chalk.green('Teacher'),']',chalk.yellow("http://localhost/profesores"));
+    console.log('[',chalk.green('Cl'),']',chalk.yellow("http://localhost/"));
+    console.log('[',chalk.green('Ad'),']',chalk.yellow("http://localhost/admin"));
+    console.log('[',chalk.green('Te'),']',chalk.yellow("http://localhost/profesores"));
 });
 
 const io = SocketIo(server);
 
 io.on('connection', (socket) =>{
     socket.on('notificacion:nuevo_registro', (data) => {
+        io.sockets.emit('notificacion:nuevo_registro',data);
+    });
+    
+    socket.on('notificacion:nueva_matricula', (data) => {
         io.sockets.emit('notificacion:nuevo_registro',data);
     });
 });

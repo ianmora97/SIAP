@@ -768,28 +768,28 @@ function createRowGrupos(e) {
     let p = e.nombre + e.apellido;
     $('#grupos_list').append(`
     <tr style="height:calc(52vh / 10);">
-        <td>${e.id_grupo}</td>
-        <td>
+        <td style="line-height: 1.5;" class="text-center">${e.id_grupo}</td>
+        <td style="line-height: 1.5;">
             <div class="d-flex flex-column">
                 <div><strong>Dia: </strong>${h.dia}</div>
                 <div><strong>Hora: </strong>${h.hora}:00</div>
             </div>
         </td>
-        <td>
+        <td style="line-height: 1.5;">
             <div class="d-flex flex-column">
                 <div>${p}</div>
                 <div><strong>${e.cedula}</strong></div>
             </div>
         </td>
-        <td>
+        <td style="line-height: 1.5;">
             <div class="d-flex flex-column">
                 <div>${e.descripcion}(N:${e.nivel})</div>
                 <div><strong>${e.codigo_taller}</strong></div>
             </div>
         </td>
-        <td>${e.cupo_actual}/${e.cupo_base}</td>
-        <td>${e.cupo_extra}</td>
-        <td class="text-center">
+        <td style="line-height: 1.5;">${e.cupo_actual}/${e.cupo_base}</td>
+        <td style="line-height: 1.5;">${e.cupo_extra}</td>
+        <td style="line-height: 1.5;" class="text-center">
             <button type="button" class="btn btn-sm btn-primary" 
             data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo" >
                 Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>

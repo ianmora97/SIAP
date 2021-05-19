@@ -35,6 +35,7 @@ router.get('/buscarUsuarioRegistro',(req,res)=>{
     });
 });
 router.post('/usuario/registrarse',(req,res)=>{
+
     var script = con.query('call prc_insertar_usuario_temp(?, ?, ?, ?, ?, ?, ?, ?, ?)', 
     [req.body.cedula, req.body.nombre, req.body.apellido, 
         req.body.nacimiento, req.body.nombreUsuario, 
@@ -43,6 +44,7 @@ router.post('/usuario/registrarse',(req,res)=>{
         if(!err){
             res.send(result);
         }else{
+            console.log(err)
             res.status(501).send('error');
         }
     });

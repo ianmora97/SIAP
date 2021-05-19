@@ -37,7 +37,7 @@ var tableCreateGroups = (item,i)=>{
                     </div>
                 </div>
                 <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
-                    <table class="table table-hover table-responsive-md table-borderless" id="grupo${item.id_grupo}_asistencia_Table" data-order="[[ 2, &quot;asc&quot; ]]">
+                    <table class="table custom-table table-responsive-md table-borderless" id="grupo${item.id_grupo}_asistencia_Table" data-order="[[ 2, &quot;asc&quot; ]]">
                         <thead>
                             <tr>
                                 <th class="bg-dark text-white sticky-top " style="width: 40px;" scope="col">&nbsp;</th> <!--Aqui va la foto-->
