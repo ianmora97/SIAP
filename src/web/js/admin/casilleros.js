@@ -79,6 +79,7 @@ function openModalAdd(){
     })
 }
 function agregarCasilleros() {
+    let bearer = 'Bearer '+g_token;
     $('#addCasilleroInputModal').on('keyup', function (){
         let val = $('#addCasilleroInputModal').val();
         let res = listaCasilleros.find(i => i.codigo == 'CA'+val);
@@ -99,7 +100,10 @@ function agregarCasilleros() {
             type: "GET",
             url: "/admin/casilleros/agregarCasillero",
             data: {codigo},
-            contentType: "application/json"
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
         }).then((response) => {
             location.href = "/admin/casilleros"
         }, (error) => {
@@ -113,7 +117,10 @@ function agregarCasilleros() {
             type: "GET",
             url: "/admin/casilleros/eliminarCasillero",
             data: {codigo},
-            contentType: "application/json"
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
         }).then((response) => {
             location.href = "/admin/casilleros"
         }, (error) => {
@@ -146,6 +153,7 @@ function searchonfind(params) {
     }
 }
 function asignaruncasillero(cedula) {
+    let bearer = 'Bearer '+g_token;
     let codigo = $('.codigoModal').html();
     let date = new Date();
     let horaEntrada = date.getHours()+":"+date.getMinutes()+":00";
@@ -158,7 +166,10 @@ function asignaruncasillero(cedula) {
         type: "GET",
         url: "/admin/casilleros/asignarCasillero",
         data: data,
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         location.href = "/admin/casilleros"
     }, (error) => {
@@ -167,12 +178,20 @@ function asignaruncasillero(cedula) {
 }
 
 function loadFromDb() {
+    let ajaxTime = new Date().getTime();
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/admin/casilleros/bringCasilleros",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
-        
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime / 1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').text(t);
         g_cantidadCasilleros = response.length;
         $('#addCasilleroInputModal').val( response.length + 1);
         cargarMatrizCasilleros(response)
@@ -182,7 +201,10 @@ function loadFromDb() {
     $.ajax({
         type: "GET",
         url: "/admin/casilleros/bringEstudiantes",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         cargarEstudiantes(response);
     }, (error) => {
@@ -192,6 +214,7 @@ function loadFromDb() {
 }
 
 function cargarEstudiantes(estudiantes) {
+    let bearer = 'Bearer '+g_token;
     estudiantes.forEach(u =>{
         listaEstudiantes.push(u);
         listaEstudiantesMap.set(u.id,u);
@@ -222,7 +245,10 @@ function cargarEstudiantes(estudiantes) {
     $.ajax({
         type: "GET",
         url: "/admin/casilleros/bringCasillerosEstudiantes",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         $('#casilleros_disponibles_stats').html(g_cantidadCasilleros - response.length);
         $('#casilleros_en_uso_stats').html(response.length);
@@ -260,13 +286,17 @@ function readCasilleroModalOpen() {
     })
 }
 function revocarCasillero() {
+    let bearer = 'Bearer '+g_token;
     let id = $('#idCasilleroModal').html();
     let codigo = $('.codigoModal').html();
     $.ajax({
         type: "GET",
         url: "/admin/casilleros/revocarCasillero",
         data: {id,codigo},
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         location.href = "/admin/casilleros";
     }, (error) => {

@@ -15,6 +15,15 @@
 const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
+const nodemailer = require('nodemailer');
+
+var email = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'siapduna2020@gmail.com',
+    pass: 'Perroloco123!'
+  }
+});
 
 const {logSistema, DDL, TABLE} = require('../../../systemLogs');
 
@@ -26,6 +35,28 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
         [req.body.grupo, req.body.estudiante],
         (err,result,fields)=>{
         if(!err){
+            // var mailOptions = {
+            //     name:'SIAP - Matricula',
+            //     from: 'siapduna2020@gmail.com',
+            //     to: req.body.correo,
+            //     subject: 'Confirmacion de Matricula',
+            //     html: '<body style="background="white"><div style="background:white;color:black;"><div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
+            //         '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
+            //         '</div>' +
+            //         '<h1>' + req.body.estudiante+'</h1>' +
+            //         `<p>Usted ha sido Matriculado en el curso de ${req.body.curso} el dia ${req.body.fecha} a las ${req.body.hora} horas
+            //         </p><br>
+            //         </div>
+            //         </body>
+            //         `
+            // };
+            // email.sendMail(mailOptions, function(error, info){
+            //     if (error) {
+                  
+            //     } else {
+            //       console.log('Email sent: ' + info.response);
+            //     }
+            // });
             logSistema(req.session.value.cedula, `${req.body.estudiante + " | MATRICULAR " + req.body.grupo}`, DDL.INSERT, TABLE.MATRICULA);
             res.send(result);
         }else{

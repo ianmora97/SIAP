@@ -19,10 +19,14 @@ con.getConnection(function(err) {
 });
 
 const DDL = {
-    DELETE: 'ELIMINAR', //Referencia al "DELETE" de MySQL
-    INSERT: 'AGREGAR', //Referencia al "INSERT" de MySQL
-    UPDATE: 'ACTUALIZAR', //Referencia al "UPDATE" de MySQL
-    SELECT: 'VISUALIZAR' //Referencia al "SELECT" de MySQL
+    //TODO: Referencia al "DELETE" de MySQL
+    DELETE: 'ELIMINAR', 
+    //TODO: Referencia al "INSERT" de MySQL
+    INSERT: 'AGREGAR', 
+    //TODO: Referencia al "UPDATE" de MySQL
+    UPDATE: 'ACTUALIZAR', 
+    //TODO: Referencia al "SELECT" de MySQL
+    SELECT: 'VISUALIZAR' 
 }
 const TABLE = {
     TALLER : 'T_TALLER',
@@ -33,7 +37,8 @@ const TABLE = {
     PROFESOR : 'T_PROFESOR',
     MATRICULA : 'T_MATRICULA',
     COMPROBACION : 'T_COMPROBACION',
-    USUARIO : 'T_USUARIO'
+    USUARIO : 'T_USUARIO',
+    CONDUCTA : 'T_CONDUCTA'
 }
 
 function logSistema(usuario, descripcion, ddl, tabla) {

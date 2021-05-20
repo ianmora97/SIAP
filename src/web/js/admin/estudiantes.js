@@ -325,7 +325,7 @@ function cambiarMorosidadEst(estado,cedula) {
 }
 function cambiarEstadoEstudiante() {
     let estado = parseInt($('#estadoModalactualizar').val());
-    let cedula = $('#cedulaEstudiante').val();
+    let cedula = $('#cedulaEstudiante').html();
     let bearer = 'Bearer '+g_token;
     console.log(cedula);
     $.ajax({

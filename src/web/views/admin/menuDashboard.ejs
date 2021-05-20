@@ -59,15 +59,18 @@
         data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
             <i class="far fa-newspaper"></i></i>&nbsp; Reportes <i class="fas fa-angle-down float-right"></i>
         </a>
-            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-asistencia'| s == 'reportes-contabilidad'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
+            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-asistencia'|| s == 'reportes-conducta' || s == 'reportes-uso'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
                 <a href="/admin/reportes/asistencia" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-asistencia"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de Asistencia">
                     <i class="far fa-newspaper"></i>&nbsp; Asistencia
                 </a>
-                <!-- <a href="/admin/reportes/contabilidad" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-contabilidad"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de contabilidad">
-                    <i class="far fa-newspaper"></i>&nbsp; Contabilidad
-                </a> -->
+                <a href="/admin/reportes/conducta" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-conducta"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de conducta">
+                    <i class="far fa-newspaper"></i>&nbsp; Conducta
+                </a>
                 <a href="/admin/reportes/morosos" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-morosos"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de Morosidad">
                     <i class="far fa-newspaper"></i>&nbsp; Morosos
+                </a>
+                <a href="/admin/reportes/uso" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-uso"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes de uso de instalacion">
+                    <i class="far fa-newspaper"></i>&nbsp; Instalaciones
                 </a>
                 <a href="/admin/reportes/sistema" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-sistema"){%> menu-active <%}%>" data-toggle="tooltip" data-placement="right" title="Reportes del Sistema">
                     <i class="far fa-newspaper"></i>&nbsp; Sistema

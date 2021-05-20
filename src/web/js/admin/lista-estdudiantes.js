@@ -187,9 +187,19 @@ function matricularCursos(){
     let bearer = 'Bearer '+g_token;
     let estudiante = parseInt($('#EstudiantesModalMatricular').val());
     let grupo = parseInt($('#GrupoModalMatricular').val());
+
+    let dropdown = $('#GrupoModalMatricular');
+    
+    let curso = dropdown.find('option:selected').text().split(' ')[0];
+    let fecha = dropdown.find('option:selected').text().split(' ')[1];
+    let hora = dropdown.find('option:selected').text().split(' ')[2];
+    // ! falta enviar el correo como parametro
     let data = {
         estudiante: estudiante,
-        grupo: grupo
+        grupo: grupo,
+        curso: curso,
+        fecha: fecha,
+        hora: hora
     }
     $.ajax({
         type: "POST",
@@ -200,7 +210,10 @@ function matricularCursos(){
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = '/admin/solicitudes';
+        animateCSS('#tiqueteMatricula','backOutRight').then(e=>{
+            $('#tiqueteMatricula').hide();
+            location.href = '/admin/solicitudes';
+        });
     }, (error) => {
         $("#alertadanger").fadeIn('slow');   
     });

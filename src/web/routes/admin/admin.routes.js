@@ -277,13 +277,27 @@ router.get('/admin/reportes/sistema',(req,res)=>{
         res.redirect('/admin');
     }
 });
-router.get('/admin/reportes/contabilidad',(req,res)=>{
+router.get('/admin/reportes/uso',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
             let token = req.session.token;
             let usuario = req.session.value;
-            let s = 'reportes-contabilidad';
-            res.render('admin/reportes/contabilidad', {usuario,s, token});
+            let s = 'reportes-uso';
+            res.render('admin/reportes/usodeinstalacion', {usuario,s, token});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
+router.get('/admin/reportes/conducta',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-conducta';
+            res.render('admin/reportes/conductas', {usuario,s, token});
         }else{
             res.redirect('/admin');
         }

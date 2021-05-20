@@ -19,7 +19,7 @@ const router = express.Router();
 
 const con = require('../../../database');
 
-router.get('/admin/casilleros/bringCasilleros',(req,res)=>{
+router.get('/admin/casilleros/bringCasilleros',ensureToken,(req,res)=>{
     let script = "select * from t_casillero";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
@@ -31,7 +31,7 @@ router.get('/admin/casilleros/bringCasilleros',(req,res)=>{
         }
     });
 });
-router.get('/admin/casilleros/bringEstudiantes',(req,res)=>{
+router.get('/admin/casilleros/bringEstudiantes',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('select * from vta_admin_estudiante',
@@ -51,7 +51,7 @@ router.get('/admin/casilleros/bringEstudiantes',(req,res)=>{
     }
     
 });
-router.get('/admin/casilleros/bringCasillerosEstudiantes',(req,res)=>{
+router.get('/admin/casilleros/bringCasillerosEstudiantes',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('select * from vta_casilleros',
@@ -67,7 +67,7 @@ router.get('/admin/casilleros/bringCasillerosEstudiantes',(req,res)=>{
     }
     
 });
-router.get('/admin/casilleros/asignarCasillero',(req,res)=>{
+router.get('/admin/casilleros/asignarCasillero',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('call prc_insertar_casillero_estudiante(?, ?, ?,?)',
@@ -85,7 +85,7 @@ router.get('/admin/casilleros/asignarCasillero',(req,res)=>{
     }
     
 });
-router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
+router.get('/admin/casilleros/revocarCasillero',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('call prc_eliminar_casillero_estudiante(?,?)',
@@ -104,7 +104,7 @@ router.get('/admin/casilleros/revocarCasillero',(req,res)=>{
     
 });
 
-router.get('/admin/casilleros/agregarCasillero',(req,res)=>{
+router.get('/admin/casilleros/agregarCasillero',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('call prc_insertar_casillero(?)',
@@ -122,7 +122,7 @@ router.get('/admin/casilleros/agregarCasillero',(req,res)=>{
     }
 });
 
-router.get('/admin/casilleros/eliminarCasillero',(req,res)=>{
+router.get('/admin/casilleros/eliminarCasillero',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
         var script = con.query('call prc_eliminar_casillero(?)',
@@ -150,6 +150,21 @@ function logSistema(usuario, descripcion, ddl, tabla) {
         }
     });
 }
+function ensureToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader === undefined) {
+        res.redirect('/api/not_allowed');
+    }else{
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+}
+router.get('/api/not_allowed',(req,res)=>{ //logout
+    res.render('notAllowedAdmin');
+});
+
 module.exports = router;
 
 
