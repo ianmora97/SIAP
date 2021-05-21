@@ -111,10 +111,14 @@ function get_today_date() {
     $('.today-date').text(today);
 }
 function load_stats() {
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/admin/stats/usuariosNuevosTabla",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         cargarTablaUsuariosNuevos(response);
     }, (error) => {
@@ -170,10 +174,14 @@ function change_navbar(){
     
 }
 function cargarDatos() {
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/admin/ajax/stats/getTalleres",
         contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then(
         (response) => {
             let grupos = response.grupos;
@@ -188,6 +196,9 @@ function cargarDatos() {
         type: "GET",
         url: "/admin/ajax/stats/getUsuarios",
         contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then(
         (response) => {
             let cont = 0;
@@ -205,6 +216,9 @@ function cargarDatos() {
         type: "GET",
         url: "/admin/ajax/stats/getCasilleros",
         contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then(
         (response) => {
             $('#casilleros-stats').text(response.total.length);
@@ -218,6 +232,9 @@ function cargarDatos() {
         type: "GET",
         url: "/admin/ajax/stats/getReportes",
         contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then(
         (reportes) => {
             let todos = reportes.Agregados + reportes.Eliminados + reportes.Actualizados;
@@ -231,7 +248,10 @@ function cargarDatos() {
     $.ajax({
         type: "GET",
         url: "/admin/getReposiciones",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
         $('#statHorarioNotificacion').text(response.length);
     }, (error) => {

@@ -111,13 +111,13 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false"
+    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false"
         aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
-                    <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" id="closeModalAgregar" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
@@ -176,27 +176,6 @@
                                     <small for="carrera">Carrera o departamento</small>
                                     <i class="fa fa-university" aria-hidden="true"></i>
                                 </div>
-                                <div class="form-group">
-                                    <small for="carrera" class="d-block">Provincia, Canton, Distrito</small>
-                                    <select class="form-control form-control-sm d-inline" style="width: 32%;"
-                                        id="provincia_add" required autocomplete="off">
-                                        <optgroup small="provincia">
-
-                                        </optgroup>
-                                    </select>
-                                    <select class="form-control form-control-sm d-inline" style="width: 32%;"
-                                        id="canton_add">
-                                        <optgroup small="canton">
-
-                                        </optgroup>
-                                    </select>
-                                    <select class="form-control form-control-sm d-inline" style="width: 32%;"
-                                        id="distrito_add">
-                                        <optgroup small="distrito">
-
-                                        </optgroup>
-                                    </select>
-                                </div>
                                 <div class="input-container">
                                     <input type="text" id="direccion_add" required>
                                     <small>Direccion Exacta</small>
@@ -240,7 +219,7 @@
         </div>
     </div>
 
-    <div class="modal " id="modalVerEstudiante" tabindex="-1" aria-labelledby="verModalEstudiante" aria-hidden="true">
+    <div class="modal fade" id="modalVerEstudiante" tabindex="-1" aria-labelledby="verModalEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header px-3">
@@ -251,8 +230,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid px-0">
+                        <div id="feedbackVer"></div>
                         <div class="row mx-0 w-100">
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <span class="sr-only" id="idEstudiante"></span>
                                 <span class="sr-only" id="cedulaEstudiante"></span>
                                 <div class="form-group">
@@ -275,8 +255,12 @@
                                         <option value="Otro">Otro</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="v_Dirección">Dirección</label>
+                                    <input type="text" class="form-control" id="v_Dirección">
+                                </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="v_telefono">Teléfono</label>
                                     <input type="text" class="form-control" id="v_telefono">
@@ -286,28 +270,22 @@
                                     <input type="text" class="form-control" id="v_celular">
                                 </div>
                                 <div class="form-group">
-                                    <label for="v_Dirección">Dirección</label>
-                                    <input type="text" class="form-control" id="v_Dirección">
-                                </div>
-                                <div class="form-group">
                                     <label for="v_tel_emergencia">Teléfono de emergencia</label>
                                     <input type="text" class="form-control" id="v_tel_emergencia">
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="v_provincias">Provincia</label>
-                                    <input type="text" class="form-control" id="v_provincias">
+                                    <label for="v_carrera">Carrera o Departamento</label>
+                                    <input type="text" class="form-control" id="v_carrera">
                                 </div>
                                 <div class="form-group">
-                                    <label for="v_canton">Cantón</label>
-                                    <input type="text" class="form-control" id="v_canton">
-                                </div>
-                                <div class="form-group">
-                                    <label for="v_distrito">Distrito</label>
-                                    <input type="text" class="form-control" id="v_distrito">
+                                    <label for="v_perfil">Perfil</label>
+                                    <select class="form-control" id="v_perfil">
+                                        <option value="Estudiante">Estudiante</option>
+                                        <option value="Funcionario">Funcionario</option>
+                                    </select>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -346,8 +324,7 @@
                 </div>
                 <div class="modal-footer py-1">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Contraseña</button>
-                    <button type="button" class="btn btn-danger" id="closeModalEstudianteDetallado" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="Guardar-datos-estudiante">Guardar</button>
+                    <button type="button" class="btn btn-success" id="Guardar-datos-estudiante" onclick="actualizarDatosEstudiante()">Guardar</button>
                 </div>
             </div>
         </div>
@@ -423,7 +400,7 @@
                                         style="max-height: 40px">
                                         <button type="button" name="agregarTaller" id="modalButtonAgregarEstudiante"
                                             data-toggle="tooltip" data-placement="top"
-                                            title="Agregar un estudiante" onclick="openmodal('#agregarGrupo')" class="btn bg-success btn-sm text-white mr-2"
+                                            title="Agregar un estudiante" onclick="openModal('#modalAgregarEstudiante')" class="btn bg-success btn-sm text-white mr-2"
                                             style="border-radius: 50px;"><i class="fas fa-plus"></i>
                                         </button>
                                         <a href="/admin/estudiantes" name="actualizar_lista" id="actualizar_lista"

@@ -1,5 +1,6 @@
 const express = require('express');
 const { readSync } = require('fs');
+const jwt = require('jsonwebtoken')
 const router = express.Router();
 
 const con = require('../../database');
@@ -70,7 +71,7 @@ router.get('/reposicion/cursosDisponiblesPorNivel', (req, res) => {
 
 //--------------------------------------------------------------------------------------
 //Selecciona todos los reposicion
-router.get('/admin/getReposiciones', (req, res) => {
+router.get('/admin/getReposiciones',ensureToken, (req, res) => {
     if(req.session.value){
         if(req.session.value.rol){
             let usuario = req.session.value;
@@ -164,6 +165,22 @@ router.post('/client/uploadRepoImage', (req, res) => {
     }
 
 });
+
+function ensureToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader === undefined) {
+        res.redirect('/api/not_allowed');
+    }else{
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+}
+router.get('/api/not_allowed',(req,res)=>{ //logout
+    res.render('notAllowedAdmin');
+});
+
 
 module.exports = router;
 

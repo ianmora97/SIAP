@@ -15,6 +15,7 @@
 */
 
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const con = require('../../database');
@@ -24,7 +25,7 @@ const {logSistema, DDL, TABLE} = require('../../systemLogs');
 // ? ----------------------------------- Dashboard ------------------------------------
 // TODO: peticiones para los "CHARTS"
 
-router.get('/admin/ajax/stats/getTalleres',(req,res)=>{
+router.get('/admin/ajax/stats/getTalleres',ensureToken,(req,res)=>{
     let script = "call prc_seleccionar_talleres";
     let name_groups = {};
     var query = con.query(script, (err,rows,fields)=>{
@@ -50,7 +51,7 @@ router.get('/admin/ajax/stats/getTalleres',(req,res)=>{
     });
 });
 
-router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
+router.get('/admin/ajax/stats/getUsuarios',ensureToken,(req,res)=>{
     let script = "select fi_cantidad_administrativos()";
     let tipo = {};
     var query = con.query(script, (err,rows,fields)=>{
@@ -86,7 +87,7 @@ router.get('/admin/ajax/stats/getUsuarios',(req,res)=>{
         }
     });
 });
-router.get('/admin/ajax/stats/getCasilleros',(req,res)=>{
+router.get('/admin/ajax/stats/getCasilleros',ensureToken,(req,res)=>{
     let script = "SELECT * FROM vta_casilleros";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
@@ -105,7 +106,7 @@ router.get('/admin/ajax/stats/getCasilleros',(req,res)=>{
     });
 });
 
-router.get('/admin/ajax/stats/getReportes',(req,res)=>{
+router.get('/admin/ajax/stats/getReportes',ensureToken,(req,res)=>{
     let script = "call prc_seleccionar_actividad()";
     var query = con.query(script, (err,rows,fields)=>{
         if(!err){
@@ -133,7 +134,7 @@ router.get('/admin/ajax/stats/getReportes',(req,res)=>{
 
 
 // TODO: para las notificaciones
-router.get('/admin/stats/usuariosNuevosTabla',(req,res)=>{ // ! tiene que ser eliminado -> para la tabla del dashboard
+router.get('/admin/stats/usuariosNuevosTabla',ensureToken,(req,res)=>{ // ! tiene que ser eliminado -> para la tabla del dashboard
     let script = "select cedula, nombre, apellido, tipo_usuario as tipo, creado as registro from vta_usuario_temp where estado = 0";
     var query = con.query(script,
         (err,rows,fields)=>{
@@ -145,7 +146,20 @@ router.get('/admin/stats/usuariosNuevosTabla',(req,res)=>{ // ! tiene que ser el
     });
 });
 
-
+function ensureToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader === undefined) {
+        res.redirect('/api/not_allowed');
+    }else{
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+}
+router.get('/api/not_allowed',(req,res)=>{ //logout
+    res.render('notAllowedAdmin');
+});
 
 module.exports = router;
 

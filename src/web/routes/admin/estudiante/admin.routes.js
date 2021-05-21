@@ -119,6 +119,23 @@ router.get('/admin/estudiante/actualizarEstado',ensureToken,(req,res)=>{
             logSistema(req.session.value.cedula, `${req.query.cedula} ESTADO -> ${req.query.estado ? 'ACTIVO' : 'INACTIVO'}`, DDL.UPDATE, TABLE.ESTUDIANTE);
             res.send(rows);
         }else{
+            console.log(err)
+            res.send(err)
+        }
+    });
+});
+
+router.get('/admin/estudiante/actualizarDatos',ensureToken,(req,res)=>{
+    let d = req.query;
+    con.query("CALL prc_actualizar_datos_estudiante_admin(?,?,?,?,?,?,?,?,?,?,?)",
+    [d.cedula, d.correo, d.username, d.celular, d.telefono, d.emergencia, 
+        d.carrera, d.direccion, d.sexo, d.tipo, d.nacimiento],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `${req.query.cedula} ACTUALIZA DATOS`, DDL.UPDATE, TABLE.ESTUDIANTE);
+            res.send(rows);
+        }else{
+            console.log(err)
             res.send(err)
         }
     });

@@ -6,7 +6,6 @@ function loaded(event) {
 }
 
 function events(event) {
-    getLugares();
     openModalAdd();
     loadFromDb();
     changeProfilePhoto();
@@ -38,16 +37,11 @@ function openModalCameras() {
 }
 var t_modalCedulaEstudiante = "";
 
+function openModal(modal) {
+    $(modal).modal('show')
+}
+
 function openModalAdd() {
-    $('#modalButtonAgregarEstudiante').on('click', function () {
-        $('#modalAgregarEstudiante').modal('show')
-        animateCSS("#modalAgregarEstudiante", 'fadeInUpBig')
-    })
-    $('#closeModalAgregar').on('click', function () {
-        animateCSS("#modalAgregarEstudiante", 'fadeOutDownBig').then(() => {
-            $('#modalAgregarEstudiante').modal('hide')
-        })
-    })
     $('#modalAgregarEstudiante').on('hidePrevented.bs.modal', function (event) {
         animateCSS("#modalAgregarEstudiante", 'shakeX')
     })
@@ -67,20 +61,18 @@ function openModalAdd() {
     })
 
     $('#modalVerEstudiante').on('show.bs.modal', function (event) {
-        animateCSS("#modalVerEstudiante", 'fadeInUpBig')
 
         var button = $(event.relatedTarget)
-        var recipient = button.data('id')
-        let estudiante = g_estudiantes_map.get(parseInt(recipient))
+        var recipient = ""+button.data('id')
+        let estudiante = g_estudiantes_map.get(recipient)
+        console.log(estudiante,recipient)
 
         var modal = $(this)
         modal.find('.modal-title').text(estudiante.nombre + " " + estudiante.apellido)
-        modal.find('.modal-body input').val(recipient)
 
-        $('#idEstudiante').val(estudiante.id)
-        $('#cedulaEstudiante').val(estudiante.cedula)
+        $('#idEstudiante').html(estudiante.id)
+        $('#cedulaEstudiante').html(estudiante.cedula)
 
-        $('#cedulaEstudiante').val(estudiante.cedula)
         $('#cambiarclaveID').val(estudiante.cedula)
         $('#claveCedulaID').html(estudiante.cedula)
         t_modalCedulaEstudiante = estudiante.cedula;
@@ -94,13 +86,11 @@ function openModalAdd() {
         $('#v_sexo').val(estudiante.sexo)
         $('#v_telefono').val(estudiante.telefono)
         $('#v_celular').val(estudiante.celular)
-        $('#v_rol').val(estudiante.tipo)
+        $('#v_perfil').val(estudiante.tipo)
         $('#v_Dirección').val(estudiante.direccion)
         $('#v_cam_nivel').val(estudiante.nivel)
         $('#v_tel_emergencia').val(estudiante.telefono_emergencia)
-        $('#v_provincias').val(estudiante.provincia)
-        $('#v_canton').val(estudiante.canton)
-        $('#v_distrito').val(estudiante.distrito)
+        $('#v_carrera').val(estudiante.carrera_departamento)
     })
 }
 function closeFilter(params) {
@@ -119,69 +109,7 @@ function searchonfind() {
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 }
-function getLugares() {
-    $.ajax({
-        type: "GET",
-        url: "../../assets/lugares.txt",
-        contentType: "text"
-    }).then((data) => {
-        procesarLugares(data);
-    }, (error) => {
-    });
-}
-function procesarLugares(data) {
-    lugares = data;
-    var lines = data.split("\n");
 
-    var provincia = [];
-    var cantones = [];
-    var distritos = [];
-
-    for (var j = 0; j < lines.length - 1; j++) {
-        var values = lines[j].split(' ,');
-        provincia.push((values[0]));
-        cantones.push((values[1]));
-        distritos.push((values[2]));
-    }
-    load_provincias(provincia);
-    load_cantones(cantones);
-    load_distritos(distritos);
-}
-function load_provincias(data) {
-    
-    let provincias = data;
-    provincias = provincias.filter(function (item, pos) { //elimina repetidos
-        return provincias.indexOf(item) == pos;
-    })
-
-    for (let provincia of provincias) {
-        $('#provincia').append(new Option(provincia, provincia));
-    }
-}
-function load_cantones(data) {
-    let pro = $('#provinciaSelected').attr('data-values');
-    let cantones = data;
-
-    $('#canton').html(' ');
-
-    for (let canton of cantones) {
-        $('#canton').append(new Option(canton, canton));
-    }
-}
-function load_distritos(data) {
-    let distritos = data;
-    let can = $('#cantonSelected').attr('data-values');
-    let dis = $('#distritoSelected').attr('data-values');
-    distritos = filtrarDistritoxCanton(can);
-    $('#distrito').html(' ');
-    for (let distrito of distritos) {
-        if (distrito == dis) {
-            $('#distrito').append(new Option(dis, dis, false, true));
-        } else {
-            $('#distrito').append(new Option(distrito, distrito));
-        }
-    }
-}
 function load_stats(solicitudes) {
     let cantidad = solicitudes.length;
     let inactivos = 0;
@@ -246,8 +174,8 @@ function cargar_estudiante(data) {
     $("#lista_estudiantes").html("");
     
     data.forEach((e) => {
+        g_estudiantes_map.set(e.cedula, e);
         llenar_Estudiantes(e);
-        g_estudiantes_map.set(e.id, e);
 
     });
     $('#estudiantes_TableOrder').DataTable({
@@ -327,6 +255,7 @@ function cambiarEstadoEstudiante() {
     let estado = parseInt($('#estadoModalactualizar').val());
     let cedula = $('#cedulaEstudiante').html();
     let bearer = 'Bearer '+g_token;
+    console.log(cedula,estado)
     console.log(cedula);
     $.ajax({
         type: "GET",
@@ -337,10 +266,61 @@ function cambiarEstadoEstudiante() {
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = '/admin/estudiantes';
+        //location.href = '/admin/estudiantes';
     }, (error) => {
     }
     );
+}
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+function actualizarDatosEstudiante() {
+    let username = $('#v_nombre_usuario').val()
+    let correo = $('#v_correo').val()
+    let nacimiento = $('#v_fec_nacimiento').val()
+    let sexo = $('#v_sexo').val()
+    let telefono = $('#v_telefono').val()
+    let celular = $('#v_celular').val()
+    let tipo = $('#v_perfil').val()
+    let direccion = $('#v_Dirección').val()
+    let emergencia = $('#v_tel_emergencia').val()
+    let cedula = $('#cedulaEstudiante').html();
+    let carrera = $('#v_carrera').val()
+    let data ={
+        username,correo,nacimiento,telefono,sexo,cedula,tipo,celular,direccion,emergencia,carrera
+    }
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarDatos", 
+        data: data,
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        if(response.affectedRows){
+            location.href = '/admin/estudiantes';
+        }else if(response.code){
+            if(response.code == "ER_DUP_ENTRY"){
+                $('#feedbackVer').append(`
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        El correo <strong>${correo}</strong> ya se encuentra registrado. <i class="far fa-question-circle" 
+                        data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                        title="Para cambiar a este correo si el usuario ya cuenta con un registro anterior: <br> 
+                        1. Elimine el usuario con este correo. <br>
+                        2. Haga el cambio de correo a este usuario."></i>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `);
+            }
+            $('[data-toggle="tooltip"]').tooltip()
+        }
+        
+    }, (error) => {
+    });
 }
 function openImageModal(foto,cedula) {
     $('#modalImage').modal('show');
@@ -463,7 +443,7 @@ function llenar_Estudiantes(data) {
                 </label>
             </td>
             <td class="text-center">
-                <span class="button-circle" role="button" data-id="${data.id}" data-toggle="modal" data-target="#modalVerEstudiante">
+                <span class="button-circle" role="button" data-id="${data.cedula}" data-toggle="modal" data-target="#modalVerEstudiante">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
             </td>

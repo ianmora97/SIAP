@@ -1,3 +1,33 @@
+var diasLabelsData = [];
+var reporteHoraDiaCh;
+var reportesHoraDiaChart = document.getElementById("reportesHoraDiaChart").getContext("2d");
+
+var azulGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //azul
+azulGradiente.addColorStop(0, "rgba(29.8%, 51.8%, 100%, 0.8)"); //007bff
+azulGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+var rojoGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //rojo
+rojoGradiente.addColorStop(0, "rgba(184%, 22%, 22%, 0.8)"); //B81616
+rojoGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+var verdeGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //verde
+verdeGradiente.addColorStop(0, "rgba(5%, 212%, 53%, 0.8)"); //05d435
+verdeGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+var naranjaGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //naranja
+naranjaGradiente.addColorStop(0, "rgb(253%, 126%, 20%)"); //fd7e14
+naranjaGradiente.addColorStop(1, "rgba(253%, 126%, 20%, 0.4)");
+
+var moradoGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //morado
+moradoGradiente.addColorStop(0, "rgba(102%, 16%, 242%, 1)"); //6610f2
+moradoGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+var altInstagram = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 1000); //morado
+altInstagram.addColorStop(0, "rgba(98%,69%,5%,1)"); //6610f2 rgba(131,58,180,1), 
+altInstagram.addColorStop(1, "rgba(100%, 100%, 100% ,0.5)"); //rgba(252,176,69,1)
+
+
+
 var reportesChart = document.getElementById("reportesChart").getContext("2d");
 var reportesGradiente = reportesChart.createLinearGradient(0, 0, 0, 600);
 
@@ -85,8 +115,8 @@ var tallerCh = new Chart(talleresChart, {
         //labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
-                backgroundColor: gradienteColores,
-                borderColor: '#4c84ff',
+                backgroundColor: altInstagram,
+                borderColor: '#fd7e14',
                 borderWidth: 2,
             },
         ],
@@ -103,28 +133,28 @@ var tallerCh = new Chart(talleresChart, {
             }
         },
         showLines: false, // disable for all datasets
-        scales: {
-            xAxes: [
-                {
-                    gridLines: {
-                        drawBorder: true,
-                        display: false,
-                    },
-                },
-            ],
-            yAxes: [
-                {
-                    ticks: {
-                        suggestedMin: 0,
-                        beginAtZero: true   // minimum value will be 0.
-                    },
-                    gridLines: {
-                        drawBorder: true,
-                        display: false,
-                    },
-                },
-            ],
-        },
+        // scales: {
+        //     xAxes: [
+        //         {
+        //             gridLines: {
+        //                 drawBorder: true,
+        //                 display: false,
+        //             },
+        //         },
+        //     ],
+        //     yAxes: [
+        //         {
+        //             ticks: {
+        //                 suggestedMin: 0,
+        //                 beginAtZero: true   // minimum value will be 0.
+        //             },
+        //             gridLines: {
+        //                 drawBorder: true,
+        //                 display: false,
+        //             },
+        //         },
+        //     ],
+        // },
         animation: {},
         tooltips: {
             mode: "nearest",
@@ -193,7 +223,21 @@ function loadFromDb() {
         
     }, (error) => {
 
-    });   
+    });
+    $.ajax({
+        type: "GET",
+        url: "/admin/ajax/stats/getTalleres",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        let grupos = response.grupos;
+        for (var [key, value] of Object.entries(grupos)) {
+            addData(tallerCh,key, value);
+        }
+    },(error) => {
+    }); 
 }
 
 function cargarMatriculados(data) {
@@ -257,29 +301,7 @@ function cargarMatriculados(data) {
     addData(reporteHoraCh,'8 pm',cnt_20);
     addData(reporteHoraCh,'9 pm',cnt_21);
 }
-var diasLabelsData = [];
-var reporteHoraDiaCh;
-var reportesHoraDiaChart = document.getElementById("reportesHoraDiaChart").getContext("2d");
 
-var azulGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //azul
-azulGradiente.addColorStop(0, "rgba(29.8%, 51.8%, 100%, 0.8)"); //007bff
-azulGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
-
-var rojoGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //rojo
-rojoGradiente.addColorStop(0, "rgba(184%, 22%, 22%, 0.8)"); //B81616
-rojoGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
-
-var verdeGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //verde
-verdeGradiente.addColorStop(0, "rgba(5%, 212%, 53%, 0.8)"); //05d435
-verdeGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
-
-var naranjaGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //naranja
-naranjaGradiente.addColorStop(0, "rgba(253%, 126%, 20%, 0.8)"); //fd7e14
-naranjaGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
-
-var moradoGradiente = reportesHoraDiaChart.createLinearGradient(0, 0, 0, 600); //morado
-moradoGradiente.addColorStop(0, "rgba(102%, 16%, 242%, 1)"); //6610f2
-moradoGradiente.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 function cargarHorayDia(data) {
     // ! ------------------------ lunes -------------------------
