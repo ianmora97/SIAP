@@ -25,6 +25,22 @@
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
+    <div id="modal-view-event" class="modal modal-top fade calendar-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4 class="modal-title">
+                        <span class="event-icon"></span>
+                        <span class="event-title"></span>
+                    </h4>
+                    <div class="event-body"></div>
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modalEditTaller" tabindex="-1" aria-labelledby="modalEditTallerLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -360,15 +376,15 @@
                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
                                 </div>
                                 <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="talleres_stats">0</h1>
                                     <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="horarios_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="horarios_stats">0</h1>
                                     <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col ">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="grupos_stats">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="grupos_stats">0</h1>
                                     <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                             </div>
@@ -636,6 +652,11 @@
                                                     events: [
                                                         
                                                     ],
+      
+                                                    header: {
+                                                        center: 'title',
+                                                        left: 'month, agendaWeek, agendaDay'
+                                                    },
                                                     eventRender: function(event, element) {
                                                         if(event.icon){
                                                             element.find(".fc-title").prepend("<i class='fa fa-"+event.icon+"'></i>");

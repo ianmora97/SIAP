@@ -45,37 +45,38 @@
         </ul>
     </div>
 </nav>
-<div id="loadingPage">
+<!-- <div id="loadingPage">
     <div class="d-flex justify-content-center flex-column">
-        <h1 class="display-1 align-self-center text-white"><strong>SIAP</strong></h1>
-        <div class="spinner-border align-self-center text-white" role="status" style="width: 100px; height: 100px;">
-          <span class="sr-only">Loading...</span>
-        </div>
+        <svg width="100%" height="40vw" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave" 
+        style="position: fixed;bottom: 0;left: 0; z-index:999999;">
+            <defs>
+                <linearGradient id="gradient2" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff"  />
+                    <stop offset="100%" stop-color="#3c8eec"  />
+                </linearGradient>
+            </defs>
+            <path id="cargaWave" d=""/>
+        </svg>
     </div>
-</div>
+</div> 
+
 <script>
-    // function onReady(callback) {
-    //     let cont =0;
-    //     var intervalId = window.setInterval(function() {
-    //         if (document.getElementsByTagName('body')[0] !== undefined) {
-    //             window.clearInterval(intervalId);
-    //             callback.call(this);
-    //         }
-    //         cont++;
-    //         console.log(cont);
-    //     }, 1000);
-    // }
-    
-    // function setVisible(selector, visible) {
-    //     document.querySelector(selector).style.display = visible ? 'block' : 'none';
-    // }
+    $(document).ready(function () {
+        var wave1 = $('#cargaWave').wavify({
+            height: 1,
+            bones: 9,
+            amplitude: 35,
+            color: '#4c84ff',
+            speed: .65
+        });
+    });
     setTimeout(() => {
         $('body').removeClass('overflow-hidden');
         animateCSS('#loadingPage','fadeOutDownBig').then(()=>{
             $('#loadingPage').hide();
         })
     }, 1500);
-</script>
+</script> -->
 <script>
 function cargarNotificacionesDropdrown(event){
     $('#notificaciones').on('click',function () {

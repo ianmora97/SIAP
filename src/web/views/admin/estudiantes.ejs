@@ -24,14 +24,12 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <link rel="stylesheet" href="../../css/animate.css">
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
     <script src="../../js/jq-bs-bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
@@ -111,106 +109,77 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false"
+    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" data-keyboard="false"
         aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
-                    <button type="button" class="close" data-dismiss="modal" id="closeModalAgregar" aria-label="Close">
-                        <span aria-hidden="true" class="text-white">&times;</span>
+                <div class="modal-header">
+                    <h5 class="modal-title pl-3">Agregar Estudiante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body pb-0">
                     <div class="container-fluid">
-                        <h6 class="m-0">Datos del Estudiante</h6>
+                        <h5 class="m-0">Datos del Estudiante</h5>
                         <small class="text-muted">
                             Ingrese los datos del estudiante en los campos correspondientes
                             <span class="text-danger">todos los campos son requeridos.</span>
                         </small>
-                        <div class="row mt-2">
-                            <div class="col-md-6">
-                                <div class="input-container">
-                                    <input type="text" id="cedula_add" required autocomplete="off" />
-                                    <small>Cedula</small>
-                                    <i class="fa fa-id-card"></i>
+                        <form action="/admin/estudiantes/agregarEstudiantes" method="post" id="formAgregar">
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Cedula</label>
+                                        <input class="form-control" type="text" name="cedula_add" id="cedula_add" required autocomplete="off" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input class="form-control" type="text" name="nombre_add" id="nombre_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apellido">Apellido</label>
+                                        <input class="form-control" type="text" name="apellido_add" id="apellido_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fecha">Fecha de Nacimiento</label>
+                                        <input class="form-control" type="date" name="fechaNacimiento_add" required autocomplete="off">
+                                    </div>
                                 </div>
-                                <div class="input-container">
-                                    <input type="text" id="nombre_add" required autocomplete="off">
-                                    <small for="nombre">Nombre</small>
-                                    <i class="fa fa-id-card"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="text" id="apellido_add" required autocomplete="off">
-                                    <small for="apellido">Apellido</small>
-                                    <i class="fa fa-id-card"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="date" id="fechaNacimiento_add" required autocomplete="off">
-                                    <small for="fecha">Fecha de Nacimiento</small>
-                                </div>
-                                <div class="input-container">
-                                    <input type="email" id="correo_add" required autocomplete="off">
-                                    <small for="correo">Correo</small>
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="text" id="username_add" required autocomplete="off">
-                                    <small for="nombreusuario">Nombre de Usuario</small>
-                                    <i class="fa fa-user"></i>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-container">
-                                    <input type="tel" id="celular_add" required autocomplete="off">
-                                    <small for="celular">Telefono Celular</small>
-                                    <i class="fa fa-phone" aria-hidden="true"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="tel" id="telefonoEmergencia_add" required autocomplete="off">
-                                    <small for="emergencia">Telefono Emergencia</small>
-                                    <i class="fa fa-asterisk" aria-hidden="true"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="text" id="carrera_add" required autocomplete="off">
-                                    <small for="carrera">Carrera o departamento</small>
-                                    <i class="fa fa-university" aria-hidden="true"></i>
-                                </div>
-                                <div class="input-container">
-                                    <input type="text" id="direccion_add" required>
-                                    <small>Direccion Exacta</small>
-                                    <i class="fas fa-map-marked-alt    "></i>
-                                </div>
-                                <div class="form-group w-100">
-                                    <div class="row">
-                                        <div class="col">
-                                            <small>Sexo</small>
-                                            <select class="form-control form-control-sm" id="sexo">
-                                                <option value="0" selected>Seleccione...</option>
-                                                <option value="Masculino">Masculino</option>
-                                                <option value="Femenino">Femenino</option>
-                                                <option value="Otro">Otro</option>
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <small>Perfil</small>
-                                            <select class="form-control form-control-sm" id="perfil">
-                                                <option value="0" selected>Seleccione...</option>
-                                                <option value="1">Estudiante</option>
-                                                <option value="2">Funcionario</option>
-                                            </select>
-                                            <small class="text-muted">Perfil que desempeña</small>
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="correo">Correo</label>
+                                        <input class="form-control" type="email" name="correo_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombreusuario">Nombre de Usuario</label>
+                                        <input class="form-control" type="text" name="username_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label>Sexo</label>
+                                        <select class="form-control" name="sexo">
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenino">Femenino</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label>Perfil</label>
+                                        <select class="form-control" name="perfil">
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="Estudiante">Estudiante</option>
+                                            <option value="Funcionario">Funcionario</option>
+                                        </select>
+                                        <small class="text-muted">Perfil que desempeña</small>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="modal-footer py-0 pb-2">
-                    <button type="button" class="btn btn-primary">
-                        Agregar
-                    </button>
+                    <button type="submit" class="btn btn-primary" form="formAgregar">Agregar</button>
                 </div>
             </div>
             <div class="bg-white" style="width: 400px; height: 250px; display: none;">
@@ -324,7 +293,8 @@
                 </div>
                 <div class="modal-footer py-1">
                     <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Contraseña</button>
-                    <button type="button" class="btn btn-success" id="Guardar-datos-estudiante" onclick="actualizarDatosEstudiante()">Guardar</button>
+                    <button type="button" class="btn btn-danger" id="Guardar-datos-estudiante" onclick="eliminarEstudiante()"><i class="far fa-trash-alt"></i> Eliminar</button>
+                    <button type="button" class="btn btn-success" id="Guardar-datos-estudiante" onclick="actualizarDatosEstudiante()"><i class="fas fa-pencil-alt"></i> Guardar</button>
                 </div>
             </div>
         </div>
@@ -333,7 +303,6 @@
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <%- include('filterEstudianteDashboard') %>
             <nav aria-label="breadcrumb ">
                 <ol class="breadcrumb ">
                     <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
@@ -355,21 +324,24 @@
                                         id="infoTiming-usuarios-estudiantes"></span></small>
                             </div>
                             <div class="col border-right">
-                                <h1 class="m-0 font-weight-bolder text-primary"
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-1s"
                                     id="estudiantes_matriculados_stats"></h1>
-                                <small class="text-muted">Estudiantes Matriculados &nbsp; <i
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes Matriculados">Estudiantes Matriculados &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
                             <div class="col border-right">
-                                <h1 class="m-0 font-weight-bolder text-primary"
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-1s"
                                     id="estudiantes_inactivos_stats"></h1>
-                                <small class="text-muted">Estudiantes Inactivos &nbsp; <i
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes inactivos">Estudiantes Inactivos &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
                             <div class="col">
-                                <h1 class="m-0 font-weight-bolder text-primary"
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-1s"
                                     id="estudiantes_morosos_stats"></h1>
-                                <small class="text-muted">Estudiantes Morosos &nbsp; <i
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes Morosos">Estudiantes Morosos &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
                         </div>
@@ -437,11 +409,6 @@
                                         id="botonesCambiarTable">
 
                                     </div>
-                                </div>
-                            </div>
-                            <div class="text-center w-100" id="cargarDatosSpinner-usuarios-estudiantes">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
                         </div>
@@ -512,6 +479,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
     <script src="../../js/admin/estudiantes.js"></script>

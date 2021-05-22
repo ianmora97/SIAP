@@ -822,6 +822,7 @@ function toWeekDay(dia) {
 }
 function fillCalendar(grupos) {
     grupos.forEach(e => {
+        let p = e.nombre + e.apellido;
         let id_matricula = e.id_matricula;
         let grupo = e.id_grupo;
         let codigo = e.codigo_taller;
@@ -833,12 +834,16 @@ function fillCalendar(grupos) {
         let horaFi = e.hora > 12 ? e.hora - 11 +':00': e.hora + 1 +':00' ;
         let weekday = toWeekDay(dia.toUpperCase());
         
+        let todo = `Profesor: ${p} <br>${dia}: ${e.hora}`;
+        let horainicio = e.hora + ":00";
+        let horafinal = (e.hora + 1) + ":00";
+
         
         $('#calendar').fullCalendar('renderEvent', {
             title: descripcion,
-            description: codigo,
-            start: horaF,
-            end: horaFi,
+            description: todo,
+            start: horainicio,
+            end: horafinal,
             dow: [ weekday ], 
             className: 'fc-bg-default',
             icon : "swimmer"

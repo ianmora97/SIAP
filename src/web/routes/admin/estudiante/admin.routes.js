@@ -135,10 +135,43 @@ router.get('/admin/estudiante/actualizarDatos',ensureToken,(req,res)=>{
             logSistema(req.session.value.cedula, `${req.query.cedula} ACTUALIZA DATOS`, DDL.UPDATE, TABLE.ESTUDIANTE);
             res.send(rows);
         }else{
-            console.log(err)
             res.send(err)
         }
     });
+});
+
+router.get('/admin/estudiante/eliminar',ensureToken,(req,res)=>{
+    con.query("CALL prc_eliminar_usuario(?)",
+    [req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            if(rows.affectedRows){
+                logSistema(req.session.value.cedula, `ELIMINAR USUARIO -> ${req.query.cedula}`, DDL.DELETE, TABLE.ESTUDIANTE);
+                res.send(rows);
+            }
+            res.send(rows);
+        }else{
+            res.send(err)
+        }
+    });
+});
+
+router.post('/admin/estudiantes/agregarEstudiantes',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let d = req.body;
+            con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
+            [d.cedula_add, d.nombre_add.toUpperCase(), d.apellido_add.toUpperCase(), d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
+            (err,rows,fields)=>{
+                if(!err){
+                    logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
+                    res.redirect('/admin/estudiantes');
+                }else{
+                    res.redirect('/admin/estudiantes');
+                }
+            });       
+        }
+    }
 });
 
 // !------------------------------------------------------------------------------------------------------------------------

@@ -238,24 +238,13 @@ function cargarDatos() {
     }).then(
         (reportes) => {
             let todos = reportes.Agregados + reportes.Eliminados + reportes.Actualizados;
-            $('#statReportesNotificacion').text(todos);
             addData(pieDonutChartVar,'Agregados', reportes.Agregados);
             addData(pieDonutChartVar,'Eliminados', reportes.Eliminados);
             addData(pieDonutChartVar,'Actualizados', reportes.Actualizados);
         },
         (error) => {}
     );
-    $.ajax({
-        type: "GET",
-        url: "/admin/getReposiciones",
-        contentType: "application/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        $('#statHorarioNotificacion').text(response.length);
-    }, (error) => {
-    });
+    
 }
 function addData(chart, label, data) {
     chart.data.labels.push(label);

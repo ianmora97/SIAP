@@ -42,10 +42,6 @@ function openModal(modal) {
 }
 
 function openModalAdd() {
-    $('#modalAgregarEstudiante').on('hidePrevented.bs.modal', function (event) {
-        animateCSS("#modalAgregarEstudiante", 'shakeX')
-    })
-    
     $('#modalTakePic').on('hidden.bs.modal', function (event) {
         
         if(f_videoRecording){
@@ -214,10 +210,26 @@ function moverlabel(label_id, nivel){
     $('#guardar_rango_'+label_id+'').removeClass('disabled');
     $('#guardar_rango_'+label_id+'').prop('disabled',false);
 }
+function eliminarEstudiante() {
+    let bearer = 'Bearer '+g_token;
+    let cedula = $('#cedulaEstudiante').html();
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/eliminar", 
+        data: {cedula},
+        contentType: "appication/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        location.href = '/admin/estudiantes';
+    }, (error) => {
+    });
+}
 function actualizarNivel() {
     let bearer = 'Bearer '+g_token;
     let nivel = $('#nivelModalactualizar').val();
-    let cedula = $('#cedulaEstudiante').val();
+    let cedula = $('#cedulaEstudiante').html();
     $.ajax({
         type: "GET",
         url: "/admin/estudiante/actualizarNivel", 

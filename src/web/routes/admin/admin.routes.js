@@ -126,7 +126,7 @@ router.get('/admin/profesores',(req,res)=>{
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'profesores';
-            res.render('admin/dashboard', {usuario,s,token});
+            res.render('admin/profesores', {usuario,s,token});
         }else{
             res.render('indexAdmin');
         }
@@ -146,20 +146,6 @@ router.get('/admin/talleres',(req,res)=>{
         }
     }else{
         res.redirect('/admin');
-    }
-});
-router.get('/admin/grupos',(req,res)=>{
-    if(req.session.value){
-        if(req.session.value.rol){
-            let token = req.session.token;
-            let usuario = req.session.value;
-            let s = 'grupos';
-            res.render('admin/dashboard', {usuario,s,token});
-        }else{
-            res.render('indexAdmin');
-        }
-    }else{
-        res.render('indexAdmin');
     }
 });
 router.get('/admin/reposiciones',(req,res)=>{
