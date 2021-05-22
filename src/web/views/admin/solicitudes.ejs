@@ -7,10 +7,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Lista de estudiantes</title>
+    <title>Dashboard | Matricula</title>
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <link rel="stylesheet" href="../../css/general.css">
     <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="/css/datatables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <link rel="stylesheet" href="../../css/animate.css">
     <script src="../../js/jq-bs-bundle.js"></script>
@@ -18,12 +19,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
 
-<body class="page bg-light d-flex flex-column h-100" onresize="change_navbar()">
+<body class="page bg-light d-flex flex-column h-100">
     <div class="modal fade" id="modalVerMatricula" tabindex="-1" aria-labelledby="vermodalmatricula" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-secondary">
-                <h5 class="modal-title text-white" id="exampleModalLabel">Matricula <span id="nombreTarget"></span></h5>
+                <div class="modal-header border-bottom-0">
+                <h5 class="modal-title pl-3" id="exampleModalLabel">Matrícula</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -36,11 +37,67 @@
                         </button>
                     </div>
                     <span class="sr-only" id="cedulaTarget"></span>
-                    Aqui los datos de las personas
+                    <span class="sr-only" id="idCursoDesmatricular"></span>
+                </div>
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-success" onclick="cambiarEstadoMatricula(1)">Activar Matricula</button>
+                    <button type="button" class="btn btn-warning" onclick="cambiarEstadoMatricula(0)">Desactivar Matricula</button>
+                    <button type="button" class="btn btn-danger" onclick="desmatricular()">Desmatricular</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="matricularModal" tabindex="-1" aria-labelledby="matricularModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title pl-3" id="matricularModalLabel">Matricular Estudiante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mx-0">
+                            <div class="col-6 pl-0">
+                                <div class="form-group">
+                                    <label for="EstudiantesModalMatricular">Seleccione un estudiante</label>
+                                    <select class="form-control" name="EstudiantesModalMatricular" id="EstudiantesModalMatricular">
+            
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 pr-0">
+                                <div class="form-group">
+                                    <label for="GrupoModalMatricular">Seleccione el grupo</label>
+                                    <select class="form-control" name="GrupoModalMatricular" id="GrupoModalMatricular">
+            
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mx-0" style="overflow: hidden">
+                            <div class="card mb-3 flex-fill" style="max-width: 100%;" id="tiqueteMatricula">
+                                <div class="card-header bg-info text-white">Tiquete de Matricula</div>
+                                <div class="row mx-0 no-gutters">
+                                    <div class="col-md-3">
+                                        <img src="/img/piscina4.jpg" alt="Hombre nadando en la piscina" width="100%">
+                                    </div>
+                                    <div class="col-md-9">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Estudiante</h5>
+                                        <p class="card-text texto-matricular">Nivel</p>
+                                        <p class="card-text "><small class="text-muted texto-fecha">Fecha</small></p>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="CambiarEstadoRechazarBoton">Rechazar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="matricularCursos()">Matricular Estudiante</button>
                 </div>
             </div>
         </div>
@@ -54,223 +111,105 @@
                 <ol class="breadcrumb ">
                     <li class="breadcrumb-item"><a href="#">Matricula</a></li>
                     <li class="breadcrumb-item"><a href="#">Solicitudes de Matricula</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Lista de Estudiantes Matriculados</li>
+                    <li class="breadcrumb-item active" aria-current="page">Lista de estudiantes matriculados</li>
                 </ol>
             </nav>
             <div class="container-fluid">
                 <div class="card border-0 shadow-sm my-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-2">
                                 <h2 class="font-weight-bolder">Lista de Estudiantes Matriculados</h2>
-                                <small>Informacion Actualizada hace: <span class="text-success">2 segundos</span></small>
+                                <small class="text-muted">En esta seccion se muestra la lista de los
+                                    estudiantes que se matricularon en un grupo,<br>
+                                    se pueden rechazar en la matricula.<br>
+                                </small>
+                                <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                             </div>
                             <div class="col border-right">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_registrados_stats"></h4>
-                                <small class="text-muted">Estudiantes Matriculados &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                <h1 class="m-0 font-weight-bolder text-primary" id="est_activos_stats"></h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Estudiantes Matriculados">Estudiantes Activos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                             </div>
                             <div class="col border-right">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_verificados_stats"></h4>
-                                <small class="text-muted">Estudiantes Desmatriculados &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                <h1 class="m-0 font-weight-bolder text-primary" id="est_inactivos_stats"></h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Estudiantes Inactivos pero no desmatriculados">Estudiantes Inactivos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                             </div>
                             <div class="col">
-                                <h4 class="m-0 font-weight-bolder text-primary" id="usuarios_nuevos_stats"></h4>
-                                <small class="text-muted">Cursos disponibles &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                <h1 class="m-0 font-weight-bolder text-primary" id="cursos_stats"></h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad de cupos disponibles en todos los cursos">Cursos disponibles &nbsp; <i class="fas fa-align-center text-info"></i></small>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white shadow rounded-lg">
-                    <div class="card-body px-2">
-                        <div class="w-100 bg-light mx-auto rounded-lg mb-3 p-3 justify-content-between" >
-                            <div class="w-100">
+                    <div class="card-body bg-white px-2 py-2">
+                        <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                            <div class="col-md-6 pl-1 pr-0">
                                 <div class="input-group flex-nowrap">
                                     <div class="input-group-prepend">
-                                        <button class="btn bg-white" type="button" id="boton_buscar"><i class="fas fa-search"></i></button>
+                                        <button class="btn bg-white" type="button" id="button_search"><i
+                                                class="fas fa-search"></i></button>
                                     </div>
-                                    <input type="search" class="form-control border-0 shadow-none" placeholder="Buscar..." aria-label="Username" id="buscar_est_matr">
-                                    <button class="btn btn-primary ml-3" type="button" data-toggle="collapse" data-target="#collapseFiltrar" aria-expanded="false" aria-controls="collapseFiltrar">
-                                        <i class="fas fa-filter"></i>
-                                    </button>
+                                    <input type="search" class="form-control border-0 shadow-none bg-white"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
                                 </div>
-                            </div>
-                            <div class="collapse" id="collapseFiltrar">
-                                <div class="row w-100 mt-2 border-top mx-0">
-                                    <div class="col-md-4 px-0 d-flex justify-content-around align-items-center">
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" id="filter_lista_dias_lunes" name="lunes">
-                                            <label class="custom-control-label" for="filter_lista_dias_lunes">Lunes</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" id="filter_lista_dias_martes" name="martes">
-                                            <label class="custom-control-label" for="filter_lista_dias_martes">Martes</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" id="filter_lista_dias_miercoles" name="miercoles">
-                                            <label class="custom-control-label" for="filter_lista_dias_miercoles">Miércoles</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 px-0 d-flex justify-content-around align-items-center">
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" id="filter_lista_dias_jueves" name="jueves">
-                                            <label class="custom-control-label" for="filter_lista_dias_jueves">Jueves</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox" id="filter_lista_dias_viernes" name="viernes">
-                                            <label class="custom-control-label" for="filter_lista_dias_viernes">Viernes</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input class="custom-control-input" type="checkbox"  id="filter_lista_dias_sabado" name="sabado">
-                                            <label class="custom-control-label" for="filter_lista_dias_sabado">Sábado</label>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-4 px-0 mt-2 d-flex justify-content-end">
-                                        <div class="w-50 d-inline">
-                                            <div class="btn-group w-90">
-                                                <button type="button" class="btn btn-secondary w-90">Horas</button>
-                                                <button type="button"
-                                                    class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
-                                                    id="dropdownboton" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false" data-reference="parent">
-                                                </button>
-                                                <div class="dropdown-menu" id="dropdownhoras" style="z-index: 9999;">
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-6-7"
-                                                                name="6">
-                                                            <label class="custom-control-label" for="horas-6-7">6-7 </label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-7-8"
-                                                                name="7">
-                                                            <label class="custom-control-label" for="horas-7-8"> 7-8</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-8-9"
-                                                                name="8">
-                                                            <label class="custom-control-label" for="horas-8-9"> 8-9</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-9-10"
-                                                                name="9">
-                                                            <label class="custom-control-label" for="horas-9-10"> 9-10</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-10-11"
-                                                                name="10">
-                                                            <label class="custom-control-label" for="horas-10-11">10-11</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-11-12"
-                                                                name="11">
-                                                            <label class="custom-control-label" for="horas-11-12">11-12</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-12-13"
-                                                                name="12">
-                                                            <label class="custom-control-label" for="horas-12-13">12-13</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-13-14"
-                                                                name="13">
-                                                            <label class="custom-control-label" for="horas-13-14">13-14</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-14-15"
-                                                                name="14">
-                                                            <label class="custom-control-label" for="horas-14-15">14-15</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-15-16"
-                                                                name="15">
-                                                            <label class="custom-control-label" for="horas-15-16">15-16</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-16-17"
-                                                                name="16">
-                                                            <label class="custom-control-label" for="horas-16-17">16-17</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-17-18"
-                                                                name="17">
-                                                            <label class="custom-control-label" for="horas-17-18">17-18</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-18-19"
-                                                                name="18">
-                                                            <label class="custom-control-label" for="horas-18-19">18-19</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-19-20"
-                                                                name="19">
-                                                            <label class="custom-control-label" for="horas-19-20">19-20</label>
-                                                        </div>
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                                            <input class="custom-control-input" type="checkbox" id="horas-20-21"
-                                                                name="20">
-                                                            <label class="custom-control-label" for="horas-20-21">20-21</label>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-around px-0">
+                                <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                    <div class="col-5 d-flex align-items-center">
+                                        <div id="showlenghtentries" class="d-flex align-items-center m-0">
                                         </div>
-                                        <button class="btn btn-primary text-center w-50" type="button"id="aplicarFiltro">Filtrar</button>
+                                    </div>
+                                    <div class="col-7 d-flex align-items-center justify-content-end pr-2"
+                                        style="max-height: 40px">
+                                        <button type="button" name="agregarTaller" id="modalButtonAgregarEstudiante"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Matricular un Estudiante" onclick="openmodal('#matricularModal')" 
+                                            class="btn bg-success btn-sm text-white mr-2"
+                                            style="border-radius: 50px;"><i class="fas fa-plus"></i>
+                                        </button>
+                                        <a href="/admin/solicitudes" name="actualizar_lista" id="actualizar_lista"
+                                            data-toggle="tooltip" data-placement="top"
+                                            title="Actualizar lista" class="btn bg-white btn-sm"
+                                            style="border-radius: 50px;"><i
+                                                class="fas fa-sync-alt"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row w-100 mx-0 px-2" style="height: 550px; overflow-y: auto;">                            
-                        <table class="table table-hover table-responsive-md table-borderless" id="dataTable">
-                            <thead>
-                                <tr>
-                                    <th class="bg-primary text-white sticky-top" style="border-top-left-radius: 10px;" scope="col">Cédula</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Nombre</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">NRC</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Horario</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Nivel</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Profesor</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Meses</th>
-                                    <th class="bg-primary text-white sticky-top" scope="col">Fecha de matricula</th>
-                                    <th class="bg-primary text-white sticky-top" style="border-top-right-radius: 10px;" scope="col">Ver</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lista-estudiantes">
-                            
-                            </tbody>
-                        </table>
-                        <div class="text-center w-100" id="cargarDatosSpinner">
-                            <div class="spinner-border" role="status">
-                              <span class="sr-only">Loading...</span>
+                        <div class="row w-100 mx-0 px-2" style="height: 70vh; overflow-y: auto;">                            
+                            <table class="table custom-table table-responsive-md table-borderless" id="matriculasTable">
+                                <thead  style = "max-height: 30px;">
+                                    <tr>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Nombre</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Cédula</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Horario</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Nivel</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Profesor</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Fecha de matrícula</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Estado</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col">Ver</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-estudiantes">
+                                
+                                </tbody>
+                            </table>
+                            <div class="d-flex align-items-center align-self-end border-info w-100">
+                                <div class="row w-100 ml-0">
+                                    <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                        <small id="informacionTable" class="d-flex align-items-end"></small>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-end"
+                                        id="botonesCambiarTable">
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -279,6 +218,8 @@
             <%- include('footerDashboard') %>
         </div>
     </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
     <script src="../../js/admin/lista-estdudiantes.js"></script>
 </body>
 

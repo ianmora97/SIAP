@@ -1,6 +1,7 @@
 var cursos = [];
 var montoTotal = 0;
-var cursosSeleccionados = [];
+var cursosSeleccionados = []
+var cursosMatriculados = [];
 
 function loaded(event){
     events(event);
@@ -14,6 +15,7 @@ function events(event){
     matricularCursos();
     ocultarAlertaSuccess();
     ocultarAlertaDanger();
+    traerCursosMatriculados();
 }
 function eventSeleccionar(curso) {
     let all = $("[id*=matricularCursoCheckbox-]");
@@ -21,6 +23,7 @@ function eventSeleccionar(curso) {
     let montoCantidad = 0;
     
     cursosSeleccionados = []; //limpio el vector de cursos seleccionados
+    $('#listaCursosPush').html(''); //limpio el carrito
 
     for (let i = 0; i < all.length; i++) {
         if (all[i].checked) {
@@ -31,6 +34,7 @@ function eventSeleccionar(curso) {
             }else{
                 montoCantidad += $('#matricularCursoCheckbox-'+all[i].value).data('price');
             }
+            pushCurso(getCurso(all[i].value,cursos));
         }
     }
 
@@ -41,8 +45,8 @@ function eventSeleccionar(curso) {
     let contadorCursos = select.length; //cuenta los cursos que se seleccionaron, e.g 3 cursos (lunes1, martes11, jueves3)
     montoTotal = montoCantidad; //monto total precio
     $('#montoTotal').text(montoTotal);
-
-    if(contadorCursos == 3){ //desabilito los demas botones para que no pueda marcar mas de 3 cursos
+    console.log(contadorCursos);
+    if(contadorCursos == 5){ //desabilito los demas botones para que no pueda marcar mas de 3 cursos
         for (let i = 0; i < all.length; i++) {
             if (!(all[i].checked)) {
                 $('#matricularCursoCheckbox-'+all[i].value).attr('disabled',true);
@@ -55,6 +59,28 @@ function eventSeleccionar(curso) {
             }
         }
     }
+}
+function removeCurso(id){
+    let all = $("#matricularCursoCheckbox-"+id.split('-')[1]).prop("checked", false);
+    eventSeleccionar(0);
+    $('#'+id).remove();
+}
+function pushCurso(curso) {
+    let tipo = $('#tipo_estudiante').text();
+    let fecha = parseFecha(curso.dia,curso.hora);
+    let costo = tipo == 1 ? curso.costo : curso.costo_funcionario;
+    $('#listaCursosPush').append(
+        '<div class="d-flex justify-content-between px-2 my-3" onclick="removeCurso(\'car-'+curso.id_grupo+'\')" id="car-'+curso.id_grupo+'">'+
+        '<div class="d-flex justify-content-start align-items-start">'+
+        '<button type="button" class="btn btn-light mr-2 py-0"><i class="fas fa-minus" aria-hidden="true"></i></button>'+
+        '<div class="d-flex flex-column">'+
+        '<span>'+curso.codigo_taller+'</span>'+
+        '<span class="text-muted">'+fecha+'</span>'+
+        '</div>'+
+        '</div>'+
+        '<span class="text-muted">'+costo+'</span>'+
+        '</div>'
+    );
 }
 function dropdownhoras() {
     $("#dropdownboton").on("click", function () {
@@ -97,6 +123,9 @@ function filtrarTODOS(){
 	});
 }
 
+function traerCursosMatriculados(){
+    
+}
 function traerCursos(){
     let nivel = $('#nivel_estudiante').text();
     let data = {nivel}
@@ -105,19 +134,61 @@ function traerCursos(){
         url: "/client/cargarCursos",
         data:data,
         contentType: "application/json"
-    }).then((response) => {
-        cursos = response;
-        $('#spinnerCursos').toggleClass('d-block');
-        $('#spinnerCursos').hide();
-        cargarCurso(response);
+    }).then((cursosDis) => {
+        cursos = cursosDis;
+        let cedula = $('#cedula_estudiante').text();
+        let datos = {cedula}
+        $.ajax({
+            type: "GET",
+            url: "/client/cargarCursosMatriculadosCliente",
+            data:datos,
+            contentType: "application/json"
+        }).then((response) => {
+            cursosMatriculados = response;
+            $('#spinnerCursos').toggleClass('d-block');
+            $('#spinnerCursos').hide();
+
+            cargarCurso(cursos);
+        }, (error) => {
+        });        
     }, (error) => {
     });
 }
 function cargarCurso(cupos) {
     $('#cursos_lista').html('');
-    cupos.forEach(cupo => {
-        llenarCurso(cupo);
-    });
+    filtrarCursosMatriculados(cupos).then((newCupos)=>{
+        newCupos.forEach(cupo => {
+            llenarCurso(cupo);
+        });
+    }); 
+}
+async function filtrarCursosMatriculados(array1){
+    let result = [];
+    let todos = [];
+    let matriculados = [];
+    for(let i=0;i<cursosMatriculados.length;i++){
+        matriculados.push(cursosMatriculados[i].id_grupo);
+    }
+    for(let i=0;i<array1.length;i++){
+        todos.push(array1[i].id_grupo);
+    }
+    todos = todos.filter(function(item) {
+        return !matriculados.includes(item); 
+    })
+
+    console.log(todos)
+    for(let i=0;i<array1.length;i++){
+        for(let j=0;j<todos.length;j++){
+            if(array1[i].id_grupo == todos[j]){
+                result.push(array1[i]);
+            }
+        }
+    }
+    result = result.filter(function(item, pos) {
+        return result.indexOf(item) == pos;
+    })
+
+    return result;
 }
 function llenarCurso(cupo) {
     let id = cupo.id_grupo;
@@ -125,35 +196,40 @@ function llenarCurso(cupo) {
     let profesor = cupo.nombre.toUpperCase() +" "+ cupo.apellido.toUpperCase();
     let cod_t = cupo.codigo_taller;
     let costo = tipo == 1 ? cupo.costo : cupo.costo_funcionario;
-    let nivel = cupo.nivel == 1 ? 'Principiante' : cupo.nivel == 2 ? 'Intermedio' : 'Avanzado';
-    let cupos = cupo.cupo_base > 0 ? 'Cupo Disponible' : 'No hay cupos';
-    let cupos_t = cupo.cupo_base > 0 ? 'bg-success' : 'bg-danger';
+    let nivel = cupo.descripcion;
+    let cupos = cupo.cupo_base - cupo.cupo_actual > 0 ? 'Cupo Disponible' : 'No hay cupos';
+    let cantidad = cupo.cupo_base - cupo.cupo_actual;
+    let cupos_t = cupo.cupo_base - cupo.cupo_actual > 0 ? 'success' : 'danger';
+    
     let fecha = parseFecha(cupo.dia,cupo.hora);
-    $('#cursos_lista').append(
-        '<div class="w-100 my-3">'+
-        '<div class="card-cursos-header">'+
-        '<h5 id="nombre">(Taller) Piscina Nivel '+nivel+' <br><span id="nrc">'+cod_t+'</span></h5>'+
-        '<span class="my-auto badge badge-pill '+cupos_t+'" id="cupo">'+cupos+'</span>'+
-        '</div>'+
-        '<div class="card-cursos-body">'+
-        '<p class="my-0" id="horario">'+fecha+'</p>'+
-        '<i class="fas fa-swimmer fa-3x text-celeste"></i>'+
-        '</div>'+
-        '<div class="card-cursos-footer">'+
-        '<div class="row w-100">'+
-        '<div class="col-md-6">'+
-        '<small id="profesor">Profesor: '+profesor+'</small>'+
-        '</div>'+
-        '<div class="col-md-6 d-flex justify-content-md-end">'+
-        '<a href="#" class="mx-3 btn btn-secondary disabled" role="button" id="precio">'+costo+' Colones</a>'+
-        '<div class="custom-control custom-checkbox">' +
-        '<input type="checkbox" id="matricularCursoCheckbox-' + id + '" class="custom-control-input" value="' + id + '" data-price="'+costo+'" name="matricularCursoCheckbox-'+id+'" onclick="eventSeleccionar('+id+')"/>' +
-        '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div></td>' +
-        '</div>'+
-        '</div>'+
-        '</div>'+
-        '</div>'
-    );
+    if(cupo.cupo_base - cupo.cupo_actual > 0){
+        $('#cursos_lista').append(
+            '<div class="w-100 my-3">'+
+            '<div class="card-cursos-header">'+
+            '<h5 id="nombre">(Taller) Piscina Nivel '+nivel+' <br><span id="nrc">'+cod_t+'</span></h5>'+
+            '<button type="button" class="btn btn-'+cupos_t+' my-auto" >'+
+            cupos+'<span class="ml-2 badge badge-light">'+cantidad+'</span>'+
+            '</button>'+
+            '</div>'+
+            '<div class="card-cursos-body">'+
+            '<p class="my-0" id="horario">'+fecha+'</p>'+
+            '<i class="fas fa-swimmer fa-3x text-celeste"></i>'+
+            '</div>'+
+            '<div class="card-cursos-footer">'+
+            '<div class="row w-100">'+
+            '<div class="col-md-6">'+
+            '<small id="profesor">Profesor: '+profesor+'</small>'+
+            '</div>'+
+            '<div class="col-md-6 d-flex justify-content-md-end">'+
+            '<div class="custom-control custom-checkbox">' +
+            '<input type="checkbox" id="matricularCursoCheckbox-' + id + '" class="custom-control-input" value="' + id + '" data-price="'+costo+'" name="matricularCursoCheckbox-'+id+'" onclick="eventSeleccionar('+id+')"/>' +
+            '<label class="custom-control-label" for="matricularCursoCheckbox-' + id + '">Matricular</label></div>' +
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+        );
+    }
 }
 function ocultarAlertaDanger(){
     $('#cerrarAlertaDanger').on('click',function(){
@@ -174,6 +250,7 @@ function matricularCursos(){
                 id:cursosSeleccionados[i].id_grupo,
                 estudiante,
             };
+            console.log(data);
             $.ajax({
                 type: "POST",
                 url: "/client/matricularCursos",
@@ -242,7 +319,6 @@ var filtradosSeleccionados = (seleccionados, filtrados) =>{
     for (let i = 0; i < filtrados.length; i++) {
         for (let w = 0; w < seleccionados.length; w++) {
             if (filtrados[i].id_grupo == seleccioados[w].id_grupo) {
-                console.log(filtrados[i].id_grupo, seleccionados[w].id_grupo);
                 result.push(filtrados[i]);
             }
         }

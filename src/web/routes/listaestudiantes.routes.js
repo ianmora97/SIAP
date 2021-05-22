@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const con = require('../database');
 
+
+//Selecciona todos los estudiantes, sin importar si son activos o no
+
+
 //Selecciona todas las matriculas
 router.get('/admin/matricula/listaest',(req,res)=>{
     var script = 'select * from vta_matriculados_por_grupo;';

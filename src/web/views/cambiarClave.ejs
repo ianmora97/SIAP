@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Cambiar Clave</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
+</head>
+<body class="d-flex flex-column h-100 bg-light">
+    <div class="container my-auto" style="z-index: 3;">
+        <div class="w-100 m-auto bg-white shadow rounded-lg p-5 " style="max-width: 500px;">
+            <h3>Solicitud cambio de clave</h3>
+            <div class="w-100 m-auto" style="max-width: 450px;">
+                <form action="/solicitud/cambiarClave" method="post">
+                    <div class="form-group">
+                        <label for="inputPassword">Nueva Clave</label>
+                        <input type="password" id="clave" name="clave" class="form-control animate__animated animate__pulse animate__fast " placeholder="Clave..." required="">
+                        <input type="text" id="cedula" name="cedula" value="<%= user.cedula %>" placeholder="Cedula..." hidden>
+                        <small class="text-muted">Esta sera su nueva clave</small>
+                    </div>
+
+                    <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit" id="inciarSesion">Enviar Solicitud</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

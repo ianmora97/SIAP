@@ -1,0 +1,214 @@
+<!-- 
+    ! Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Talleres - Reposiciones</title>
+    <link rel="stylesheet" href="../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../css/general.css">
+    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="modal fade" id="modalGrupoOrigen" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary">Informacion de grupo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body" id="bodyModalGrupoOrigen">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalCambiarEstado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar estado de <span id="nombreTarget"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert" id="alerta_error_estado">
+                        No se pudo cambiar el estado!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <span class="sr-only" id="cedulaTarget"></span>
+                    Desea cambiar el estado del estudiante a confirmado?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="CambiarEstadoRechazarBoton">Rechazar</button>
+                    <button type="button" class="btn btn-success" id="CambiarEstadoConfirmarBoton">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalComprobante" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="titleModalComprobante">Comprobante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="bodyComprobante">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+
+            <nav aria-label="breadcrumb ">
+                <ol class="breadcrumb ">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Talleres</a></li>
+                    <li class="breadcrumb-item"><a href="#">Reposiciones</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Listado</li>
+                </ol>
+            </nav>
+            <div class="container-fluid">
+                <div class="card border-0 shadow-sm my-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h2 class="font-weight-bolder">Lista de Reposiciones</h2>
+                                <small>Informacion Actualizada hace: <span class="text-success"
+                                        id="infoTiming"></span></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="reposiciones_todas_stats"></h4>
+                                <small class="text-muted">Cantidad Reposiciones &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col border-right">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="reposiciones_aceptadas_stats"></h4>
+                                <small class="text-muted">Reposiciones aceptadas &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col">
+                                <h4 class="m-0 font-weight-bolder text-primary" id="reposiciones_nuevos_stats"></h4>
+                                <small class="text-muted">Reposiciones rechazadas &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row bg-light mx-auto rounded-lg mb-3 p-3 justify-content-between">
+                            <div class="col-md-8 mt-2">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <button class="btn bg-white" type="button" id="button_search"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                    <input type="search" class="form-control border-0 shadow-none"
+                                        placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                            <div class="col-md-4 mt-2 d-flex justify-content-between">
+                                <div class="btn-group w-100 d-inline">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle w-75"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Filtrar
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 9999;">
+                                        <button class="dropdown-item" type="button"
+                                            id="filtrar_nuevos">Pendientes</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" type="button"
+                                            id="filtrar_confirmados">Confirmados</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" type="button"
+                                            id="filtrar_rechazados">Rechazados</button>
+                                    </div>
+                                </div>
+                                <button type="button" name="actualizar_lista" id="actualizar_lista"
+                                    class="btn bg-white"><i class="fas fa-sync-alt"></i></button>
+                            </div>
+                        </div>
+                        <div class="row w-100 mx-0" style="height: 550px; overflow-y: auto;">
+                            <table class="table custom-table table-responsive-md table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-address-card"></i> Cedula</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-id-card"></i> Nombre</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-layer-group"></i> Grupo Origen</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-layer-group"></i> Grupo Reposicion</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-level-up-alt"></i> Nivel</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-calendar-alt"></i> Fecha de Reposicion</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-file-image"></i> Comprobante</th>
+                                        <th class="bg-dark text-white sticky-top" scope="col"><i
+                                                class="fas fa-toggle-on"></i> Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista_reposiciones">
+
+                                </tbody>
+                            </table>
+                            <div class="text-center w-100" id="cargarDatosSpinner">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/admin/reposiciones.js"></script>
+</body>
+
+</html>

@@ -1,162 +1,93 @@
-
 var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
-gradienteColores.addColorStop(0, 'rgb(54, 162, 235)');
-gradienteColores.addColorStop(1, 'white');
+gradienteColores.addColorStop(0, "rgba(29.8%, 51.8%, 100%, 0.6)");
+gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
     data: {
-        labels: ["Principiante", "Intermedio", "Avanzado"],
+        //labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
-                label: ["Cantidad de personas matriculadas por taller"],
-                data: [0,0,0], //los datos de los talleres aqui
                 backgroundColor: gradienteColores,
-				hoverBackgroundColor: gradienteColores,
-                hoverBorderWidth: 2,
-				hoverBorderColor: '#364C78',
-                borderWidth: 1,
+                borderColor: '#4c84ff',
+                borderWidth: 2,
             },
         ],
     },
     options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
         showLines: false, // disable for all datasets
         scales: {
             xAxes: [
                 {
                     gridLines: {
-                        //display:false,
-                        drawTicks:false,
                         drawBorder: true,
+                        display: false,
                     },
                 },
             ],
             yAxes: [
                 {
-                    gridLines: {
-                        //display:false,
-                        drawTicks:false,
-                        drawBorder: true,
-                    },
                     ticks: {
-                        beginAtZero: true
-                    }
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
+                    gridLines: {
+                        drawBorder: true,
+                        display: false,
+                    },
                 },
-                
             ],
         },
-        animation: {
-            
-        },
+        animation: {},
         tooltips: {
-            mode: 'nearest'
+            mode: "nearest",
         },
         responsive: true,
         maintainAspectRatio: false,
     },
 });
-
 
 var usuariosChart = document.getElementById("usuariosChart").getContext("2d");
+var gradienteColores_usuarios = usuariosChart.createLinearGradient(0, 0, 0, 600);
+
+gradienteColores_usuarios.addColorStop(0, "rgba(75%, 255%, 75%, 0.6)");
+gradienteColores_usuarios.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
 usuariosChart.height = 600;
-var myChart = new Chart(usuariosChart, {
+var usuarioCharVar = new Chart(usuariosChart, {
     type: "bar",
     data: {
-        labels: ["Principiante", "Intermedio", "Avanzado"],
         datasets: [
             {
-                label: "Principiante",
-                data: [12],
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                ],
-                borderWidth: 1,
-            },{
-                label: "Intermedio",
-                data: [19],
-                backgroundColor: [
-                    "rgba(54, 162, 235, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(54, 162, 235, 1)",
-                ],
-                borderWidth: 1,
-            },{
-                label: "Avanzado",
-                data: [19],
-                backgroundColor: [
-                    "rgba(75, 192, 192, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(75, 192, 192, 0.2)",
-                ],
-                borderWidth: 1,
+                backgroundColor: gradienteColores_usuarios,
+                borderColor: '#28a745 ',
+                borderWidth: 2,
             },
         ],
     },
     options: {
-        scales: {
-            xAxes: [
-                {
-                    gridLines: {
-                        drawBorder: true,
-                        display: false,
-                    },
-                },
-            ],
-            yAxes: [
-                {
-                    gridLines: {
-                        drawBorder: true,
-                        display: false,
-                    },
-                },
-            ],
+        legend: {
+            display: false
         },
-        responsive: true,
-        maintainAspectRatio: false,
-    },
-});
-var matriculaChart = document.getElementById("matriculaChart").getContext("2d");
-matriculaChart.height = 600;
-var myChart = new Chart(matriculaChart, {
-    type: "bar",
-    data: {
-        labels: [
-            "Profesores",
-            "Estudiantes",
-            "Activos",
-            "Morosos",
-            "Desmatriculados",
-        ],
-        datasets: [
-            {
-                label: "Cantidad de Usuarios",
-                data: [12, 19, 3, 5, 6],
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                    "rgba(54, 162, 235, 0.2)",
-                    "rgba(255, 206, 86, 0.2)",
-                    "rgba(75, 192, 192, 0.2)",
-                    "rgba(153, 102, 255, 0.2)",
-                ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(153, 102, 255, 1)",
-                ],
-                borderWidth: 1,
-            },
-        ],
-    },
-    options: {
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
         scales: {
             xAxes: [
                 {
@@ -168,6 +99,10 @@ var myChart = new Chart(matriculaChart, {
             ],
             yAxes: [
                 {
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
                     gridLines: {
                         drawBorder: true,
                         display: false,
@@ -181,10 +116,96 @@ var myChart = new Chart(matriculaChart, {
 });
 
 
-function addData(chart, label, data) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
-    chart.update();
-}
+var casillerosChart = document.getElementById("casillerosChart").getContext("2d");
+var gradienteColores_casilleros = casillerosChart.createLinearGradient(0, 0, 0, 600);
+
+gradienteColores_casilleros.addColorStop(0, "rgba(255%, 204%, 58%, 0.6)");
+gradienteColores_casilleros.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
+
+casillerosChart.height = 600;
+var casillerosChartVar = new Chart(casillerosChart, {
+    type: "bar",
+    data: {
+        datasets: [
+            {
+                backgroundColor: gradienteColores_casilleros,
+                borderColor: '#ffc107',
+                borderWidth: 2,
+            },
+        ],
+    },
+    options: {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+               label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+               }
+            }
+        },
+        showLines: false, // disable for all datasets
+        scales: {
+            xAxes: [
+                {
+                    gridLines: {
+                        drawBorder: true,
+                        display: false,
+                    },
+                },
+            ],
+            yAxes: [
+                {
+                    ticks: {
+                        suggestedMin: 0,
+                        beginAtZero: true   // minimum value will be 0.
+                    },
+                    gridLines: {
+                        drawBorder: true,
+                        display: false,
+                    },
+                },
+            ],
+        },
+        animation: {},
+        tooltips: {
+            mode: "nearest",
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+
+
+});
+
+
+
+
+var pieDonutChart = document.getElementById("pieDonutChart").getContext("2d");
+var pieDonutChartVar = new Chart(pieDonutChart, {
+    type: "doughnut",
+    data: {
+        datasets: [
+            {                
+                borderWidth: [2],
+                backgroundColor: [
+                    '#28a745',
+                    "#4c84ff",
+                    '#ffc107',
+                ],
+                borderColor: [
+                    "#28a745",
+                    "#4c84ff",
+                    "#ffc107",
+                ],
+                borderWidth: 1,
+            },
+        ],
+    },
+    options:{
+        cutoutPercentage: 70,
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+});

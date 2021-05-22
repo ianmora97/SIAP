@@ -9,20 +9,15 @@ function events(event){
     fotoonChange();
     checkUpdate();
     update();
-    getLugares();
     cargarFoto();
-    reqCantones();
-    reqDistritos();
     ocultarAlertaDanger();
     changeProfilePhoto();
 }
 
-
-
 function cargarFoto() {
     let foto = $('#usuario_foto').data('value');
     $('.avatar-bg').css({
-        'background':'url(./../public/uploads/'+foto+')',
+        'background':'url(/public/uploads/'+foto+')',
         'background-size':'cover',
         'background-position': '50% 50%'
     });
@@ -71,30 +66,6 @@ function get_today_date() {
     today = mm + '/' + dd + '/' + yyyy;
     $('.today-date').text(today);
 }
-
-function reqCantones() {
-    $('#provincia').on('change', function(){
-        filCan(this.value);
-    });
-}
-
-function reqDistritos() {
-    $('#canton').on('change', function(){
-        filDis(this.value);
-    });
-}
-
-function getLugares(){
-    $.ajax({
-        type: "GET",
-        url: "../../../assets/lugares.txt",
-        contentType: "text"
-    }).then((data) => {
-        proplaces(data);
-    }, (error) => {
-    });
-}
-
 function checkUpdate(){
     $('#guardar_info').on('click',function(){
         $('#modalCheckUpdate').modal('show');
@@ -109,9 +80,6 @@ function update() {
         let emergencia = $('#telefono_emergencia').val();
         let correo = $('#email_perfil').val();
         let carrera = $('#carrera').val();
-        let provincia = $('#provincia option:selected').val();
-        let canton = $('#canton option:selected').val();
-        let distrito = $('#distrito option:selected').val();
         let direccion = $('#direccion').val();
 
         let data = {cedula,correo,celular,telefono,emergencia,carrera,provincia,canton,distrito,direccion}

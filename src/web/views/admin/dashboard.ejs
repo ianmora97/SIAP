@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../../css/bootstrap.css">
-    <link rel="stylesheet" href="../../css/general.css">
-    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" type="text/css" href="/css/dashboard.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-    <link rel="stylesheet" href="../../css/animate.css">
-    <script src="../../js/jq-bs-bundle.js"></script> 
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
-<body class="page bg-light d-flex flex-column h-100">
-    <div class="d-flex h-100" id="wrapper">
+<body class="page bg-light d-flex flex-column h-100 overflow-hidden">
+    
+    <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
@@ -26,114 +27,144 @@
                 <ol class="breadcrumb ">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Estadisticas</li>
+                    <li class="breadcrumb-item active" aria-current="page">Estadísticas</li>
                 </ol>
             </nav>
-            <div class="container-fluid hv-90">
-                <div class=" mx-auto mt-2 mb-4">
-                    <nav>
-                        <div class="nav nav-tabs justify-content-between border-bottom-0" id="nav-tab" role="tablist">
-                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
-                                <label class="text-center align-text-top text-dark d-block" >Talleres</label>
-                                <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                            </a>
-                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border " id="usuarios_chart-tab" data-toggle="tab" href="#usuarios_chart" role="tab" aria-controls="usuarios_chart" aria-selected="false">
-                                <label class="text-center align-text-top text-dark d-block" >Usuarios</label>
-                                <h1 id="usuarios-stats" class="text-center text-secondary"></h1>
-                            </a>
-                            <a class="nav-link bg-white rounded-lg p-3 shadow-sm col-md-3 mb-2 border" id="matricula_chart-tab" data-toggle="tab" href="#matricula_chart" role="tab" aria-controls="matricula_chart" aria-selected="false">
-                                <label class="text-center align-text-top text-dark d-block" >Matriculados</label>
-                                <h1 id="matricula-stats" class="text-center text-secondary"></h1>
-                            </a>
-                        </div>
-                    </nav>
-                    <div class="tab-content w-100" id="nav-tabContent">
-                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2 show active" id="talleres_chart" role="tabpanel" aria-labelledby="talleres-chart-tab">
-                            <div class="row py-2 px-3">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="d-block">Talleres</h4>
+            <div class="container-fluid">
+                <nav>
+                    <div class="nav nav-tabs justify-content-around border-bottom-0" id="nav-tab" role="tablist" style="min-height: 150px;">
+                        <a class="nav-link nav-card-item col-lg-3 active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
+                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes Matriculados">
+                                <div class="p-0">
+                                    <i class="fas fa-swimming-pool fa-2x text-info talleres-ic"></i>
                                 </div>
-                                <small class="text-muted today-date d-block"></small>
+                                <div class="p-0">
+                                    <h1 id="talleres-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
+                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Talleres</label>
+                                </div>
                             </div>
-                            <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0" style="height:400px;">
+                            
+                        </a>
+                        <a class="nav-link nav-card-item col-lg-3 " id="usuarios_chart-tab" data-toggle="tab" href="#usuarios_chart" role="tab" aria-controls="usuarios_chart" aria-selected="false">
+                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Usuarios en el sistema">
+                                <div class="p-0">
+                                    <i class="fas fa-users fa-2x text-success talleres-uc"></i>
+                                </div>
+                                <div class="p-0">
+                                    <h1 id="usuarios-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
+                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Usuarios</label>
+                                </div>
+                            </div>
+                            
+                        </a>
+                        <a class="nav-link nav-card-item col-lg-3" id="casilleros_chart-tab" data-toggle="tab" href="#casilleros_chart" role="tab" aria-controls="casilleros_chart" aria-selected="false">
+                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Cantidad Total de Casilleros">
+                                <div class="p-0">
+                                    <i class="fas fa-lock fa-2x text-warning talleres-mc"></i>
+                                </div>
+                                <div class="p-0">
+                                    <h1 id="casilleros-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
+                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Casilleros</label>
+                                </div>
+                            </div>
+                            
+                        </a>
+                         <a class="nav-link nav-card-item col-lg-2" id="estudiantes-tab" aria-controls="estudiantes" aria-selected="false">
+                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes actuales">
+                                <div class="p-0">
+                                    <h1 id="estudiantestotales-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
+                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Estudiantes</label>
+                                </div>
+                            </div>
+                            
+                        </a>
+                    </div>
+                </nav>
+                <div class="row mx-auto mt-2 mb-4">
+                    <div class="col-md-8 px-1">
+                        <div class="tab-content w-100" id="nav-tabContent">
+                            <div class="tab-pane fade show chart-container cards-dash active " id="talleres_chart" role="tabpanel" aria-labelledby="talleres-chart-tab">
+                                <div class="row py-2 px-3">
+                                    <div class="w-100">
+                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Talleres</h4>
+                                    </div>
+                                    <small class="text-muted today-date d-block"></small>
+                                </div>
+                                <div class="row py-2 px-3" style="height:400px;">
                                     <canvas id="talleresChart"></canvas>
                                 </div>
-                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
-                                    <div class="text-center w-100">
-                                        <h6 class="text-muted">Grupos</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                    <div class="text-center w-100">
-                                        <hr>
-                                        <h6 class="text-muted">Talleres</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2" id="usuarios_chart" role="tabpanel" aria-labelledby="
-                        nav-profile-tab">
-                            <div class="row py-2 px-3">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="d-block">Usuarios</h4>
+                            <div class="tab-pane fade chart-container cards-dash" id="usuarios_chart" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <div class="row py-2 px-3">
+                                    <div class="w-100">
+                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Usuarios</h4>
+                                    </div>
+                                    <small class="text-muted today-date d-block"></small>
                                 </div>
-                                <small class="text-muted today-date d-block"></small>
-                            </div>
-                            <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0" style="height:400px;">
+                                <div class="row py-2 px-3" style="height:400px;">
                                     <canvas id="usuariosChart"></canvas>
                                 </div>
-                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
-                                    <div class="text-center w-100">
-                                        <h6 class="text-muted">Profesores</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                    <div class="text-center w-100">
-                                        <hr>
-                                        <h6 class="text-muted">Usuarios</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                    <div class="text-center w-100">
-                                        <hr>
-                                        <h6 class="text-muted">Administradores</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                    <div class="text-center w-100">
-                                        <hr>
-                                        <h6 class="text-muted">Morosos</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade chart-container bg-white rounded shadow p-3 mt-2" id="matricula_chart" role="tabpanel" aria-labelledby="nav-contact-tab">
-                            <div class="row py-2 px-3">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="d-block">Matricula</h4>
-                                </div>
-                                <small class="text-muted today-date d-block"></small>
-                            </div>
-                            <div class="row py-2 px-3">
-                                <div class="col-md-9 px-0" style="height:400px;">
-                                    <canvas id="matriculaChart"></canvas>
-                                </div>
-                                <div class="col-md-3 d-flex align-content-stretch flex-wrap">
-                                    <div class="text-center w-100">
-                                        <h6 class="text-muted">Matriculados</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
+                            <div class="tab-pane fade chart-container cards-dash" id="casilleros_chart" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                <div class="row py-2 px-3">
+                                    <div class="w-100">
+                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Casilleros</h4>
                                     </div>
-                                    <div class="text-center w-100">
-                                        <hr>
-                                        <h6 class="text-muted">Desmatriculados</h6>
-                                        <h1 id="talleres-stats" class="text-center text-secondary"></h1>
-                                    </div>
+                                    <small class="text-muted today-date d-block"></small>
+                                </div>
+                                <div class="row py-2 px-3" style="height:400px;">
+                                    <canvas id="casillerosChart"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white w-100 shadow rounded-lg">
-                        
+                    <div class="col-md-4 px-1">
+                        <div class="cards-dash" style="height: 503px;">
+                            <div class="row py-2 px-3">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="row py-2 px-3" style="height:400px;">
+                                <canvas id="pieDonutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-auto mt-2 mb-4">
+                    <div class="w-100 bg-white rounded shadow" style="height: 500px;">
+                        <div class="row py-2 mx-3 pt-4 d-flex justify-content-between">
+                            <div class="col-8 pl-0">
+                                <div class="w-100">
+                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Usuarios Nuevos</h4>
+                                </div>
+                                <small class="text-muted today-date d-block"></small>
+                            </div>
+                            <div class="col-4 pl-0">
+                                <a class="btn btn-primary btn-sm float-right" href="/admin/comprobacion" role="button"><i class="fas fa-cog"></i> Confirmar Usuarios</a>
+                            </div>
+                        </div>
+                        <div class="row mx-0 py-2 w-100" style="height:400px; overflow-y: auto;">
+                            <table class="table table-hover w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cedula</th>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataListUsuariosNuevos">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

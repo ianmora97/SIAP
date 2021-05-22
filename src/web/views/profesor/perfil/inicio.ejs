@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Clases</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+</head>
+<body style="overflow-x:hidden ;">
+    
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
+    <div class="modal fade" id="modalAnotaciones" tabindex="-1" role="dialog" aria-labelledby="modalAnotaciones" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header bg-secondary">
+                        <h5 class="modal-title text-white">Crear anotacion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <div class="modal-body">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;" id="alertasucess">
+                        <strong>Anotacion Creada!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;" id="alertadanger">
+                        <strong>La anotacion no se pudo crear!</strong>
+                        <p class="mb-0" id="erroresAlert"></p>
+                        <button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="position-relative">
+                            <span class="sr-only" id="cedulaEstudianteGet"></span>
+                            <div class=" container-fluid my-0 border border-bottom-0" id="scrollText" style="height: 300px; overflow-y: auto;" >
+                                <div class="h-100 d-flex justify-content-end flex-column" id="messagesText">
+
+                                </div>
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <input type="text" class="rounded-0 form-control mt-0" name="anotacion" id="anotacionEstudiante" rows="1" style="resize: none;" placeholder="Escribir anotación...">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-success" id="crearAnotacionButton"><i class="fas fa-paper-plane" id="i_send"></i></button>
+                                </div>
+                            </div>
+                            <style>
+                                #messagesText::-webkit-scrollbar {
+                                    width: 8px;
+                                }
+                                #messagesText::-webkit-scrollbar-thumb {
+                                    background-color: darkgrey;
+                                }
+                                #messagesText::-webkit-scrollbar-track {
+                                    border-radius: 8px;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar {
+                                    width: 4px;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar-thumb {
+                                    background-color: darkgrey;
+                                }
+                                #anotacionEstudiante::-webkit-scrollbar-track {
+                                    border-radius: 8px;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('perfilHeader') %>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0" id="breadcrumbPages">
+            <li class="breadcrumb-item active"><a href="#">Clases</a></li>
+            <li class="breadcrumb-item" id="breadcrum-item-listaestudiantes" style="display: none;"><a href="#">Lista de Estudiantes</a></li>
+            <li class="breadcrumb-item" id="breadcrum-item-estudiantesInfo" style="display: none;"><a href="#">Estudiante</a></li>
+        </ol>
+    </nav>
+    <div class="container mt-3">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertaNoHay">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
+        </div>
+        
+        <script>
+          $(".alert").alert();
+        </script>
+        <nav class="d-flex justify-content-between" aria-label="breadcrumb" style="height: 40px;">
+            <button type="button" class="btn" data-page="0" id="pag_ant" style="display: none;"><i class="fas fa-chevron-left"></i></button>
+        </nav>
+        <div id="contentLista" style="min-height: 600px; margin-bottom: 100px;">
+            <div id="clasesLista">
+                
+            </div>
+            <div id="EstudiantesPorClaseLista" style="display: none;">
+                
+            </div>
+            <div id="estudianteInformacionLista" style="display: none;">
+                
+            </div>
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../js/profesor/listaEstudiantes.js"></script>
+</body>
+</html>

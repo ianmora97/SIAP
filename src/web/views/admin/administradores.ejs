@@ -1,0 +1,319 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="en" class="h-100">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Usuarios - Administradores</title>
+     <link rel="stylesheet" href="../../css/bootstrap.css">
+     <link rel="stylesheet" href="../../css/general.css">
+     <link rel="stylesheet" href="../../css/datatables.min.css">
+     <link rel="stylesheet" href="../../css/dashboard.css"/>
+     <link rel="stylesheet" href="../../css/adminPanel.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+     <link rel="stylesheet" href="../../css/animate.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
+     <script src="../../js/jq-bs-bundle.js"></script> 
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+    <% if(usuario.rol > 3){ %>
+    <div class="modal fade" id="modalAdd" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header py-1 pl-3">
+                    <h5 class="modal-title ml-3" id="staticBackdropLabel">Agregar un administrador</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4>Datos del administrador</h4>
+                    <div class="alert alert-sucess alert-dismissible fade show" role="alert" style="display: none;">
+                        <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/279/check-mark-button_2705.png" width="20px">
+                        <strong>Administrador Agregado</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="row mx-auto">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="cedulaAdd">Cedula</label>
+                                <input type="text" class="form-control" id="cedulaAdd" minlength="9" maxlength="12">
+                            </div>
+                            <div class="form-group">
+                                <label for="NombreAdd">Nombre</label>
+                                <input type="text" class="form-control" id="NombreAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidosAdd">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidosAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="correoAdd">Correo</label>
+                                <input type="text" class="form-control" id="correoAdd" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                            </div>
+                            
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="sexoAdd">Sexo</label>
+                                <select class="custom-select" id="sexoAdd">
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="UsuarioAdd">Usuario</label>
+                                <input type="text" class="form-control" id="UsuarioAdd">
+                            </div>
+                            <div class="form-group">
+                                <label for="rolAdd">Rol</label>
+                                <select class="custom-select" id="rolAdd">
+                                    <option value="3">3 Administrador</option>
+                                    <option value="4">4 Administrador con privilegios</option>
+                                    <option value="5">5 Super Usuario</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="claveAdd">Clave de acceso</label>
+                                <input type="password" class="form-control" id="claveAdd" minlength="8" maxlength="20">
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-rojo" id="progreso_clave" role="progressbar" 
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="text-white" id="cantidad_caracteres"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarUsuario()">
+                        <div class="spinner-border spinner-border-sm" role="status" id="agregarBotonAdmin" style="display: none;">
+                            <span class="sr-only">Loading...</span>
+                        </div> Agregar Administrador
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalEdit" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="editLabelTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header py-1 pl-3">
+                    <h5 class="modal-title ml-3" id="editLabelTitle">Administrador</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <span class="sr-only" id="idAdministradorEdit"></span>
+                <div class="modal-footer py-0">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" onclick="eliminarAdmin()">Eliminar Administrador</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%}%>
+     <div class="d-flex" id="wrapper">
+         <%- include('menuDashboard') %>
+         <div id="page-content-wrapper">
+             <%- include('headerDashboard') %>
+             <%- include('filterEstudianteDashboard') %>
+             
+             <nav aria-label="breadcrumb ">
+                 <ol class="breadcrumb ">
+                     <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                     <li class="breadcrumb-item"><a href="#">Administradores</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Lista de Administradores</li>
+                 </ol>
+             </nav>
+             <div class="container-fluid">
+                 <div class="card border-0 shadow-sm my-3">
+                     <div class="card-body py-2">
+                         <div class="row">
+                             <div class="col-md-6 ">
+                                 <h2 class="font-weight-bolder">Lista de Administradores</h2>
+                                 <small class="text-muted">En esta seccion se muestra la lista de los administradores del sistema <br>
+                                    solo un administrador puede agregar a un administrador</small><br>
+                                 <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="administradores_total_stats">0</h1>
+                                 <small class="text-muted">Total de Administradores&nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="superusuarios_stats">0</h1>
+                                 <small class="text-muted">Super Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+
+                         </div>
+                     </div>
+                 </div>
+                 <div class="card border-0 shadow">
+                    <nav>
+                        <div class="nav bg-light" id="nav-tab" role="tablist">
+                            <a class="nav-link-casilleros active" id="nav-lista-tab" data-toggle="tab" 
+                            href="#nav-lista" role="tab" aria-controls="nav-lista" aria-selected="true">Lista</a>
+                            <% if(usuario.rol == 5){ %>
+                            <a class="nav-link-casilleros" id="nav-querys-tab" data-toggle="tab" 
+                            href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false"><i class="ri-terminal-line text-info"></i> Panel de administracion</a>
+                            <%}%>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-lista" role="tabpanel" aria-labelledby="nav-lista-tab">
+                            <div class="card-body px-2 py-2">
+                                <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                                    <div class="col-md-6 pl-1 pr-0">
+                                        <div class="input-group flex-nowrap">
+                                            <div class="input-group-prepend">
+                                                <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                            </div>
+                                            <input type="search" class="form-control border-0 shadow-none bg-white" 
+                                            onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-around px-0">
+                                        <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                            <div class="col-5 d-flex align-items-center">
+                                                <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
+                                            </div>
+                                            <div class="col-7 d-flex align-items-center justify-content-end pr-2" style="max-height: 40px">
+                                                <% if(usuario.rol > 3){ %>
+                                                <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarAdmin"
+                                                data-toggle="modal" data-target="#modalAdd"
+                                                >Agregar <i class="fas fa-plus-square"></i></button>
+                                                <%}%>
+                                                <a href="/admin/administradores" name="actualizar_lista" id="actualizar_lista" 
+                                                data-toggle="tooltip" data-placement="top" title="Actualizar lista"
+                                                class="btn bg-white btn-sm" style="border-radius: 50px;"><i class="fas fa-sync-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                    <table class="table custom-table table-responsive-md table-borderless" id="administradores_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
+                                        <thead>
+                                            <tr>
+                                                <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--Aqui va la foto-->
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
+                                                <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-level-up"></i> Usuario</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Correo</th>
+                                                <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Rol</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="lista_administradores">
+                    
+                                            </tbody>
+                                    </table>
+                                    <div class="d-flex align-items-center align-self-end border-info w-100">
+                                        <div class="row w-100 ml-0">
+                                            <div class="col-md-6 d-flex justify-content-start text-muted pl-0" >
+                                                <small id="informacionTable" class="d-flex align-items-end"></small>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-end" id="botonesCambiarTable">
+        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                        <% if(usuario.rol == 5){ %>
+                        <div class="tab-pane fade" id="nav-querys" role="tabpanel" aria-labelledby="nav-querys-tab">
+                            <div class="card-body px-2 py-2" style="height: 65vh; overflow-y: auto;">
+                                <div class="row mx-0 pl-0">
+                                    <div class="col-lg-5 pl-0" style="height: 60vh; overflow-y: auto;">
+                                        <h4>Base de datos</h4>
+                                        <ul class="pl-0" id="myUL">
+                                            <li><span class="caret pl-0"><i class="fas fa-chevron-right"></i> siapd</span>
+                                                <ul class="nested">
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Tables</span>
+                                                        <ul class="nested" id="ulTables">
+                                                            
+                                                        </ul>
+                                                    </li>  
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Views</span>
+                                                        <ul class="nested" id="ulViews">
+
+                                                        </ul>
+                                                    </li>  
+                                                    <li><span class="caret"><i class="fas fa-chevron-right"></i> Procedures</span>
+                                                        <ul class="nested" id="ulProde">
+
+                                                        </ul>
+                                                    </li>  
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                        
+                                        <script>
+                                            
+                                        </script>
+                                    </div>
+                                    <div class="col-lg-7 border-right right-stick">
+                                        <div class="form-group">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <label for="scripts">Ejecutar Scripts a la base de datos</label>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btn btn-info btn-sm" onclick="runQueryIntoBase()">Run Query</button>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div contenteditable="true" class="form-control mt-2" 
+                                            id="scripts" style="height: 20vh; overflow-y: auto;">
+                                                
+                                            </div>
+                                            <div class="border rounded mt-3" 
+                                            id="resultScript" style="height: 30vh; overflow-y: auto;">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
+                    </div>
+                 </div>
+             </div>
+             <%- include('footerDashboard') %>
+         </div>
+             
+         </div>
+     </div>
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+     <script src="../../js/admin/administradores.js"></script>
+ </body>
+ </html>

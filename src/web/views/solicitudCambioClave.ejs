@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Cambiar Clave</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
+</head>
+<body class="d-flex flex-column h-100 bg-light">
+    <div class="container my-auto" style="z-index: 3;">
+        <div class="w-100 m-auto bg-white shadow rounded-lg p-5 " style="max-width: 500px;">
+            <h3>Solicitud cambio de clave</h3>
+            <p class="text-muted">Se le enviara al correo una solicitud para cambiar la clave</p>
+            <div class="w-100 m-auto" style="max-width: 450px;">
+                <%if(typeof fb != "undefined"){%>
+                    <%if(fb.text != "GOOD"){%>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> <%= fb.error %>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <%}%>
+                    <%if(fb.text == "GOOD"){%>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Solicitud enviada!</strong> Revise su correo para cambiar la clave
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <%}%>
+                <%}%>
+                <form action="/solicitud/cambioClave" method="post">
+                    <div class="form-group">
+                        <label for="inputEmail">Cedula</label>
+                        <input type="text" id="cedula" name="cedula" class="form-control animate__animated animate__pulse animate__fast" placeholder="Cedula..." required="" autofocus="">
+                        <small class="text-muted">Numero de cedula con el que se encuentra registrado en el sistema</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inputPassword">Correo</label>
+                        <input type="email" id="correo" name="correo" class="form-control animate__animated animate__pulse animate__fast animate__delay-2s" placeholder="Correo..." required="">
+                        <small class="text-muted">Correo con el que se encuentra registrado en el sistema</small>
+                    </div>
+
+                    <button class="btn btn-lg btn-secondary btn-block mt-4" type="submit" id="inciarSesion">Enviar Solicitud</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

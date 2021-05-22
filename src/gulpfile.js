@@ -22,16 +22,47 @@ gulp.task('animate', function() {
 gulp.task('js', function() {
     return gulp.src([
             'node_modules/jquery/dist/jquery.js',
-            'node_modules/popper.js/dist/umd/popper.min.js',
-            'node_modules/bootstrap/dist/js/bootstrap.js'
+            'node_modules/bootstrap/dist/js/bootstrap.bundle.js'
         ])
         .pipe(concat('jq-bs-bundle.js'))
         .pipe(gulp.dest('web/js'));
 });
 
+// fullCalendar JS
+gulp.task('fcjs', function() {
+    return gulp.src([
+            'node_modules/fullcalendar/main.js'
+        ])
+        .pipe(concat('fullcalendar.js'))
+        .pipe(gulp.dest('web/js'));
+});
+
+// fullCalendar CSS
+gulp.task('fccss', function() {
+    return gulp.src([
+            'node_modules/fullcalendar/main.css'
+        ])
+        .pipe(concat('fullcalendar.css'))
+        .pipe(gulp.dest('web/css'));
+});
+
+
 // watching scss/html files
-gulp.task('serve', gulp.series('sass','js','animate', function() {
+gulp.task('serve', gulp.series('sass','js','animate','fcjs','fccss', function() {
     gulp.watch("web/scss/*.scss", gulp.series('sass'));
 }));
+// gulp.task('dev', gulp.series('sass','js','animate','nodemon', function() {
+//     browserSync.init(null, {
+// 		proxy: "http://localhost:80",
+//         files: ["web/views/**/*.*"],
+//         open: false,
+//         notify: false,
+//         ui:false,
+//         port: 3000,
+// 	});
+//     gulp.watch("web/scss/*.scss", gulp.series('sass'));
+//     gulp.watch("web/views/*.ejs").on('change', browserSync.reload);
+//     gulp.watch("web/css/*.css").on('change', browserSync.reload);
+// }));
 
 gulp.task('default', gulp.series('serve'));

@@ -14,6 +14,7 @@ var con = mysql.createPool(config);
 
 con.getConnection(function(err) {
     if (err){
+        console.log(process.env.DB_HOST);
         console.log(err);
         return;
     }else{

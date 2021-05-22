@@ -1,0 +1,347 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Dashboard - Reportes - Morosidad</title>
+    <link rel="stylesheet" href="../../../css/bootstrap.css">
+    <link rel="stylesheet" href="../../../css/general.css">
+    <link rel="stylesheet" href="../../../css/datatables.min.css">
+    <link rel="stylesheet" href="../../../css/dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../../css/animate.css">
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <script src="../../../js/jq-bs-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
+                    <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+
+                </div>
+                <div class="modal-footer py-0 pb-2">
+                    <button type="button" class="btn btn-primary">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white" style="width: 400px; height: 250px; display: none;">
+                <!--Aqui es para verificar que sea un administrador-->
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('../menuDashboard') %>
+            <div id="page-content-wrapper">
+                <%- include('../headerDashboard') %>
+                    <%- include('../filterEstudianteDashboard') %>
+
+                        <nav aria-label="breadcrumb ">
+                            <ol class="breadcrumb ">
+                                <li class="breadcrumb-item"><a href="#">Reportes</a></li>
+
+                                <li class="breadcrumb-item active" aria-current="page">Contabilidad</li>
+                            </ol>
+                        </nav>
+                        <div class="container-fluid">
+                            <div class="card border-0 shadow-sm my-3">
+                                <div class="card-body py-2">
+                                    <div class="row">
+                                        <div class="col-md-6 ">
+                                            <h2 class="font-weight-bolder">Registros contables</h2>
+                                            <small class="text-muted">En esta seccion se muestra información básica <br>
+                                                relacionada con los registros contables<span <small>Informacion
+                                                    <br>  Actualizada hace: <span class="text-success"
+                                                        id="infoTiming"></span></small>
+                                        </div>
+                                        <div class="col border-right">
+                                            <h1 class="m-0 font-weight-bolder text-primary"
+                                                id="estudiantes_univer_can">0</h1>
+                                            <small class="text-muted">Estudiantes universitarios &nbsp; <i
+                                                    class="fas fa-align-center text-info"></i></small>
+                                        </div>
+                                        <div class="col border-right">
+                                            <h1 class="m-0 font-weight-bolder text-primary"
+                                                id="personal_admin_can">0</h1>
+                                            <small class="text-muted">Personal adminidtrativo &nbsp; <i
+                                                    class="fas fa-align-center text-info"></i></small>
+                                        </div>
+                                        <div class="col">
+                                            <h1 class="m-0 font-weight-bolder text-primary"
+                                                id="pensionados_can">0</h1>
+                                            <small class="text-muted">Pensionados &nbsp; <i
+                                                    class="fas fa-align-center text-info"></i></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <nav>
+                                <div class=" nav nav-tabs justify-content-between border-bottom-0" id="nav-tab"
+                                    role="tablist" style="min-height: 150px;">
+                                    <a class="nav-link nav-card-item col-md-3 active" id="totales_chart-tab"
+                                        data-toggle="tab" href="#total_chart" role="tab"
+                                        aria-controls="total_chart" aria-selected="true">
+                                        <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                                        <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom"
+                                            title="Ingresos totales">
+                                            <div class="p-0">
+                                                <i class="fas fa-money-bill-wave fa-2x text-info totales-ic"></i>
+                                            </div>
+                                            <div class="p-0">
+                                                <h1 id="totales-stats" class="text-center text-dark">&#x20a1;0</h1>
+                                                <label
+                                                    class="text-center align-text-top text-muted font-weight-bold d-block mb-0">Total
+                                                    de ingresos en el año</label>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                    <a class="nav-link nav-card-item col-md-3 " id="estudiantes_chart-tab"
+                                        data-toggle="tab" href="#estUni_chart" role="tab"
+                                        aria-controls="estUni_chart" aria-selected="false">
+                                        <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                                        <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom"
+                                            title="Ingresos provenientes del pago de los estudiantes universitarios">
+                                            <div class="p-0">
+                                                <i class="fas fa-users fa-2x text-success talleres-uc"></i>
+                                            </div>
+                                            <div class="p-0">
+                                                <h1 id="estudiantes-stats" class="text-center text-dark">&#x20a1;0</h1>
+                                                <label
+                                                    class="text-center align-text-top text-muted font-weight-bold d-block mb-0">Estudiantes
+                                                    universitarios</label>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                    <a class="nav-link nav-card-item col-md-3" id="perAdmin_chart-tab"
+                                        data-toggle="tab" href="#perAdmin_chart" role="tab"
+                                        aria-controls="perAdmin_chart" aria-selected="false">
+                                        <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                                        <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom"
+                                            title="Ingresos provenientes del pago de funcionarios">
+                                            <div class="p-0">
+                                                <i class="fas fa-users fa-2x text-info talleres-uc"></i>
+                                            </div>
+                                            <div class="p-0">
+                                                <h1 id="perAdmin-stats" class="text-center text-dark">&#x20a1;0</h1>
+                                                <label
+                                                    class="text-center align-text-top text-muted font-weight-bold d-block mb-0">Personnal
+                                                    adminidtrativo</label>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                    <a class="nav-link nav-card-item col-md-3" id="pensionados_chart-tab" data-toggle="tab"
+                                        href="#pensionados_chart" role="tab" aria-controls="pensionados_chart"
+                                        aria-controls="casilleros_chart" aria-selected="false">
+                                        <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
+                                        <div class="nav-item-in">
+                                            <div class="p-0">
+                                                <i class="fas fa-users fa-2x text-warning talleres-uc"></i>
+                                            </div>
+                                            <div class="p-0">
+                                                <h1 id="pensionados-stats" class="text-center text-dark">&#x20a1;0</h1>
+                                                <label
+                                                    class="text-center align-text-top text-muted font-weight-bold d-block mb-0">Pensionados</label>
+                                            </div>
+                                        </div>
+
+                                    </a>
+                                </div>
+                            </nav>
+                            <div class="row mx-auto mt-2 mb-4">
+                                <div class="col-md px-1">
+                                    <div class="tab-content w-100" id="nav-tabContent">
+
+                                        <div class="tab-pane fade show chart-container cards-dash active "
+                                            id="total_chart" role="tabpanel" aria-labelledby="total-chart-tab">
+                                            <div class="row py-2 px-3">
+                                                <div class="w-100">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">
+                                                        Total de ingresos</h4>
+                                                </div>
+                                                <small class="text-muted today-date d-block"></small>
+                                            </div>
+                                            <div class="row py-2 px-3" style="height:400px;">
+                                                <canvas id="totalChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade chart-container cards-dash" id="estUni_chart"
+                                            role="tabpanel" aria-labelledby="nav-profile-tab">
+                                            <div class="row py-2 px-3">
+                                                <div class="w-100">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">
+                                                        Ingresos provenientes de estudiantes universitarios</h4>
+                                                </div>
+                                                <small class="text-muted today-date d-block"></small>
+                                            </div>
+                                            <div class="row py-2 px-3" style="height:400px;">
+                                                <canvas id="estUniChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade chart-container cards-dash" id="perAdmin_chart"
+                                            role="tabpanel" aria-labelledby="nav-contact-tab">
+                                            <div class="row py-2 px-3">
+                                                <div class="w-100">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">
+                                                        Ingresos provenientes del personal administrativo</h4>
+                                                </div>
+                                                <small class="text-muted today-date d-block"></small>
+                                            </div>
+                                            <div class="row py-2 px-3" style="height:400px;">
+                                                <canvas id="perAdminChart"></canvas>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade chart-container cards-dash" id="pensionados_chart"
+                                            role="tabpanel" aria-labelledby="nav-contact-tab">
+                                            <div class="row py-2 px-3">
+                                                <div class="w-100">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">
+                                                        Ingresos provenientes de pensioados</h4>
+                                                </div>
+                                                <small class="text-muted today-date d-block"></small>
+                                            </div>
+                                            <div class="row py-2 px-3" style="height:400px;">
+                                                <canvas id="pensionadosChart"></canvas>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- <div class="row mx-auto mt-2 mb-4">
+                                
+                                <div class="col-md-12 px-1">
+                                    <div class="w-100 bg-white rounded shadow" style="height: 900px;">
+                                        <div class="row py-2 mx-3 pt-4 d-flex justify-content-between">
+                                            <div class="col-8 pl-0">
+                                                <div class="w-100">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">
+                                                        Usuarios nuevos</h4>
+                                                </div>
+                                                <small class="text-muted today-date d-block"></small>
+                                            </div>
+                                            <div class="col-4 pl-0">
+                                                <a class="btn btn-primary btn-sm float-right" href="/admin/comprobacion"
+                                                    role="button"><i class="fas fa-cog"></i> Confirmar Usuarios</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mx-0 py-2 w-100" style="height:800px; overflow-y: auto;">
+
+
+                                            <canvas id="myChart"></canvas>
+
+
+
+                                            <script>
+                                                // === include 'setup' then 'config' above ===
+                                                const labels = [
+                                                    'January',
+                                                    'February',
+                                                    'March',
+                                                    'April',
+                                                    'May',
+                                                    'June',
+                                                    'July'
+                                                ];
+                                                const data = {
+                                                    labels: labels,
+                                                    datasets: [{
+                                                        label: 'My First Dataset',
+                                                        data: [65, 59, 80, 81, 56, 55, 40],
+                                                        backgroundColor: [
+                                                            'rgba(255, 99, 132, 0.2)',
+                                                            'rgba(255, 159, 64, 0.2)',
+                                                            'rgba(255, 205, 86, 0.2)',
+                                                            'rgba(75, 192, 192, 0.2)',
+                                                            'rgba(54, 162, 235, 0.2)',
+                                                            'rgba(153, 102, 255, 0.2)',
+                                                            'rgba(201, 203, 207, 0.2)'
+                                                        ],
+                                                        borderColor: [
+                                                            'rgb(255, 99, 132)',
+                                                            'rgb(255, 159, 64)',
+                                                            'rgb(255, 205, 86)',
+                                                            'rgb(75, 192, 192)',
+                                                            'rgb(54, 162, 235)',
+                                                            'rgb(153, 102, 255)',
+                                                            'rgb(201, 203, 207)'
+                                                        ],
+                                                        borderWidth: 2,
+
+                                                    }]
+                                                };
+                                                const config = {
+                                                    type: 'bar',
+                                                    data: data,
+                                                    options: {
+                                                        scales: {
+                                                            y: {
+                                                                beginAtZero: true
+                                                            }
+                                                        }
+                                                    },
+                                                };
+                                                var myChart = new Chart(
+                                                    document.getElementById('myChart'),
+                                                    config
+                                                );
+                                            </script>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <%- include('../footerDashboard') %>
+            </div>
+
+    </div>
+    </div>
+    <script src="../../../js/assets/datatables.min.js"></script>
+    <script src="../../../js/admin/reporte.contabilidad.js"></script>
+    <script src="../../js/admin/chart-dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+</html>

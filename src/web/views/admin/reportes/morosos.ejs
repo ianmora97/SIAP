@@ -1,0 +1,179 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="en" class="h-100">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Dashboard - Reportes - Morosidad</title>
+     <link rel="stylesheet" href="../../../css/bootstrap.css">
+     <link rel="stylesheet" href="../../../css/general.css">
+     <link rel="stylesheet" href="../../../css/datatables.min.css">
+     <link rel="stylesheet" href="../../../css/dashboard.css"/>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+     <link rel="stylesheet" href="../../../css/animate.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
+     <script src="../../../js/jq-bs-bundle.js"></script> 
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
+                <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+
+            </div>
+            <div class="modal-footer py-0 pb-2">
+                <button type="button" class="btn btn-primary">
+                    Agregar
+                </button>
+            </div>
+            </div>
+            <div class="bg-white" style="width: 400px; height: 250px; display: none;"> 
+                <!--Aqui es para verificar que sea un administrador-->
+            </div>
+        </div>        
+    </div>
+     <div class="d-flex" id="wrapper">
+         <%- include('../menuDashboard') %>
+         <div id="page-content-wrapper">
+             <%- include('../headerDashboard') %>
+             <%- include('../filterEstudianteDashboard') %>
+             
+             <nav aria-label="breadcrumb ">
+                 <ol class="breadcrumb ">
+                     <li class="breadcrumb-item"><a href="#">Reportes</a></li>
+                     <li class="breadcrumb-item"><a href="#">Morisidad</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Lista de Estudiantes Morosos</li>
+                 </ol>
+             </nav>
+             <div class="container-fluid">
+                 <div class="card border-0 shadow-sm my-3"> 
+                     <div class="card-body py-2">
+                         <div class="row">
+                             <div class="col-md-6 ">
+                                 <h2 class="font-weight-bolder">Lista de Estudiantes Morosos</h2>
+                                 <small class="text-muted">En esta seccion se muestra la lista de los estudiantes que se encuentran <br>
+                                    actualmente en un estado de <span class="badge badge-danger">Morosidad</span></small><br>
+                                 <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_matriculados_stats">0</h1>
+                                 <small class="text-muted">Estudiantes Activos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                             <div class="col border-right">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_inactivos_stats">0</h1>
+                                 <small class="text-muted">Estudiantes Morosos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                             <div class="col">
+                                 <h1 class="m-0 font-weight-bolder text-primary" id="estudiantes_morosos_stats">0</h1>
+                                 <small class="text-muted">Estudiantes  &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="card border-0 shadow">
+                     <div class="card-body px-2 py-2">
+                         <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                             <div class="col-md-6 pl-1 pr-0">
+                                 <div class="input-group flex-nowrap">
+                                     <div class="input-group-prepend">
+                                         <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                     </div>
+                                     <input type="search" class="form-control border-0 shadow-none bg-white" 
+                                     onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                                 </div>
+                                 
+                             </div>
+                             <div class="col-md-6 d-flex justify-content-around px-0">
+                                 <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                     <div class="col-5 d-flex align-items-center">
+                                         <div id="showlenghtentries" class="d-flex align-items-center m-0"></div>
+                                     </div>
+                                     <div class="col-7 d-flex align-items-center justify-content-end pr-2" style="max-height: 40px">
+                                        <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarEstudiante"
+                                        data-toggle="tooltip" data-placement="top" title="Agregar un estudiante" 
+                                        >Agregar <i class="fas fa-plus-square"></i></button>
+                                       
+                                         <div class="btn-group dropleft">
+                                             <button type="button" class="btn btn-secondary btn-sm mr-2" style="border-radius: 10px;" 
+                                             data-toggle="tooltip" data-placement="top" title="Filtrar"
+                                             onclick="openFilter()" id="dropdownFiltrar">
+                                                 Filtrar <i class="fas fa-filter"></i>
+                                             </button>
+                                         </div>
+ 
+                                         <button type="button" name="actualizar_lista" id="actualizar_lista" 
+                                         data-toggle="tooltip" data-placement="top" title="Actualizar lista"
+                                         class="btn bg-white btn-sm" style="border-radius: 50px;"><i class="fas fa-sync-alt"></i></button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="row w-100 mx-0" style="height: 55vh; overflow-y: auto;">
+                             <table class="table custom-table table-responsive-md table-borderless" id="morosos_Table" data-order="[[ 2, &quot;asc&quot; ]]">
+                                 <thead>
+                                     <tr>
+                                         <th class="bg-dark text-white sticky-top " style="width: 40px;" scope="col">&nbsp;</th> <!--Aqui va la foto-->
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
+                                         <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-money"></i> Pago</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-calendar"></i> Estado</th>
+                                         <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
+                                     </tr>
+                                     </thead>
+                                     <tbody id="lista_morosos">
+             
+                                     </tbody>
+                             </table>
+                             <div class="d-flex align-items-center align-self-end border-info w-100">
+                                 <div class="row w-100 ml-0">
+                                     <div class="col-md-6 d-flex justify-content-start text-muted pl-0" >
+                                         <small id="informacionTable" class="d-flex align-items-end"></small>
+                                     </div>
+                                     <div class="col-md-6 d-flex justify-content-end" id="botonesCambiarTable">
+ 
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="text-center w-100" id="cargarDatosSpinner">
+                                 <div class="spinner-border" role="status">
+                                   <span class="sr-only">Loading...</span>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                     </div>
+                 </div>
+             </div>
+             <%- include('../footerDashboard') %>
+         </div>
+             
+         </div>
+     </div>
+     <script src="../../../js/assets/datatables.min.js"></script>
+     <script src="../../../js/admin/reporte.morosidad.js"></script>
+ </body>
+ </html>

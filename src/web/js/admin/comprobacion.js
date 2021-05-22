@@ -1,74 +1,88 @@
 var estudiantes = [];
 
-function loaded(event){
+function loaded(event) {
     events(event);
 }
 
-function events(event){
+function events(event) {
     traer_estudiantes();
     toogleMenu();
-    load_stats();
     get_today_date();
     cambiarEstadoShow();
     cambiarEstadoSend();
-    filtrarXNuevos();
-    filtrarXConfirmados();
-    filtrarXFuncionarios();
-    filtrarXEstudiantes();
+    filtrarX();
     filtrarTodos();
-    buscar();
 }
-function filtrarXFuncionarios() {
-    $('#filtrar_funcionarios').on('click',function(){
+const animateCSS = (element, animation) =>
+
+    // We create a Promise and return it
+    new Promise((resolve, reject) => {
+        let prefix = 'animate__';
+        const animationName = `${prefix}${animation}`;
+        const node = document.querySelector(element);
+        console.log(node)
+
+        node.classList.add(`${prefix}animated`, animationName);
+
+        // When the animation ends, we clean the classes and resolve the Promise
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
+        }
+
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
+function closeFilter(params) {
+    $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
+    setTimeout(() => {
+        $('#containerFilter').removeClass('animate__animated animate__fadeOutRight')
+        $('#containerFilter').hide();
+    }, 1000);
+}
+function openFilter(params) {
+    $('#containerFilter').show();
+    animateCSS('#containerFilter', 'fadeInRight')
+}
+function filtrarX() {
+    $('#filtrar_funcionarios').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarFuncionarios(estudiantes));
     });
-}
-function filtrarXEstudiantes() {
-    $('#filtrar_estudiantes').on('click',function(){
+    $('#filtrar_estudiantes').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarEstudiantes(estudiantes));
     });
-}
-function filtrarXConfirmados() {
-    $('#filtrar_confirmados').on('click',function(){
+    $('#filtrar_confirmados').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarConfirmados(estudiantes));
     });
-}
-function filtrarXNuevos() {
-    $('#filtrar_nuevos').on('click',function(){
+    $('#filtrar_nuevos').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(filtrarNuevos(estudiantes));
     });
-}
-function filtrarTodos(){
-    $('#actualizar_lista').on('click',function(){
+    $('#filtrar_todos').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
         mostrarUsuarios(estudiantes);
     });
 }
-function buscar() {
-    $('#button_search').on('click',function () {
-        let texto = $('#barraBuscar').val();
-        if(texto == '') mostrarUsuarios(estudiantes);
-        else mostrarUsuarios(filtrarBuscar(estudiantes,texto));
+function filtrarTodos() {
+    $('#actualizar_lista').on('click', function () {
+        let table = $('#estudiantes_TableOrder').DataTable();
+        table.destroy();
+        traer_estudiantes();
     });
-    $('#barraBuscar').on('keydown',function (event) {
-        if(event.which == 13){
-            let texto = $('#barraBuscar').val();
-            if(texto == '') mostrarUsuarios(estudiantes);
-            else mostrarUsuarios(filtrarBuscar(estudiantes,texto));
-        }
-    });
-    $('#barraBuscar').on('keyup',(cantidad)=>{
-        if($('#barraBuscar').val() != ''){
-            mostrarUsuarios(buscarInlcudes(estudiantes,$('#barraBuscar').val().toUpperCase()));
-        }else{
-            mostrarUsuarios(estudiantes);
-        }
-    });
-    
 }
+
 function buscarInlcudes(estudiantes, buscar) {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {
-        if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar) ) {
+        if (estudiantes[i].nombre.includes(buscar) || estudiantes[i].apellido.includes(buscar) || estudiantes[i].cedula.includes(buscar)) {
             result.push(estudiantes[i]);
         }
     }
@@ -84,53 +98,85 @@ function get_today_date() {
     $('.today-date').text(today);
 }
 
-function load_stats() {
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/cantidadRegistros",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_registrados_stats').text(response.cantidad);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/usuariosVerificados",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_verificados_stats').text(response.cant);
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/stats/usuariosNuevos",
-        contentType: "application/json"
-    }).then((response) => {
-        $('#usuarios_nuevos_stats').text(response.cant);
-    }, (error) => {
-
-    });
+function load_stats(usuarios) {
+    let cantidad = usuarios.length;
+    let verificados = 0;
+    let nuevos = 0;
+    for (let i of usuarios) {
+        if (i.estado) verificados++;
+        if (!i.estado) nuevos++;
+    }
+    $('#usuarios_registrados_stats').text(cantidad);
+    $('#usuarios_verificados_stats').text(verificados);
+    $('#usuarios_nuevos_stats').text(nuevos);
+}
+function searchonfind() {
+    var table = $('#estudiantes_TableOrder').DataTable();
+    let val = $('#barraBuscar').val();
+    let result = table.search(val).draw();
 
 }
 function traer_estudiantes() {
+    let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
         url: "/admin/usuariostemp",
         contentType: "application/json"
     }).then((usuarios) => {
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime / 1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').text(t);
         $('#cargarDatosSpinner').hide();
         estudiantes = usuarios;
         mostrarUsuarios(usuarios);
+        load_stats(usuarios);
     }, (error) => {
     });
 }
+
 function mostrarUsuarios(usuarios) {
     $('#lista_usuarios_temporales').html(' ');
-    usuarios.forEach(u =>{
+    usuarios.forEach(u => {
         llenarListaUsuarios(u);
     });
+    let database = '#estudiantes_TableOrder';
+    var table = $(database).DataTable({
+        "language": {
+            "zeroRecords": "No se encontraron estudiantes",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "Mostrar _MENU_ ",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first": 'Primera',
+                    "previous": 'Anterior',
+                    "next": 'Siguiente',
+                    "last": 'Última'
+                }
+            }
+        }
+    });
+    $('#informacionTable').html('');
+    $('#botonesCambiarTable').html('');
+    $('#showlenghtentries').html('');
+
+    $('#estudiantes_TableOrder_filter').css('display', 'none');
+    $('#estudiantes_TableOrder_info').appendTo('#informacionTable');
+
+    $('#estudiantes_TableOrder_paginate').appendTo('#botonesCambiarTable');
+
+
+    $('#estudiantes_TableOrder_length').appendTo('#showlenghtentries');
+    $('#estudiantes_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+    $('#estudiantes_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
 }
 function llenarListaUsuarios(u) {
     let id = u.id;
@@ -138,26 +184,25 @@ function llenarListaUsuarios(u) {
     let nombre = u.nombre;
     let apellido = u.apellido;
     let nacimiento = u.nacimiento;
-    let username = u.usuario;
     let sexo = u.sexo;
-    let tipo = u.tipo_usuario == '1' ? 'Estudiante' : 'Funcionario';
-    let creado = u.creado;
+    let tipo = u.tipo_usuario;
+    let creado = u.creado.substring(0, u.creado.indexOf(' '));
     let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
     let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
     $('#lista_usuarios_temporales').append(
-        '<tr>'+
-        '<td>'+cedula+'</td>'+
-        '<td>'+nombre+'</td>'+
-        '<td>'+apellido+'</td>'+
-        '<td>'+nacimiento+'</td>'+
-        '<td>'+username+'</td>'+
-        '<td>'+sexo+'</td>'+
-        '<td>'+tipo+'</td>'+
-        '<td>'+creado+'</td>'+
-        '<td><span type="button" class="badge badge-pill badge-'+colorEstado+'" data-toggle="modal" data-target="#modalCambiarEstado" data-cedula="'+cedula+'" data-nombre="'+nombre+' '+apellido+'">'+estado+'</span></td>'+
+        '<tr style="height:calc(55vh / 10);">' +
+        '<td>' + cedula + '</td>' +
+        '<td>' + nombre + ' ' + apellido + '</td>' +
+        '<td>' + nacimiento + '</td>' +
+        '<td>' + sexo + '</td>' +
+        '<td>' + tipo + '</td>' +
+        '<td>' + creado + '</td>' +
+        '<td> <span role="button" class="badge badge-' + colorEstado + ' w-75" style="font-size:14px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
+        'data-cedula="' + cedula + '" data-nombre="' + nombre + ' ' + apellido + '">' + estado + '</span></td>' +
         '</tr>'
     );
 }
+
 function cambiarEstadoShow() {
     $('#modalCambiarEstado').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -172,39 +217,43 @@ function cambiarEstadoSend() {
         let cedula = $('#cedulaTarget').text();
         let email = 'ianmorar03@gmail.com';
         let nombre = $('#nombreTarget').text();
-        let data = {cedula, email, nombre}
+        let data = { cedula, email, nombre }
         $.ajax({
             type: "POST",
-            url: "/estudiante/insertarUsuarioPermanente",
+            url: "/admin/comprobacion/insertarUsuarioPermanente",
             data: JSON.stringify(data),
             contentType: "application/json"
         }).then((response) => {
             console.log(response);
-            $('#modalCambiarEstado').modal('hide');
+            location.href = "/admin/comprobacion";
+            let table = $('#estudiantes_TableOrder').DataTable();
+            table.destroy();
             traer_estudiantes();
         }, (error) => {
-            $('#alerta_error_estado').css('display','block');
-        });        
+            $('#alerta_error_estado').css('display', 'block');
+        });
     });
     $('#CambiarEstadoRechazarBoton').on('click', function () {
         let cedula = $('#cedulaTarget').text();
-        let data = {cedula}
+        let data = { cedula }
         $.ajax({
             type: "POST",
-            url: "/estudiante/rechazarEstudiante",
+            url: "/admin/comprobacion/rechazarEstudiante",
             data: JSON.stringify(data),
             contentType: "application/json"
         }).then((response) => {
             console.log(response);
+            location.href = "/admin/comprobacion";
             $('#modalCambiarEstado').modal('hide');
-            traer_estudiantes();
+            let table = $('#estudiantes_TableOrder').DataTable();
+            table.destroy();
         }, (error) => {
-            $('#alerta_error_estado').css('display','block');
-        });        
+            $('#alerta_error_estado').css('display', 'block');
+        });
     });
 }
 function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle").click(function (e) {
         e.preventDefault();
         //$('#sidebar-wrapper').css('position','relative');
         $("#wrapper").toggleClass("toggled");
@@ -214,46 +263,48 @@ function toogleMenu() {
         //$("#sidebar-wrapper").animate({left:'-200'},1000);
     });
 }
-var filtrarNuevos = (estudiantes)=>{
+var filtrarNuevos = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if(!(estudiantes[i].estado)){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if (!(estudiantes[i].estado)) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarConfirmados = (estudiantes)=>{
+var filtrarConfirmados = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].estado)){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].estado)) {
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarEstudiantes = (estudiantes)=>{
+var filtrarEstudiantes = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario == '1')){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].tipo_usuario == 'Estudiante')) {
+            console.log('est');
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarFuncionarios = (estudiantes)=>{
+var filtrarFuncionarios = (estudiantes) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario != '1')){
+    for (let i = 0; i < estudiantes.length; i++) {
+        if ((estudiantes[i].tipo_usuario == 'Funcionario')) {
+            console.log('funcionario');
             result.push(estudiantes[i]);
         }
     }
     return result;
 }
-var filtrarBuscar = (estudiantes, s)=>{
+var filtrarBuscar = (estudiantes, s) => {
     let result = [];
-    for(let i=0;i<estudiantes.length; i++) 
-        if(estudiantes[i].nombre == s.toUpperCase() || estudiantes[i].nombre == s || estudiantes[i].cedula == s) 
+    for (let i = 0; i < estudiantes.length; i++)
+        if (estudiantes[i].nombre == s.toUpperCase() || estudiantes[i].nombre == s || estudiantes[i].cedula == s)
             result.push(estudiantes[i]);
     return result;
 }
