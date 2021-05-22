@@ -156,7 +156,7 @@ function eliminarAdmin(){
     }, (error) => {
       
   }); 
-}// 	moiso0499@outlook.com  	117410572
+}
 function agregarUsuario(){
   let bearer = 'Bearer '+g_token;
   let cedula = $('#cedulaAdd').val();

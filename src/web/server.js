@@ -69,6 +69,7 @@ app.use(require('./routes/admin/reportes/uso.routes'));
 
 app.use(require('./routes/admin/estudiante/admin.routes'));
 app.use(require('./routes/admin/administradores/admin.routes'));
+app.use(require('./routes/admin/profesores/profesor.routes'));
 app.use(require('./routes/admin/talleres/talleres.routes'));
 app.use(require('./routes/admin/comprobacion/admin.routes'));
 

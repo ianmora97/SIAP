@@ -19,12 +19,13 @@ const animateCSS = (element, animation) =>
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
 
+var g_mapProfesores = new Map();
+
 function loaded(event){
   events(event);
 }
 
 function events(event){
-  traerTablas();
   bringDB();
   toogleMenu();
   modals();
@@ -43,10 +44,45 @@ function toogleMenu() {
 $(function () {
   $('[data-toggle="popover"]').popover();
 })
-function modals() {
-  
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+function openModalCameras() {
+  setTimeout(() => {
+      $('#modalTakePic').modal('show');
+  }, 1000);
 }
-function agregarUsuario(){
+function modals() {
+  $('#modalTakePic').on('hidden.bs.modal', function (event) {
+        
+    if(f_videoRecording){
+        var videoEl = document.getElementById('theVideo');
+        stream = videoEl.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        videoEl.srcObject = null;
+    }
+    $('#modalVerProfesor').on('show.bs.modal', function (event) {
+
+      var button = $(event.relatedTarget)
+      var recipient = ""+button.data('id')
+      let profesor = g_mapProfesores.get(recipient)
+      console.log(profesor,recipient)
+
+      var modal = $(this)
+      modal.find('.modal-title').text(profesor.nombre + " " + profesor.apellido)
+
+      $('#idprofesor').html(profesor.id_profesor)
+      $('#cedulaprofesor').html(profesor.cedula)
+
+      $('#correo_edit').val(profesor.correo)
+      $('#Usuario_edit').val(profesor.usuario)
+  })
+})
+}
+function agregarProfesor(){
   let bearer = 'Bearer '+g_token;
   let cedula = $('#cedulaAdd').val();
   let nombre = $('#NombreAdd').val();
@@ -55,19 +91,21 @@ function agregarUsuario(){
   let clave = $('#claveAdd').val();
   let sexo = $('#sexoAdd option:selected').val();
   let usuario = $('#UsuarioAdd').val();
-  let rol = $('#rolAdd option:selected').val();
   $.ajax({
       type: "GET",
-      url: "/admin/administrador/agregarAdministrador",
-      data: {cedula,nombre,apellidos,correo,clave,sexo,usuario,rol},
+      url: "/admin/profesor/agregarProfesor",
+      data: {cedula,nombre,apellidos,correo,clave,sexo,usuario},
       contentType: "appication/json",
       headers:{
           'Authorization':bearer
       }
     }).then((response) => {
-      location.href = "/admin/administradores"
+      location.href = "/admin/profesores"
     }, (error) => {
   });
+}
+function openModal(modal){
+  $(modal).modal('show')
 }
 
 function bringDB() {
@@ -75,7 +113,7 @@ function bringDB() {
   let bearer = 'Bearer '+g_token;
   $.ajax({
       type: "GET",
-      url: "/admin/administrador/getAdministradores",
+      url: "/admin/profesores/getProfesores",
       contentType: "appication/json",
       headers:{
           'Authorization':bearer
@@ -85,28 +123,26 @@ function bringDB() {
       let a = Math.ceil(totalTime / 1000);
       let t = a == 1 ? a + ' segundo' : a + ' segundos';
       $('#infoTiming').text(t);
-      let su = response.filter(e => e.rol == 5).length;
-      let ad = response.filter(e => e.rol < 5).length;
-      $('#administradores_total_stats').html(ad);
-      $('#superusuarios_stats').html(su);
-      showAdminList(response);
+      $('#profesores_stats').html(response.length);
+      showProfesorList(response);
     }, (error) => {
   });
 }
 function searchonfind() {
-  var table = $('#administradores_TableOrder').DataTable();
+  var table = $('#profesores_TableOrder').DataTable();
   let val = $('#barraBuscar').val();
   let result = table.search(val).draw();
 }
 
-function showAdminList(data){
-  $('#lista_administradores').html();
+function showProfesorList(data){
+  $('#lista_profesores').html();
   data.forEach(e=>{
-    showRowAdminList(e)
+    g_mapProfesores.set(e.id_profesor,e);
+    showRowProfesorList(e);
   })
-  $('#administradores_TableOrder').DataTable({
+  $('#profesores_TableOrder').DataTable({
     "language": {
-        "zeroRecords": "No se encontraron estudiantes",
+        "zeroRecords": "No se encontraron profesores",
         "infoEmpty": "No hay registros disponibles!",
         "infoFiltered": "(filtrado de _MAX_ registros)",
         "lengthMenu": "Mostrar _MENU_ ",
@@ -131,305 +167,129 @@ function showAdminList(data){
   $('#botonesCambiarTable').html('');
   $('#showlenghtentries').html('');
 
-  $('#administradores_TableOrder_filter').css('display', 'none');
-  $('#administradores_TableOrder_info').appendTo('#informacionTable');
+  $('#profesores_TableOrder_filter').css('display', 'none');
+  $('#profesores_TableOrder_info').appendTo('#informacionTable');
 
-  $('#administradores_TableOrder_paginate').appendTo('#botonesCambiarTable');
+  $('#profesores_TableOrder_paginate').appendTo('#botonesCambiarTable');
   
-  $('#administradores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
+  $('#profesores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
 
 }
-function showRowAdminList(data){
-  $('#lista_administradores').append(`
+function showRowProfesorList(data){
+  let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
+  $('#lista_profesores').append(`
     <tr>
-      <td>${data.id}</td>
-      <td>${data.cedula}</td>
+      <td>${data.id_profesor}</td>
+      <td class="align-center">${foto}</td>
       <td>${data.nombre.toUpperCase() + ' '+ data.apellido.toUpperCase()}</td>
-      <td>${data.usuario}</td>
+      <td>${data.cedula}</td>
       <td>${data.correo}</td>
-      <td>${data.rol}</td>
+      <td>${data.sexo}</td>
+      <td class="text-center">
+          <span class="button-circle" role="button" data-id="${data.id_profesor}" data-toggle="modal" data-target="#modalVerProfesor">
+              <i class="fas fa-ellipsis-v"></i>
+          </span>
+      </td>
     </tr>
   `)
 }
+function openImageModal(foto,cedula) {
+  $('#modalImage').modal('show');
+  $('#cedulaHiddenCambiarFotoModal').val(cedula);
 
-function traerTablas() {
-  let bearer = 'Bearer '+g_token;
-  $.ajax({
-      type: "GET",
-      url: "/admin/administrador/getTables",
-      contentType: "appication/json",
-      headers:{
-          'Authorization':bearer
-      }
-    }).then((response) => {
-      showTableTree(response.tables).then(e=>{
-        showviewTree(response.views).then(e=>{
-          let toggler = document.getElementsByClassName("caret");
-          for (let i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function() {
-              this.parentElement.querySelector(".nested").classList.toggle("active-open");
-              $(this).find('i').toggleClass('fa-rotate-90');
-            });
-          }
-        })
-      })
-    }, (error) => {
+  $('.avatar-bg').css({
+      'background':'url('+foto+')',
+      'background-size':'cover',
+      'background-position': '50% 50%'
   });
+  $('#contentImageModal').attr('src',foto);
 }
 
-function showTableTree(data) {
-  return new Promise((resolve, reject) => {
-    let cont = 0;
-    data.forEach(e => {
-      $('#ulTables').append(`
-        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name}</span>
-            <ul class="nested" id="table_name_${e.name}">
-
-            </ul>
-        </li>
-      `);
-      e.rows.forEach(c => {
-        $(`#table_name_${e.name}`).append(`
-          <li class="pl-1">${c.Key == "PRI" ? '<i class="ri-key-line text-warning"></i>': 
-          c.Key == "MUL" ? '<i class="ri-key-2-line text-info"></i>' : '<i class="ri-archive-line text-info"></i>'} 
-          <strong role="button" ondblclick="addTableToQuery('${c.Field}')">${c.Field}</strong> <span class="text-muted">${c.Type}</span><li>
-        `);
-      })
-      cont++;
-      if(cont == data.length){
-        resolve('FINISH')
-      }
-    })
-  })
-}
-
-function showviewTree(data) {
-  return new Promise((resolve, reject) => {
-    let cont = 0;
-    data.forEach(e => {
-      $('#ulViews').append(`
-        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name}</span>
-            <ul class="nested" id="table_name_${e.name}">
-            </ul>
-        </li>
-      `);
-      e.rows.forEach(c => {
-        $(`#table_name_${e.name}`).append(`
-          <li class="pl-1">${c.Key == "PRI" ? '<i class="ri-key-line text-warning"></i>': 
-          c.Key == "MUL" ? '<i class="ri-key-2-line text-info"></i>' : '<i class="ri-archive-line text-info"></i>'} 
-          <strong role="button" ondblclick="addTableToQuery('${c.Field}')">${c.Field}</strong> <span class="text-muted">${c.Type}</span><li>
-        `);
-      })
-      cont++;
-      if(cont == data.length){
-        resolve('FINISH')
-      }
-    })
-  });
-}
-function addTableToQuery(table) {
-  let valMoment = $('#scripts').html();
-  $('#scripts').html(valMoment + table);
-}
-const editor = document.getElementById('scripts');
-const selectionOutput = document.getElementById('selection');
-
-function getTextSegments(element) {
-    const textSegments = [];
-    Array.from(element.childNodes).forEach((node) => {
-        switch(node.nodeType) {
-            case Node.TEXT_NODE:
-                textSegments.push({text: node.nodeValue, node});
-                break;
-                
-            case Node.ELEMENT_NODE:
-                textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
-                break;
-                
-            default:
-                throw new Error(`Unexpected node type: ${node.nodeType}`);
-        }
-    });
-    return textSegments;
-}
-
-
-
-function updateEditor() {
-    const sel = window.getSelection();
-    const textSegments = getTextSegments(editor);
-    const textContent = textSegments.map(({text}) => text).join('');
-    let anchorIndex = null;
-    let focusIndex = null;
-    let currentIndex = 0;
-    textSegments.forEach(({text, node}) => {
-        if (node === sel.anchorNode) {
-            anchorIndex = currentIndex + sel.anchorOffset;
-        }
-        if (node === sel.focusNode) {
-            focusIndex = currentIndex + sel.focusOffset;
-        }
-        currentIndex += text.length;
-    });
-    
-    editor.innerHTML = renderText(textContent);
-    
-    restoreSelection(anchorIndex, focusIndex);
-}
-
-function restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
-    const sel = window.getSelection();
-    const textSegments = getTextSegments(editor);
-    let anchorNode = editor;
-    let anchorIndex = 0;
-    let focusNode = editor;
-    let focusIndex = 0;
-    let currentIndex = 0;
-    textSegments.forEach(({text, node}) => {
-        const startIndexOfNode = currentIndex;
-        const endIndexOfNode = startIndexOfNode + text.length;
-        if (startIndexOfNode <= absoluteAnchorIndex && absoluteAnchorIndex <= endIndexOfNode) {
-            anchorNode = node;
-            anchorIndex = absoluteAnchorIndex - startIndexOfNode;
-        }
-        if (startIndexOfNode <= absoluteFocusIndex && absoluteFocusIndex <= endIndexOfNode) {
-            focusNode = node;
-            focusIndex = absoluteFocusIndex - startIndexOfNode;
-        }
-        currentIndex += text.length;
-    });
-    
-    sel.setBaseAndExtent(anchorNode,anchorIndex,focusNode,focusIndex);
-}
-
-function renderText(text) {
-    const words = text.split(/(\s+)/);
-    const output = words.map((word) => {
-      
-      if (checkWordColor(word,'azul')) {
-        return `<span class="text-info">${word.toUpperCase()}</span>`;
-      }
-      else if (checkWordColor(word,'rojo')) {
-        return `<span class="text-danger">${word.toUpperCase()}</span>`;
-      }else if(typeof word === 'number') {
-        return `<span class="text-warning">${word.toUpperCase()}</span>`;
-      }
-      else {
-          return word;
-      }
-    })
-    return output.join('');
-}
-function checkWordColor(palabra,color) {
-  let s_azul = ['select','from','as','join','distinct','view','call','where'
-  ,'and','update','create','in','begin','end','insert','into','procedure','delete','set'
-  ,'returns','declare','return','deterministic','default','grant','add','alter',
-  'char','all','before','after','column','databse','desc','exit','if','like'];  
-  let s_rojo = ['float','varchar','int','blob','timestamp','tinyint'];
-  if(color == 'azul'){
-    s_azul.forEach(e=>{
-      if(e === palabra){
-        return true;
-      }
-    })
-  }else if(color == 'rojo'){
-    s_rojo.forEach(e=>{
-      if(e === palabra){
-        return true;
-      }
-    })
+function readURL(input) { 
+  if (input.files && input.files[0]) {
+      var reader = new FileReader(); 
+      reader.onload = function (e) {
+          $('.avatar-bg').css({
+              'background':'url('+e.target.result+')',
+              'background-size':'cover',
+              'background-position': '50% 50%'
+          });
+      }; 
+      reader.readAsDataURL(input.files[0]);
   }
 }
-var g_vecResponseQuery = [];
-var g_MapResponseQuery = new Map();
-function runQueryIntoBase() {
-  let bearer = 'Bearer '+g_token;
-  let text = $('#scripts').html();
-  $.ajax({
-      type: "GET",
-      url: "/admin/administrador/runScript",
-      data: {text},
-      contentType: "appication/json",
-      headers:{
-          'Authorization':bearer
-      }
-    }).then((response) => {
-      if(response.type == 'good') {
-        g_vecResponseQuery = response;
-        showResponseTable(response);
-      }else if(response.type == 'error'){
-        $('#resultScript').html('');
-        $('#resultScript').append(`
-        <span class="text-danger">${response.text.code}</span><br>
-        <span class="text-danger">${response.text.sqlMessage}</span>
-        `);
-      }
-      
-    }, (error) => {
+function changeProfilePhoto() {
+  $("#profileImageChange").click(function(e) {
+      $("#fileFoto").click();
   });
 }
-function showResponseTable(data) {
-    buildtable().then(res=>{
-      buildHeaders(data.campos).then(res1 =>{
-        buildRows(data.filas).then(res2 =>{
-          
+function fotoonChange() {
+  $("#fileFoto").change(function(event){
+      let fileInput = event.currentTarget;
+      let archivos = fileInput.files;
+      let nombre = archivos[0].name;
+      let tipo = nombre.split('.')[archivos.length];
+      if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
+      || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+          readURL(this);
+          $('#fileFoto').after(
+              '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
+              'id="btn_cambiar_foto" type="submit" '+
+              'style="display: none;">Cambiar foto</button>'
+          );
+          $('#formatoImagenInvalido').hide();
+      }else{
+          $('#formatoImagenInvalido').show();
+      }
+                  
+  });
+}
+var f_videoRecording = false;
+function openModalToTakePhoto(){
+    $('#theVideo').show();
+    f_videoRecording = true;
+    var videoWidth = 500;
+    var videoHeight = 500;
+    var videoTag = document.getElementById('theVideo');
+    var canvasTag = document.getElementById('theCanvas');
+    var btnCapture = document.getElementById("btnCapture");
+    var btnDownloadImage = document.getElementById("btnDownloadImage");
+    videoTag.setAttribute('width', videoWidth);
+    videoTag.setAttribute('height', videoHeight);
+    canvasTag.setAttribute('width', videoWidth);
+    canvasTag.setAttribute('height', videoHeight);
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: videoWidth,
+            height: videoHeight
+        }
+    }).then(stream => {
+        videoTag.srcObject = stream;
+        
+    }).catch(e => {
+        document.getElementById('errorTxt').innerHTML = 'ERROR: ' + e.toString();
+    });
+    var canvasContext = canvasTag.getContext('2d');
+    btnCapture.addEventListener("click", () => {
+        canvasContext.drawImage(videoTag, 0, 0, videoWidth, videoHeight);
+        var videoEl = document.getElementById('theVideo');
+        stream = videoEl.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
         });
-      });
+        videoEl.srcObject = null;
+        f_videoRecording = false;
+        setTimeout(() => {
+            $('#theVideo').hide();
+        }, 1500);
+    });
+    btnDownloadImage.addEventListener("click", () => {
+        var link = document.createElement('a');
+        link.download = 'capturedImage.png';
+        link.href = canvasTag.toDataURL();
+        link.click();
     });
 }
-function buildtable() {
-  return new Promise((resolve, reject) => {
-    $('#resultScript').html('');
-    $('#resultScript').append(`
-      <table class="table custom-table table-responsive-md table-borderedless" id="resultTableScript" data-order="[[ 1, &quot;asc&quot; ]]">
-        <thead>
-          <tr id="headerTableScript">
-            
-          </tr>
-        </thead>
-        <tbody id="filasTableScript">
-
-        </tbody>
-      </table>
-    `);
-    resolve('table_created');
-  })
-}
-function buildHeaders(data) {
-  return new Promise((resolve, reject) => {
-    data.forEach(e => {
-      $('#headerTableScript').append(`
-        <th class="bg-dark text-white sticky-top" scope="col">${e.name}</th>
-      `);
-    })
-    resolve('headers_created');
-  })
-}
-function buildRows(data) {
-  return new Promise((resolve, reject) => {
-    data.forEach(e => {
-      $('#filasTableScript').append(`
-        <tr>
-      `);
-      printTableRow(e).then(res=>{
-        $('#filasTableScript').append(` 
-          </tr>
-        `);
-      })
-    });
-    resolve('rows_created');
-  })
-}
-function printTableRow(data) {
-  return new Promise((resolve, reject) => {
-    for (var [key, value] of Object.entries(data)) {
-      $('#filasTableScript').append(`
-        <td>${value}</td>
-      `);
-    }
-    resolve('row_created');
-  })
-}
-editor.addEventListener('input', updateEditor);
 
 document.addEventListener("DOMContentLoaded", loaded);
