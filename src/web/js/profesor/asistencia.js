@@ -83,7 +83,7 @@ function buildAsistenciaTable(grupo) {
     $('#bodyTableModal').html('');
     g_asistencia.forEach((e)=>{
         if(e.id_grupo == id){
-            let foto = '<img src="/public/uploads/'+e.foto+'" class="rounded-circle" width="30px">';
+            let foto = '<img src="/public/uploads/'+e.foto+'" class="rounded-circle" width="30px" height="30px">';
             let fecha = moment(e.fecha).format('DD/MM/YYYY hh:mm');
             $('#bodyTableModal').append(`
             <tr>
@@ -448,7 +448,7 @@ function mostrarCursosActuales(c) {
     let cedula = c.cedula;
     let id_grupo = c.id_grupo;
     let nombre = c.nombre + ' ' + c.apellido;
-    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px" height="30px">';
     let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
     $('#listaUlEstudiantes').append(`
         <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 bg-light border-0" style="min-height:120px; position:relative;">
@@ -659,7 +659,7 @@ function showInformacionDeEstudiante(id){
     let telefono = e.telefono_emergencia_estudiante == null ? 'No Asignado' : e.telefono_emergencia_estudiante;
     let id_est = e.id_estudiante;
     if(e.foto_estudiante != null){
-        foto = '<div class="rounded-circle" style="background-image: url(../public/uploads/'+e.foto_estudiante+'); height: 20vh;width: 20vh;background-position: center;background-size: contain;"></div>';
+        foto = '<div class="rounded-circle" style="background-image: url(/public/uploads/'+e.foto_estudiante+'); height: 20vh;width: 20vh;background-position: center;background-size: contain;"></div>';
     }else{
         foto = '<i class="fas fa-user-circle fa-10x"></i>';
     }

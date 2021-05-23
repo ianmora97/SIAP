@@ -20,7 +20,11 @@ router.post('/profesores/entrar',(req,res)=>{
                     jwt.sign({userLogged},'secretKeyTokenTeacher',(err,token)=>{
                         req.session.value = rows[0];
                         req.session.token = token;
-                        console.log('[',chalk.green('OK'),']', chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                        let today = new Date();
+                        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        let dateTime = date+' '+time;
+                        console.log('[',chalk.green('OK'),']', chalk.green('(PROFESOR)'),chalk.magenta(dateTime),chalk.yellow(req.session.value.usuario),'Session Iniciada');
                         let usuario = req.session.value;
                         let selected = 'dash';
                         res.render('profesor/perfil/inicio',{usuario,selected,token});

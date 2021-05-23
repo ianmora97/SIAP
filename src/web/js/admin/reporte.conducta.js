@@ -169,7 +169,7 @@ function fillListConductas(conductas) {
     $('#conductas_Table_paginate').appendTo('#botonesCambiarTable');
 }
 function showonListMorosos(u){
-    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#lista_conductas').append(`
         <tr>
             <td class="text-center">${foto}</td>

@@ -192,7 +192,7 @@ function filltableGroups(data) {
     runDatatables();
 }
 function showRowsOntablesgroup(data,i) {
-    let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px" height="30px">';
     $(`#lista_asistencia_grupo${data.id_grupo}`).append(`
         <tr class="align-middle">
             <td class="text-center">${foto}</td>

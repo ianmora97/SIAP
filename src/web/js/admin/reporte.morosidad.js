@@ -85,7 +85,7 @@ function showonListMorosos(u){
     let sexo = u.sexo == 'Masculino' ? 'o' : u.sexo == 'Femenino' ? 'a' : '@';
     let estado = u.moroso == 1 ? 'Moroso' : 'Activo';
     let colorEstado = u.moroso == 1 ? 'danger' : 'Success';
-    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#lista_morosos').append(`
         <tr>
         <td class="text-center">${foto}</td>

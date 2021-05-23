@@ -231,7 +231,7 @@ function showAdminList(data){
         "zeroRecords": "No se encontraron estudiantes",
         "infoEmpty": "No hay registros disponibles!",
         "infoFiltered": "(filtrado de _MAX_ registros)",
-        "lengthMenu": "Mostrar _MENU_ ",
+        "lengthMenu": "_MENU_ ",
         "info": "Mostrando pagina _PAGE_ de _PAGES_",
         "paginate": {
             "first": '<i class="fas fa-angle-double-left"></i>',
@@ -258,12 +258,15 @@ function showAdminList(data){
   
   $('#administradores_TableOrder_paginate').appendTo('#botonesCambiarTable');
   
-  $('#administradores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
+
+  $('#administradores_TableOrder_length').appendTo('#showlenghtentries');
+  $('#administradores_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+  $('#administradores_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
   $('#administradores_TableOrder_length').html('');
 
 }
 function showRowAdminList(data){
-  let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px">';
+  let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px" height="30px">';
   $('#lista_administradores').append(`
     <tr ondblclick="openModalEdit(${data.cedula})">
       <td class="text-center">${foto}</td>

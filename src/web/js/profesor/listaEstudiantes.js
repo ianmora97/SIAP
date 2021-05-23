@@ -245,7 +245,7 @@ function mostrarCursosActuales(c) {
     let id_usuario = c.id_usuario;
     let cedula = c.cedula;
     let nombre = c.nombre + ' ' + c.apellido;
-    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#EstudiantesPorClaseLista').append(
         '<div class="card-list-custom-2" id="idEstudiantexGrupo-'+id_usuario+'" onclick="abrirEstudiante('+cedula+')">'+
         '<div class="card-body d-flex">'+

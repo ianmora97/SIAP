@@ -440,7 +440,7 @@ function openModalToTakePhoto(){
     });
 }
 function llenar_Estudiantes(data) {
-    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
     $("#lista_estudiantes").append(`
         <tr style="height:calc(55vh / 10);">
             <td class="align-center">${foto} &nbsp;&nbsp;${data.nombre + " " + data.apellido}</td>

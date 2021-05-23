@@ -40,7 +40,7 @@ router.post('/admin/log',(req,res)=>{ //login
                         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let dateTime = date+' '+time;
-                        console.log('[',chalk.green('OK'),']',chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                        console.log('[',chalk.green('OK'),']',chalk.green('(ADMIN)'),chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
                         let usuario = req.session.value;
                         let s = 'dash';
                         res.render('admin/dashboard', {usuario,s,token});

@@ -1,4 +1,3 @@
-
 const animateCSS = (element, animation) =>
     
   // We create a Promise and return it
@@ -29,6 +28,8 @@ function events(event){
   bringDB();
   toogleMenu();
   modals();
+  changeProfilePhoto();
+  fotoonChange();
 }
 function toogleMenu() {
   $("#menu-toggle").click(function(e) {
@@ -54,33 +55,46 @@ function openModalCameras() {
 }
 function modals() {
   $('#modalTakePic').on('hidden.bs.modal', function (event) {
-        
-    if(f_videoRecording){
-        var videoEl = document.getElementById('theVideo');
-        stream = videoEl.srcObject;
-        tracks = stream.getTracks();
-        tracks.forEach(function(track) {
-            track.stop();
-        });
-        videoEl.srcObject = null;
-    }
+      if(f_videoRecording){
+          var videoEl = document.getElementById('theVideo');
+          stream = videoEl.srcObject;
+          tracks = stream.getTracks();
+          tracks.forEach(function(track) {
+              track.stop();
+          });
+          videoEl.srcObject = null;
+      }
+    })
     $('#modalVerProfesor').on('show.bs.modal', function (event) {
-
       var button = $(event.relatedTarget)
       var recipient = ""+button.data('id')
-      let profesor = g_mapProfesores.get(recipient)
-      console.log(profesor,recipient)
+      let profesor = g_mapProfesores.get(parseInt(recipient))
 
       var modal = $(this)
       modal.find('.modal-title').text(profesor.nombre + " " + profesor.apellido)
 
-      $('#idprofesor').html(profesor.id_profesor)
+      $('#idProfesor').html(profesor.id_profesor)
       $('#cedulaprofesor').html(profesor.cedula)
 
       $('#correo_edit').val(profesor.correo)
       $('#Usuario_edit').val(profesor.usuario)
   })
-})
+}
+function eliminarProfesor() {
+  let bearer = 'Bearer '+g_token;
+  let id = parseInt($('#idProfesor').html());
+  $.ajax({
+      type: "GET",
+      url: "/admin/profesor/eliminar", 
+      data: {id},
+      contentType: "appication/json",
+      headers:{
+          'Authorization':bearer
+      }
+  }).then((response) => {
+      location.href = '/admin/profesores';
+  }, (error) => {
+  });
 }
 function agregarProfesor(){
   let bearer = 'Bearer '+g_token;
@@ -93,7 +107,7 @@ function agregarProfesor(){
   let usuario = $('#UsuarioAdd').val();
   $.ajax({
       type: "GET",
-      url: "/admin/profesor/agregarProfesor",
+      url: "/admin/profesor/agregar",
       data: {cedula,nombre,apellidos,correo,clave,sexo,usuario},
       contentType: "appication/json",
       headers:{
@@ -107,7 +121,13 @@ function agregarProfesor(){
 function openModal(modal){
   $(modal).modal('show')
 }
-
+function cambiarClaveModal() {
+  $('#modalcambiarclave').modal('show');
+  
+  let id = $('#cedulaprofesor').html();
+  $('#claveCedulaID').html(id);
+  $('#cambiarclaveID').val(id);
+}
 function bringDB() {
   let ajaxTime = new Date().getTime();
   let bearer = 'Bearer '+g_token;
@@ -128,6 +148,46 @@ function bringDB() {
     }, (error) => {
   });
 }
+function actualizarProfesor() {
+  let cedula = $('#cedulaprofesor').html();
+  let username = $('#Usuario_edit').val();
+  let correo = $('#correo_edit').val();
+  let data ={
+      username,correo,cedula
+  }
+  let bearer = 'Bearer '+g_token;
+  $.ajax({
+      type: "GET",
+      url: "/admin/profesor/actualizar", 
+      data: data,
+      contentType: "appication/json",
+      headers:{
+          'Authorization':bearer
+      }
+  }).then((response) => {
+      if(response.affectedRows){
+          location.href = '/admin/profesores';
+      }else if(response.code){
+          if(response.code == "ER_DUP_ENTRY"){
+              $('#feedbackVer').append(`
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      El correo <strong>${correo}</strong> ya se encuentra registrado. <i class="far fa-question-circle" 
+                      data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                      title="Para cambiar a este correo si el profesor ya cuenta con un registro anterior: <br> 
+                      1. Elimine el profesor con este correo. <br>
+                      2. Haga el cambio de correo a este profesor."></i>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              `);
+          }
+          $('[data-toggle="tooltip"]').tooltip()
+      }
+      
+  }, (error) => {
+  });
+}
 function searchonfind() {
   var table = $('#profesores_TableOrder').DataTable();
   let val = $('#barraBuscar').val();
@@ -145,7 +205,7 @@ function showProfesorList(data){
         "zeroRecords": "No se encontraron profesores",
         "infoEmpty": "No hay registros disponibles!",
         "infoFiltered": "(filtrado de _MAX_ registros)",
-        "lengthMenu": "Mostrar _MENU_ ",
+        "lengthMenu": "_MENU_ ",
         "info": "Mostrando pagina _PAGE_ de _PAGES_",
         "paginate": {
             "first": '<i class="fas fa-angle-double-left"></i>',
@@ -172,11 +232,14 @@ function showProfesorList(data){
 
   $('#profesores_TableOrder_paginate').appendTo('#botonesCambiarTable');
   
-  $('#profesores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
+  $('#profesores_TableOrder_length').appendTo('#showlenghtentries');
+  $('#profesores_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+  $('#profesores_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
 
 }
 function showRowProfesorList(data){
-  let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
+  let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px"
+   role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
   $('#lista_profesores').append(`
     <tr>
       <td>${data.id_profesor}</td>

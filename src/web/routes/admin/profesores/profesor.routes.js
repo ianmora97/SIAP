@@ -34,16 +34,66 @@ router.get('/admin/profesores/getProfesores',ensureToken,(req,res)=>{
     });
 });
 
-router.get('/admin/administrador/eliminarProfesor',ensureToken,(req,res)=>{
-    let script = "call prc_eliminar_administrativo(?)";
-    con.query(script,[req.query.cedula],
+router.get('/admin/profesor/eliminar',ensureToken,(req,res)=>{
+    let script = "call prc_eliminar_profesor(?)";
+    con.query(script,[req.query.id],
         (err,rows,fields)=>{
         if(!err){
+            logSistema(req.session.value.cedula, `ELIMINAR ${req.query.id}`, DDL.DELETE, TABLE.PROFESOR);
             res.send(rows);
         }else{
-            console.log(err)
+            res.send(err);
         }
     });
+});
+
+router.get('/admin/profesor/agregar',ensureToken,(req,res)=>{
+    let script = "call prc_insertar_profesor_admin(?,?,?,?,?,?,?)";
+    con.query(script,[req.query.cedula, req.query.nombre, req.query.apellidos, 
+        req.query.correo, req.query.clave, req.query.sexo, req.query.usuario],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `AGREGAR ${req.query.cedula}`, DDL.INSERT, TABLE.PROFESOR);
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
+
+router.get('/admin/profesor/actualizar',ensureToken,(req,res)=>{
+    con.query("update t_usuario set usuario = ?, correo = ? where cedula = ?",
+    [req.query.username, req.query.correo, req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `ACTUALIZA DATOS -> ${req.query.cedula}`, DDL.UPDATE, TABLE.PROFESOR);
+            res.send(rows);
+        }else{
+            res.send(err)
+        }
+    });
+});
+
+router.post('/admin/profesor/cambiarClave',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            con.query('call prc_actualizar_clave_sha1_usuario(?, ?)',
+            [req.body.cedula, req.body.clave],(err,rows,fields)=>{
+                let usuario = req.session.value;
+                let token = req.session.token;
+                let s = 'estudiantes';
+                if(!err){
+                    res.render('admin/profesores', {usuario,s,token});
+                }else{
+                    res.render('admin/profesores', {usuario,s,token});
+                }
+            });
+        }else{
+            res.render('indexAdmin');
+        }
+    }else{
+        res.render('indexAdmin');
+    }
 });
 
 function ensureToken(req,res,next) {
