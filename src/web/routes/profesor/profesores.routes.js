@@ -137,6 +137,25 @@ router.get('/profesores/reponer',(req,res)=>{ //perfil del profesor
         res.render('indexProfesores');
     }
 });
+
+router.get('/profesores/rutinas',(req,res)=>{ //perfil del profesor
+    if(req.session.value){
+        let usuario = req.session.value;
+        if(typeof usuario.rol == 'number'){
+            if(usuario.rol == 2){
+                let token = req.session.token;
+                let v = {usuario, selected:'rutinas',token}
+                res.render('profesor/perfil/rutinas',v);
+            }else{
+                res.render('indexProfesores');
+            }    
+        }else{
+            res.render('indexProfesores');
+        }
+    }else{
+        res.render('indexProfesores');
+    }
+});
 // ? ----------------------------------- ROUTES MENU! ------------------------------------
 
 // ? ----------------------------------- peticiones ------------------------------------
@@ -170,7 +189,7 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
     }
 });
 
-router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -200,7 +219,7 @@ router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{ // trer
     }
 });
 
-router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -230,7 +249,7 @@ router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{
     }
 });
 
-router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -255,7 +274,8 @@ router.get('/profesor/asistenciaProfesor/insertarAsistencia',ensureToken,(req,re
         res.render('notAllowedAdmin');
     }
 });
-router.get('/profesor/grupos/getGrupos',(req,res)=>{ // trer cursos por profesor
+
+router.get('/profesor/grupos/getGrupos',(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -286,7 +306,60 @@ router.get('/profesor/grupos/getGrupos',(req,res)=>{ // trer cursos por profesor
     }
 });
 
-router.get('/profesor/grupos/getReposicion',(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/rutinas/getGrupos',ensureToken,(req,res)=>{ 
+    let script = 'select * from vta_grupos where cedula = ?';
+    var query = con.query(script,
+        [req.query.cedula],
+        (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
+
+router.get('/profesor/rutina/crear',ensureToken,(req,res)=>{ 
+    let script = 'insert into t_rutina(profesor,grupo,texto) values(?,?,?)';
+    var query = con.query(script,
+        [req.query.profesor, req.query.grupo, req.query.texto],
+        (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
+
+router.get('/profesor/rutinas/ver',ensureToken,(req,res)=>{ 
+    let id = parseInt(req.query.id);
+    console.log(id)
+    let script = `select 
+    r.id as id_rutina,
+    r.profesor as id_profesor,
+    r.grupo as id_grupo,
+    r.texto as texto,
+    r.created_at as fecha,
+    h.dia as dia,
+    h.hora as hora 
+    from t_rutina  r 
+    join t_horario h 
+    join t_grupo g 
+    where r.profesor = ? 
+    and r.grupo = g.id 
+    and g.horario = h.id`;
+    con.query(script,[id],
+        (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
+
+router.get('/profesor/grupos/getReposicion',(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){
@@ -372,7 +445,7 @@ router.get('/profesor/reponer/reponerClase',ensureToken,(req,res)=>{ // traer cu
     }
 });
 
-router.get('/profesor/matriculaEstudiantes',(req,res)=>{ // trer cursos por profesor
+router.get('/profesor/matriculaEstudiantes',(req,res)=>{ 
     if(req.session.value){
         let usuario = req.session.value;
         if(typeof usuario.rol == 'number'){

@@ -52,6 +52,7 @@ router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
                 let token = req.session.token;
                 let s = 'estudiantes';
                 if(!err){
+                    logSistema(req.session.value.cedula, `CAMBIO FOTO ${req.query.cedula}`, DDL.UPDATE, TABLE.ESTUDIANTE);
                     res.render('admin/estudiantes', {usuario,s,token});
                 }else{
                     res.render('admin/estudiantes', {usuario,s,token});
@@ -74,6 +75,7 @@ router.post('/admin/estudiantes/cambiarClave',(req,res)=>{
                 let token = req.session.token;
                 let s = 'estudiantes';
                 if(!err){
+                    logSistema(req.session.value.cedula, `CAMBIO CLAVE ${req.query.cedula}`, DDL.UPDATE, TABLE.ESTUDIANTE);
                     res.render('admin/estudiantes', {usuario,s,token});
                 }else{
                     res.render('admin/estudiantes', {usuario,s,token});

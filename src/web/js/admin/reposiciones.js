@@ -11,6 +11,10 @@ function events(event){
     traerCursos();
     informacionGrupos();
 }
+function openModal(modal) {
+    $(modal).modal('show')
+}
+
 const animateCSS = (element, animation) =>
   new Promise((resolve, reject) => {
     let prefix = 'animate__';
@@ -34,6 +38,12 @@ function toogleMenu() {
         $("#wrapper").toggleClass("toggled");
     });
 }
+$(function () {
+    $('[data-toggle="popover"]').popover();
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 function cargarFoto() {
     let foto = $('#usuario_foto').data('value');
     if(!foto){
@@ -192,49 +202,4 @@ function informacionGrupos() { //modal para ver informacion de un grupo
         $('#cedulaTarget').text(cedula);
     });
 }
-
-var filtrarNuevos = (estudiantes)=>{
-    let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if(!(estudiantes[i].estado)){
-            result.push(estudiantes[i]);
-        }
-    }
-    return result;
-}
-var filtrarConfirmados = (estudiantes)=>{
-    let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].estado)){
-            result.push(estudiantes[i]);
-        }
-    }
-    return result;
-}
-var filtrarEstudiantes = (estudiantes)=>{
-    let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario == '1')){
-            result.push(estudiantes[i]);
-        }
-    }
-    return result;
-}
-var filtrarFuncionarios = (estudiantes)=>{
-    let result = [];
-    for(let i=0;i<estudiantes.length; i++){
-        if((estudiantes[i].tipo_usuario != '1')){
-            result.push(estudiantes[i]);
-        }
-    }
-    return result;
-}
-var filtrarBuscar = (estudiantes, s)=>{
-    let result = [];
-    for(let i=0;i<estudiantes.length; i++) 
-        if(estudiantes[i].nombre == s.toUpperCase() || estudiantes[i].nombre == s || estudiantes[i].cedula == s) 
-            result.push(estudiantes[i]);
-    return result;
-}
-
 document.addEventListener("DOMContentLoaded", loaded);
