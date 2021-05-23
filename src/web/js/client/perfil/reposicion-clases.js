@@ -45,6 +45,29 @@ function cargarListaAsistencias(asistencias) {
     asistencias.forEach((a) => {
         llenarAsistenciasTabla(a);
     });
+    $('#tabla_asistencia').DataTable({
+        "language": {
+            "zeroRecords": "No se encontraron asistencias",
+            "infoEmpty": "No hay registros disponibles!",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "lengthMenu": "_MENU_ ",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "paginate": {
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first": 'Primera',
+                    "previous": 'Anterior',
+                    "next": 'Siguiente',
+                    "last": 'Última'
+                }
+            }
+        }
+      });
 }
 function llenarAsistenciasTabla(a) {
     $("#lista_asistencia_usuario").append(`
