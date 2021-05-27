@@ -176,7 +176,7 @@ function abrirCurso(grupo){
     let curso = $('#idGrupo-'+grupo);
     $('html').scrollTop(0);
     forEachEstudiantesxGrupo(grupo);
-    revisarAsistenciaProfesor(grupo);
+    //revisarAsistenciaProfesor(grupo);
     $('#clasesLista').removeClass('animate__bounceInLeft');
     $('#EstudiantesPorClaseLista').removeClass('animate__bounceOutRight');
     
@@ -234,9 +234,12 @@ async function traerEstudantesXGrupoAfter() {
                 }
             }).then((response) => {
                 g_mapAsistencia.clear();
-                response.forEach((e =>{
-                    g_mapAsistencia.get(e.id_asistencia,e);
-                }));
+                console.log(response);
+                if(response.length){
+                    response.forEach((e =>{
+                        g_mapAsistencia.get(e.id_asistencia,e);
+                    }));
+                }
                 g_asistencia = response;
                 resolve('done');
             }, (error) => {
@@ -286,6 +289,7 @@ function ingresarAsitenciaProfesor(){
     let fecha = new Date();
     fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate();
     let grupo = parseInt(g_grupoAbierto);
+    console.log(grupo)
     $.ajax({
         type: "GET",
         url: "/profesor/asistenciaProfesor/insertarAsistencia",
@@ -295,6 +299,7 @@ function ingresarAsitenciaProfesor(){
             'Authorization':bearer
         }
     }).then((response) => {
+        $('#pasarAsistenciaProfesor').modal('hide');
         bringDB()
         traerEstudantesXGrupo();
         const Toast = Swal.mixin({
@@ -339,33 +344,36 @@ function bringDB() {
     });
     
 }
-function revisarAsistenciaProfesor(grupo) {
-    let data = g_profesorAsistencia;
-    let today = new Date();
-    today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
-    let filter = filtrarAsistenciasPorProfesor($('#id_cedula').html(), grupo);
-    let flag = true;
-    if(filter.length != 0){
-        filter.every((e)=>{
-            if(today == e.fecha){
-                console.log(g_grupoAbierto,e.id_grupo)
-                flag= false;
-                return false;
-            }else{
-                flag=true;
-            }
-        });
-    }else{
-        flag=true;
-    }
-    if(flag){
-        $('#pasarAsistenciaProfesor').modal('show')
-    }
-}
-function filtrarAsistenciasPorProfesor(cedula, grupo) {
-    let result= g_profesorAsistencia.filter(e => e.cedula == cedula);
-    return result.filter(e => e.id_grupo == grupo);
-}
+// function revisarAsistenciaProfesor(grupo) {
+//     let data = g_profesorAsistencia;
+//     let today = new Date();
+//     today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+//     let filter = filtrarAsistenciasPorProfesor($('#id_cedula').html(), grupo);
+//     let flag = true;
+//     if(filter.length != 0){
+//         filter.every((e)=>{
+//             if(today == e.fecha){
+//                 console.log(g_grupoAbierto,e.id_grupo)
+//                 flag= false;
+//                 return false;
+//             }else{
+//                 flag=true;
+//             }
+//         });
+//     }else{
+//         flag=true;
+//     }
+//     if(flag){
+//         $('#pasarAsistenciaProfesor').modal('show')
+//     }
+// }
+// function filtrarAsistenciasPorProfesor(cedula, grupo) {
+//     if(g_profesorAsistencia.length){
+//         let result= g_profesorAsistencia.filter(e => e.cedula == cedula);
+//         return result.filter(e => e.id_grupo == grupo);
+//     }
+//     return [];
+// }
 function filtrarEstudiantesxGrupo(grupo) {
     let result=[];
     for(let i=0;i<g_estudiantes.length; i++){
@@ -376,19 +384,20 @@ function filtrarEstudiantesxGrupo(grupo) {
     return result;
 }
 function forEachEstudiantesxGrupo(grupo){
+    console.log(grupo,g_mapGrupos.get(grupo))
     setTimeout(() => {
         $('#buttonTriggerModalAsistencia').show();
     }, 2000);
     $('#buttonTriggerModalAsistencia').attr("data-grupo",grupo);
     $('#grupoIdModal').html('Grupo ' + grupo);
     $('#idGrupoTemp').html( grupo);
-    traerEstudantesXGrupoAfter().then((response) => {
-        let result = filtrarEstudiantesxGrupo(grupo);
-        $('#listaUlEstudiantes').html('');
-        result.forEach((c)=>{
-            mostrarCursosActuales(c);
-        });
+    $('#listaUlEstudiantes').html('');
+    let result = filtrarEstudiantesxGrupo(grupo);
+    result.forEach((c)=>{
+        mostrarCursosActuales(c);
     });
+    // traerEstudantesXGrupoAfter().then((response) => {
+    // });
 }
 function updateStatus(estudiante,estado,grupo,) {
     let bearer = 'Bearer '+g_token;
@@ -491,29 +500,6 @@ function traerGrupos(){
         eachGrupos(response);
     }, (error) => {
     });
-    $.ajax({ // trae los grupos de la semana de reposicion que se le asignaron al profesor
-        type: "GET",
-        url: "/profesor/grupos/getReposicion",
-        data: data,
-        contentType: "application/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        console.log(response);
-        g_grupoReposicion = response;
-        eachGruposRepo(g_grupoReposicion,"REPO");
-    }, (error) => {
-    });
-}
-function eachGruposRepo(grupos,filtro) {
-    let vec = filtrarRepoPorProfesor(grupos,$('#id_cedula').text())
-    // vec = filtrarPorFecha(vec);
-    vec.forEach((e)=>{
-        if(e.cupo_actual != 0){
-            showGrupos(e,filtro);
-        }
-    });
 }
 function filtrarRepoPorProfesor(grupo,cedula) {
     return grupo.filter(e => e.cedula_origen != cedula);
@@ -555,7 +541,7 @@ async function showGrupos(g,filtro){
     if(filtro == 'HOY'){
         if(allow){
             $('#clasesLista').append(`
-            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
+            <div class="col-md px-0 mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
                 <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
                     <div class="position-absolute" style="right:-20px; top:-20px;">${hoy}</div>
                     <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
@@ -571,25 +557,6 @@ async function showGrupos(g,filtro){
             
         }else{
         }
-    }else if(filtro == "REPO"){
-        $('#clasesLista').append(`
-            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
-                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
-                    <div class="position-absolute" style="right:-20px; top:-20px;">${rep}</div>
-                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6> 
-                        <p class="card-text">${cupo_actual} ${est}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" 
-                            id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
-                            <h6 class="m-0"><span class="badge badge-info">REPOSICION</span></h6> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `);
     }else{
         $('#clasesLista').append(`
             <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
@@ -626,10 +593,6 @@ function daytoWeekDay(day) {
                 resolve(0);    
         }
     })
-}
-function mostartClasesFiltro(fil) {
-    eachGrupos(g_grupos,fil.value)
-    eachGruposRepo(g_grupoReposicion,"REPO")
 }
 function traerInformacionDeEstudiante(){
     let bearer = 'Bearer '+g_token;

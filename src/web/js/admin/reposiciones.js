@@ -4,12 +4,9 @@ function loaded(event){
 
 function events(event){
     obtenerReposiciones();
-    cargarFoto();
     toogleMenu();
     openModalComprobante();
-    cambiarEstadoShow();
-    traerCursos();
-    informacionGrupos();
+    selecEstudianteAdd();
 }
 function openModal(modal) {
     $(modal).modal('show')
@@ -44,46 +41,166 @@ $(function () {
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
-function cargarFoto() {
-    let foto = $('#usuario_foto').data('value');
-    if(!foto){
-        $('.avatar-bg').css({
-            'background':'url(/public/uploads/default-avatar.png)',
-            'background-size':'cover',
-            'background-position': '50% 50%'
-        });
 
-    }else{
-        $('.avatar-bg').css({
-            'background':'url(./../public/uploads/'+foto+')',
-            'background-size':'cover',
-            'background-position': '50% 50%'
-        });
-
-    }
+function searchonfind() {
+    var table = $('#reposiciones_TableOrder').DataTable();
+    let val = $('#barraBuscar').val();
+    let result = table.search(val).draw();
 }
+
+var g_vecAsistencias = [];
+var g_vecGrupos = [];
+var g_mapReposiciones = new Map();
 function obtenerReposiciones(){
+    let bearer = 'Bearer '+g_token;
     let ajaxTime= new Date().getTime();
     $.ajax({
         type: "GET",
-        url: "/admin/getReposiciones",
-        contentType: "application/json"
-    }).then((response) => {
-        let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime/1000);
-        let t = a == 1 ? a + ' segundo' : a + ' segundos';
-        $('#infoTiming').text(t);
-        listReposiciones(response);
-        $('#cargarDatosSpinner').hide();
-        load_stats(response);
-    }, (error) => {
+        url: "/api/admin/reposiciones",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((reposiciones) => {
+        listaReposiciones(reposiciones);
+        $.ajax({
+            type: "GET",
+            url: "/admin/reportes/asistencia/getAsistencia",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((asistencias) => {
+            let totalTime = new Date().getTime() - ajaxTime;
+            let a = Math.ceil(totalTime/1000);
+            let t = a == 1 ? a + ' segundo' : a + ' segundos';
+            $('#infoTiming').text(t);
+            g_vecAsistencias = asistencias;
+        }, (error) => {
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/reportes/asistencia/getGrupos",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((grupos) => {
+            g_vecGrupos = grupos;
+            listaGrupos(grupos);
+        }, (error) => {
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/admin/estudiante/listaEstudiantes",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((estudiantes) => {
+            listaEstudiantes(estudiantes);
+        }, (error) => {
+
+        });
     });
 }
-function listReposiciones(reposiciones) {
-    $('#lista_reposiciones').html('');
-    reposiciones.forEach((r)=>{
-        showReposicion(r);
+function listaGrupos(data) {
+    $('#grupoAddSelect').html('');
+    $('#grupoAddSelect').append(`
+        <option value="null">Seleccione un estudiante</option>
+    `)
+    data.forEach(e => {
+        let hora = e.hora < 10 ? '0'+e.hora : e.hora;
+        $('#grupoAddSelect').append(`
+            <option value="${e.id_grupo}">${e.dia} ${moment(`${hora}:00`,'HH:mm').format('LT')}</option>
+        `)
     });
+}
+function selecEstudianteAdd() {
+    $('#estudiantesAddSelect').on('change',function(){
+        // filtro por estudiante la lista de asistencia
+        let filt = g_vecAsistencias.filter(e => e.id_estudiante == parseInt($('#estudiantesAddSelect').val()))
+        buildRowListAusencia(filt)
+    })
+}
+function buildRowListAusencia(data) {
+    // filtro por ausencias
+    let res = data.filter(e => e.estado == "Ausente");
+    res.forEach(element => {
+        showRowListAusencia(element)
+    });
+}
+
+function showRowListAusencia(ele) {
+    $('#ausenciasAgregarReposicion').append(`
+        <a class="list-group-item list-group-item-action border-right-0 border-left-0">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1"><span class="badge badge-danger">Ausencia</span></h5>
+                <small class="text-muted">${moment(ele.fecha,'DD-MM-YYYY-HH-mm').calendar()}</small>
+            </div>
+            <p class="mb-1">${ele.nombre} ${ele.apellido} 
+            <br>Presenta una ausencia con ${ele.profesor}</p>
+            <small class="text-muted">Grupo: ${ele.id_grupo}</small>
+        </a>
+    `)
+}
+function listaEstudiantes(data){
+    $('#estudiantesAddSelect').html('');
+    $('#estudiantesAddSelect').append(`
+        <option value="null">Seleccione un estudiante</option>
+    `)
+    data.forEach(e => {
+        $('#estudiantesAddSelect').append(`
+            <option value="${e.id_estudiante}">${e.cedula} - ${e.nombre + " " + e.apellido}</option>
+        `)
+    })
+}
+function listaReposiciones(reposiciones) {
+    $('#lista_reposiciones').html('');
+    if(reposiciones.length){
+        $('#reposiciones_todas_stats').html(reposiciones.length);
+        reposiciones.forEach((r)=>{
+            g_mapReposiciones.set(r.id_reposicion, r)
+            showReposicion(r);
+        });
+    }
+    $('#reposiciones_TableOrder').DataTable({
+      "language": {
+          "zeroRecords": "No se encontraron profesores",
+          "infoEmpty": "No hay registros disponibles!",
+          "infoFiltered": "(filtrado de _MAX_ registros)",
+          "lengthMenu": "_MENU_ ",
+          "info": "Mostrando pagina _PAGE_ de _PAGES_",
+          "paginate": {
+              "first": '<i class="fas fa-angle-double-left"></i>',
+              "previous": '<i class="fas fa-angle-left"></i>',
+              "next": '<i class="fas fa-angle-right"></i>',
+              "last": '<i class="fas fa-angle-double-right"></i>'
+          },
+          "aria": {
+              "paginate": {
+                  "first": 'Primera',
+                  "previous": 'Anterior',
+                  "next": 'Siguiente',
+                  "last": 'Última'
+              }
+          }
+      }
+    });
+    $('#informacionTable').html('');
+    $('#botonesCambiarTable').html('');
+    $('#showlenghtentries').html('');
+  
+    $('#reposiciones_TableOrder_filter').css('display', 'none');
+    $('#reposiciones_TableOrder_info').appendTo('#informacionTable');
+  
+    $('#reposiciones_TableOrder_paginate').appendTo('#botonesCambiarTable');
+    
+    $('#reposiciones_TableOrder_length').appendTo('#showlenghtentries');
+    $('#reposiciones_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+    $('#reposiciones_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
 }
 function showReposicion(r) {
 
@@ -91,87 +208,58 @@ function showReposicion(r) {
     let nombre = r.nombre + ' ' + r.apellido;
     let g_orig = r.grupo_origen;
     let g_repo = r.grupo_reposicion;
-    let nivel  = r.nivel;
+    let nivel  = r.descripcion;
     let fecha  = r.fecha_reposicion;
     let compro = r.comprobante;
     let observ = r.observacion;
-    let estado = r.estado == 1 ? 'Confirmado' : r.estado == 2 ? 'Rechazado' : 'Pendiente';
-    let color  = r.estado == 1 ? 'success' : r.estado == 2 ? 'danger' : 'warning';
+    let hora = r.hora_reposicion < 10 ? '0'+r.hora_reposicion : r.hora_reposicion;
 
     $('#lista_reposiciones').append(
         '<tr>'+
-        '<td>'+cedula+'</td>'+
+        '<td class="text-center">'+cedula+'</td>'+
         '<td>'+nombre+'</td>'+
-        '<td><button class="btn btn-sm btn-light w-50 mx-auto d-block" data-toggle="modal" data-target="#modalGrupoOrigen"><span class="badge badge-light">'+g_orig+'</span></button></td>'+
-        '<td><button class="btn btn-sm btn-light w-50 mx-auto d-block" data-toggle="modal" data-target="#modalGrupoOrigen"><span class="badge badge-light">'+g_repo+'</span></button></td>'+
+        `<td>${r.dia_reposicion} ${moment(`${hora}:00`,'HH:mm').format('LT')}</td>`+
         '<td>'+nivel+'</td>'+
         '<td>'+fecha+'</td>'+
-        '<td><button class="btn p-0" data-cedula="'+cedula+'" data-obser="'+observ+'" data-foto="'+compro+'" data-toggle="modal" data-target="#modalComprobante"><i class="fas fa-file-image fa-2x text-info"></i></button></td>'+
-        '<td> <button class="btn btn-'+color+' py-0 w-100" data-toggle="modal" data-target="#modalCambiarEstado" '+
-        'data-cedula="'+cedula+'" data-nombre="'+nombre+'"><i class="fas fa-sign-in-alt"></i> '+estado+'</button></td>'+
+        `<td class="text-center">
+            <span class="button-circle" role="button" data-id="${r.id_reposicion}" data-toggle="modal" data-target="#modalComprobante">
+                <i class="fas fa-ellipsis-v"></i>
+            </span>
+        </td>`+
         '</tr>'
     );
+}
+function openModal(modal) {
+    $(modal).modal('show');
+}
 
-}
-var g_grupos = [];
-
-function traerCursos(){
-    $.ajax({
-        type: "GET",
-        url: "/admin/getGrupos",
-        contentType: "application/json"
-    }).then((cursosDis) => {
-        g_grupos = cursosDis;        
-    }, (error) => {
-    });
-}
-function cargarCurso(cupos) {
-    $('#cursos_lista').html('');
-    filtrarCursosMatriculados(cupos).then((newCupos)=>{
-        newCupos.forEach(cupo => {
-            llenarCurso(cupo);
-        });
-    }); 
-}
-function load_stats(reposiciones) {
-    let cantidad = reposiciones.length;
-    let verificados=0;
-    let nuevos =0 ;
-    for (let i of reposiciones) {
-        if(i.estado) verificados++;
-        if(i.estado == 2) nuevos++;
-    }
-    $('#reposiciones_todas_stats').text(cantidad);
-    $('#reposiciones_aceptadas_stats').text(verificados);
-    $('#reposiciones_nuevos_stats').text(nuevos);
-}
 function openModalComprobante() {
     $('#modalComprobante').on('show.bs.modal', event => {
         var button = $(event.relatedTarget);
-        var foto = button.data('foto');
-        var cedula = button.data('cedula');
-        var observacion = button.data('obser');
+        var id = button.data('id');
+        let re = g_mapReposiciones.get(parseInt(id))
+        console.log(re)
         $('#bodyComprobante').html('');
 
-        $('#titleModalComprobante').text('Comprobante de '+cedula);
-        if(foto.length != 0){
-            let tipo = foto.split('.')[1];
+        $('#titleModalComprobante').text('Reposicion de '+re.nombre);
+        if(re.comprobante.length != 0){
+            let tipo = re.comprobante.split('.')[1];
             if(tipo == 'pdf'){
                 $('#bodyComprobante').append(
                     '<h4>Comprobante:</h4>'+
-                    '<embed src="./../public/uploads/'+foto+'" type="application/pdf" class="d-block mx-auto w-75" />'+
+                    '<embed src="/public/uploads/'+re.comprobante+'" type="application/pdf" class="d-block mx-auto w-100" />'+
                     '<div class="form-group">'+
                     '<label for="Observacion">Observacion</label>'+
-                    '<textarea class="form-control" style="resize: none;" rows="4" disabled>'+observacion+'</textarea>'+
+                    '<textarea class="form-control" style="resize: none;" rows="4" disabled>'+re.observacion+'</textarea>'+
                     '</div>'
                 );
             }else{
                 $('#bodyComprobante').append(
                     '<h4>Comprobante:</h4>'+
-                    '<img src="./../public/uploads/'+foto+'" class="d-block w-50 mx-auto">'+
+                    '<img src="/public/uploads/'+re.comprobante+'" class="d-block w-100 mx-auto">'+
                     '<div class="form-group">'+
                     '<label for="Observacion">Observacion</label>'+
-                    '<textarea class="form-control" style="resize: none;" rows="4" disabled>'+observacion+'</textarea>'+
+                    '<textarea class="form-control" style="resize: none;" rows="4" disabled>'+re.observacion+'</textarea>'+
                     '</div>'
                 );
             }
@@ -184,22 +272,5 @@ function openModalComprobante() {
         
     });
 }
-function cambiarEstadoShow() {
-    $('#modalCambiarEstado').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var cedula = button.data('cedula');
-        var nombre = button.data('nombre');
-        $('#nombreTarget').text(nombre);
-        $('#cedulaTarget').text(cedula);
-    });
-}
-function informacionGrupos() { //modal para ver informacion de un grupo
-    $('#modalCambiarEstado').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var cedula = button.data('cedula');
-        var nombre = button.data('nombre');
-        $('#nombreTarget').text(nombre);
-        $('#cedulaTarget').text(cedula);
-    });
-}
+
 document.addEventListener("DOMContentLoaded", loaded);

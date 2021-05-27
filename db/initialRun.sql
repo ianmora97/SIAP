@@ -494,14 +494,12 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `siapd`.`t_reposicion` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `estudiante` INT(11) NOT NULL,
-  `grupo_origen` INT(11) NOT NULL,
   `grupo_reposicion` INT(11) NOT NULL,
   `fecha_reposicion` DATE NOT NULL,
   `comprobante` VARCHAR(100) NOT NULL,
   `observacion` VARCHAR(255) NOT NULL,
   `estado` INT(2) NOT NULL DEFAULT '0' COMMENT '0 = no aceptada, 1 = aceptada',
   PRIMARY KEY (`id`),
-  INDEX `fk_t_reposicion_t_grupo2_idx` (`grupo_origen`) ,
   INDEX `fk_t_reposicion_t_grupo1_idx` (`grupo_reposicion`) ,
   INDEX `fk_t_reposicion_t_estudiante_idx` (`estudiante`) ,
   CONSTRAINT `fk_t_reposicion_t_estudiante`
@@ -513,12 +511,7 @@ CREATE TABLE IF NOT EXISTS `siapd`.`t_reposicion` (
     FOREIGN KEY (`grupo_reposicion`)
     REFERENCES `siapd`.`t_grupo` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_t_reposicion_t_grupo2`
-    FOREIGN KEY (`grupo_origen`)
-    REFERENCES `siapd`.`t_grupo` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 

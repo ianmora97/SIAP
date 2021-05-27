@@ -172,12 +172,13 @@ router.get('/profesor/asistencia/actualizarEstudiante',(req,res)=>{ //perfil del
                 var query = con.query(script, [req.query.estado, req.query.estudiante, req.query.grupo, fecha],
                     (err,result,fields)=>{
                     if(!err){
+                        console.log(result);
                         res.send(result);
                     }else{
+                        console.log(err)
                         res.status(501).send('error');
                     }
                 });
-                res.send(req.query);
             }else{
                 res.render('indexProfesores');
             }    
@@ -199,11 +200,7 @@ router.get('/profesor/asistencia/getAsistencia',ensureToken,(req,res)=>{
                     [req.query.id],
                     (err,rows,fields)=>{
                     if(!err){
-                        if(rows.length != 0){
-                            res.send(rows);
-                        }else{
-                            res.send('vacia');
-                        }
+                        res.send(rows);
                     }else{
                         res.status(501).send('error');
                     }
@@ -229,11 +226,7 @@ router.get('/profesor/asistenciaProfesor/getAsistencia',ensureToken,(req,res)=>{
                     [req.query.id],
                     (err,rows,fields)=>{
                     if(!err){
-                        if(rows.length != 0){
-                            res.send(rows);
-                        }else{
-                            res.send('vacia');
-                        }
+                        res.send(rows);
                     }else{
                         res.status(501).send('error');
                     }
