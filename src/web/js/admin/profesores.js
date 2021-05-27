@@ -242,7 +242,7 @@ function showRowProfesorList(data){
    role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
   $('#lista_profesores').append(`
     <tr>
-      <td>${data.id_profesor}</td>
+      <td class="text-center">${data.id_profesor}</td>
       <td class="align-center">${foto}</td>
       <td>${data.nombre.toUpperCase() + ' '+ data.apellido.toUpperCase()}</td>
       <td>${data.cedula}</td>

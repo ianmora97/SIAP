@@ -21,7 +21,25 @@ function loaded(event){
 
 function events(event){
     bringData();
+    toogleMenu();
 }
+function toogleMenu() {
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        //$('#sidebar-wrapper').css('position','relative');
+        $("#wrapper").toggleClass("toggled");
+        //$("#side-panel").css('margin-left','-12px');
+        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+        //$("#sidebar-wrapper").animate({left:'-200'},1000);
+    });
+  }
+  $(function () {
+    $('[data-toggle="popover"]').popover();
+  })
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 function searchonfind() {
     var table = $('#morosos_Table').DataTable();
     let val = $('#barraBuscar').val();           
@@ -42,16 +60,17 @@ function bringData(){
 }
 function fillListMorosos(morosos) {
     $('#lista_morosos').html('');
-    morosos.forEach((e)=>{
-        showonListMorosos(e);
-    });
+    if(morosos.length){
+        morosos.forEach((e)=>{
+            showonListMorosos(e);
+        });
+    }
     $('#morosos_Table').DataTable({
-        stateSave: true,
         "language": {
             "zeroRecords": "No se encontraron estudiantes",
             "infoEmpty": "No hay registros disponibles!",
             "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ registros",
+            "lengthMenu": "_MENU_",
             "info": "Mostrando pagina _PAGE_ de _PAGES_",
             "paginate": {
                 "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',

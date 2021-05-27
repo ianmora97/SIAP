@@ -25,7 +25,25 @@ function loaded(event){
 function events(event){
     bringData();
     openModalOn();
+    toogleMenu();
 }
+function toogleMenu() {
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        //$('#sidebar-wrapper').css('position','relative');
+        $("#wrapper").toggleClass("toggled");
+        //$("#side-panel").css('margin-left','-12px');
+        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+        //$("#sidebar-wrapper").animate({left:'-200'},1000);
+    });
+  }
+$(function () {
+    $('[data-toggle="popover"]').popover();
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 function openModalOn() {
     $('#verConductaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)

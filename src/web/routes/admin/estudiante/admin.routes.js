@@ -24,9 +24,10 @@ const con = require('../../../database');
 router.get('/admin/estudiante/listaEstudiantes',ensureToken,(req,res)=>{
     var script = 'select * from vta_admin_estudiante;';
     con.query(script,(err,rows,fields)=>{
-        if(err) throw err;
-        if(rows[0] != undefined){
+        if(!err){
             res.send(rows);
+        }else{
+            res.send(err);
         }
     });
 });
@@ -36,9 +37,9 @@ router.get('/admin/estudiante/getTalleres',ensureToken,(req,res)=>{
     var query = con.query(script,
         (err,rows,fields)=>{
         if(!err){
-            if(rows != undefined){
-                res.send(rows);
-            }
+            res.send(rows);
+        }else{
+            res.send(err)
         }
     });
 });
@@ -147,10 +148,7 @@ router.get('/admin/estudiante/eliminar',ensureToken,(req,res)=>{
     [req.query.cedula],
         (err,rows,fields)=>{
         if(!err){
-            if(rows.affectedRows){
-                logSistema(req.session.value.cedula, `ELIMINAR USUARIO -> ${req.query.cedula}`, DDL.DELETE, TABLE.ESTUDIANTE);
-                res.send(rows);
-            }
+            logSistema(req.session.value.cedula, `ELIMINAR USUARIO -> ${req.query.cedula}`, DDL.DELETE, TABLE.ESTUDIANTE);
             res.send(rows);
         }else{
             res.send(err)
@@ -162,13 +160,15 @@ router.post('/admin/estudiantes/agregarEstudiantes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
             let d = req.body;
+            console.log(d)
             con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
-            [d.cedula_add, d.nombre_add.toUpperCase(), d.apellido_add.toUpperCase(), d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
+            [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
             (err,rows,fields)=>{
                 if(!err){
                     logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
                     res.redirect('/admin/estudiantes');
                 }else{
+                    console.log(err)
                     res.redirect('/admin/estudiantes');
                 }
             });       

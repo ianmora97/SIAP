@@ -177,6 +177,21 @@ router.get('/admin/solicitudes',(req,res)=>{
     }
 });
 
+router.get('/admin/matricula/reportes',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-matricula';
+            res.render('admin/matriculaReporte', {usuario,s, token});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
+
 router.get('/admin/comprobacion',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){

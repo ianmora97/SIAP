@@ -369,6 +369,32 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
+-- Table `siapd`.`t_matricula_reporte`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `siapd`.`t_matricula_reporte` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `grupo` INT(11) NOT NULL,
+  `estudiante` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_t_matricula_t_taller2_idx` (`grupo`) ,
+  INDEX `fk_t_matricula_t_estudiante2_idx` (`estudiante`) ,
+  CONSTRAINT `fk_t_matricula_t_estudiante2`
+    FOREIGN KEY (`estudiante`)
+    REFERENCES `siapd`.`t_estudiante` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_t_matricula_t_taller12`
+    FOREIGN KEY (`grupo`)
+    REFERENCES `siapd`.`t_grupo` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
 -- Table `siapd`.`t_padecimiento`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `siapd`.`t_padecimiento` (
@@ -2689,6 +2715,36 @@ end$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure prc_insertar_profesor_admin
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `siapd`$$
+CREATE DEFINER=`siapuseradmin`@`localhost` PROCEDURE prc_insertar_profesor_admin(
+    in vps_cedula VARCHAR(30),
+    in vps_nombre VARCHAR(100),
+    in vps_apellido VARCHAR(100),
+    in vps_correo VARCHAR(100),
+    in vps_clave VARCHAR(100),
+    in vps_sexo VARCHAR(40),
+    in vps_usuario VARCHAR(100))
+begin
+    declare vli_id int;
+
+    insert into siapd.t_usuario(cedula, nombre, apellido, usuario, clave, sexo, correo) 
+    values (vps_cedula, vps_nombre, vps_apellido, vps_usuario, sha1(vps_clave), vps_sexo, vps_correo);
+
+    select id into vli_id
+        from t_usuario 
+        where cedula = vps_cedula;
+
+    insert into t_profesor(usuario)
+    values (vli_id);
+
+    commit;
+end$$
+
+-- -----------------------------------------------------
 -- procedure prc_insertar_profesor_asistencia
 -- -----------------------------------------------------
 
@@ -3571,126 +3627,126 @@ CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL S
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siapd`.`vta_asistencia_admin`;
 USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_asistencia_admin` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%d-%m-%Y-%h-%i') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`codigo` AS `codigo`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `profesor` from (((((((`siapd`.`t_asistencia` `a` join `siapd`.`t_matricula` `m`) join `siapd`.`t_grupo` `g`) join `siapd`.`t_taller` `t`) join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `u`) join `siapd`.`t_usuario` `up`) join `siapd`.`t_profesor` `p`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_asistencia_admin` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%d-%m-%Y-%h-%i') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`codigo` AS `codigo`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `profesor` from (((((((`siapd`.`t_asistencia` `a` join `siapd`.`t_matricula` `m`) join `siapd`.`t_grupo` `g`) join `siapd`.`t_taller` `t`) join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `u`) join `u280304940_siapd`.`t_usuario` `up`) join `u280304940_siapd`.`t_profesor` `p`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`));
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_cantidad_usuarios_registrados`
+-- View `u280304940_siapd`.`vta_cantidad_usuarios_registrados`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_cantidad_usuarios_registrados`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_cantidad_usuarios_registrados` AS select count(`cantidad`.`cedula`) AS `cantidad` from (select `vta_usuario_temp`.`cedula` AS `cedula` from `siapd`.`vta_usuario_temp` where (`vta_usuario_temp`.`estado` = 0) union all select `vta_admin_estudiante`.`cedula` AS `cedula` from `siapd`.`vta_admin_estudiante`) `cantidad`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_cantidad_usuarios_registrados`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_cantidad_usuarios_registrados` AS select count(`cantidad`.`cedula`) AS `cantidad` from (select `vta_usuario_temp`.`cedula` AS `cedula` from `u280304940_siapd`.`vta_usuario_temp` where (`vta_usuario_temp`.`estado` = 0) union all select `vta_admin_estudiante`.`cedula` AS `cedula` from `u280304940_siapd`.`vta_admin_estudiante`) `cantidad`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_casilleros`
+-- View `u280304940_siapd`.`vta_casilleros`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_casilleros`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_casilleros` AS select `c`.`id` AS `id_casillero`,`c`.`codigo` AS `codigo_casillero`,`r`.`id` AS `id_reserva`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`r`.`hora_entrada` AS `hora_entrada`,`r`.`hora_salida` AS `hora_salida` from (((`siapd`.`t_casillero` `c` join `siapd`.`t_casillero_estudiante` `r`) join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `u`) where ((`r`.`casillero` = `c`.`id`) and (`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`)) order by `c`.`codigo`,`r`.`id`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_casilleros`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_casilleros` AS select `c`.`id` AS `id_casillero`,`c`.`codigo` AS `codigo_casillero`,`r`.`id` AS `id_reserva`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`r`.`hora_entrada` AS `hora_entrada`,`r`.`hora_salida` AS `hora_salida` from (((`u280304940_siapd`.`t_casillero` `c` join `u280304940_siapd`.`t_casillero_estudiante` `r`) join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_usuario` `u`) where ((`r`.`casillero` = `c`.`id`) and (`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`)) order by `c`.`codigo`,`r`.`id`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_cliente_estudiante`
+-- View `u280304940_siapd`.`vta_cliente_estudiante`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_cliente_estudiante`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_cliente_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siapd`.`t_usuario` `u` join `siapd`.`t_estudiante` `e`) where (`u`.`id` = `e`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_cliente_estudiante`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_cliente_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`u280304940_siapd`.`t_usuario` `u` join `u280304940_siapd`.`t_estudiante` `e`) where (`u`.`id` = `e`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_conductas`
+-- View `u280304940_siapd`.`vta_conductas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_conductas`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_conductas` AS select `a`.`id` AS `id_conducta`,`a`.`texto` AS `texto`,`a`.`strike` AS `strike`,`a`.`tipo` AS `tipo`,`a`.`created_at` AS `created_at`,`a`.`estudiante` AS `id_estudiante`,`e`.`estado` AS `estado`,`ue`.`foto` AS `foto`,`ue`.`cedula` AS `cedula`,`ue`.`apellido` AS `apellido`,`ue`.`nombre` AS `nombre` from ((`siapd`.`t_conductas` `a` join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `ue`) where ((`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`));
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_conductas`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_conductas` AS select `a`.`id` AS `id_conducta`,`a`.`texto` AS `texto`,`a`.`strike` AS `strike`,`a`.`tipo` AS `tipo`,`a`.`created_at` AS `created_at`,`a`.`estudiante` AS `id_estudiante`,`e`.`estado` AS `estado`,`ue`.`foto` AS `foto`,`ue`.`cedula` AS `cedula`,`ue`.`apellido` AS `apellido`,`ue`.`nombre` AS `nombre` from ((`u280304940_siapd`.`t_conductas` `a` join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_usuario` `ue`) where ((`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`));
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_documentos_usuarios`
+-- View `u280304940_siapd`.`vta_documentos_usuarios`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_documentos_usuarios`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_documentos_usuarios` AS select `d`.`id` AS `id_documento`,`d`.`tipo_documento` AS `tipo_documento`,`d`.`documento` AS `documento`,`d`.`created_at` AS `created_at`,`d`.`updated_at` AS `updated_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula` from ((`siapd`.`t_documento_usuario` `d` join `siapd`.`t_usuario` `u`) join `siapd`.`t_estudiante` `e`) where ((`d`.`usuario` = `u`.`id`) and (`e`.`usuario` = `u`.`id`));
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_documentos_usuarios`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_documentos_usuarios` AS select `d`.`id` AS `id_documento`,`d`.`tipo_documento` AS `tipo_documento`,`d`.`documento` AS `documento`,`d`.`created_at` AS `created_at`,`d`.`updated_at` AS `updated_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula` from ((`u280304940_siapd`.`t_documento_usuario` `d` join `u280304940_siapd`.`t_usuario` `u`) join `u280304940_siapd`.`t_estudiante` `e`) where ((`d`.`usuario` = `u`.`id`) and (`e`.`usuario` = `u`.`id`));
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_estadistica`
+-- View `u280304940_siapd`.`vta_estadistica`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_estadistica`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_estadistica` AS select `fi_cantidad_talleres`() AS `cantidad_talleres`,`fi_cantidad_grupos`() AS `cantidad_grupos`,`fi_cantidad_matriculados`() AS `cantidad_matriculados`,`fi_cantidad_estudiantes`() AS `cantidad_estudiantes`,`fi_cantidad_administrativos`() AS `cantidad_administrativos`,`fi_cantidad_profesores`() AS `cantidad_profesores`,`fi_cantidad_usuarios`() AS `cantidad_usuarios`,`fi_cantidad_usuarios_temp`() AS `cantidad_usuarios_temp`,`fi_cantidad_horarios`() AS `cantidad_horarios`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_estadistica`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_estadistica` AS select `fi_cantidad_talleres`() AS `cantidad_talleres`,`fi_cantidad_grupos`() AS `cantidad_grupos`,`fi_cantidad_matriculados`() AS `cantidad_matriculados`,`fi_cantidad_estudiantes`() AS `cantidad_estudiantes`,`fi_cantidad_administrativos`() AS `cantidad_administrativos`,`fi_cantidad_profesores`() AS `cantidad_profesores`,`fi_cantidad_usuarios`() AS `cantidad_usuarios`,`fi_cantidad_usuarios_temp`() AS `cantidad_usuarios_temp`,`fi_cantidad_horarios`() AS `cantidad_horarios`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_estudiante_moroso`
+-- View `u280304940_siapd`.`vta_estudiante_moroso`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_estudiante_moroso`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_estudiante_moroso` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`pago` AS `pago`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siapd`.`t_usuario` `u` join `siapd`.`t_estudiante` `e`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`moroso` = 1)) order by `u`.`apellido`,`u`.`nombre`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_estudiante_moroso`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_estudiante_moroso` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`pago` AS `pago`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`u280304940_siapd`.`t_usuario` `u` join `u280304940_siapd`.`t_estudiante` `e`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`moroso` = 1)) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_grupos`
+-- View `u280304940_siapd`.`vta_grupos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_grupos`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_grupos` AS select `t`.`codigo` AS `codigo_taller`,`t`.`costo` AS `costo`,`t`.`costo_funcionario` AS `costo_funcionario`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`t`.`id` AS `id_taller`,`g`.`id` AS `id_grupo`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo`,`h`.`id` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_profesor`,`u`.`cedula` AS `cedula` from ((((`siapd`.`t_taller` `t` join `siapd`.`t_grupo` `g`) join `siapd`.`t_usuario` `u`) join `siapd`.`t_profesor` `p`) join `siapd`.`t_horario` `h`) where ((`g`.`taller` = `t`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`) and (`g`.`horario` = `h`.`id`)) order by `t`.`codigo`,`g`.`id`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_grupos`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_grupos` AS select `t`.`codigo` AS `codigo_taller`,`t`.`costo` AS `costo`,`t`.`costo_funcionario` AS `costo_funcionario`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`t`.`id` AS `id_taller`,`g`.`id` AS `id_grupo`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo`,`h`.`id` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_profesor`,`u`.`cedula` AS `cedula` from ((((`u280304940_siapd`.`t_taller` `t` join `u280304940_siapd`.`t_grupo` `g`) join `u280304940_siapd`.`t_usuario` `u`) join `u280304940_siapd`.`t_profesor` `p`) join `u280304940_siapd`.`t_horario` `h`) where ((`g`.`taller` = `t`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`) and (`g`.`horario` = `h`.`id`)) order by `t`.`codigo`,`g`.`id`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_matriculados_grupo_detalle`
+-- View `u280304940_siapd`.`vta_matriculados_grupo_detalle`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_matriculados_grupo_detalle`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_matriculados_grupo_detalle` AS select `g`.`id` AS `id_grupo`,`e`.`id` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`correo` AS `correo_estudiante`,`e`.`carrera_departamento` AS `carrera_departamento`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante`,`ue`.`foto` AS `foto_estudiante`,`ue`.`sexo` AS `sexo_estudiante`,`e`.`celular` AS `celular_estudiante`,`e`.`telefono_emergencia` AS `telefono_emergencia_estudiante`,`ue`.`nacimiento` AS `nacimiento_estudiante`,`p`.`id` AS `id_profesor`,`up`.`cedula` AS `cedula_profesor` from (((((`siapd`.`t_grupo` `g` join `siapd`.`t_estudiante` `e`) join `siapd`.`t_profesor` `p`) join `siapd`.`t_usuario` `ue`) join `siapd`.`t_usuario` `up`) join `siapd`.`t_matricula` `m`) where ((`e`.`usuario` = `ue`.`id`) and (`p`.`usuario` = `up`.`id`) and (`m`.`grupo` = `g`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`g`.`profesor` = `p`.`id`)) order by `ue`.`cedula`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_matriculados_grupo_detalle`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_matriculados_grupo_detalle` AS select `g`.`id` AS `id_grupo`,`e`.`id` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`correo` AS `correo_estudiante`,`e`.`carrera_departamento` AS `carrera_departamento`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante`,`ue`.`foto` AS `foto_estudiante`,`ue`.`sexo` AS `sexo_estudiante`,`e`.`celular` AS `celular_estudiante`,`e`.`telefono_emergencia` AS `telefono_emergencia_estudiante`,`ue`.`nacimiento` AS `nacimiento_estudiante`,`p`.`id` AS `id_profesor`,`up`.`cedula` AS `cedula_profesor` from (((((`u280304940_siapd`.`t_grupo` `g` join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_profesor` `p`) join `u280304940_siapd`.`t_usuario` `ue`) join `u280304940_siapd`.`t_usuario` `up`) join `u280304940_siapd`.`t_matricula` `m`) where ((`e`.`usuario` = `ue`.`id`) and (`p`.`usuario` = `up`.`id`) and (`m`.`grupo` = `g`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`g`.`profesor` = `p`.`id`)) order by `ue`.`cedula`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_matriculados_por_grupo`
+-- View `u280304940_siapd`.`vta_matriculados_por_grupo`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_matriculados_por_grupo`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_matriculados_por_grupo` AS select `t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel_taller`,`t`.`descripcion` AS `descripcion`,`g`.`id` AS `id_grupo`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `nombre_profesor`,`m`.`id` AS `id_matricula`,`m`.`activa` AS `activa`,`m`.`created_at` AS `created_at`,`g`.`periodo` AS `periodo`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo` from (((((((`siapd`.`t_taller` `t` join `siapd`.`t_grupo` `g`) join `siapd`.`t_matricula` `m`) join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `u`) join `siapd`.`t_usuario` `up`) join `siapd`.`t_horario` `h`) join `siapd`.`t_profesor` `p`) where ((`m`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`h`.`id` = `g`.`horario`) and (`p`.`id` = `g`.`profesor`) and (`up`.`id` = `p`.`usuario`)) order by `t`.`codigo`,`g`.`id`,`u`.`apellido`,`u`.`nombre`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_matriculados_por_grupo`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_matriculados_por_grupo` AS select `t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel_taller`,`t`.`descripcion` AS `descripcion`,`g`.`id` AS `id_grupo`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `nombre_profesor`,`m`.`id` AS `id_matricula`,`m`.`activa` AS `activa`,`m`.`created_at` AS `created_at`,`g`.`periodo` AS `periodo`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo` from (((((((`u280304940_siapd`.`t_taller` `t` join `u280304940_siapd`.`t_grupo` `g`) join `u280304940_siapd`.`t_matricula` `m`) join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_usuario` `u`) join `u280304940_siapd`.`t_usuario` `up`) join `u280304940_siapd`.`t_horario` `h`) join `u280304940_siapd`.`t_profesor` `p`) where ((`m`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`h`.`id` = `g`.`horario`) and (`p`.`id` = `g`.`profesor`) and (`up`.`id` = `p`.`usuario`)) order by `t`.`codigo`,`g`.`id`,`u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_padecimientos`
+-- View `u280304940_siapd`.`vta_padecimientos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_padecimientos`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_padecimientos` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`e`.`id` AS `id_estudiante`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_padecimiento`,`p`.`descripcion` AS `descripcion`,`p`.`observaciones` AS `observaciones` from ((`siapd`.`t_usuario` `u` join `siapd`.`t_estudiante` `e`) join `siapd`.`t_padecimiento` `p`) where ((`u`.`id` = `e`.`usuario`) and (`p`.`estudiante` = `e`.`id`)) order by `u`.`cedula`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_padecimientos`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_padecimientos` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`e`.`id` AS `id_estudiante`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_padecimiento`,`p`.`descripcion` AS `descripcion`,`p`.`observaciones` AS `observaciones` from ((`u280304940_siapd`.`t_usuario` `u` join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_padecimiento` `p`) where ((`u`.`id` = `e`.`usuario`) and (`p`.`estudiante` = `e`.`id`)) order by `u`.`cedula`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_profesor_asistencias`
+-- View `u280304940_siapd`.`vta_profesor_asistencias`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_profesor_asistencias`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_profesor_asistencias` AS select `pa`.`id` AS `id_profesor_asistencia`,`pa`.`estado` AS `estado`,`pa`.`fecha` AS `fecha`,`pa`.`profesor` AS `id_profesor`,`p`.`usuario` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`pa`.`grupo` AS `id_grupo` from ((`siapd`.`t_profesor_asistencia` `pa` join `siapd`.`t_profesor` `p`) join `siapd`.`t_usuario` `u`) where ((`pa`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`)) order by `u`.`apellido`,`u`.`nombre`,`pa`.`fecha`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_profesor_asistencias`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_profesor_asistencias` AS select `pa`.`id` AS `id_profesor_asistencia`,`pa`.`estado` AS `estado`,`pa`.`fecha` AS `fecha`,`pa`.`profesor` AS `id_profesor`,`p`.`usuario` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`pa`.`grupo` AS `id_grupo` from ((`u280304940_siapd`.`t_profesor_asistencia` `pa` join `u280304940_siapd`.`t_profesor` `p`) join `u280304940_siapd`.`t_usuario` `u`) where ((`pa`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`)) order by `u`.`apellido`,`u`.`nombre`,`pa`.`fecha`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_profesor_reposiciones`
+-- View `u280304940_siapd`.`vta_profesor_reposiciones`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_profesor_reposiciones`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_profesor_reposiciones` AS select `pr`.`id` AS `id_reposicion`,`pr`.`profesor_origen` AS `id_profesor_origen`,`po`.`usuario` AS `id_usuario_origen`,`uo`.`cedula` AS `cedula_origen`,`uo`.`nombre` AS `nombre_origen`,`uo`.`apellido` AS `apellido_origen`,`pr`.`profesor_reposicion` AS `id_profesor_reposicion`,`pd`.`usuario` AS `id_usuario_reposicion`,`ud`.`cedula` AS `cedula_reposicion`,`ud`.`nombre` AS `nombre_reposicion`,`ud`.`apellido` AS `apellido_reposicion`,`pr`.`fecha_reposicion` AS `fecha_reposicion`,`pr`.`grupo` AS `id_grupo`,`g`.`horario` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`g`.`taller` AS `id_taller`,`t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo` from (((((((`siapd`.`t_profesor_reposicion` `pr` join `siapd`.`t_profesor` `po`) join `siapd`.`t_profesor` `pd`) join `siapd`.`t_usuario` `uo`) join `siapd`.`t_usuario` `ud`) join `siapd`.`t_grupo` `g`) join `siapd`.`t_horario` `h`) join `siapd`.`t_taller` `t`) where ((`pr`.`profesor_origen` = `po`.`id`) and (`po`.`usuario` = `uo`.`id`) and (`pr`.`profesor_reposicion` = `pd`.`id`) and (`pd`.`usuario` = `ud`.`id`) and (`g`.`id` = `pr`.`grupo`) and (`g`.`horario` = `h`.`id`) and (`g`.`taller` = `t`.`id`)) order by `uo`.`apellido`,`uo`.`nombre`,`ud`.`apellido`,`ud`.`nombre`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_profesor_reposiciones`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_profesor_reposiciones` AS select `pr`.`id` AS `id_reposicion`,`pr`.`profesor_origen` AS `id_profesor_origen`,`po`.`usuario` AS `id_usuario_origen`,`uo`.`cedula` AS `cedula_origen`,`uo`.`nombre` AS `nombre_origen`,`uo`.`apellido` AS `apellido_origen`,`pr`.`profesor_reposicion` AS `id_profesor_reposicion`,`pd`.`usuario` AS `id_usuario_reposicion`,`ud`.`cedula` AS `cedula_reposicion`,`ud`.`nombre` AS `nombre_reposicion`,`ud`.`apellido` AS `apellido_reposicion`,`pr`.`fecha_reposicion` AS `fecha_reposicion`,`pr`.`grupo` AS `id_grupo`,`g`.`horario` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`g`.`taller` AS `id_taller`,`t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo` from (((((((`u280304940_siapd`.`t_profesor_reposicion` `pr` join `u280304940_siapd`.`t_profesor` `po`) join `u280304940_siapd`.`t_profesor` `pd`) join `u280304940_siapd`.`t_usuario` `uo`) join `u280304940_siapd`.`t_usuario` `ud`) join `u280304940_siapd`.`t_grupo` `g`) join `u280304940_siapd`.`t_horario` `h`) join `u280304940_siapd`.`t_taller` `t`) where ((`pr`.`profesor_origen` = `po`.`id`) and (`po`.`usuario` = `uo`.`id`) and (`pr`.`profesor_reposicion` = `pd`.`id`) and (`pd`.`usuario` = `ud`.`id`) and (`g`.`id` = `pr`.`grupo`) and (`g`.`horario` = `h`.`id`) and (`g`.`taller` = `t`.`id`)) order by `uo`.`apellido`,`uo`.`nombre`,`ud`.`apellido`,`ud`.`nombre`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_profesores`
+-- View `u280304940_siapd`.`vta_profesores`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_profesores`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_profesores` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`clave` AS `clave`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo`,`p`.`id` AS `id_profesor`,`p`.`rol` AS `rol` from (`siapd`.`t_usuario` `u` join `siapd`.`t_profesor` `p`) where (`u`.`id` = `p`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_profesores`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_profesores` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`clave` AS `clave`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo`,`p`.`id` AS `id_profesor`,`p`.`rol` AS `rol` from (`u280304940_siapd`.`t_usuario` `u` join `u280304940_siapd`.`t_profesor` `p`) where (`u`.`id` = `p`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_reposiciones`
+-- View `u280304940_siapd`.`vta_reposiciones`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_reposiciones`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_reposiciones` AS select `r`.`id` AS `id_reposicion`,`r`.`grupo_origen` AS `grupo_origen`,`r`.`grupo_reposicion` AS `grupo_reposicion`,`r`.`fecha_reposicion` AS `fecha_reposicion`,`r`.`comprobante` AS `comprobante`,`r`.`observacion` AS `observacion`,`r`.`estado` AS `estado`,`e`.`id` AS `id_estudiante`,`e`.`nivel` AS `nivel`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido` from ((`siapd`.`t_reposicion` `r` join `siapd`.`t_estudiante` `e`) join `siapd`.`t_usuario` `u`) where ((`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`));
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_reposiciones`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_reposiciones` AS select `r`.`id` AS `id_reposicion`,`r`.`grupo_origen` AS `grupo_origen`,`r`.`grupo_reposicion` AS `grupo_reposicion`,`r`.`fecha_reposicion` AS `fecha_reposicion`,`r`.`comprobante` AS `comprobante`,`r`.`observacion` AS `observacion`,`r`.`estado` AS `estado`,`e`.`id` AS `id_estudiante`,`e`.`nivel` AS `nivel`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido` from ((`u280304940_siapd`.`t_reposicion` `r` join `u280304940_siapd`.`t_estudiante` `e`) join `u280304940_siapd`.`t_usuario` `u`) where ((`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`));
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_usuario_temp`
+-- View `u280304940_siapd`.`vta_usuario_temp`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_usuario_temp`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_usuario_temp` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado`,`u`.`correo` AS `correo` from `siapd`.`t_usuario_temp` `u` order by `u`.`estado`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_usuario_temp`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_usuario_temp` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado`,`u`.`correo` AS `correo` from `u280304940_siapd`.`t_usuario_temp` `u` order by `u`.`estado`;
 
 -- -----------------------------------------------------
--- View `siapd`.`vta_usuario_temp_admin`
+-- View `u280304940_siapd`.`vta_usuario_temp_admin`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `siapd`.`vta_usuario_temp_admin`;
-USE `siapd`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `siapd`.`vta_usuario_temp_admin` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`clave` AS `clave`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado` from `siapd`.`t_usuario_temp` `u` order by `u`.`estado`;
+DROP TABLE IF EXISTS `u280304940_siapd`.`vta_usuario_temp_admin`;
+USE `u280304940_siapd`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapuseradmin`@`localhost` SQL SECURITY DEFINER VIEW `u280304940_siapd`.`vta_usuario_temp_admin` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`clave` AS `clave`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado` from `u280304940_siapd`.`t_usuario_temp` `u` order by `u`.`estado`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
