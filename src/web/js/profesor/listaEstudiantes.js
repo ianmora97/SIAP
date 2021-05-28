@@ -273,10 +273,18 @@ function traerCursosEstudiante(){
         data: data,
         contentType: "application/json"
     }).then((response) => {
-        g_grupos = response;
-        eachGrupos(response);
         if(response.length){
-            $('#alertaNoHay').hide();
+            g_grupos = response;
+            eachGrupos(response);
+        }else{
+            $('#alertaVacia').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertaNoHay">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
+                </div>
+            `)
         }
     }, (error) => {
     });
