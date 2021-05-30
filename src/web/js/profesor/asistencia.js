@@ -1,12 +1,13 @@
 
 var g_estudiantes = [];
+var g_mapEstudiantes = new Map();
+
 var g_grupos = [];
 var g_informacionEstudiantes = [];
 var g_mapGrupos = new Map();
 var g_mapAsistencia = new Map();
 var g_asistencia = [];
-var g_profesorAsistencia = [];
-var g_MapprofesorAsistencia = new Map();
+
 var g_grupoAbierto ='';
 var g_grupoReposicion = [];
 
@@ -17,10 +18,9 @@ function loaded(event){
 function events(event){
     traerEstudantesXGrupo();
     traerGrupos();
-    traerInformacionDeEstudiante();
+    bringEstudiantesInfo();
     movePageBack();
     modalsOpen();
-    bringDB();
 }
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
@@ -51,9 +51,7 @@ function modalsOpen() {
     $('#asistenciaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = $('#idGrupoTemp').html();
-        console.log(id);
         var grupo = g_mapGrupos.get(parseInt(id));
-        
         buildAsistenciaTable(grupo);
     })
     $('#asistenciaModal').on('hide.bs.modal', function (event) {
@@ -91,7 +89,7 @@ function buildAsistenciaTable(grupo) {
                 <td>${foto}</td>
                 <td>${e.cedula}</td>
                 <td>${e.nombre.toUpperCase() +' '+e.apellido.toUpperCase()}</td>
-                <td>${fecha}</td>
+                <td>${moment(e.fecha,'DD-MM-YYYY-HH-mm').calendar()}</td>
                 <td>
                     <h4><span class="w-100 badge badge-${e.estado == 'Presente' ? 'success' : e.estado == 'Tarde' ? 'warning' : 'danger'}">${e.estado}</span></h4>
                 </td>
@@ -133,6 +131,7 @@ function buildAsistenciaTable(grupo) {
     $('#tablaModalAsistencia_filter').html('');
 }
 
+// ? ----------------------------------- TABLA MODAL ---------------------------------------
 // ! ---------------------------------------------------------------------------------------
 
 
@@ -218,6 +217,7 @@ function abrirEstudiante(id){
     },500);
 }
 
+// ? --------------------------------------- TRANSICION --------------------------------------------------
 // ! ---------------------------------------  NAV --------------------------------------------------
 
 
@@ -308,8 +308,7 @@ function ingresarAsitenciaProfesor(){
         }
     }).then((response) => {
         $('#pasarAsistenciaProfesor').modal('hide');
-        bringDB()
-        traerEstudantesXGrupo();
+        
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -332,64 +331,10 @@ function ingresarAsitenciaProfesor(){
 }
 function saltarAsitenciaProfesor() {
     $('#pasarAsistenciaProfesor').modal('hide');
-    $('#pag_ant').click();
 }
 
-function bringDB() {
-    let bearer = 'Bearer '+g_token;
-    $.ajax({
-        type: "GET",
-        url: "/profesor/asistenciaProfesor/getAsistencia",
-        contentType: "application/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        g_profesorAsistencia = response;
-
-    }, (error) => {
-        
-    });
-    
-}
-// function revisarAsistenciaProfesor(grupo) {
-//     let data = g_profesorAsistencia;
-//     let today = new Date();
-//     today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
-//     let filter = filtrarAsistenciasPorProfesor($('#id_cedula').html(), grupo);
-//     let flag = true;
-//     if(filter.length != 0){
-//         filter.every((e)=>{
-//             if(today == e.fecha){
-//                 console.log(g_grupoAbierto,e.id_grupo)
-//                 flag= false;
-//                 return false;
-//             }else{
-//                 flag=true;
-//             }
-//         });
-//     }else{
-//         flag=true;
-//     }
-//     if(flag){
-//         $('#pasarAsistenciaProfesor').modal('show')
-//     }
-// }
-// function filtrarAsistenciasPorProfesor(cedula, grupo) {
-//     if(g_profesorAsistencia.length){
-//         let result= g_profesorAsistencia.filter(e => e.cedula == cedula);
-//         return result.filter(e => e.id_grupo == grupo);
-//     }
-//     return [];
-// }
 function filtrarEstudiantesxGrupo(grupo) {
-    let result=[];
-    for(let i=0;i<g_estudiantes.length; i++){
-        if(g_estudiantes[i].id_grupo == grupo){
-            result.push(g_estudiantes[i]);
-        }
-    }
-    return result;
+    return g_estudiantes.filter(e => e.id_grupo == grupo);
 }
 function forEachEstudiantesxGrupo(grupo){
     console.log(grupo,g_mapGrupos.get(grupo))
@@ -404,11 +349,18 @@ function forEachEstudiantesxGrupo(grupo){
     result.forEach((c)=>{
         mostrarEstudiantesporGrupo(c);
     });
-    // traerEstudantesXGrupoAfter().then((response) => {
-    // });
 }
 
+function reiniciarListaAsistencia() {
+    // traer los estudiantes de nuevo para reinicar la asistencia edl lado del cliente
+    traerEstudantesXGrupo();
+    let table = $('#tablaModalAsistencia').DataTable();
+    table.destroy();
+    // var id = $('#idGrupoTemp').html();
+    // var grupo = g_mapGrupos.get(parseInt(id));
+    // buildAsistenciaTable(grupo);
 
+}
 function updateStatus(estudiante,estado,grupo,) {
     let bearer = 'Bearer '+g_token;
     $.ajax({
@@ -420,6 +372,7 @@ function updateStatus(estudiante,estado,grupo,) {
             'Authorization':bearer
         }
     }).then((response) => {
+        reiniciarListaAsistencia();
         let est = g_estudiantes.filter(e => e.id_estudiante == estudiante)[0];
         est = est.nombre.toUpperCase() + ' ' + est.apellido.toUpperCase();
         switch (estado) {
@@ -487,7 +440,7 @@ function mostrarEstudiantesporGrupo(c) {
                 <small>${c.dia} ${hora}</small>
             </div>
             <div class="col-2 px-1 d-flex flex-column">
-                <div class="mx-auto" id="idEstudiantexGrupo-${id_estudiante}" onclick="abrirEstudiante(${cedula})" role="button">${foto}</div>
+                <div class="mx-auto" id="idEstudiantexGrupo-${id_estudiante}" onclick="abrirEstudiante('${cedula}')" role="button">${foto}</div>
             </div>
         </li>
     `);
@@ -609,7 +562,7 @@ function daytoWeekDay(day) {
         }
     })
 }
-function traerInformacionDeEstudiante(){
+function bringEstudiantesInfo(){
     let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
@@ -622,6 +575,9 @@ function traerInformacionDeEstudiante(){
             'Authorization':bearer
         }
     }).then((response) => {
+        response.forEach(e => {
+            g_mapEstudiantes.set(e.cedula_estudiante,e)
+        });
         g_informacionEstudiantes = response;
     }, (error) => {
     });
@@ -629,7 +585,8 @@ function traerInformacionDeEstudiante(){
 
 function showInformacionDeEstudiante(id){
     $('#estudianteInformacionLista').html('');
-    let e = buscarEstudiantexCedula(id);
+    let e = g_mapEstudiantes.get(id);
+    console.log(e)
     let foto;
     let celular = e.celular_estudiante == null ? 'No Asignado' : e.celular_estudiante;
     let correo = e.correo_estudiante == null ? 'No Asignado' : e.correo_estudiante;
@@ -663,18 +620,11 @@ function showInformacionDeEstudiante(id){
         '</div>'
     );
 }
-function buscarEstudiantexCedula(id) {
-    for(let i =0;i<g_informacionEstudiantes.length;i++){
-        // console.log(g_informacionEstudiantes[i].cedula_estudiante,id);
-        if(g_informacionEstudiantes[i].cedula_estudiante == id){
-            return g_informacionEstudiantes[i];
-        }
-    }
-}
-function getEdad(birthday) {
+var getEdad = (birthday) =>{
     let b = new Date(birthday);
     var ageDifMs = Date.now() - b.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
+
 document.addEventListener("DOMContentLoaded", loaded);
