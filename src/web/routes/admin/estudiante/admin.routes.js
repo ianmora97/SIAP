@@ -97,6 +97,8 @@ router.get('/admin/estudiante/actualizarNivel',ensureToken,(req,res)=>{
         if(!err){
             logSistema(req.session.value.cedula, `${req.query.cedula} NIVEL -> ${req.query.nivel}`, DDL.UPDATE, TABLE.ESTUDIANTE);
             res.send(rows);
+        }else{
+            res.send(err)
         }
     });
 });

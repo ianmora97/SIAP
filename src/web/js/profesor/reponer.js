@@ -6,7 +6,7 @@ function loaded(event){
 }
 
 function events(event){
-    bringDB();
+    bringDBAlt();
 
 }
 
@@ -80,7 +80,7 @@ function enviarSolicitud() {
     });
 }
 
-function bringDB() {
+function bringDBAlt() {
     let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
