@@ -4,20 +4,21 @@ require('dotenv').config();
 
 var config = {
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     dateStrings: true
 };
 
-var db = mysql.createPool(config);
+var con = mysql.createPool(config);
 
-db.getConnection(function(err) {
+con.getConnection(function(err) {
     if (err){
+        console.log(process.env.DB_HOST);
         console.log(err);
         return;
     }else{
-        console.log('[',chalk.bgMagenta('OK'),'] Database', chalk.green(`${process.env.DB_DATABASE}`),'conected');
+        console.log('[',chalk.green('OK'),'] BD siapd conected');
     }
 });
-module.exports = db;
+module.exports = con;
