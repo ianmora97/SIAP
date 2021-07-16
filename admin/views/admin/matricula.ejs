@@ -107,14 +107,7 @@
 
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <nav aria-label="breadcrumb ">
-                <ol class="breadcrumb ">
-                    <li class="breadcrumb-item"><a href="#">Matricula</a></li>
-                    <li class="breadcrumb-item"><a href="#">Solicitudes de Matricula</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Lista de estudiantes matriculados</li>
-                </ol>
-            </nav>
-            <div class="container-fluid">
+            <div class="container-fluid mt-4">
                 <div class="card border-0 shadow-sm my-3">
                     <div class="card-body">
                         <div class="row">
@@ -173,7 +166,7 @@
                                             class="btn bg-success btn-sm text-white mr-2"
                                             style="border-radius: 50px;"><i class="fas fa-plus"></i>
                                         </button>
-                                        <a href="/admin/solicitudes" name="actualizar_lista" id="actualizar_lista"
+                                        <a href="/admin/matricula" name="actualizar_lista" id="actualizar_lista"
                                             data-toggle="tooltip" data-placement="top"
                                             title="Actualizar lista" class="btn bg-white btn-sm"
                                             style="border-radius: 50px;"><i
@@ -220,7 +213,7 @@
     </div>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
-    <script src="../../js/admin/lista-estdudiantes.js"></script>
+    <script src="../../js/admin/matricula.js"></script>
 </body>
 
 </html>

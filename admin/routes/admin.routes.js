@@ -41,19 +41,17 @@ router.post('/admin/log',(req,res)=>{ //login
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let dateTime = date+' '+time;
                         console.log('[',chalk.green('OK'),']',chalk.green('(ADMIN)'),chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
-                        let usuario = req.session.value;
-                        let s = 'dash';
-                        res.render('admin/dashboard', {usuario,s,token});
+                        res.redirect('/admin/dashboard');
                     }); //json web token
                     
                 }else{
-                    res.render('indexAdmin',{err:'No tiene permisos',id: 1});
+                    res.render('index',{err:'No tiene permisos',id: 1});
                 }
             }else{
-                res.render('indexAdmin', {err:'No se encuentra Registrado',id: 2});
+                res.render('index', {err:'No se encuentra Registrado',id: 2});
             }
         }else{
-            res.render('indexAdmin', {err:'Server Error',id: 3});
+            res.render('index', {err:'Server Error',id: 3});
         }
     });
 });
@@ -63,10 +61,10 @@ router.get('/admin/logout',(req,res)=>{ //logout
         let u = req.session.value.usuario;
         req.session.destroy((err) => {
             console.log('[',chalk.green('OK'),']',chalk.yellow(u),'Session Cerrada');
-            res.render('indexAdmin');
+            res.render('index');
         })
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -84,10 +82,10 @@ router.get('/admin/dashboard', (req,res)=>{
             let s = 'dash';
             res.render('admin/dashboard', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -100,10 +98,10 @@ router.get('/admin/estudiantes',(req,res)=>{
             let s = 'estudiantes';
             res.render('admin/estudiantes', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 router.get('/admin/administradores',(req,res)=>{
@@ -114,10 +112,10 @@ router.get('/admin/administradores',(req,res)=>{
             let s = 'administradores';
             res.render('admin/administradores', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 router.get('/admin/profesores',(req,res)=>{
@@ -128,10 +126,10 @@ router.get('/admin/profesores',(req,res)=>{
             let s = 'profesores';
             res.render('admin/profesores', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 router.get('/admin/talleres',(req,res)=>{
@@ -156,24 +154,24 @@ router.get('/admin/reposiciones',(req,res)=>{
             let s = 'reposiciones';
             res.render('admin/reposiciones', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
-router.get('/admin/solicitudes',(req,res)=>{
+router.get('/admin/matricula',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
-            let s = 'solicitudes';
-            res.render('admin/solicitudes', {usuario,s,token});
+            let s = 'matricula';
+            res.render('admin/matricula', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -200,26 +198,13 @@ router.get('/admin/comprobacion',(req,res)=>{
             let s = 'comprobacion';
             res.render('admin/comprobacionDatos', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
-router.get('/admin/reportes',(req,res)=>{
-    if(req.session.value){
-        if(req.session.value.rol > 2){
-            let token = req.session.token;
-            let usuario = req.session.value;
-            let s = 'reportes';
-            res.render('admin/dashboard', {usuario,s,token});
-        }else{
-            res.render('indexAdmin');
-        }
-    }else{
-        res.render('indexAdmin');
-    }
-});
+
 router.get('/admin/casilleros',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
@@ -228,10 +213,10 @@ router.get('/admin/casilleros',(req,res)=>{
             let s = 'casilleros';
             res.render('admin/casilleros', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -317,10 +302,10 @@ router.get('/admin/perfil',(req,res)=>{
             let s = 'dash';
             res.render('admin/editarDatos', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -353,10 +338,10 @@ router.post('/admin/cambiarfotoperfil',(req,res)=>{
             });
             res.render('admin/editarDatos', {usuario,s,token});
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 

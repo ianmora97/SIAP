@@ -60,10 +60,10 @@ router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
                 }
             });
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -83,10 +83,10 @@ router.post('/admin/estudiantes/cambiarClave',(req,res)=>{
                 }
             });
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 
@@ -132,8 +132,8 @@ router.get('/admin/estudiante/actualizarEstado',ensureToken,(req,res)=>{
 
 router.get('/admin/estudiante/actualizarDatos',ensureToken,(req,res)=>{
     let d = req.query;
-    con.query("CALL prc_actualizar_datos_estudiante_admin(?,?,?,?,?,?,?,?,?,?,?)",
-    [d.cedula, d.correo, d.username, d.celular, d.telefono, d.emergencia, 
+    con.query("CALL prc_actualizar_datos_estudiante_admin(?,?,?,?,?,?,?,?,?,?)",
+    [d.cedula, d.correo, d.username, d.celular, d.telefono, 
         d.carrera, d.direccion, d.sexo, d.tipo, d.nacimiento],
         (err,rows,fields)=>{
         if(!err){

@@ -31,7 +31,7 @@ router.get('/cambiarClave', (req, res) => {
 });
 
 router.get('/admin', (req, res) => {
-    res.render('indexAdmin');
+    res.render('index');
 });
 
 router.get('/profesores', (req, res) => {

@@ -1,11 +1,12 @@
 var mysql = require('mysql');
 const chalk = require('chalk');
+require('dotenv').config();
 
 var config = {
-    host: '52.171.213.23',
-    user: 'proyecto',
-    password: 'proyecto',
-    database: 'siapd',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     dateStrings: true
 };
 

@@ -100,12 +100,13 @@ router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/administrador/getTables', ensureToken,(req,res)=>{
-    con.query("SELECT * FROM information_schema.tables WHERE table_schema = 'siapd'",
+    con.query("SELECT * FROM information_schema.tables WHERE table_schema = 'siap'",
         (err,rows,fields)=>{
         if(!err){
             getColumnsTables(rows).then(resTables=>{
                 let tables = resTables;
                 getColumnsViews(rows).then(resViews=>{
+                    console.log(resViews);
                     let views = resViews;
                     res.send({tables,views});
                 })
@@ -163,6 +164,8 @@ function getColumnsViews(data) {
                     if(cont1 == tablesVec.length){
                         resolve(resTables);
                     }
+                }else{
+                    console.log(err1)
                 }
             });
         })

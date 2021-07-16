@@ -89,10 +89,10 @@ router.post('/admin/profesor/cambiarClave',(req,res)=>{
                 }
             });
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 

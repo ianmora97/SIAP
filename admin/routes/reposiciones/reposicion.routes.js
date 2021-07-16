@@ -20,7 +20,6 @@ const {logSistema, DDL, TABLE} = require('../../systemLogs');
 
 const con = require('../../database');
 
-//Selecciona todos los reposicion
 router.get('/api/admin/reposiciones',ensureToken, (req, res) => {
     con.query('SELECT * FROM vta_reposiciones', 
     (err, rows, fields) => {
@@ -43,19 +42,22 @@ router.post('/admin/taller/reposicion/crearReposicion', (req, res) => {
                     , req.body.fecha_reposicion, req.body.observacionTexto, req.file.filename],
                     (err, result, fields) => {
                     if (!err) {
-                        res.send(result);
+                        let token = req.session.token;
+                        let usuario = req.session.value;
+                        let s = 'reposiciones';
+                        res.render('admin/reposiciones', {usuario,s,token});
                     } else {
                         console.log(err);
                     }
                 });
             } else {
-                res.render('indexAdmin');
+                res.render('index');
             }
         } else {
-            res.render('indexAdmin');
+            res.render('index');
         }
     } else {
-        res.render('indexAdmin');
+        res.render('index');
     }
 });
 

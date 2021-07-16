@@ -29,10 +29,10 @@ router.get('/admin/getGrupos',(req,res)=>{
                 }
             });
         }else{
-            res.render('indexAdmin');
+            res.render('index');
         }
     }else{
-        res.render('indexAdmin');
+        res.render('index');
     }
     
 });

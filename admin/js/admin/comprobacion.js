@@ -252,17 +252,7 @@ function cambiarEstadoSend() {
         });
     });
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        //$('#sidebar-wrapper').css('position','relative');
-        $("#wrapper").toggleClass("toggled");
-        //$("#side-panel").css('margin-left','-12px');
-        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-        //$("#sidebar-wrapper").animate({left:'-200'},1000);
-    });
-}
+
 var filtrarNuevos = (estudiantes) => {
     let result = [];
     for (let i = 0; i < estudiantes.length; i++) {

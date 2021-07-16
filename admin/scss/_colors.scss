@@ -1,67 +1,37 @@
-// $primary:#364C78";
-// "$secondary:#B81616;
-// $light:#F0F2F5;
-// $gray:#4E5560;
-// $dark:#27323A;
-// $green:#28a745;
-// $info:#4c84ff;
+$theme-colors: (
+    "primary":#4659E4,
+    "dark-primary":#3347e0,
+    "secondary":#f0bc4d,
+    "light":#F9FAFE,
+    "light-alt":#f0f2fa,
+    "gray":#afafaf,
+    "dark":#212529,
+    "info":#97a3ff
+);
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 426px,
+    md: 768px,
+    lg: 1280px,
+    xl: 1400px,
+    xxl: 1900px
+);
+    
+$container-max-widths: (
+    sm: 426px,
+    md: 768px,
+    lg: 1280px,
+    xl: 1400px,
+    xxl: 1900px
+);
+
+$breadcrumb-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E");
 
 $modal-fade-transform: scaleY(.01) scaleX(0);
 .modal-dialog{
     animation: unfoldIn 1s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
-.modal-backdrop {
-    .modal {
-      transform:scale(0);
-      animation: zoomIn .5s .8s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
-    }
-}
-@keyframes zoomIn {
-    0% {
-      transform:scale(0);
-    }
-    100% {
-      transform:scale(1);
-    }
-  }
-@keyframes unfoldIn {
-    0% {
-      transform:scaleY(.005) scaleX(0);
-    }
-    50% {
-      transform:scaleY(.005) scaleX(1);
-    }
-    100% {
-      transform:scaleY(1) scaleX(1);
-    }
-}
-
-$theme-colors: (
-    "primary":#364C78,
-    "dark-primary":#25375a,
-    "secondary":#B81616,
-    "light":#F0F2F5,
-    "gray":#4E5560,
-    "dark":#27323A,
-    "green":#28a745,
-    "info":#4c84ff
-);
-// $primary:#45b4ff;
-// $secondary:#f77457;
-// $light:#F0F2F5;
-// $gray:#4E5560;
-// $dark:#27323A;
-// $green:#1b242f;
-// $info:#45b4ff;
-
-// $primary:#ea7124;
-// $secondary:#67c7e7;
-// $light:#F0F2F5;
-// $gray:#4E5560;
-// $dark:#27323A;
-// $green:#1b242f;
-// $info:#45b4ff;
-
 body{
     font-family: 'Lato' !important;
 }

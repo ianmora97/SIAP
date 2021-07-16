@@ -12,25 +12,7 @@ function events(event) {
     fotoonChange();
     llenarDatos();
 }
-const animateCSS = (element, animation) =>
 
-    // We create a Promise and return it
-    new Promise((resolve, reject) => {
-        let prefix = 'animate__';
-        const animationName = `${prefix}${animation}`;
-        const node = document.querySelector(element);
-
-        node.classList.add(`${prefix}animated`, animationName);
-
-        // When the animation ends, we clean the classes and resolve the Promise
-        function handleAnimationEnd(event) {
-            event.stopPropagation();
-            node.classList.remove(`${prefix}animated`, animationName);
-            resolve('Animation ended');
-        }
-
-        node.addEventListener('animationend', handleAnimationEnd, { once: true });
-    });
 function openModalCameras() {
     setTimeout(() => {
         $('#modalTakePic').modal('show');
@@ -102,7 +84,7 @@ function openFilter(params) {
     animateCSS('#containerFilter', 'fadeInRight')
 }
 function searchonfind() {
-    var table = $('#estudiantes_TableOrder').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 }
@@ -214,35 +196,92 @@ function cargar_estudiante(data) {
     
         });
     }
-    $('#estudiantes_TableOrder').DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron estudiantes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ registros",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
-                "first":    '<i class="fas fa-angle-double-left"></i>',
+                "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
-                "next":     '<i class="fas fa-angle-right"></i>',
-                "last":     '<i class="fas fa-angle-double-right"></i>'
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
-                    "first":    'Primera',
-                    "previous": 'Anterior',
-                    "next":     'Siguiente',
-                    "last":     'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [0, 6], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $(`#estudiantes_TableOrder_length`).css('display','none');
-    $(`#estudiantes_TableOrder_filter`).css('display','none');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
 
-    $(`#estudiantes_TableOrder_info`).appendTo(`#informacionTable`);
-    $(`#estudiantes_TableOrder_paginate`).appendTo(`#botonesCambiarTable`);
+    $('#table_wrapper').addClass('px-0')
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
 
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+    
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
+
+}
+function llenar_Estudiantes(data) {
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
+    $("#lista_estudiantes").append(`
+        <tr style="height:calc(55vh / 10);">
+            <td class="align-center">${foto}</td>
+            <td class="align-center">${data.nombre + " " + data.apellido}</td>
+            <td>${data.cedula}</td>
+            <td><i class="fas fa-flag text-primary"></i>&nbsp;&nbsp; ${data.descripcion}</td>
+            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
+            <td class="">
+                <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
+                <label class="switch-cus" for="customSwitch_${data.id}">
+                    <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
+                    <span class="slider-cus round-cus"></span>
+                </label>
+            </td>
+            <td class="text-center">
+                <span class="button-circle" role="button" data-id="${data.cedula}" data-toggle="modal" data-target="#modalVerEstudiante">
+                    <i class="fas fa-ellipsis-v"></i>
+                </span>
+            </td>
+        </tr>
+    S`);
+    /*
+    <button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')"></button>
+
+    <div class="d-flex justify-content-between">
+        <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
+        <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
+        disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
+    </div>
+    <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
+    */
 }
 function moverlabel(label_id, nivel){
     let valor = g_talleres.get(parseInt(nivel.value));
@@ -335,11 +374,10 @@ function actualizarDatosEstudiante() {
     let celular = $('#v_celular').val()
     let tipo = $('#v_perfil').val()
     let direccion = $('#v_Dirección').val()
-    let emergencia = $('#v_tel_emergencia').val()
     let cedula = $('#cedulaEstudiante').html();
     let carrera = $('#v_carrera').val()
     let data ={
-        username,correo,nacimiento,telefono,sexo,cedula,tipo,celular,direccion,emergencia,carrera
+        username,correo,nacimiento,telefono,sexo,cedula,tipo,celular,direccion,carrera
     }
     let bearer = 'Bearer '+g_token;
     $.ajax({
@@ -479,37 +517,5 @@ function openModalToTakePhoto(){
         link.click();
     });
 }
-function llenar_Estudiantes(data) {
-    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
-    $("#lista_estudiantes").append(`
-        <tr style="height:calc(55vh / 10);">
-            <td class="align-center">${foto} &nbsp;&nbsp;${data.nombre + " " + data.apellido}</td>
-            <td>${data.cedula}</td>
-            <td><i class="fas fa-flag text-info"></i>&nbsp;&nbsp; ${data.descripcion}</td>
-            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
-            <td class="">
-                <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
-                <label class="switch-cus" for="customSwitch_${data.id}">
-                    <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
-                    <span class="slider-cus round-cus"></span>
-                </label>
-            </td>
-            <td class="text-center">
-                <span class="button-circle" role="button" data-id="${data.cedula}" data-toggle="modal" data-target="#modalVerEstudiante">
-                    <i class="fas fa-ellipsis-v"></i>
-                </span>
-            </td>
-        </tr>
-    S`);
-    /*
-    <button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')"></button>
 
-    <div class="d-flex justify-content-between">
-        <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
-        <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
-        disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
-    </div>
-    <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
-    */
-}
 document.addEventListener("DOMContentLoaded", loaded);

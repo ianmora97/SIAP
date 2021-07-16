@@ -3,172 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" type="text/css" href="/css/dashboard.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-    <link rel="stylesheet" href="/css/animate.css">
-    <script src="/js/jq-bs-bundle.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <title>Administracion | Dashboard</title>
+    <%- include('headers') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
 </head>
 <body class="page bg-light d-flex flex-column h-100 overflow-hidden">
-    
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            
-            <nav aria-label="breadcrumb ">
-                <ol class="breadcrumb ">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Estadísticas</li>
-                </ol>
-            </nav>
-            <div class="container-fluid">
-                <nav>
-                    <div class="nav nav-tabs justify-content-around border-bottom-0" id="nav-tab" role="tablist" style="min-height: 150px;">
-                        <a class="nav-link nav-card-item col-lg-3 active" id="talleres_chart-tab" data-toggle="tab" href="#talleres_chart" role="tab" aria-controls="talleres_chart" aria-selected="true">
-                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes Matriculados">
-                                <div class="p-0">
-                                    <i class="fas fa-swimming-pool fa-2x text-info talleres-ic"></i>
-                                </div>
-                                <div class="p-0">
-                                    <h1 id="talleres-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
-                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Talleres</label>
-                                </div>
-                            </div>
-                            
-                        </a>
-                        <a class="nav-link nav-card-item col-lg-3 " id="usuarios_chart-tab" data-toggle="tab" href="#usuarios_chart" role="tab" aria-controls="usuarios_chart" aria-selected="false">
-                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Usuarios en el sistema">
-                                <div class="p-0">
-                                    <i class="fas fa-users fa-2x text-success talleres-uc"></i>
-                                </div>
-                                <div class="p-0">
-                                    <h1 id="usuarios-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
-                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Usuarios</label>
-                                </div>
-                            </div>
-                            
-                        </a>
-                        <a class="nav-link nav-card-item col-lg-3" id="casilleros_chart-tab" data-toggle="tab" href="#casilleros_chart" role="tab" aria-controls="casilleros_chart" aria-selected="false">
-                            <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Cantidad Total de Casilleros">
-                                <div class="p-0">
-                                    <i class="fas fa-lock fa-2x text-warning talleres-mc"></i>
-                                </div>
-                                <div class="p-0">
-                                    <h1 id="casilleros-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
-                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Casilleros</label>
-                                </div>
-                            </div>
-                            
-                        </a>
-                         <a class="nav-link nav-card-item col-lg-2" id="estudiantes-tab" aria-controls="estudiantes" aria-selected="false">
-                             <!-- <div style="z-index: 1; opacity: 0.2; background: url(../../img/chartImg.png); background-size: cover; background-position: center; position: absolute; width: 100%; height: 125px; top: 0; left: 0;"></div> -->
-                            <div class="nav-item-in" data-toggle="tooltip" data-placement="bottom" title="Estudiantes actuales">
-                                <div class="p-0">
-                                    <h1 id="estudiantestotales-stats" class="text-center text-dark animate__animated animate__flipInX animate__delay-1s">0</h1>
-                                    <label class="text-center align-text-top text-muted font-weight-bold d-block mb-0" >Estudiantes</label>
-                                </div>
-                            </div>
-                            
-                        </a>
+            <div class="container-fluid mt-2">
+                <div class="row mx-3 p-3 cards-dash">
+                    <div class="col-md-5">
+                        <h4 class="font-weight-bold mt-1">Panel de administracion</h4>
                     </div>
-                </nav>
-                <div class="row mx-auto mt-2 mb-4">
-                    <div class="col-md-8 px-1">
-                        <div class="tab-content w-100" id="nav-tabContent">
-                            <div class="tab-pane fade show chart-container cards-dash active " id="talleres_chart" role="tabpanel" aria-labelledby="talleres-chart-tab">
-                                <div class="row py-2 px-3">
-                                    <div class="w-100">
-                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Talleres</h4>
-                                    </div>
-                                    <small class="text-muted today-date d-block"></small>
-                                </div>
-                                <div class="row py-2 px-3" style="height:400px;">
-                                    <canvas id="talleresChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade chart-container cards-dash" id="usuarios_chart" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                <div class="row py-2 px-3">
-                                    <div class="w-100">
-                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Usuarios</h4>
-                                    </div>
-                                    <small class="text-muted today-date d-block"></small>
-                                </div>
-                                <div class="row py-2 px-3" style="height:400px;">
-                                    <canvas id="usuariosChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade chart-container cards-dash" id="casilleros_chart" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="row py-2 px-3">
-                                    <div class="w-100">
-                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Casilleros</h4>
-                                    </div>
-                                    <small class="text-muted today-date d-block"></small>
-                                </div>
-                                <div class="row py-2 px-3" style="height:400px;">
-                                    <canvas id="casillerosChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 px-1">
-                        <div class="cards-dash" style="height: 503px;">
-                            <div class="row py-2 px-3">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
-                                </div>
-                                <small class="text-muted today-date d-block"></small>
-                            </div>
-                            <div class="row py-2 px-3" style="height:400px;">
-                                <canvas id="pieDonutChart"></canvas>
+                    <div class="col-md-7">
+                        <div class="position-relative w-100">
+                            <input type="text" class="form-control rounded-3" 
+                            placeholder="Buscar..." id="dashboardSearch">
+                            <div class="bg-light finder">
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row mx-auto mt-2 mb-4">
-                    <div class="w-100 bg-white rounded shadow" style="height: 500px;">
-                        <div class="row py-2 mx-3 pt-4 d-flex justify-content-between">
-                            <div class="col-8 pl-0">
-                                <div class="w-100">
-                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Usuarios Nuevos</h4>
+                <div class="row mx-auto">
+                    <div class="col-xl-4 order-xl-1 order-2">
+                        <div class="cards-dash animate__animated animate__zoomIn" style="height: 400px;">
+                            <div class="row mx-0 pt-2 px-2  card-border-header">
+                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
+                                    <small class="text-muted d-block"></small>
                                 </div>
-                                <small class="text-muted today-date d-block"></small>
                             </div>
-                            <div class="col-4 pl-0">
-                                <a class="btn btn-primary btn-sm float-right" href="/admin/comprobacion" role="button"><i class="fas fa-cog"></i> Confirmar Usuarios</a>
+                            <div class="row mr-auto py-2 px-3" style="height:350px;">
+                                <canvas id="pieDonutChart"></canvas>
                             </div>
                         </div>
-                        <div class="row mx-0 py-2 w-100" style="height:400px; overflow-y: auto;">
-                            <table class="table table-hover w-100">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Cedula</th>
-                                        <th>Nombre</th>
-                                        <th>Tipo</th>
-                                        <th>Registro</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dataListUsuariosNuevos">
+                        <div class="cards-dash animate__animated animate__zoomIn" style="min-height: 400px;">
+                            <div class="row px-2 mx-0 pt-2  card-border-header">
+                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Grupos de esta semana</h4>
+                                    <small class="text-muted d-block"></small>
+                                </div>
+                            </div>
+                            <div class="w-100" style="min-height:500px; overflow-y: auto; display:block; padding:0 5px;">
+                                <div id="calendar"></div>
+                                <style>
+                                    .fc .fc-toolbar.fc-header-toolbar {
+                                        margin-bottom: 0.8em !important;
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 order-xl-2 order-1">
+                        <div class="row mx-0">
+                            <div class="col-xl-6 order-xl-1 order-2 pl-xl-2 px-0 pl-xl-0">
+                                <div class="chart-container cards-dash animate__animated animate__zoomIn " id="talleres_chart">
+                                    <div class="row px-2 mx-0 pt-2  card-border-header">
+                                        <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                            <h4 id="data-selected-chart" class="font-weight-bold d-block">Talleres</h4>
+                                            <small class="text-muted d-block"></small>
+                                        </div>
+                                    </div>
+                                    <div class="row py-2 px-3" style="height:237px;">
+                                        <canvas id="talleresChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="chart-container cards-dash animate__animated animate__zoomIn" id="usuarios_chart">
+                                    <div class="row px-2 mx-0 pt-2  card-border-header">
+                                        <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                            <h4 id="data-selected-chart" class="font-weight-bold d-block">Usuarios</h4>
+                                            <small class="text-muted d-block"></small>
+                                        </div>
+                                    </div>
+                                    <div class="row py-2 px-3" style="height:237px;">
+                                        <canvas id="usuariosChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 order-xl-2 order-1 pl-xl-0 px-0 pl-xl-3">
+                                <div class="row mx-auto d-flex flex-column flex-sm-row">
+                                    <div class="col-sm-6 col pl-0 pr-sm-2 pr-0">
+                                        <div class="cards-dash mb-0 pb-0 animate__animated animate__flipInX animate_delay_t1" id="casilleros_chart" style="min-width: 200px;">
+                                            <div class="row px-2 mx-0 pt-2  card-border-header">
+                                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Casilleros</h4>
+                                                    <small class="text-muted d-block"></small>
+                                                </div>
+                                            </div>
+                                            <div class="py-2 mx-auto chart-container position-relative" style="width: 200px;">
+                                                <canvas id="casillerosChart" ></canvas>
+                                                <h1 class="center-number casilleros-stats-per" data-toggle="tooltip" 
+                                                data-placement="bottom" title="Casilleros Libres">0</h1>
+                                            </div>
+                                            <div class="card-border-footer font-weight-bold text-center">
+                                                Total: <span class="casilleros-stats" style="color:#2bbbff;"></span> casilleros
+                                            </div>
+                                        </div>
+                                        <div class="cards-dash mb-0 pb-0 animate__animated animate__flipInX animate_delay_t2" id="morosidad_chart" style="min-width: 200px;">
+                                            <div class="row px-2 mx-0 pt-2  card-border-header">
+                                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Morosidad</h4>
+                                                    <small class="text-muted d-block"></small>
+                                                </div>
+                                            </div>
+                                            <div class=" py-2 mx-auto chart-container position-relative" style="width: 200px;">
+                                                <canvas id="morosidadChart"></canvas>
+                                                <h1 class="center-number morosidad-stats-per" data-toggle="tooltip" 
+                                                data-placement="bottom" title="Estudiantes Morosos">0</h1>
+                                            </div>
+                                            <div class="card-border-footer font-weight-bold text-center">
+                                                Total: <span class="morosidad-stats" style="color:#ff7f00;"></span> morosos
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col pr-0 pl-sm-2 pl-0">
+                                        <div class="cards-dash mb-0 pb-0 animate__animated animate__flipInX animate_delay_t3" id="cupos_chart" style="min-width: 200px;">
+                                            <div class="row px-2 mx-0 pt-2  card-border-header">
+                                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Cupos</h4>
+                                                    <small class="text-muted d-block"></small>
+                                                </div>
+                                            </div>
+                                            <div class=" py-2 mx-auto chart-container position-relative" style="width: 200px;">
+                                                <canvas id="cuposDisponiblesChart"></canvas>
+                                                <h1 class="center-number cupos-stats-per" data-toggle="tooltip" 
+                                                data-placement="bottom" title="Cupos Disponibles">0</h1>
+                                            </div>
+                                            <div class="card-border-footer font-weight-bold text-center">
+                                                Total: <span class="cupos-stats" style="color:#a2ff56;"></span> cupos
+                                            </div>
+                                        </div>
+                                        <div class="cards-dash mb-0 pb-0 animate__animated animate__flipInX animate_delay_t4" id="reposiciones_chart" style="min-width: 200px;">
+                                            <div class="row px-2 mx-0 pt-2  card-border-header">
+                                                <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                                    <h4 id="data-selected-chart" class="font-weight-bold d-block">Estudiantes</h4>
+                                                    <small class="text-muted d-block"></small>
+                                                </div>
+                                            </div>
+                                            <div class=" py-2 mx-auto chart-container position-relative" style="width: 200px;">
+                                                <canvas id="reposicionesChart"></canvas>
+                                                <h1 class="center-number reposiciones-stats-per" data-toggle="tooltip"
+                                                data-placement="bottom" title="Estudiantes Activos">12</h1>
+                                            </div>
+                                            <div class="card-border-footer font-weight-bold text-center">
+                                                Total: <span class="reposiciones-stats" style="color:#ff1654;"></span> inactivos
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="row mx-auto">
+                            <div class="cards-dash" style="height: 375px; width: 100%;">
+                                <div class="row px-2 mx-0 pt-2  card-border-header">
+                                    <div class="w-100 d-flex justify-content-between align-items-baseline">
+                                        <h4 id="data-selected-chart" class="font-weight-bold d-block">Estudiantes nuevos</h4>
+                                        <small class="text-muted today-date d-block"></small>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 py-2 w-100" style="height:400px; overflow-y: auto;">
+                                    <div class="list-group mt-2 w-100" id="list-comprobacion">
 
-                                </tbody>
-                            </table>
+                                    </div>                   
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <div class="modal fade" id="grupoHorario" tabindex="-1" aria-labelledby="grupoHorarioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white rounded-3-top">
+                    <h5 class="modal-title pl-2" id="grupoHorarioLabel">Taller</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="infoEventCalendar">
+
+                    </div>
+                </div>
+                <div class="modal-footer pb-1 pt-0 border-0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="../../js/admin/dashboard.js"></script>

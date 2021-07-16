@@ -4,30 +4,11 @@ function loaded(event) {
 }
 
 function events(event) {
-    toogleMenu();
     loadFromDb();
     openModalShow();
     onChangeSelectsMatricula();
 }
-const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
 
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 function onChangeSelectsMatricula() {
     $('#EstudiantesModalMatricular').on('change',function(event) {
         let dropdown = $(event.currentTarget);
@@ -45,12 +26,7 @@ function onChangeSelectsMatricula() {
         card.find('.texto-fecha').text(`Fecha: ${fecha} ${hora}`);
     });
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-}
+
 function searchonfind() {
     var table = $('#matriculasTable').DataTable();
     let val = $('#barraBuscar').val();
@@ -144,7 +120,7 @@ function cambiarEstadoMatricula(est) {
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = "/admin/solicitudes";
+        location.href = "/admin/matricula";
     }, (error) => {
         $('#feedbackdesmatricula').append(`
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -171,7 +147,7 @@ function desmatricular() {
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = "/admin/solicitudes";
+        location.href = "/admin/matricula";
     }, (error) => {
         $('#feedbackdesmatricula').append(`
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -212,7 +188,7 @@ function matricularCursos(){
     }).then((response) => {
         animateCSS('#tiqueteMatricula','backOutRight').then(e=>{
             $('#tiqueteMatricula').hide();
-            location.href = '/admin/solicitudes';
+            location.href = '/admin/matricula';
         });
     }, (error) => {
         $("#alertadanger").fadeIn('slow');   

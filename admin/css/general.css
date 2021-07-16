@@ -35,11 +35,6 @@
 .border-secondary {
   border: 3px solid #B81616 !important; }
 
-.menu-active {
-  border-left: 7px #fff solid !important;
-  color: #fff;
-  font-size: 16px; }
-
 .tab-dashboard-pane {
   width: 100%;
   max-width: 200px; }

@@ -105,6 +105,45 @@ router.get('/admin/ajax/stats/getCasilleros',ensureToken,(req,res)=>{
         }
     });
 });
+router.get('/admin/ajax/stats/getMorosos',ensureToken,(req,res)=>{
+
+    let script = "SELECT * FROM vta_admin_estudiante";
+    var query = con.query(script, (err,rows,fields)=>{
+        if(rows != undefined){
+            if(rows != undefined){
+                let morosos = rows.filter(e=> e.moroso == 1);
+                let estado = rows.filter(e=> e.estado == 1);
+                res.send({'estudiantes':rows.length,'morosos':morosos.length,'estado':estado.length});
+            }else{
+                res.send({err:'ServerError'});
+            }
+        }else{
+            res.send({err:'ServerError'});
+        }
+    });
+});
+
+router.get('/admin/ajax/stats/getReposiciones',ensureToken,(req,res)=>{
+    con.query('SELECT * FROM vta_reposiciones', 
+    (err, rows, fields) => {
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send({err:'ServerError'});
+        }
+    });
+});
+
+router.get('/admin/ajax/getUrls',ensureToken,(req,res)=>{
+    con.query('SELECT * FROM vta_url_admin', 
+    (err, rows, fields) => {
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send({err:'ServerError'});
+        }
+    });
+});
 
 router.get('/admin/ajax/stats/getReportes',ensureToken,(req,res)=>{
     let script = "call prc_seleccionar_actividad()";
@@ -135,7 +174,7 @@ router.get('/admin/ajax/stats/getReportes',ensureToken,(req,res)=>{
 
 // TODO: para las notificaciones
 router.get('/admin/stats/usuariosNuevosTabla',ensureToken,(req,res)=>{ // ! tiene que ser eliminado -> para la tabla del dashboard
-    let script = "select cedula, nombre, apellido, tipo_usuario as tipo, creado as registro from vta_usuario_temp where estado = 0";
+    let script = "select * from vta_nuevos_usuarios";
     var query = con.query(script,
         (err,rows,fields)=>{
         if(rows != undefined){

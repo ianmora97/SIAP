@@ -1,22 +1,3 @@
-const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
-
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 
 var g_mapProfesores = new Map();
 
@@ -26,22 +7,12 @@ function loaded(event){
 
 function events(event){
   bringDB();
-  toogleMenu();
   modals();
   changeProfilePhoto();
   fotoonChange();
+  llenarDatos();
 }
-function toogleMenu() {
-  $("#menu-toggle").click(function(e) {
-      e.preventDefault();
-      //$('#sidebar-wrapper').css('position','relative');
-      $("#wrapper").toggleClass("toggled");
-      //$("#side-panel").css('margin-left','-12px');
-      //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-      //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-      //$("#sidebar-wrapper").animate({left:'-200'},1000);
-  });
-}
+
 $(function () {
   $('[data-toggle="popover"]').popover();
 })
@@ -188,8 +159,46 @@ function actualizarProfesor() {
   }, (error) => {
   });
 }
+function llenarDatos() {
+  $('#cedulaAdd').on('keyup',(cantidad)=>{
+      let id = $('#cedulaAdd').val();
+      
+      if(id.length == 9){
+          // $('#id_registro').addClass('is-valid');
+          $.ajax({
+              type: "GET",
+              url: '/buscarUsuarioRegistro',
+              contentType: "application/json",
+              data: {id:id}
+          }).then((response) => {
+              let p = JSON.parse(response)
+              $('#NombreAdd').val(p.results[0].firstname1);
+              $('#apellidosAdd').val(p.results[0].lastname);
+              
+              // $('#NombreAdd').addClass('is-valid');
+              // $('#apellidosAdd').addClass('is-valid');
+
+              $('#NombreAdd').attr('readonly', true);
+              $('#apellidosAdd').attr('readonly', true);
+          }, (error) => {
+          
+          });
+      }
+      else if(id.length == 12){ //revisar si es residente
+          // $('#id_registro').addClass('is-valid');
+      }else{ // si no se encontro
+          // $('#id_registro').removeClass('is-valid');
+
+          // $('#NombreAdd').removeClass('is-valid');
+          // $('#apellidosAdd').removeClass('is-valid');
+
+          $('#NombreAdd').attr('readonly', false);
+          $('#apellidosAdd').attr('readonly', false);
+      }
+  });
+}
 function searchonfind() {
-  var table = $('#profesores_TableOrder').DataTable();
+  var table = $('#table').DataTable();
   let val = $('#barraBuscar').val();
   let result = table.search(val).draw();
 }
@@ -200,41 +209,57 @@ function showProfesorList(data){
     g_mapProfesores.set(e.id_profesor,e);
     showRowProfesorList(e);
   })
-  $('#profesores_TableOrder').DataTable({
-    "language": {
-        "zeroRecords": "No se encontraron profesores",
-        "infoEmpty": "No hay registros disponibles!",
-        "infoFiltered": "(filtrado de _MAX_ registros)",
-        "lengthMenu": "_MENU_ ",
-        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-        "paginate": {
-            "first": '<i class="fas fa-angle-double-left"></i>',
-            "previous": '<i class="fas fa-angle-left"></i>',
-            "next": '<i class="fas fa-angle-right"></i>',
-            "last": '<i class="fas fa-angle-double-right"></i>'
-        },
-        "aria": {
-            "paginate": {
-                "first": 'Primera',
-                "previous": 'Anterior',
-                "next": 'Siguiente',
-                "last": 'Última'
-            }
-        }
-    }
+  $('#table').DataTable({
+      "language": {
+          "decimal":        "",
+          "emptyTable":     "No hay datos en la tabla",
+          "info":           "Mostrando _END_ de _TOTAL_ registros",
+          "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+          "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+          "infoPostFix":    "",
+          "thousands":      ",",
+          "lengthMenu":     "_MENU_",
+          "loadingRecords": "Cargando...",
+          "processing":     "Procesando...",
+          "search":         "Buscar:",
+          "zeroRecords":    "No se encontraron registros similares",
+          "paginate": {
+              "first": '<i class="fas fa-angle-double-left"></i>',
+              "previous": '<i class="fas fa-angle-left"></i>',
+              "next": '<i class="fas fa-angle-right"></i>',
+              "last": '<i class="fas fa-angle-double-right"></i>'
+          },
+          "aria": {
+              "paginate": {
+                  "first": '<i class="fas fa-angle-double-left"></i>',
+                  "previous": '<i class="fas fa-angle-left"></i>',
+                  "next": '<i class="fas fa-angle-right"></i>',
+                  "last": '<i class="fas fa-angle-double-right"></i>'
+              }
+          }
+      },
+      columnDefs: [
+          { targets: [0, 6], orderable: false,},
+          { targets: '_all', orderable: true }
+      ]
   });
-  $('#informacionTable').html('');
-  $('#botonesCambiarTable').html('');
-  $('#showlenghtentries').html('');
+  $('#info').html('');
+  $('#pagination').html('');
+  $('#length').html('');
 
-  $('#profesores_TableOrder_filter').css('display', 'none');
-  $('#profesores_TableOrder_info').appendTo('#informacionTable');
+  $('#table_wrapper').addClass('px-0')
+  let a = $('#table_wrapper').find('.row')[1];
+  $(a).addClass('mx-0')
+  $(a).find('.col-sm-12').addClass('px-0');
 
-  $('#profesores_TableOrder_paginate').appendTo('#botonesCambiarTable');
-  
-  $('#profesores_TableOrder_length').appendTo('#showlenghtentries');
-  $('#profesores_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
-  $('#profesores_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
+  $('#table_filter').css('display', 'none');
+  $('#table_info').appendTo('#info');
+
+  $('#table_paginate').appendTo('#pagination');
+
+  $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+  $('#table_length').find('label').find('select').appendTo('#length');
+  $('#table_length').html('');
 
 }
 function showRowProfesorList(data){

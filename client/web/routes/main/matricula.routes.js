@@ -10,7 +10,7 @@
     * Marlon Freer Acevedo
     * Moises Fernandez Alfaro
     * 
-    * Solicitudes del estudiante /
+    * Matricula del estudiante /
 */
 
 const express = require('express');

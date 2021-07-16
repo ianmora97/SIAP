@@ -86,21 +86,23 @@
     <div class="modal fade" id="modalcambiarclave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title pl-3">Solicitud de Cambio de clave a <span id="claveCedulaID"></span></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
+                    <h5 class="modal-title pl-3 font-weight-bold">Solicitud de Cambio de clave a <span id="claveCedulaID"></span></h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form action="/admin/profesor/cambiarClave" method="post">
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <label for="cambiarclaveinput">Clave</label>
                             <input type="text" class="form-control" name="clave" id="cambiarclaveinput" value="1234">
                             <input type="text" class="form-control" name="cedula" id="cambiarclaveID" hidden>
                             <small class="text-muted">Debe cambiar la clave.</small>
                         </div>
-                        <button type="submit" class="btn btn-success">Cambiar Clave</button>
+                        <div class="modal-footer py-0 border-0">
+                            <button type="submit" class="btn btn-primary">Cambiar Clave</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -109,9 +111,9 @@
     <div class="modal fade" id="modalAdd" data-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <div class="modal-header py-1 pl-3">
-                    <h5 class="modal-title ml-3" id="staticBackdropLabel">Agregar un Profesor</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header py-1 pl-3 bg-primary text-white">
+                    <h5 class="modal-title ml-3 font-weight-bold" id="staticBackdropLabel"><i class="fas fa-plus"></i>&nbsp; Agregar un Profesor</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -172,11 +174,11 @@
                     
                 </div>
                 <div class="modal-footer py-0">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="agregarProfesor()">
                         <div class="spinner-border spinner-border-sm" role="status" id="agregarBotonAdmin" style="display: none;">
                             <span class="sr-only">Loading...</span>
-                        </div> Agregar Profesor
+                        </div><i class="fas fa-plus"></i>&nbsp; Agregar Profesor
                     </button>
                 </div>
             </div>
@@ -185,9 +187,9 @@
     <div class="modal fade" id="modalVerProfesor" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
-                <div class="modal-header py-1 pl-3">
+                <div class="modal-header py-1 pl-3 bg-primary text-white border-0">
                     <h5 class="modal-title ml-3" id="staticBackdropLabel">Profesor</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -212,10 +214,10 @@
                     </div>
                     
                 </div>
-                <div class="modal-footer py-0">
-                    <button type="button" class="btn btn-info" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Clave</button>
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-light" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Clave</button>
                     <button type="button" class="btn btn-danger" onclick="eliminarProfesor()"><i class="far fa-trash-alt"></i> Eliminar</button>
-                    <button type="button" class="btn btn-success" onclick="actualizarProfesor()"><i class="fas fa-pencil-alt"></i> Guardar</button>
+                    <button type="button" class="btn btn-primary" onclick="actualizarProfesor()"><i class="fas fa-pencil-alt"></i> Guardar</button>
                 </div>
             </div>
         </div>
@@ -224,15 +226,9 @@
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <nav aria-label="breadcrumb ">
-            <ol class="breadcrumb ">
-                    <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
-                    <li class="breadcrumb-item"><a href="#">Profesores</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Listado</li>
-                </ol>
-            </nav>
-            <div class="container-fluid">
-                <div class="card border-0 shadow-sm my-3">
+
+            <div class="container-fluid mt-4">
+                <div class="card border-0 shadow-primary rounded-3 my-3">
                     <div class="card-body py-2">
                         <div class="row d-flex justify-content-between">
                             <div class="col-md-6 ">
@@ -242,8 +238,8 @@
                                 <small>Información actualizada hace: <span class="text-success"
                                         id="infoTiming"></span></small>
                             </div>
-                            <div class="col-md-4 ">
-                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-1s"
+                            <div class="col-md-4 mt-3 mt-sm-0">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1"
                                     id="profesores_stats">0</h1>
                                 <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                 title="Cantidad Total de profesores registrados">Profesores &nbsp; <i
@@ -252,71 +248,114 @@
                         </div>
                     </div>
                 </div>
-                <div class="card border-0">
-                    <div class="card-body bg-white px-2 py-2">
-                        <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
-                            <div class="col-md-6 pl-1 pr-0">
-                                <div class="input-group flex-nowrap">
-                                    <div class="input-group-prepend">
-                                        <button class="btn bg-white" type="button" id="button_search"><i
-                                                class="fas fa-search"></i></button>
-                                    </div>
-                                    <input type="search" class="form-control border-0 shadow-none bg-white"
-                                        onkeyup="searchonfind()" placeholder="Buscar..."
-                                        aria-label="Username" id="barraBuscar">
-                                </div>
 
+                <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                    <div class="row mx-0 d-flex justify-content-between">
+                        <div class="col">
+                            <div class="input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <div class="btn bg-light" id="button_search">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control border-0 shadow-none bg-light"
+                                    onkeyup="searchonfind()" placeholder="Buscar..."
+                                    aria-label="Username" id="barraBuscar">
                             </div>
-                            <div class="col-md-6 d-flex justify-content-around px-0">
-                                <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                    <div class="col-5 d-flex align-items-center">
-                                        <div id="showlenghtentries" class="d-flex align-items-center m-0">
-                                        </div>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-end mt-3 mt-sm-0">
+                            <div class="w-100">
+                                <button type="button" class="btn btn-primary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
+                                onclick="openModal('#modalAdd')"><i class="fas fa-plus"></i> Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white px-2 py-2 shadow-primary rounded-3 mt-4 animate__animated animate__zoomIn">
+                    <!-- <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
+                        <div class="col-md-6 pl-1 pr-0">
+                            <div class="input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <button class="btn bg-white" type="button" id="button_search"><i
+                                            class="fas fa-search"></i></button>
+                                </div>
+                                <input type="text" class="form-control border-0 shadow-none bg-white"
+                                    onkeyup="searchonfind()" placeholder="Buscar..."
+                                    aria-label="Username" id="barraBuscar">
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-around px-0">
+                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
+                                <div class="col-5 d-flex align-items-center">
+                                    <div id="showlenghtentries" class="d-flex align-items-center m-0">
                                     </div>
-                                    <div class="col-7 d-flex align-items-center justify-content-end pr-2"
-                                        style="max-height: 40px">
-                                        <button type="button" name="agregarTaller"
-                                            data-toggle="tooltip" data-placement="top"
-                                            title="Agregar un Profesor" onclick="openModal('#modalAdd')" class="btn bg-success btn-sm text-white mr-2"
-                                            style="border-radius: 50px;"><i class="fas fa-plus"></i>
-                                        </button>
-                                        <a href="/admin/profesores" name="actualizar_lista" id="actualizar_lista"
-                                            data-toggle="tooltip" data-placement="top"
-                                            title="Actualizar lista" class="btn bg-white btn-sm"
-                                            style="border-radius: 50px;"><i
-                                                class="fas fa-sync-alt"></i></a>
-                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center justify-content-end pr-2"
+                                    style="max-height: 40px">
+                                    <button type="button" name="agregarTaller"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="Agregar un Profesor" onclick="openModal('#modalAdd')" class="btn bg-success btn-sm text-white mr-2"
+                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
+                                    </button>
+                                    <a href="/admin/profesores" name="actualizar_lista" id="actualizar_lista"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="Actualizar lista" class="btn bg-white btn-sm"
+                                        style="border-radius: 50px;"><i
+                                            class="fas fa-sync-alt"></i></a>
                                 </div>
                             </div>
                         </div>
-                        <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
-                            <table class="table custom-table table-responsive-md w-100" id="profesores_TableOrder" data-order="[[ 0, &quot;asc&quot; ]]">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-dark text-white sticky-top" scope="col">#</th> <!--ID-->
-                                        <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va la foto-->
-                                        <th class="bg-dark text-white sticky-top" scope="col">Nombre</th> 
-                                        <th class="bg-dark text-white sticky-top" scope="col">Cédula</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Correo</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Sexo</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">&nbsp;</th> <!--Aqui va el edit-->
-                                    </tr>
-                                </thead>
-                                <tbody id="lista_profesores">
-
-                                </tbody>
-                            </table>
-                            <div class="d-flex align-items-center align-self-end border-info w-100">
-                                <div class="row w-100 ml-0">
-                                    <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
-                                        <small id="informacionTable" class="d-flex align-items-end"></small>
-                                    </div>
-                                    <div class="col-md-6 d-flex justify-content-end"
-                                        id="botonesCambiarTable">
-
-                                    </div>
-                                </div>
+                    </div> -->
+                    <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
+                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
+                            <h4 class="font-weight-bold mb-0 ">Listado</h4>
+                        </div>
+                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                            <h6 class="font-weight-bold">Show</h6>
+                            <div class="ml-2 w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
                             </div>
+                        </div>
+                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                            <div id="pagination">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
+                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover" id="table" data-order="[[ 0, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th class="" scope="col">#</th> <!--ID-->
+                                    <th class="" scope="col">&nbsp;</th> <!--Aqui va la foto-->
+                                    <th class="" scope="col">Nombre</th> 
+                                    <th class="" scope="col">Cédula</th>
+                                    <th class="" scope="col">Correo</th>
+                                    <th class="" scope="col">Sexo</th>
+                                    <th class="" scope="col">&nbsp;</th> <!--Aqui va el edit-->
+                                </tr>
+                            </thead>
+                            <tbody id="lista_profesores">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end border-info w-100">
+                            <small id="info" class="d-flex align-items-end ml-4"></small>
                         </div>
                     </div>
                 </div>

@@ -41,10 +41,10 @@ router.get('/admin/casilleros/bringEstudiantes',ensureToken,(req,res)=>{
                 if(rows.length != 0){
                     res.send(rows);
                 }else{
-                    res.render('indexAdmin', {err:'No se encuentra Registrado',id: 2});
+                    res.render('index', {err:'No se encuentra Registrado',id: 2});
                 }
             }else{
-                res.render('indexAdmin', {err:'Server Error',id: 3});
+                res.render('index', {err:'Server Error',id: 3});
             }
         });
     }else{
@@ -60,7 +60,7 @@ router.get('/admin/casilleros/bringCasillerosEstudiantes',ensureToken,(req,res)=
             if(!err){
                 res.send(rows);
             }else{
-                res.render('indexAdmin', {err:'Server Error',id: 3});
+                res.render('index', {err:'Server Error',id: 3});
             }
         });
     }else{
