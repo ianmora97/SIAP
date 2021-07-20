@@ -366,15 +366,14 @@ input, select {
 
 .btn-close {
   box-sizing: content-box;
-  width: 20px !important;
-  height: 20px !important;
+  width: 40px !important;
+  height: 40px !important;
   border-radius: 100% !important;
   box-shadow: 0 5px 10px -2px #cacaca !important;
   background-color: #fff !important;
   padding: 0.25em 0.25em;
-  color: #000;
-  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
-  border: 0; }
+  border: 0;
+  z-index: 40; }
   .btn-close:focus {
     outline: 0;
     box-shadow: 0 5px 10px -2px #cacaca !important;
@@ -440,3 +439,75 @@ input, select {
   .modal-dialog {
     max-width: 80%;
     margin: 1.75rem auto; } }
+
+.modal-fullscreen {
+  max-width: 100% !important;
+  margin: 0; }
+
+.modal-dialog-bottom {
+  display: flex;
+  align-items: flex-end;
+  min-height: 100%; }
+
+.modal-p-bottom .modal-dialog {
+  transform: translateY(100%) !important; }
+
+.modal-p-bottom.show {
+  overflow: hidden; }
+  .modal-p-bottom.show .modal-dialog {
+    transform: translateY(0%) !important; }
+
+.wrapperA {
+  animation: scaleBack 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
+
+@keyframes scaleBack {
+  0% {
+    transform: scale(1); }
+  100% {
+    transform: scale(0.95); } }
+
+.nav-pills .nav-link.active {
+  color: #4659E4 !important;
+  background-color: white !important;
+  text-align: center !important;
+  border-radius: 100%;
+  transition: all 0.5s ease; }
+
+.nav-pills .nav-link {
+  text-align: center !important; }
+
+.custom-nav-email {
+  margin: 10px auto;
+  width: 40px;
+  height: 40px;
+  padding: 8px; }
+
+.itemlist-custom {
+  background-color: #e0e2f0; }
+
+.list-group-item.active {
+  z-index: 2;
+  color: #030303;
+  background-color: #fff !important; }
+
+.list-group-item {
+  border: none !important;
+  border-bottom: 1px solid #cacaca; }
+
+.media.active {
+  background-color: #fff !important; }
+
+@media (max-width: 950px) {
+  .menu-correo-tab {
+    display: none !important; }
+  .correos-lista-tab {
+    display: none !important; }
+  .boton-back-bp {
+    display: block; } }
+
+@media (min-width: 950px) {
+  .boton-back-bp {
+    display: none; } }
+
+.titulos-correo-tab.off {
+  display: none !important; }

@@ -5,6 +5,11 @@
     <div class="p-0" id="navbarSupportedContent">
         <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0">
             <li class="d-inline px-3 dropdown">
+                <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
+                    <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
+                </a>
+            </li>
+            <li class="d-inline px-3 dropdown">
                 <div class="dropdown d-inline">
                     <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
                         <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
@@ -23,12 +28,14 @@
         </ul>
     </div>
 </nav>
+
 <script>
     function loadFunctions(event) {
         cargarNotificacionesDropdrown();
         toogleMenu();
         menuUserDropdowm();
     }
+    
     function cargarNotificacionesDropdrown(event){
         $('#notificaciones').on('click',function () {
             $('#notificacionesDrop').toggle();
@@ -51,8 +58,7 @@
     });
 }
     const animateCSS = (element, animation) =>
-    // We create a Promise and return it
-    new Promise((resolve, reject) => {
+        new Promise((resolve, reject) => {
         let prefix = 'animate__';
         const animationName = `${prefix}${animation}`;
         const node = document.querySelector(element);

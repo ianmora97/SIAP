@@ -222,7 +222,8 @@
             </div>
         </div>
     </div>
-     <div class="d-flex" id="wrapper">
+    <%- include('email') %>
+    <div class="d-flex" id="wrapper">
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
@@ -273,41 +274,6 @@
                 </div>
 
                 <div class="bg-white px-2 py-2 shadow-primary rounded-3 mt-4 animate__animated animate__zoomIn">
-                    <!-- <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
-                        <div class="col-md-6 pl-1 pr-0">
-                            <div class="input-group flex-nowrap">
-                                <div class="input-group-prepend">
-                                    <button class="btn bg-white" type="button" id="button_search"><i
-                                            class="fas fa-search"></i></button>
-                                </div>
-                                <input type="text" class="form-control border-0 shadow-none bg-white"
-                                    onkeyup="searchonfind()" placeholder="Buscar..."
-                                    aria-label="Username" id="barraBuscar">
-                            </div>
-
-                        </div>
-                        <div class="col-md-6 d-flex justify-content-around px-0">
-                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                <div class="col-5 d-flex align-items-center">
-                                    <div id="showlenghtentries" class="d-flex align-items-center m-0">
-                                    </div>
-                                </div>
-                                <div class="col-7 d-flex align-items-center justify-content-end pr-2"
-                                    style="max-height: 40px">
-                                    <button type="button" name="agregarTaller"
-                                        data-toggle="tooltip" data-placement="top"
-                                        title="Agregar un Profesor" onclick="openModal('#modalAdd')" class="btn bg-success btn-sm text-white mr-2"
-                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
-                                    </button>
-                                    <a href="/admin/profesores" name="actualizar_lista" id="actualizar_lista"
-                                        data-toggle="tooltip" data-placement="top"
-                                        title="Actualizar lista" class="btn bg-white btn-sm"
-                                        style="border-radius: 50px;"><i
-                                            class="fas fa-sync-alt"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
                         <div class="col-md-3 flex-fill d-flex align-items-baseline">
                             <h4 class="font-weight-bold mb-0 ">Listado</h4>
