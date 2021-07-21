@@ -8,7 +8,7 @@
                     </button>
                 </div> -->
                 <div class="row p-0 m-0 d-flex align-items-stretch h-100 bg-gray" style="border-top-left-radius:15px;">
-                    <div class="col-1 bg-primary d-flex flex-column px-0 menu-correo-tab" id="menu-correo-tab-id" style="border-top-left-radius:15px; max-width: 80px !important;">
+                    <div class="col-1 bg-primary d-flex flex-column px-0 menu-correo-tab" id="menu-correo-tab-id" style="border-top-left-radius:15px; max-width: 80px !important;min-width:50px;">
                         <div class="py-3 text-center">
                             <i class="fas fa-inbox fa-2x text-white text-center"></i> &nbsp;
                         </div>
@@ -27,7 +27,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-3 px-2 correos-lista-tab" id="correos-lista-tab-id" style="min-width: 410px !important;">
+                    <div class="col px-2 correos-lista-tab" id="correos-lista-tab-id" style="min-width: 410px !important;">
                         <div class="tab-content bg-white rounded-3 mt-3" id="v-pills-tabContent" style="height: 86.5vh;max-height: 86.5vh;">
                             <div class="tab-pane fade show active d-flex flex-column" id="correos-recibidos" 
                             role="tabpanel" aria-labelledby="correos-recibidos-tab" style="height:100%;">
@@ -137,8 +137,9 @@
     function toggleBackArrow(event) {
         $('.boton-back-bp').on('click',function (e) {
             $('#menu-correo-tab-id').removeClass('menu-correo-tab');
+            $('#correos-lista-tab-id').css('min-width','300px');
             $('#correos-lista-tab-id').removeClass('correos-lista-tab');
-            $('#titulos-correo-tab-id').addClass('off');
+            $('#titulos-correo-tab-id').addClass('hide');
         })
     }
     document.addEventListener("DOMContentLoaded", emailEvents);

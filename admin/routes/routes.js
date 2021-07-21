@@ -1,9 +1,15 @@
 const express = require('express');
 const request = require('request-promise');
+// const mongoose = require('mongoose')
 const cheerio = require('cheerio');
 const router = express.Router();
 
 const db = require('../database');
+
+// mongoose.connect('mongodb://localhost/siap',{
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// })
 
 router.get('/', (req, res) => {
     res.render('index');

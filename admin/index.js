@@ -74,11 +74,12 @@ app.use(require('./routes/reposiciones/reposicion.routes'));
 app.use(require('./routes/matricula/matriula.routes'));
 
 const server = app.listen(app.get('port'), () =>{
-    console.log('[',chalk.bgMagenta('OK'),']',chalk.green('CORS-enabled'));
-    console.log('[',chalk.bgMagenta('OK'),'] Admin server running on','http://'+app.get('host')+':'+ app.get('port'));
+    console.log('[',chalk.green('OK'),']' ,chalk.yellow('SERVER'),'Admin server running on','http://'+app.get('host')+':'+ app.get('port'));
 });
 
 const io = SocketIo(server);
+
+var usersOnline = new Map();
 
 io.on('connection', (socket) =>{
     socket.on('notificacion:nuevo_registro', (data) => {
@@ -87,5 +88,37 @@ io.on('connection', (socket) =>{
     
     socket.on('notificacion:nueva_matricula', (data) => {
         io.sockets.emit('notificacion:nuevo_registro',data);
+    });
+    
+    socket.on('notificacion:enviarmensaje', (data) => {
+        socket.broadcast.to(usersOnline.get(data.to).socketId).emit('notificacion:enviarmensaje', data);
+    });
+    
+    socket.on('notificacion:newuser', (data) => {
+        usersOnline.set(data.id,{data:data,socketId:socket.id});
+        console.log('[',chalk.green('OK'),']',chalk.yellow('SOCKET') ,'new user Connected',socket.id);
+        let vec = [];
+        usersOnline.forEach((e) => {
+            vec.push(e.data);
+        })
+        io.sockets.emit('notificacion:bringconnected',vec);
+    });
+    socket.on('notificacion:bringconnected', (data) => {
+        let vec = [];
+        usersOnline.forEach((e) => {
+            vec.push(e.data);
+        })
+        
+        io.sockets.emit('notificacion:bringconnected',vec);
+    });
+    socket.on('notificacion:disconnect', (data) => {
+        usersOnline.delete(socket.id);
+        let vec = [];
+        usersOnline.forEach((e) => {
+            vec.push(e.data);
+        })
+        io.sockets.emit('notificacion:bringconnected',vec);
+    });
+    socket.on('disconnect', () => {
     });
 });

@@ -4,11 +4,11 @@
     </button>
     <div class="p-0" id="navbarSupportedContent">
         <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0">
-            <li class="d-inline px-3 dropdown">
+            <!-- <li class="d-inline px-3 dropdown">
                 <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
                     <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
                 </a>
-            </li>
+            </li> -->
             <li class="d-inline px-3 dropdown">
                 <div class="dropdown d-inline">
                     <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
@@ -80,6 +80,16 @@
 </script>
 <script>
     var g_token = '<%= token%>';
+    var g_myData = {
+        "id": "<%= usuario.id%>",
+        "cedula": "<%= usuario.cedula%>",
+        "nombre": "<%= usuario.nombre%>",
+        "apellido": "<%= usuario.apellido%>",
+        "foto": "<%= usuario.foto%>",
+        "correo": "<%= usuario.correo%>",
+        "usuario": "<%= usuario.usuario%>",
+        "sexo": "<%= usuario.sexo%>"
+    };
 </script>
 <!-- <div class="progress rounded-0" style="height: 10px;">
     <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

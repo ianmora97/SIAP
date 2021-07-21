@@ -1,0 +1,230 @@
+<div class="chat-footer" role="button" id="modalchatbtn">
+    <i class="far fa-comment fa-2x hvr-grow"></i>
+</div>
+<div class="chat-container animate__faster" id="modalchat">
+    <div class="header-chat bg-primary px-3">
+        <h5 class="modal-title">Chat</h5>
+        <button type="button" class="close text-white" id="close-chat" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="chat-body">
+        <div class="messages">
+            <div class="bg-light px-2 py-3 d-flex justify-content-center align-items-center border-bottom" style="height:50px;">
+                Usuarios Conectados
+            </div>
+            <div class="list-group" id="usersConected" role="tablist">
+                
+            </div>
+        </div>
+        <div class="chat-message" id="chat-message">
+            <div class="tab-content h-100" id="chat-messages">
+
+                <div class="tab-pane h-100 fade show active" id="list-default" role="tabpanel" aria-labelledby="list-default-list">
+                    <div class="d-flex flex-column align-items-center" style="height:calc(100% - 40px);">
+                        <h5 class="my-auto">Selecciona un chat para enviar un mensaje </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="createChatModal" tabindex="-1" aria-labelledby="createChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createChatModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var g_usersConnected = [];
+    function m_chatR(mensaje ) { 
+        let hora = moment().calendar();
+        return 
+        `<div class="d-flex justify-content-start my-2 position-relative">
+            <div class="w-75 m-2 px-3 py-2 rounded-3 text-white bg-dark">
+                ${mensaje}
+                <small class="d-flex justify-content-end text-small-muted">${hora}</small>
+            </div>
+            <div class="position-absolute" style="bottom:8px;">
+                <i class="fas fa-2x fa-caret-left text-dark"></i>
+            </div>
+        </div>
+    `}
+    function m_chatR(mensaje ){
+        let hora = moment().calendar();
+        return 
+        `<div class="d-flex justify-content-end my-2 position-relative">
+            <div class="w-75 m-2 px-3 py-2 rounded-3 text-white bg-primary ">
+                ${mensaje}
+                <small class="d-flex justify-content-end text-small-muted">${hora}</small>
+            </div>
+            <div class="position-absolute" style="bottom:8px;">
+                <i class="fas fa-2x fa-caret-right text-primary"></i>
+            </div>
+        </div>
+    `}
+    function chatEvents(event){
+        chatOpen(event)
+        onbringConected();
+        bringConected();
+        logout()
+        messageIncome();
+    }
+    function logout(){
+        $('#logoutbutton').on('click',function() {
+            socket.emit('notificacion:disconnect');
+            location.href = "/admin/logout";
+        })
+    }
+    function chatOpen(event){
+        $('#modalchatbtn').on('click',function (e) {
+            if(!$( "#modalchat" ).hasClass( "open" )){
+                $('#modalchat').addClass('open')
+                $('#modalchatbtn').addClass('open')
+                animateCSS('#modalchat','fadeInBottomRight')
+            }
+        })
+        $('#close-chat').on('click',function (e) {
+            animateCSS('#modalchat','fadeOutBottomRight').then(function (){
+                $('#modalchat').removeClass('open')
+                $('#modalchatbtn').removeClass('open')
+            })
+        })
+    }
+    function onbringConected(){
+        socket.on('notificacion:bringconnected',function (data) {
+            g_usersConnected = data;
+            let vec = g_usersConnected.filter(e=> e.id != g_myData.id)
+            console.log(vec)
+            printConnected(vec);
+        });
+    }
+    function bringConected(){
+        socket.emit('notificacion:bringconnected');
+    }
+    function printConnected(usersConnected){
+        $('#usersConected').html('');
+        $('#chat-messages').html('');
+        console.log('cantidad de usarios conectados',usersConnected.length)
+        usersConnected.forEach(e => {
+            $('#usersConected').append(
+            `<a class="list-group-item-chat border-bottom list-group-item-action" id="list-user-list" 
+            data-toggle="list" href="#list-user-${e.id}" role="tab">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <div class="position-relative">
+                        <img src="/public/uploads/${e.foto}" class="rounded-circle" width="50px" height="50px">
+                        <small class="position-absolute" style="bottom: -5px;right: 5px;">
+                            <i class="fas fa-circle" style="color:#13b913;"></i>
+                        </small>
+                    </div>
+                    <div class="mx-2">
+                        <h6 class="m-0 font-weight-bold">${e.nombre}</h6>
+                    </div>
+                </div>
+            </a>
+            `)
+            console.log('print 1')
+            $('#chat-messages').append(`
+                <div class="tab-pane h-100 fade" id="list-user-${e.id}" role="tabpanel" aria-labelledby="list-user-list">
+                    <div class="bg-light text-dark d-flex justify-content-between align-items-center border-bottom px-3">
+                        <div class="d-flex w-100 justify-content-start align-items-center" style="height:50px;">
+                            <img src="/public/uploads/default-avatar.png" class="rounded-circle" width="30px" height="30px">
+                            <div class="mx-2">
+                                <h5 class="m-0" id="name-inside-chat">${e.nombre + ' ' + e.apellido}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column" style="height:calc(100% - 51px);">
+                        <div class="mb-auto" id="body-inside-chat-messages-${e.id}" style="overflow-y: auto; height:100%;">
+                            
+                        </div>
+                        <div class="row m-0 border-top" style="height:50px;">
+                            <label id="usuario-a-enviar-mensaje-${e.id}" class="sr-only">${e.id}</label>
+                            <div class="input-group mb-0 h-100">
+                                <input type="text" class="h-100 form-control rounded-0 border-0" id="mensaje-input-${e.id}">
+                                <div class="input-group-append rounded-0">
+                                    <button class="input-group-text bg-white rounded-0 border-0" id="enviar-mensaje" 
+                                    style="border-bottom-right-radius: 15px !important;" 
+                                    onclick="enviarMensaje('${e.id}')">
+                                        <i class="fas fa-paper-plane text-primary"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `)
+        });
+    }
+    // function socket_sendMessage(id){
+    //     $('#mensaje').on('keydown',function (event){
+    //         if(event.which == 13){
+    //             var mensaje = $('#mensaje').val();
+    //             var usuario = $('#username').val();
+    //             console.log(usuario + " " + mensaje);
+    //             socket.emit('chat:message',{
+    //                 message:  mensaje,
+    //                 username: usuario
+    //             });
+    //             $('#mensaje').val('');
+    //         }
+    //     });
+    // }
+    function enviarMensaje(id) {
+        let text = $(`#mensaje-input-${id}`).val();
+        let hora = new Date();
+        $(id).val('');
+        let to = $(`#usuario-a-enviar-mensaje-${id}`).html();
+        socket.emit('notificacion:enviarmensaje',{
+            message: text,
+            to: to,
+            from: g_myData.id
+        });
+        $(`#body-inside-chat-messages-${to}`).append(`
+            <div class="d-flex justify-content-end my-2 position-relative">
+                <div class="w-75 m-2 px-3 py-2 rounded-3 text-white bg-primary ">
+                    ${text}
+                    <small class="d-flex justify-content-end text-small-muted">${hora}</small>
+                </div>
+                <div class="position-absolute" style="bottom:8px;">
+                    <i class="fas fa-2x fa-caret-right text-primary"></i>
+                </div>
+            </div>
+        `);
+    }
+
+    function messageIncome(){
+        socket.on('notificacion:enviarmensaje',function (data) {
+            let message = data.message;
+            let hora = '2:00pm';
+            console.log('Mensaje incomming',data)
+            let text = `
+            <div class="d-flex justify-content-start my-2 position-relative">
+                <div class="w-75 m-2 px-3 py-2 rounded-3 text-white bg-dark">
+                    ${message}
+                    <small class="d-flex justify-content-end text-small-muted">${hora}</small>
+                </div>
+                <div class="position-absolute" style="bottom:8px;">
+                    <i class="fas fa-2x fa-caret-left text-dark"></i>
+                </div>
+            </div>
+            `
+            $(`#body-inside-chat-messages-${data.from}`).append(text);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", chatEvents);
+</script>

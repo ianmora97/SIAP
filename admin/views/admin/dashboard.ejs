@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administracion | Dashboard</title>
     <%- include('headers') %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.1.1/css/hover-min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.css">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
 </head>
 <body class="page bg-light d-flex flex-column h-100 overflow-hidden">
-    <%- include('email') %>
+     
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
@@ -178,6 +179,11 @@
                 </div>
             </div>
             <%- include('footerDashboard') %>
+            <script>
+                socket.on("connect", () => {
+                    socket.emit('notificacion:newuser',g_myData);
+                });
+            </script>
         </div>
     </div>
     <div class="modal fade" id="grupoHorario" tabindex="-1" aria-labelledby="grupoHorarioLabel" aria-hidden="true">

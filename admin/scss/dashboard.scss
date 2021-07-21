@@ -2,6 +2,19 @@
   overflow-x: hidden;
 }
 
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius:10px;
+  background-color: darkgrey;
+  outline: none;
+}
 #menu-header{
   height: 40px;
   position: sticky;
@@ -571,7 +584,8 @@ input,select{
 .media.active{
   background-color: #fff !important;
 }
-@media (max-width: 950px){
+// ! --------------------------------------------- MEDIA QUERYS FOR EMAIL ----------------------------------
+@media (max-width: 950px){ // menos que 950
   .menu-correo-tab {
       display: none !important;
   }
@@ -582,11 +596,94 @@ input,select{
     display:block;
   }
 }
-@media (min-width: 950px){
+@media (min-width: 950px){ // mas que 950
   .boton-back-bp{
     display:none;
   }
+  .correos-lista-tab {
+    max-width:410px;
+  }
 }
-.titulos-correo-tab.off{
+.titulos-correo-tab.hide{
   display: none !important;
+}
+.correos-lista-tab.hide{
+
+}
+// !------------------ chat -----------------
+
+.chat-footer{
+  position:fixed;
+  bottom:15px;
+  right:15px;
+  width:70px;
+  height:70px;
+  background-color: #4659e4;
+  color:#ffffff;
+  border-radius:100%;
+  box-shadow: 0 0 20px rgba(70, 70, 70, 0.5) !important;
+  transition: all 0.3s;
+  z-index: 5;
+  display:flex !important;
+  justify-content:center;
+  align-items:center;
+  &.open{
+    transition: all 0.3s;
+    box-shadow: none !important;
+  }
+}
+.chat-container{
+  display:none;
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  width:700px;
+  height:85vh;
+  border-radius:15px;
+  border-bottom-right-radius: 30px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px rgba(70, 70, 70, 0.5) !important;
+  transition: all 0.3s;
+  z-index: 6;
+  &.open{
+    transition: all 0.3s;
+    display: block !important;
+  }
+}
+.header-chat{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  color: #fff !important;
+  height:40px;
+  
+}
+.chat-body{
+  display:flex;
+  flex-direction:row;
+  height:calc(85vh - 40px);
+}
+.messages{
+  min-width: 220px;
+  height:100%;
+  border-right: 1px solid #cacaca;
+}
+.list-group-item-chat.active{
+  background-color:#4659e4;
+  color:white;
+}
+.list-group-item-chat{
+  padding:5px 5px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.chat-message{
+  width:100%;
+}
+.text-small-muted{
+  color:white;
+  font-size: 10px;
 }

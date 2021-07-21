@@ -1,7 +1,6 @@
 const socket = io();
 
 function cargasSockets(event){
-    socket_sendAction();
     socket_pushNotificationNewUser();
     socket_prueba();
     socket_pushNotificationNuevaMatricula();
@@ -25,20 +24,7 @@ function socket_prueba(){
         $("#toast-11").toast('show');
     });
 }
-function socket_sendAction(){
-    $('#mensaje').on('keydown',function (event){
-        if(event.which == 13){
-            var mensaje = $('#mensaje').val();
-            var usuario = $('#username').val();
-            console.log(usuario + " " + mensaje);
-            socket.emit('chat:message',{
-                message:  mensaje,
-                username: usuario
-            });
-            $('#mensaje').val('');
-        }
-    });
-}
+
 function socket_pushNotificationNewUser(){
     socket.on('notificacion:nuevo_registro',function (data) {
         $('#notifications').append(
