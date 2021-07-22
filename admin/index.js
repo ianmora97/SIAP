@@ -82,42 +82,43 @@ const io = SocketIo(server);
 var usersOnline = new Map();
 
 io.on('connection', (socket) =>{
-    socket.on('notificacion:nuevo_registro', (data) => {
-        io.sockets.emit('notificacion:nuevo_registro',data);
+    socket.on(' chat:nuevo_registro', (data) => {
+        io.sockets.emit(' chat:nuevo_registro',data);
     });
     
-    socket.on('notificacion:nueva_matricula', (data) => {
-        io.sockets.emit('notificacion:nuevo_registro',data);
+    socket.on(' chat:nueva_matricula', (data) => {
+        io.sockets.emit(' chat:nuevo_registro',data);
     });
     
-    socket.on('notificacion:enviarmensaje', (data) => {
-        socket.broadcast.to(usersOnline.get(data.to).socketId).emit('notificacion:enviarmensaje', data);
+    socket.on(' chat:enviarmensaje', (data) => {
+        socket.broadcast
+        .to(usersOnline.get(data.to).socketId)
+        .emit(' chat:enviarmensaje', data);
     });
     
-    socket.on('notificacion:newuser', (data) => {
+    socket.on(' chat:newuser', (data) => {
         usersOnline.set(data.id,{data:data,socketId:socket.id});
         console.log('[',chalk.green('OK'),']',chalk.yellow('SOCKET') ,'new user Connected',socket.id);
         let vec = [];
         usersOnline.forEach((e) => {
             vec.push(e.data);
         })
-        io.sockets.emit('notificacion:bringconnected',vec);
+        io.sockets.emit(' chat:bringconnected',vec);
     });
-    socket.on('notificacion:bringconnected', (data) => {
+    socket.on(' chat:bringconnected', (data) => {
         let vec = [];
         usersOnline.forEach((e) => {
             vec.push(e.data);
         })
-        
-        io.sockets.emit('notificacion:bringconnected',vec);
+        io.sockets.emit(' chat:bringconnected',vec);
     });
-    socket.on('notificacion:disconnect', (data) => {
+    socket.on(' chat:disconnect', (data) => {
         usersOnline.delete(socket.id);
         let vec = [];
         usersOnline.forEach((e) => {
             vec.push(e.data);
         })
-        io.sockets.emit('notificacion:bringconnected',vec);
+        io.sockets.emit(' chat:bringconnected',vec);
     });
     socket.on('disconnect', () => {
     });

@@ -87,11 +87,11 @@ const server = app.listen(app.get('port'), () =>{
 const io = SocketIo(server);
 
 io.on('connection', (socket) =>{
-    socket.on('notificacion:nuevo_registro', (data) => {
-        io.sockets.emit('notificacion:nuevo_registro',data);
+    socket.on(' chat:nuevo_registro', (data) => {
+        io.sockets.emit(' chat:nuevo_registro',data);
     });
     
-    socket.on('notificacion:nueva_matricula', (data) => {
-        io.sockets.emit('notificacion:nuevo_registro',data);
+    socket.on(' chat:nueva_matricula', (data) => {
+        io.sockets.emit(' chat:nuevo_registro',data);
     });
 });

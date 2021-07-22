@@ -26,7 +26,7 @@ function socket_prueba(){
 }
 
 function socket_pushNotificationNewUser(){
-    socket.on('notificacion:nuevo_registro',function (data) {
+    socket.on(' chat:nuevo_registro',function (data) {
         $('#notifications').append(
             `<a class="dropdown-item bg-light px-0" href="/admin/comprobacion"><i class="far fa-user"></i> 
             Registro Nuevo<br> <strong>${data.nombre}</strong></a>`
@@ -50,7 +50,7 @@ function socket_pushNotificationNewUser(){
 }
 
 function socket_pushNotificationNuevaMatricula(){
-    socket.on('notificacion:nueva_matricula',function (data) {
+    socket.on(' chat:nueva_matricula',function (data) {
         $('#notifications').append(
             `<a class="dropdown-item bg-light" href="#"><i class="far fa-user"></i> 
             Nueva Matricula<br> <strong>${data.nombre}</strong></a>`

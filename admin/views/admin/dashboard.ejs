@@ -181,8 +181,12 @@
             <%- include('footerDashboard') %>
             <script>
                 socket.on("connect", () => {
-                    socket.emit('notificacion:newuser',g_myData);
+                    socket.emit(' chat:newuser',g_myData);
                 });
+                function bringConected(){
+                    socket.emit(' chat:bringconnected');
+                }
+                bringConected()
             </script>
         </div>
     </div>

@@ -213,7 +213,7 @@ function registrar_usuario_ajax(){
                         data: JSON.stringify(data),
                         contentType: "application/json"
                     }).then((response) => {
-                        socket.emit('notificacion:nuevo_registro',data);
+                        socket.emit(' chat:nuevo_registro',data);
                         $('html').scrollTop(0);
                         $('#spinnerWaiter').hide();
                         $('#alertasuccess').show()

@@ -632,6 +632,17 @@ input,select{
     box-shadow: none !important;
   }
 }
+#badge-icon span{
+  position: absolute;
+  top: -45px;
+  right: -55px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
 .chat-container{
   display:none;
   position:fixed;
@@ -686,4 +697,10 @@ input,select{
 .text-small-muted{
   color:white;
   font-size: 10px;
+}
+.feedback-chat{
+  position: absolute;
+  top: -25px;
+  right: 10px;
+  font-size: 12px;
 }
