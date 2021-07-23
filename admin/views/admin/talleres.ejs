@@ -11,16 +11,16 @@
     <link rel="stylesheet" href="../../css/bootstrap.css">
     <link rel="stylesheet" href="../../css/general.css">
     <link rel="stylesheet" href="../../css/datatables.min.css">
-    <link rel="stylesheet" href="/css/calendar-horario.css">
+    <!-- <link rel="stylesheet" href="/css/calendar-horario.css"> -->
     <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <link rel="stylesheet" href="../../css/animate.css">
     <script src="../../js/jq-bs-bundle.js"></script>
-    <!-- <link href='/css/fullcalendar.css' rel='stylesheet' /> -->
-    <!--<script src='/js/fullcalendar.js'></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
 </head>
 
@@ -243,9 +243,9 @@
     <div class="modal fade" id="agregarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title pl-3" id="exampleModalLabel">Agregar Grupo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header border-bottom-0 bg-primary">
+                    <h5 class="modal-title pl-3 text-white" id="exampleModalLabel">Agregar Grupo</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -358,15 +358,9 @@
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
                 <%- include('headerDashboard') %>
-                <nav aria-label="breadcrumb ">
-                    <ol class="breadcrumb ">
-                        <li class="breadcrumb-item"><a href="#">Talleres</a></li>
-                        <li class="breadcrumb-item"><a href="#">Talleres</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Lista de Talleres</li>
-                    </ol>
-                </nav>
-                <div class="container-fluid">
-                    <div class="card border-0 shadow-sm my-3">
+                
+                <div class="container-fluid mt-4">
+                    <div class="card border-0 shadow-primary my-3 rounded-3">
                         <div class="card-body py-2">
                             <div class="row">
                                 <div class="col-md-6 mb-2">
@@ -395,13 +389,17 @@
                         <nav>
                             <div class="nav bg-light" id="nav-tab" role="tablist">
                                 <a class="nav-link-casilleros active" id="nav-talleres-tab" data-toggle="tab" 
-                                href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="true">Talleres</a>
+                                href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="true">
+                                <i class="fas fa-swimmer text-primary"></i> Talleres</a>
                                 <a class="nav-link-casilleros" id="nav-horarios-tab" data-toggle="tab" 
-                                href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">Horarios</a>
+                                href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">
+                                <i class="fas fa-clock text-primary"></i> Horarios</a>
                                 <a class="nav-link-casilleros" id="nav-grupos-tab" data-toggle="tab" 
-                                href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">Grupos</a>
+                                href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">
+                                <i class="fas fa-users text-primary"></i> Grupos</a>
                                 <a class="nav-link-casilleros" id="nav-calendario-tab" data-toggle="tab" 
-                                href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="false">Calendario</a>
+                                href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="false">
+                                <i class="fas fa-calendar-day text-primary"></i> Calendario</a>
                             </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
@@ -409,7 +407,6 @@
                                 <div class="card-body px-2 py-2">
                                     <div class="row mx-0">
                                         <div class="col-lg-8 px-2 py-2">
-                                            <h2 class="font-weight-bolder">Talleres</h2>
                                             <p class="text-muted">
                                                 Aqui se muestran todos los talleres que se imparten en la piscina.
                                                 Estos talleres tendran un nivel, una descripcion y un <strong>codigo</strong>, el cual 
@@ -418,39 +415,53 @@
                                             </p>
                                         </div>                                        
                                     </div>
-                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
-                                        <div class="col-md-8 px-1">
-                                            <div class="input-group flex-nowrap">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn bg-white" type="button" id="button_search"><i
-                                                            class="fas fa-search"></i></button>
-                                                </div>
-                                                <input type="search" class="form-control border-0 shadow-none bg-white "
-                                                    onkeyup="searchonfind(this)" data-type="talleres" placeholder="Buscar..."
-                                                    aria-label="Username" id="barraBuscar_talleres">
-                                            </div>
-        
-                                        </div>
-                                        <div class="col-md-4 d-flex justify-content-around px-0">
-                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-start">
-                                                <div class="col-lg-9 flex-column">
-                                                    <div id="lenghtTable_talleres" class="px-1 m-0">
+                                    <div class="row mx-0 d-flex justify-content-between mb-3">
+                                        <div class="col">
+                                            <div class="mb-1">
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <div class="btn bg-light" id="button_search">
+                                                            <i class="fas fa-search"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
-                                                    <button type="button" name="agregarTaller" id="agregarTaller"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar nuevo Taller" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;" onclick="openmodal('#agregarTaller')"><i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Actualizar lista" class="btn bg-white btn-sm"
-                                                        style="border-radius: 50px;"><i class="fas fa-sync-alt"></i>
-                                                    </a>
+                                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                                        onkeyup="searchonfind(this)" data-type="talleres" placeholder="Buscar..."
+                                                         id="barraBuscar_talleres">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                            <div class="w-100">
+                                                <button type="button" name="agregarTaller" id="agregarTaller" 
+                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                data-toggle="modal" data-target="#agregarTaller">
+                                                <i class="fas fa-plus"></i> Agregar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
+                                            <h4 class="font-weight-bold mb-0 ">Talleres</h4>
+                                            
+                                        </div>
+                                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                                            <h6 class="font-weight-bold">Show</h6>
+                                            <div id="lenghtTable_talleres" class="px-1 m-0 w-100">
+                                            </div> 
+                                        </div>
+                                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                                            <div id="pagination">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
                                         <table class="table custom-table table-responsive-md table-borderless"
@@ -643,43 +654,44 @@
                             <div class="tab-pane fade" id="nav-calendario" role="tabpanel" aria-labelledby="nav-calendario-tab">
                                 <div class="row mx-0 w-100 mt-4 bg-white rounded p-2">
                                     <script>
-                                          $( document ).ready(function() {
-                                                $('#calendar').fullCalendar(
-                                                    {
-                                                    locale: 'es',
-                                                    themeSystem: 'bootstrap4',
-                                                    defaultView: 'month', //agendaWeek, listWeek, month, dayGridWeek, timeGridDay
-                                                    height: 650,
-                                                    events: [
+                                            $( document ).ready(function() {
+                                                
+                                                // $('#calendar').fullCalendar(
+                                                //     {
+                                                //     locale: 'es',
+                                                //     themeSystem: 'bootstrap4',
+                                                //     defaultView: 'month', //agendaWeek, listWeek, month, dayGridWeek, timeGridDay
+                                                //     height: 650,
+                                                //     events: [
                                                         
-                                                    ],
+                                                //     ],
       
-                                                    header: {
-                                                        center: 'title',
-                                                        left: 'month, agendaWeek, agendaDay'
-                                                    },
-                                                    eventRender: function(event, element) {
-                                                        if(event.icon){
-                                                            element.find(".fc-title").prepend("<i class='fa fa-"+event.icon+"'></i>");
-                                                        }
-                                                    },
-                                                    dayClick: function() {
-                                                        $('#modal-view-event-add').modal();
-                                                    },
-                                                    eventClick: function(event, jsEvent, view) {
-                                                            $('.event-icon').html("<i class='fa fa-"+event.icon+"'></i>");
-                                                            $('.event-title').html(event.title);
-                                                            $('.event-body').html(event.description);
-                                                            $('.eventUrl').attr('href',event.url);
-                                                            $('#modal-view-event').modal();
-                                                    },
-                                                }
-                                                );
+                                                //     header: {
+                                                //         center: 'title',
+                                                //         left: 'month, agendaWeek, agendaDay'
+                                                //     },
+                                                //     eventRender: function(event, element) {
+                                                //         if(event.icon){
+                                                //             element.find(".fc-title").prepend("<i class='fa fa-"+event.icon+"'></i>");
+                                                //         }
+                                                //     },
+                                                //     dayClick: function() {
+                                                //         $('#modal-view-event-add').modal();
+                                                //     },
+                                                //     eventClick: function(event, jsEvent, view) {
+                                                //             $('.event-icon').html("<i class='fa fa-"+event.icon+"'></i>");
+                                                //             $('.event-title').html(event.title);
+                                                //             $('.event-body').html(event.description);
+                                                //             $('.eventUrl').attr('href',event.url);
+                                                //             $('#modal-view-event').modal();
+                                                //     },
+                                                // }
+                                                // );
                                             });
 
                                       </script>
                                       <style>
-                                            .fc-day.alert-info {
+                                            /* .fc-day.alert-info {
                                                 background: rgba(76, 132, 255 , 62%);
                                             }
                                             .fc-day.fc-today {
@@ -690,7 +702,7 @@
                                           }
                                           .fc-row{
                                             background: #f0f2f5 !important;
-                                          }
+                                          } */
                                           #calendar {
                                               width:95%;
                                           }

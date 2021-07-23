@@ -7,7 +7,10 @@ const multer = require('multer');
 const uuid = require('uuid');
 var cors = require('cors')
 const app = express();
+const router = express.Router();
 require('dotenv').config();
+
+usersOnline = new Map();
 
 app.set('port', process.env.PORT);
 app.set('host', process.env.HOST);
@@ -79,7 +82,7 @@ const server = app.listen(app.get('port'), () =>{
 
 const io = SocketIo(server);
 
-var usersOnline = new Map();
+
 
 io.on('connection', (socket) =>{
     socket.on(' chat:nuevo_registro', (data) => {
@@ -103,8 +106,9 @@ io.on('connection', (socket) =>{
         usersOnline.forEach((e) => {
             vec.push(e.data);
         })
-        io.sockets.emit(' chat:bringconnected',vec);
+        io.sockets.emit(' chat:newuserLoged',data);
     });
+
     socket.on(' chat:bringconnected', (data) => {
         let vec = [];
         usersOnline.forEach((e) => {
@@ -112,8 +116,16 @@ io.on('connection', (socket) =>{
         })
         io.sockets.emit(' chat:bringconnected',vec);
     });
+    socket.on(' chat:bringmeall', (data) => {
+        let vec = [];
+        usersOnline.forEach((e) => {
+            vec.push(e.data);
+        })
+        io.sockets.emit(' chat:bringmeall',vec);
+    });
+
     socket.on(' chat:disconnect', (data) => {
-        usersOnline.delete(socket.id);
+        usersOnline.delete(data.me);
         let vec = [];
         usersOnline.forEach((e) => {
             vec.push(e.data);

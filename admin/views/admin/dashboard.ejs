@@ -15,7 +15,7 @@
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <div class="container-fluid mt-2">
+            <div class="container-fluid mt-2 px-0">
                 <div class="row mx-3 p-3 cards-dash">
                     <div class="col-md-5">
                         <h4 class="font-weight-bold mt-1">Panel de administracion</h4>
@@ -180,13 +180,13 @@
             </div>
             <%- include('footerDashboard') %>
             <script>
-                socket.on("connect", () => {
-                    socket.emit(' chat:newuser',g_myData);
-                });
-                function bringConected(){
-                    socket.emit(' chat:bringconnected');
-                }
-                bringConected()
+                // socket.on("connect", () => {
+                //     socket.emit(' chat:newuser',g_myData);
+                // });
+                // function bringConected(){
+                //     socket.emit(' chat:bringconnected');
+                // }
+                // bringConected()
             </script>
         </div>
     </div>

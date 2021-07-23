@@ -35,6 +35,17 @@ router.get('/buscarUsuarioRegistro',(req,res)=>{
         res.send(persona)
     });
 });
-
+router.get('/admin/bringmeAll', (req, res) => {
+    if(req.query.auth == 'IsOnServer'){
+        let vec = [];
+        usersOnline.forEach((e) => {
+            vec.push(e.data);
+        })
+        console.log(vec)
+        res.send(vec);
+    }else{
+        res.send(false);
+    }
+});
 
 module.exports = router;

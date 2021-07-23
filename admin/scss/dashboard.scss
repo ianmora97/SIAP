@@ -1,6 +1,3 @@
-#wrapper {
-  overflow-x: hidden;
-}
 
 body::-webkit-scrollbar {
   width: 10px;
@@ -14,6 +11,10 @@ body::-webkit-scrollbar-thumb {
   border-radius:10px;
   background-color: darkgrey;
   outline: none;
+}
+#wrapper {
+  overflow-x: hidden;
+  transition: all .25s ; 
 }
 #menu-header{
   height: 40px;
@@ -31,13 +32,13 @@ body::-webkit-scrollbar-thumb {
 	left: 0;
 	height: 100vh;
 	margin-left: -13rem;
-  -webkit-transition: all .25s ;
-  -moz-transition: all .25s ;
-  -o-transition: all .25s ;
-  transition: all .25s ; 
+  transition: all .5s ease-out; 
+  -webkit-transition: all .5s ease-out;
+  -moz-transition: all .5s ease-out;
+  -o-transition: all .5s ease-out;
+  
 }
 #sidebar-wrapper .list-group {
-  transition: all .25s ; 
   width: 13rem; 
   overflow-y: auto;
 }
@@ -47,11 +48,11 @@ body::-webkit-scrollbar-thumb {
   left: 0;
   height: 100vh;
   margin-left: 0; 
-  transition: all .25s ; 
 }
 #page-content-wrapper {
   min-width: 100vw;
   position: relative;
+  background-color: #F9FAFE;
 }
 @media (min-width: 770px) { //si el ancho de la pantalla es mayor que 768px 
   #sidebar-wrapper {
@@ -60,7 +61,7 @@ body::-webkit-scrollbar-thumb {
     height: 100vh;
     position: sticky;
     margin-left: 0; 
-    transition: all .25s ; 
+    
   }
   #page-content-wrapper {
     min-width: 0;
@@ -73,7 +74,7 @@ body::-webkit-scrollbar-thumb {
     left: 0;
     height: 100vh;
     margin-left: -13rem; 
-    transition: all .25s ; 
+    
   } 
 }
 // !---------------------------------------------------------------- TH TD -----------------
@@ -82,11 +83,20 @@ body::-webkit-scrollbar-thumb {
   font-size: 1rem;
   margin-bottom: 5px;
   font-weight: bold;
+  text-align: left;
+}
+.custom-table tbody tr{
+  transition: all 1s ease-out;
+  &:hover{
+    background-color: #dce3ff;
+  }
 }
 .custom-table tbody td{
-  line-height: 2.5;
-  font-size: 1rem;
-  padding: 0.2rem !important;
+  line-height: 2.4;
+  font-size: 1em;
+  padding: 6px 10px !important;
+  color: #9d9d9d;
+  text-align: left;
 }
 
 
@@ -316,7 +326,7 @@ body::-webkit-scrollbar-thumb {
   display: block;
   background-color: #fff;
   border-radius: 100%;
-  box-shadow: 0 5px 5px -1px rgba(0, 0, 0, 0.05); 
+  box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.05); 
 }
 
 // ! ---------------------------------------- FOR NEW UI  --------------------------------------------------
@@ -646,40 +656,73 @@ input,select{
 .chat-container{
   display:none;
   position:fixed;
-  bottom:10px;
-  right:10px;
-  width:700px;
-  height:85vh;
-  border-radius:15px;
-  border-bottom-right-radius: 30px;
+  width: 100vw;
+  height: 100vh;
+  bottom: 0;
+  right: 0;
   background-color: #ffffff;
   box-shadow: 0 0 20px rgba(70, 70, 70, 0.5) !important;
   transition: all 0.3s;
-  z-index: 6;
+  z-index: 9999;
   &.open{
     transition: all 0.3s;
     display: block !important;
   }
 }
-.header-chat{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  color: #fff !important;
-  height:40px;
-  
+@media (min-width: 430px){ // en mobile
+  .chat-container{
+    bottom:10px;
+    right:10px;
+    width:700px;
+    height:85vh;
+    border-radius:15px;
+    border-bottom-right-radius: 30px;
+  }
+  .header-chat{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  .chat-body{
+    height:calc(85vh - 40px) !important;
+  }
+  .messages{
+    border-right: 1px solid #cacaca;
+    width: unset !important; 
+  }
 }
 .chat-body{
   display:flex;
   flex-direction:row;
-  height:calc(85vh - 40px);
+  height:calc(100vh - 40px);
 }
 .messages{
+  width: 100%;
   min-width: 220px;
   height:100%;
-  border-right: 1px solid #cacaca;
+  &.show{
+    display:block;
+  }
+  &.hide{
+    display:none;
+  }
+}
+.chat-message{
+  width:100%;
+  &.show{
+    display:block;
+  }
+  &.hide{
+    display:none;
+  }
+}
+.header-chat{
+  position: sticky;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color: #fff !important;
+  height:40px;
+  
 }
 .list-group-item-chat.active{
   background-color:#4659e4;
@@ -691,9 +734,7 @@ input,select{
   justify-content:space-between;
   align-items:center;
 }
-.chat-message{
-  width:100%;
-}
+
 .text-small-muted{
   color:white;
   font-size: 10px;
@@ -703,4 +744,11 @@ input,select{
   top: -25px;
   right: 10px;
   font-size: 12px;
+}
+// ! -------------------------- END OF CHAT -----------------------------
+
+.descriptionRow{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
 }

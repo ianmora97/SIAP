@@ -252,13 +252,13 @@ function cargar_estudiante(data) {
 function llenar_Estudiantes(data) {
     let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
     $("#lista_estudiantes").append(`
-        <tr style="height:calc(55vh / 10);">
+        <tr style="height:calc(55vh / 10);" class="">
             <td class="align-center">${foto}</td>
-            <td class="align-center">${data.nombre + " " + data.apellido}</td>
-            <td>${data.cedula}</td>
-            <td><i class="fas fa-flag text-primary"></i>&nbsp;&nbsp; ${data.descripcion}</td>
-            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
-            <td class="">
+            <td class="align-center descriptionRow">${data.nombre + " " + data.apellido}</td>
+            <td class="descriptionRow">${data.cedula}</td>
+            <td class="descriptionRow"><i class="fas fa-flag text-primary"></i>&nbsp;&nbsp; ${data.descripcion}</td>
+            <td class="descriptionRow"><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
+            <td class="descriptionRow">
                 <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
                 <label class="switch-cus" for="customSwitch_${data.id}">
                     <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">

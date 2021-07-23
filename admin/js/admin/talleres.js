@@ -24,6 +24,7 @@ function loaded(event){
 function events(event){
     loadFromDb();
     openModal();
+    checkClickModalDateCalendar()
 }
 
 $(function () {
@@ -34,6 +35,7 @@ $(function () {
 
 function openmodal(modal) {
     $(modal).modal('show');
+    console.log('Modal Abierto')
 }
 
 function searchonfind(barra) {
@@ -138,6 +140,7 @@ function openModal(){
         $('#toogleFormActualizar').show();
     })
 }
+var g_modalFechaCalendario = "";
 // ? ------------------------------------- Horario CRUD ------------------------------
 
 function agregarHorario() {
@@ -578,7 +581,7 @@ function selectTallerFromGrupo(talleres) {
 function selectHorarioFromGrupo(horarios) {
     horarios.forEach(e => {
         $('#horarioSelectGrupo').append(`
-            <option value="${e.id}">${e.dia} ${e.hora}</option>
+            <option value="${e.id}" data-day="${e.dia}">${e.dia} ${e.hora}</option>
         `)
     });
     horarios.forEach(e => {
@@ -788,7 +791,28 @@ function toWeekDay(dia) {
             break;
     }
 }
+function toDayWeek(dia) {
+    switch (dia) {
+        case 1:
+            return 'LUNES';
+        case 2:
+            return 'MARTES';
+        case 3:
+            return 'MIERCOLES';
+        case 4:
+            return 'JUEVES';
+        case 5:
+            return 'VIERNES';
+        case 6:
+            return 'SABADO';
+        case 7:
+            return 'DOMINGO';
+        default:
+            return 'DOMINGO';
+    }
+}
 function fillCalendar(grupos) {
+    var eventsArray = [];
     grupos.forEach(e => {
         let p = e.nombre + e.apellido;
         let id_matricula = e.id_matricula;
@@ -806,18 +830,63 @@ function fillCalendar(grupos) {
         let horainicio = e.hora + ":00";
         let horafinal = (e.hora + 1) + ":00";
 
-        
-        $('#calendar').fullCalendar('renderEvent', {
+        eventsArray.push({
+            id: grupo,
             title: descripcion,
-            description: todo,
-            start: horainicio,
-            end: horafinal,
-            dow: [ weekday ], 
-            className: 'fc-bg-default',
-            icon : "swimmer"
+            startTime: horainicio,
+            endTime: horafinal,
+            daysOfWeek: [ weekday ], 
+            backgroundColor: '#4659E4',
+            borderColor: '#4659E4',
         });
-    })
-   
-}
 
+        
+    })
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'UTC',
+        initialView: 'dayGridMonth',
+        height: 650,
+        themeSystem: 'bootstrap',
+        headerToolbar: {
+            start: '',
+            center: 'dayGridMonth,listWeek,timeGridWeek',
+            end: ''
+        },
+        events: eventsArray,
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Dia',
+            list:     'Hoy'
+        },
+        dateClick: function(info) {
+            g_modalFechaCalendario = info.dateStr;
+            $('#agregarGrupo').modal();
+        },
+        eventClick: function(event) {
+            $('.event-icon').html("<i class='fa fa-"+event.icon+"'></i>");
+            $('.event-title').html(event.title);
+            $('.event-body').html(event.description);
+            $('.eventUrl').attr('href',event.url);
+            $('#modal-view-event').modal();
+        }
+    });
+    calendar.render();
+}
+function checkClickModalDateCalendar(){
+    $('#agregarGrupo').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        if(g_modalFechaCalendario != undefined){
+            let fecha = g_modalFechaCalendario;
+            g_modalFechaCalendario = undefined;
+            let fecha_1 = new Date(fecha);
+            let day = toDayWeek(fecha_1.getDay()+1);
+            let a = $(`#horarioSelectGrupo option`).attr('data-day',day);
+            console.log(day,a)
+        }
+    })
+}
 document.addEventListener("DOMContentLoaded", loaded);

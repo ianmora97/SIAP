@@ -386,7 +386,7 @@ function fillCalendar(grupos) {
         });
         
     })
-    console.log(eventsArray)
+    //console.log(eventsArray)
     var calendarEl = document.getElementById('calendar');
 
 
