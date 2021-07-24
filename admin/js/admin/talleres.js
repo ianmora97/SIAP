@@ -24,15 +24,52 @@ function loaded(event){
 function events(event){
     loadFromDb();
     openModal();
-    checkClickModalDateCalendar()
+    checkClickModalDateCalendar();
+    checkInputsTaller();
 }
 
 $(function () {
     $('[data-toggle="popover"]').popover();
     $('[data-toggle="tooltip"]').tooltip()
 })
+function checkInputsTaller() {
+    $('#codigoTallerModalAgregar').keyup(function () {
+        var codigo = $('#codigoTallerModalAgregar').val();
+        g_mapTalleres.forEach( e=>{
+            if(e.codigo == codigo){
+                $('#feedback').html('')
+                $('#feedback').append(`
+                    <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
+                        <img src="/img/emoji/sad_face.png" width="30px">
+                        <strong>El código debe ser único.</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `);
+            }
+        })
+    });
+    $('#nivelTallerModalAgregar').on("change keyup",function () {
+        var nivel = $('#nivelTallerModalAgregar').val();
+        g_mapTalleres.forEach( e=>{
+            if(e.nivel == nivel){
+                $('#feedback').html('')
+                $('#feedback').append(`
+                    <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
+                        <img src="/img/emoji/sad_face.png" width="30px">
+                        <strong>El nivel debe ser único</strong> ya hay un taller con este nivel. <span class="badge badge-light">${e.descripcion}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `);
+            }
+        })
+    });
+    
 
-
+}
 function openmodal(modal) {
     $(modal).modal('show');
     console.log('Modal Abierto')
@@ -811,10 +848,11 @@ function toDayWeek(dia) {
             return 'DOMINGO';
     }
 }
+var calendar;
 function fillCalendar(grupos) {
     var eventsArray = [];
     grupos.forEach(e => {
-        let p = e.nombre + e.apellido;
+        let p = e.nombre + " "+ e.apellido;
         let id_matricula = e.id_matricula;
         let grupo = e.id_grupo;
         let codigo = e.codigo_taller;
@@ -833,48 +871,88 @@ function fillCalendar(grupos) {
         eventsArray.push({
             id: grupo,
             title: descripcion,
+            hora: hora,
             startTime: horainicio,
             endTime: horafinal,
             daysOfWeek: [ weekday ], 
+            display: 'block',
             backgroundColor: '#4659E4',
             borderColor: '#4659E4',
+            icon : "swimmer",
+            codigo: codigo,
+            description: todo,
         });
 
         
     })
     var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        timeZone: 'UTC',
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
         initialView: 'dayGridMonth',
-        height: 650,
+        height: 750,
+        nowIndicator: true,
         themeSystem: 'bootstrap',
+        businessHours: {
+            startTime: '7:00',
+            endTime: '22:00',
+            dow: [ 1, 2, 3, 4, 5 ],
+        },
+        customButtons: {
+            doHorario: {
+              text: 'Crear Horario',
+              click: function() {
+                $('#agregarHorario').modal();
+              }
+            },
+            doGrupo: {
+              text: 'Agregar Grupo',
+              click: function() {
+                g_modalFechaCalendario = undefined;
+                $('#agregarGrupo').modal();
+              }
+            }
+        },
         headerToolbar: {
             start: '',
-            center: 'dayGridMonth,listWeek,timeGridWeek',
-            end: ''
+            center: 'dayGridMonth,dayGridWeek,timeGridDay,listWeek',
+            end: 'doHorario doGrupo'
         },
         events: eventsArray,
+
         buttonText: {
             today:    'Hoy',
             month:    'Mes',
             week:     'Semana',
             day:      'Dia',
-            list:     'Hoy'
+            list:     'Lista'
         },
         dateClick: function(info) {
             g_modalFechaCalendario = info.dateStr;
             $('#agregarGrupo').modal();
         },
         eventClick: function(event) {
-            $('.event-icon').html("<i class='fa fa-"+event.icon+"'></i>");
-            $('.event-title').html(event.title);
-            $('.event-body').html(event.description);
-            $('.eventUrl').attr('href',event.url);
+            let info = event.event._def.extendedProps
+            console.log(event.event._def.extendedProps)
+            $('.event-icon').html("<i class='fa fa-"+info.icon+"'></i>");
+            $('.event-title').html(info.codigo);
+            $('.event-body').html(info.description);
             $('#modal-view-event').modal();
+        },
+        eventContent: function (args, createElement) {
+            const hora = args.event._def.extendedProps.hora;
+            const icon = args.event._def.extendedProps.icon;
+            const text = `<i class="fa fa-${icon}"></i> <span class="font-weight-bold">${args.event._def.title}</span> <span class="badge badge-light">${hora}</span>`;
+            return {
+              html: text
+            };
         }
     });
     calendar.render();
+    setTimeout(() => {
+        $(".fc-dayGridMonth-button").trigger("click");
+    }, 1000);
 }
+var mientras;
 function checkClickModalDateCalendar(){
     $('#agregarGrupo').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal

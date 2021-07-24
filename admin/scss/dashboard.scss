@@ -522,12 +522,12 @@ input,select{
   animation-delay:1.7s;
 }
 
-@media (min-width: 426px){
-  .modal-dialog {
-      max-width: 80%;
-      margin: 1.75rem auto;
-  }
-}
+// @media (min-width: 426px){
+//   .modal-dialog {
+//       max-width: 80%;
+//       margin: 1.75rem auto;
+//   }
+// }
 .modal-fullscreen{
   max-width: 100% !important;
   margin: 0;
