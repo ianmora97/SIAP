@@ -17,18 +17,18 @@
  <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
      <meta name="apple-mobile-web-app-capable" content="yes">
      <meta name="mobile-web-app-capable" content="yes">
-     <title>Dashboard - Estudiantes</title>
-     <link rel="stylesheet" href="../../css/bootstrap.css">
-     <link rel="stylesheet" href="../../css/general.css">
-     <link rel="stylesheet" href="../../css/datatables.min.css">
-     <link rel="stylesheet" href="../../css/dashboard.css"/>
+     <title>Dashboard | Casilleros</title>
+     <link rel="stylesheet" href="/css/bootstrap.css">
+     <link rel="stylesheet" href="/css/general.css">
+     <link rel="stylesheet" href="/css/datatables.min.css">
+     <link rel="stylesheet" href="/css/dashboard.css"/>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-     <link rel="stylesheet" href="../../css/animate.css">
+     <link rel="stylesheet" href="/css/animate.css">
      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
-     <script src="../../js/jq-bs-bundle.js"></script> 
+     <script src="/js/jq-bs-bundle.js"></script> 
      <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -38,9 +38,9 @@
     <div class="modal fade" id="modalAgregarCasillero" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarCasillero" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h6 class="modal-title text-white pl-2">Agregar un Casillero</h6>
-                    <button type="button" class="close"  data-dismiss="modal" aria-label="Close">
+                <div class="modal-header px-3 bg-primary text-white">
+                    <h6 class="modal-title font-weight-bold pl-3">Agregar un Casillero</h6>
+                    <button type="button" class="close text-white"  data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
@@ -51,7 +51,19 @@
                     <div class="casilleroFormat libre agregar mt-2">
                         <div class="formgroup-casillero" data-toggle="tooltip" data-placement="right" data-html="true" title="Codigo">
                             <span>CA</span>
-                            <input type="text" class="input-casillero form-control-sm" placeholder="##" id="addCasilleroInputModal" autofocus>
+                            <input type="number" class="input-casillero form-control-sm" placeholder="##" id="addCasilleroInputModal" autofocus>
+                            <style>
+                                input::-webkit-outer-spin-button,
+                                input::-webkit-inner-spin-button {
+                                -webkit-appearance: none;
+                                margin: 0;
+                                }
+
+                                /* Firefox */
+                                input[type=number] {
+                                -moz-appearance: textfield;
+                                }
+                            </style>
                         </div>
                         <small id="feedbackInputCasilleroModal"></small>
                         <div class="d-flex justify-content-end mt-3">
@@ -60,8 +72,8 @@
                     </div>
                     <small>El formato para los casilleros es <i>CA</i>+<i>numero</i> e.g: CA90</small>
                 </div>
-                <div class=" p-0 m-0">
-                    <button type="button" class="btn btn-primary btn-casillero-agregar" id="agregarCasilleroButton">
+                <div class="modal-footer py-1">
+                    <button type="button" class="btn btn-primary " id="agregarCasilleroButton">
                         Agregar
                     </button>
                 </div>
@@ -112,17 +124,10 @@
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
              <%- include('headerDashboard') %>
-             <%- include('filterEstudianteDashboard') %>
-             
-             <nav aria-label="breadcrumb ">
-                 <ol class="breadcrumb ">
-                     <li class="breadcrumb-item"><a href="#">Casilleros</a></li>
-                     <li class="breadcrumb-item active" aria-current="page"><a href="#">Matriz de casilleros</a></li>
-                 </ol>
-             </nav>
-             <div class="container-fluid">
-                 <div class="card border-0 shadow-sm my-3">
-                     <div class="card-body pb-2 pt-2 pt-md-0">
+
+             <div class="container-fluid mt-4">
+                 <div class="card border-0 shadow-primary my-3 rounded-3">
+                     <div class="card-body py-4">
                          <div class="row">
                              <div class="col-md-6 pt-2">
                                  <h2 class="font-weight-bolder">Administracion de Casilleros</h2>
@@ -131,38 +136,49 @@
                                  <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                              </div>
                              <div class="col pt-2 border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary" id="totalCasilleros_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" 
+                                 id="totalCasilleros_stats">0</h1>
                                  <small class="text-muted">Total de casilleros &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                              <div class="col pt-2 border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary" id="casilleros_disponibles_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" 
+                                 id="casilleros_disponibles_stats">0</h1>
                                  <small class="text-muted">Casilleros Disponibles &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                              <div class="col pt-2">
-                                 <h1 class="m-0 font-weight-bolder text-primary" id="casilleros_en_uso_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3" 
+                                 id="casilleros_en_uso_stats">0</h1>
                                  <small class="text-muted">Casilleros en uso &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                          </div>
                      </div>
                  </div>
-                 <div class="card border-0 shadow" style="min-height: 650px;">
-                    <div class="card-body px-2 py-2">
-                        <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-3">
-                            <div class="col-md-6 ">
+                 <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                    <div class="row mx-0 d-flex justify-content-between">
+                        <div class="col">
+                            <div class="mb-1">
                                 <div class="input-group flex-nowrap">
                                     <div class="input-group-prepend">
-                                        <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
                                     </div>
-                                    <input type="search" class="form-control border-0 shadow-none bg-white" 
-                                    onkeyup="searchonfind()" placeholder="Buscar..." id="barraBuscar">
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
                                 </div>
-                                
                             </div>
-                            <div class="col-lg-3 col-md-6 col d-flex justify-content-end  py-1">
-                                <button type="button" class="btn btn-secondary btn-sm w-100" 
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                            <div class="w-100 h-100">
+                                <button type="button" class="btn btn-primary w-100" 
                                 data-toggle="modal" data-target="#modalAgregarCasillero"><i class="fas fa-plus"></i> Agregar Casillero</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+                 <div class="bg-white px-0 py-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn" style="min-height: 650px;">
+                    <div class="card-body px-2 py-2">
                         <div id="casillerosMatrix">
 
                         </div>

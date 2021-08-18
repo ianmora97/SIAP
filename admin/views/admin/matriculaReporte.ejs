@@ -37,24 +37,25 @@
 </head> 
  <body class="page bg-light d-flex flex-column h-100">
      <div class="modal fade" id="descargarPdf" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-         <div class="modal-dialog" role="document">
+         <div class="modal-dialog modal-dialog-centered" role="document">
              <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title">Descargar Reporte</h5>
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <div class="modal-header bg-primary text-white py-3">
+                     <h5 class="modal-title pl-3 font-weight-bold">Descargar Reporte</h5>
+                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                              <span aria-hidden="true">&times;</span>
                          </button>
                  </div>
                  <div class="modal-body">
                      <div class="form-group">
-                       <label for="">Titulo que llevara el PDF</label>
+                       <label for="">Nombre del PDF</label>
                        <input type="text" class="form-control form-control-sm" id="tituloPdf">
                        <small id="helpId" class="text-muted">Reportes de Abril</small>
                      </div>
                  </div>
                  <div class="modal-footer">
-                     <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
-                     <button type="button" class="btn btn-info" onclick="pdfDownload()">Save</button>
+                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                     <button type="button" class="btn btn-primary" onclick="pdfDownload()">
+                        <i class="fas fa-download animate__animated animate__pulse animate__infinite"></i> Descargar</button>
                  </div>
              </div>
          </div>
@@ -63,104 +64,115 @@
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
                 <%- include('headerDashboard') %>
-                <nav aria-label="breadcrumb ">
-                    <ol class="breadcrumb ">
-                        <li class="breadcrumb-item"><a href="#">Matricula</a></li>
-                        <li class="breadcrumb-item"><a href="#">Reportes</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Lista</li>
-                    </ol>
-                </nav>
-                <div class="container-fluid ">
-                    <div class="card border-0 shadow-sm my-3">
-                        <div class="card-body py-2">
+
+                <div class="container-fluid mt-4">
+                    <div class="card border-0 shadow-primary my-3 rounded-3">
+                        <div class="card-body py-4">
                             <div class="row">
                                 <div class="col-md-6 ">
-                                    <h2 class="font-weight-bolder">Reportes de matricula</h2>
+                                    <h2 class="font-weight-bold">Reportes de matricula</h2>
                                     <small class="text-muted">En esta seccion se muestra la lista de matriculas 
-                                        ingresadas y eliminadas</small><br>
+                                        ingresadas y eliminadas<br>
+                                        Los reportes de matricula se pueden generar Mensualmente</small><br>
                                     <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                                 </div>
                                 <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary" id="cantidad_matriculados">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" id="cantidad_matriculados">0</h1>
                                     <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                     title="Cantidad de matriculas en el sistema">Matriculas &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                                 <div class="col">
-                                    <h1 class="m-0 font-weight-bolder text-primary" id="cantidad_desmatriculados">0</h1>
+                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" id="cantidad_desmatriculados">0</h1>
                                     <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                     title="Cantidad de desmatriculas">Desmatriculas &nbsp; <i class="fas fa-align-center text-info"></i></small>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card border-0 shadow px-2">
-                        <div class="card-body px-2 py-2">
-                        <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 mb-1">
-                            <div class="col-md-6 pl-1 pr-0">
-                                <div class="input-group flex-nowrap">
-                                    <div class="input-group-prepend">
-                                        <button class="btn bg-white" type="button" id="button_search"><i class="fas fa-search"></i></button>
-                                    </div>
-                                    <input type="text" class="form-control border-0 shadow-none bg-white"
-                                        onkeyup="searchonfind()" placeholder="Buscar..."
-                                        aria-label="Username" id="barraBuscar">
-                                </div>
-                            </div>
-                            <div class="col-md-6 d-flex justify-content-around px-0">
-                                <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                    <div class="col-md-10 d-flex justify-content-around">
-                                        <div class="row mx-0 px-1 no-gutters flex-fill">
-                                            <div class="col-4">
-                                                <div id="showlenghtentries" class="flex-fill"></div>
-                                            </div>
-                                            <div class="col-8 pl-2">
-                                                <input type="month" class="form-control" id="filtrarDate">
+                    <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                        <div class="row mx-0 d-flex justify-content-between">
+                            <div class="col">
+                                <div class="mb-1">
+                                    <div class="input-group flex-nowrap">
+                                        <div class="input-group-prepend">
+                                            <div class="btn bg-light" id="button_search">
+                                                <i class="fas fa-search"></i>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-center justify-content-end pr-2"style="max-height: 40px">
-                                        <button onclick="openModal('#descargarPdf')"
-                                            data-toggle="tooltip" data-placement="top"
-                                            title="Descargar Reporte" class="btn btn-info btn-sm mr-2"
-                                            ><i class="far fa-file-pdf"></i>
-                                        </button>
-                                        <a href="/admin/matricula/reportes" name="actualizar_lista" id="actualizar_lista"
-                                            data-toggle="tooltip" data-placement="top"
-                                            title="Actualizar lista" class="btn bg-white btn-sm"
-                                            style="border-radius: 50px;"><i class="fas fa-sync-alt"></i>
-                                        </a>
+                                        <input type="text" class="form-control border-0 shadow-none bg-light"
+                                            onkeyup="searchonfind()" placeholder="Buscar..."
+                                            aria-label="Username" id="barraBuscar">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row w-100 mx-0" style="min-height: 750px; overflow-y: auto;">
-                            <table class="table custom-table table-responsive-md table-borderless px-0" id="table_reportes">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-dark text-white sticky-top text-center" scope="col" style="width: 40px;">#</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Grupo</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Estudiante</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col">Acción</th>
-                                        <th class="bg-dark text-white sticky-top" scope="col" style="width: 160px;"><i class="fas fa-clock"></i> Fecha</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lista_reportes">
-
-                                </tbody>
-                            </table>
-                            <div class="d-flex align-items-center align-self-end border-info w-100">
-                                <div class="row w-100 ml-0">
-                                    <div class="col-6 d-flex justify-content-start text-muted pl-0">
-                                        <small id="infoTable_reportes" class="d-flex align-items-end"></small>
-                                        
-                                        </a>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end" id="botonesTable_reportes"></div>
+                            <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                <div class="w-100 h-100">
+                                    <input type="month" class="form-control" id="filtrarDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                <div class="w-100 h-100">
+                                    <button onclick="openModal('#descargarPdf')"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="Descargar Reporte" class="btn btn-primary w-100 mr-2"
+                                        ><i class="far fa-file-pdf"></i> Descargar Reporte
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="bg-white px-0 py-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
+                        <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
+                            <div class="col-md-3 flex-fill d-flex align-items-baseline">
+                                <h4 class="font-weight-bold mb-0 ">Listado</h4>
+                            </div>
+                            <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                                <h6 class="font-weight-bold">Mostrar</h6>
+                                <div class="ml-2 w-100" id="length">
+                                    <select class="custom-select">
+                                        <option selected>All columns</option>
+                                        <option value="1">5</option>
+                                        <option value="2">10</option>
+                                        <option value="3">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                                <div id="pagination">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                          <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                          <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
+                            <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
+                             id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                                <thead class="table-light-header">
+                                    <tr>
+                                        <th style="width: 50px;"><strong>#</strong></th>
+                                        <th scope="col">Grupo</th>
+                                        <th scope="col">Estudiante</th>
+                                        <th scope="col">Acción</th>
+                                        <th scope="col" style="width: 160px;">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista_reportes">
+    
+                                </tbody>
+                            </table>
+                            <div class="d-flex align-items-center align-self-end border-info w-100">
+                                <small id="info" class="d-flex align-items-end ml-4"></small>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <%- include('footerDashboard') %>
             </div>

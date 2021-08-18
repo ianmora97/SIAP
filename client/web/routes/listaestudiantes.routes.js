@@ -7,8 +7,9 @@ const con = require('../database');
 
 
 //Selecciona todas las matriculas
-router.get('/admin/matricula/listaest',(req,res)=>{
-    var script = 'select * from vta_matriculados_por_grupo;';
+router.get('/admin/matricula/listaMatriculados',(req,res)=>{
+    console.log('aqui 1')
+    var script = 'select * from vta_matriculados_por_grupo';
     con.query(script,(err,rows,fields)=>{
         if(!err){
             console.log(rows)

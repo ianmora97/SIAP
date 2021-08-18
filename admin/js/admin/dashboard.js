@@ -11,7 +11,7 @@ function events(event){
     changeProfilePhoto();
     fotoonChange();
     onshowtabscharts();
-    onfind();
+    
 }
 
 function onshowtabscharts(){
@@ -286,67 +286,9 @@ function cargarDatos() {
     }, (error) => {
     });
 
-    $.ajax({
-        type: "GET",
-        url: "/admin/ajax/getUrls", 
-        contentType: "appication/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((urls) => {
-        g_links = urls;
-        getUrl(urls);
-    }, (error) => {
-    });
-}
-function getUrl(urls){
-    $('.finder').html('');
-    urls.forEach(u => {
-        $('.finder').append(`
-            <div class="row no-gutters mx-0 d-flex justify-content-between position-relative py-2 px-3 bg-white mb-2">
-                <div class="col-md-7 d-flex justify-content-start">
-                    <span class="d-block align-middle h-100 text-primary mt-3" style="font-size:30px; width:45px;">    
-                        ${u.icon}
-                    </span>
-                    <div class="d-flex flex-column pl-2">
-                        <h6 class="mt-0 font-weight-bold">${u.name}</h6>
-                        <p class="text-muted mb-0">${u.description}</p>
-                    </div>
-                </div>
-                <div class="col-md-5 d-flex justify-content-end align-items-center px-3" style="position:unset !important;">
-                    <a href="${u.url}" class="mt-2 stretched-link btn btn-sm btn-primary d-block w-100">
-                        <i class="fas fa-external-link-square-alt"></i> ${u.name}
-                    </a>
-                </div>
-            </div>
-            <hr>
-        `);
-    })
+    
 }
 
-function onfind(){
-    $('#dashboardSearch').on('keyup',function(event){
-        let word = $('#dashboardSearch').val();
-        let wordN = word;
-        $('.finder').show();
-        if(!word.length){
-            $('.finder').hide();
-        }
-        word = word != '' ? word[0].toUpperCase() + word.slice(1) : '';
-        let urls = g_links.filter(e => (
-            e.name.includes(word) ||  e.name.includes(wordN) || includesVariation(e,wordN)
-        ))
-        getUrl(urls);
-    })
-}
-function includesVariation(e,word){
-    let varations = e.variation.split(',')
-    let vec = varations.filter(v => 
-        v.includes(word)
-    );
-    console.log(vec.length)
-    return vec.length > 0;
-}
 var g_grupos = new Map();
 function fillCalendar(grupos) {
     var eventsArray = [];

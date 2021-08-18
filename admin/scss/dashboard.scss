@@ -1,23 +1,25 @@
-
+html{
+  scroll-behavior: smooth;
+}
 body::-webkit-scrollbar {
-  width: 10px;
+  width: 10px !important;
 }
 
 body::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0) !important;
 }
 
 body::-webkit-scrollbar-thumb {
-  border-radius:10px;
-  background-color: darkgrey;
-  outline: none;
+  border-radius:10px !important;
+  background-color: darkgrey !important;
+  outline: none !important;
 }
 #wrapper {
   overflow-x: hidden;
   transition: all .25s ; 
 }
 #menu-header{
-  height: 40px;
+  height: 48px;
   position: sticky;
   top: 0;
   z-index: 1040;
@@ -84,6 +86,7 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 5px;
   font-weight: bold;
   text-align: left;
+  white-space: nowrap !important;
 }
 .custom-table tbody tr{
   transition: all 1s ease-out;
@@ -91,12 +94,24 @@ body::-webkit-scrollbar-thumb {
     background-color: #dce3ff;
   }
 }
+
 .custom-table tbody td{
   line-height: 2.4;
   font-size: 1em;
   padding: 6px 10px !important;
   color: #9d9d9d;
   text-align: left;
+  white-space: nowrap !important;
+}
+
+.custom-table tbody td:nth-child(1),
+.custom-table thead th:nth-child(1){
+  text-align: center !important;
+}
+
+.custom-table tbody td:nth-last-child(1),
+.custom-table thead th:last-child{
+  text-align: center !important;
 }
 
 
@@ -221,7 +236,7 @@ body::-webkit-scrollbar-thumb {
 
 .form-control{
   &:focus{
-    background-color: white !important;
+    background-color: none !important;
   }
 }
 .btn{
@@ -246,14 +261,27 @@ body::-webkit-scrollbar-thumb {
 }
 .container-custom{
   display: none;
-  width: 330px;
-  position: absolute;
+  width: 100%;
+  position: fixed;
   bottom: 0;
   right: 0;
-  height: calc(100vh - 40px);
+  height: calc(100vh);
   background-color: #fff;
   z-index: 9999;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.buscarupbarra{
+  width: 265px;
+}
+
+@media (min-width: 480px){ // mas que 425
+  .container-custom{
+    width: 430px;
+  }
+  .buscarupbarra{
+    width: 500px;
+  }
 }
 #imgFilter{
   background-image: url('../img/icons8-clear-filters-240.png');
@@ -337,17 +365,10 @@ body::-webkit-scrollbar-thumb {
 .rounded-3{
   border-radius: 15px !important;
 }
-@media (min-width: 992px) {
-  .rounded-3-s{
-    
-    border-bottom-left-radius: 15px !important;
 
-    border-top-right-radius: 0px !important;
-  }
-}
 .rounded-3-s{
-  border-top-left-radius: 15px !important;
-  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 .rounded-3-top{
   border-top-left-radius: 15px;
@@ -390,6 +411,10 @@ h1.text-primary{
 .btn-primary{
   box-shadow: 0 5px 12px 0 rgba(70, 88, 228, 0.5) !important;
 }
+.btn-secondary{
+  box-shadow: 0 5px 12px 0 rgba(236, 216, 31, 0.5) !important;
+  color: white !important;
+}
 .btn-light{
   box-shadow: 0 5px 10px -2px rgba(175, 175, 175, 0.5) !important;
 }
@@ -399,9 +424,22 @@ h1.text-primary{
 .btn-success{
   box-shadow: 0 5px 10px -2px rgba(9, 224, 9, 0.562) !important;
 }
-.table-light-header{
-  background: #f7f8fe;
+
+.badge-green-light{
+  background-color: #89e489 !important;
+  color: #fff !important;
+  border: 2px solid #06d506;
 }
+.badge-red-light{
+  background-color: #e07070 !important;
+  color: #fff !important;
+  border: 2px solid #df1616;
+}
+
+.table-light-header{
+  background: #edf0ff;
+}
+
 select.form-control{
   box-shadow: none !important;
   outline: none !important;
@@ -593,6 +631,9 @@ input,select{
 }
 .media.active{
   background-color: #fff !important;
+}
+.rounded-circle-2{
+  border-radius: 20px;
 }
 // ! --------------------------------------------- MEDIA QUERYS FOR EMAIL ----------------------------------
 @media (max-width: 950px){ // menos que 950

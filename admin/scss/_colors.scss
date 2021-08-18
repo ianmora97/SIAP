@@ -2,7 +2,7 @@ $theme-colors: (
     "primary":#4659E4,
     "dark-primary":#3347e0,
     "secondary":#f0bc4d,
-    "light":#F9FAFE,
+    "light":#edf0ff,
     "light-alt":#f0f2fa,
     "gray":#e0e2f0,
     "dark":#212529,
@@ -25,7 +25,7 @@ $breadcrumb-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/200
 $modal-fade-transform: scaleY(.01) scaleX(0);
 
 body{
-    font-family: 'Lato' !important;
+    font-family: 'Nunito Sans', sans-serif !important;
 }
 
 $enable-shadows:true;

@@ -28,7 +28,7 @@ var email = nodemailer.createTransport({
 const {logSistema, DDL, TABLE} = require('../../systemLogs');
 
 const con = require('../../database');
-// ? ---------------------------------------------------------- TALLERES CRUD ----------------------------------------------------------
+// ? ---------------------------------------------------------- Matricula CRUD ----------------------------------------------------------
 
 router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
     con.query("call prc_insertar_matricula(?,?)",
@@ -102,7 +102,17 @@ router.get('/api/admin/matricula/reportes',ensureToken,(req,res)=>{
         }
     });
 });
-
+router.get('/admin/matricula/listaMatriculados',(req,res)=>{
+    var script = 'select * from vta_matriculados_por_grupo';
+    con.query(script,(err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }
+        else{
+            res.status(501).send(err);
+        }
+    });
+});
 // ! ----------------------------------- SECURITY ------------------------------------
 function ensureToken(req,res,next) {
     const bearerHeader = req.headers['authorization'];

@@ -6,74 +6,44 @@ function loaded(event) {
 
 function events(event) {
     traer_estudiantes();
-    toogleMenu();
     get_today_date();
     cambiarEstadoShow();
     cambiarEstadoSend();
     filtrarX();
     filtrarTodos();
 }
-const animateCSS = (element, animation) =>
 
-    // We create a Promise and return it
-    new Promise((resolve, reject) => {
-        let prefix = 'animate__';
-        const animationName = `${prefix}${animation}`;
-        const node = document.querySelector(element);
-        console.log(node)
-
-        node.classList.add(`${prefix}animated`, animationName);
-
-        // When the animation ends, we clean the classes and resolve the Promise
-        function handleAnimationEnd(event) {
-            event.stopPropagation();
-            node.classList.remove(`${prefix}animated`, animationName);
-            resolve('Animation ended');
-        }
-
-        node.addEventListener('animationend', handleAnimationEnd, { once: true });
-    });
 function closeFilter(params) {
-    $('#containerFilter').addClass('animate__animated animate__fadeOutRight')
-    setTimeout(() => {
-        $('#containerFilter').removeClass('animate__animated animate__fadeOutRight')
+    animateCSS('#containerFilter', 'fadeOutRight').then(e=>{
         $('#containerFilter').hide();
-    }, 1000);
+    })
 }
 function openFilter(params) {
     $('#containerFilter').show();
+    
     animateCSS('#containerFilter', 'fadeInRight')
 }
 function filtrarX() {
     $('#filtrar_funcionarios').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
+        let table = $('#table').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarFuncionarios(estudiantes));
     });
     $('#filtrar_estudiantes').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
+        let table = $('#table').DataTable();
         table.destroy();
         mostrarUsuarios(filtrarEstudiantes(estudiantes));
     });
-    $('#filtrar_confirmados').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
-        table.destroy();
-        mostrarUsuarios(filtrarConfirmados(estudiantes));
-    });
-    $('#filtrar_nuevos').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
-        table.destroy();
-        mostrarUsuarios(filtrarNuevos(estudiantes));
-    });
+
     $('#filtrar_todos').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
+        let table = $('#table').DataTable();
         table.destroy();
         mostrarUsuarios(estudiantes);
     });
 }
 function filtrarTodos() {
     $('#actualizar_lista').on('click', function () {
-        let table = $('#estudiantes_TableOrder').DataTable();
+        let table = $('#table').DataTable();
         table.destroy();
         traer_estudiantes();
     });
@@ -111,7 +81,7 @@ function load_stats(usuarios) {
     $('#usuarios_nuevos_stats').text(nuevos);
 }
 function searchonfind() {
-    var table = $('#estudiantes_TableOrder').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 
@@ -140,14 +110,20 @@ function mostrarUsuarios(usuarios) {
     usuarios.forEach(u => {
         llenarListaUsuarios(u);
     });
-    let database = '#estudiantes_TableOrder';
-    var table = $(database).DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron estudiantes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -156,27 +132,31 @@ function mostrarUsuarios(usuarios) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
     });
-    $('#informacionTable').html('');
-    $('#botonesCambiarTable').html('');
-    $('#showlenghtentries').html('');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
 
-    $('#estudiantes_TableOrder_filter').css('display', 'none');
-    $('#estudiantes_TableOrder_info').appendTo('#informacionTable');
+    $('#table_wrapper').addClass('px-0')
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
 
-    $('#estudiantes_TableOrder_paginate').appendTo('#botonesCambiarTable');
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+    
+    $('#table_paginate').appendTo('#pagination');
 
-
-    $('#estudiantes_TableOrder_length').appendTo('#showlenghtentries');
-    $('#estudiantes_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
-    $('#estudiantes_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function llenarListaUsuarios(u) {
     let id = u.id;
@@ -186,20 +166,20 @@ function llenarListaUsuarios(u) {
     let nacimiento = u.nacimiento;
     let sexo = u.sexo;
     let tipo = u.tipo_usuario;
-    let creado = u.creado.substring(0, u.creado.indexOf(' '));
-    let estado = u.estado == 1 ? 'Confirmado' : u.estado == 2 ? 'Rechazado' : 'No Confirmado';
-    let colorEstado = u.estado == 1 ? 'success' : u.estado == 2 ? 'danger' : 'warning';
+    let creado = moment(u.creado, "DD-MM-YYYY-h-mm").calendar();
     $('#lista_usuarios_temporales').append(
-        '<tr style="height:calc(55vh / 10);">' +
-        '<td>' + cedula + '</td>' +
-        '<td>' + nombre + ' ' + apellido + '</td>' +
-        '<td>' + nacimiento + '</td>' +
-        '<td>' + sexo + '</td>' +
-        '<td>' + tipo + '</td>' +
-        '<td>' + creado + '</td>' +
-        '<td> <span role="button" class="badge badge-' + colorEstado + ' w-75" style="font-size:14px;" data-toggle="modal" data-target="#modalCambiarEstado" ' +
-        'data-cedula="' + cedula + '" data-nombre="' + nombre + ' ' + apellido + '">' + estado + '</span></td>' +
-        '</tr>'
+        `<tr style="height:calc(55vh / 10);">
+            <td>${cedula}</td>
+            <td>${nombre} ${apellido}</td>
+            <td>${nacimiento}</td>
+            <td>${sexo}</td>
+            <td>${tipo}</td>
+            <td>${creado}</td>
+            <td>
+                <button type="button" class="btn btn-sm d-inline btn-danger" id="CambiarEstadoRechazarBoton">Rechazar</button>
+                <button type="button" class="btn btn-sm d-inline btn-primary" id="CambiarEstadoConfirmarBoton">Confirmar</button>
+            </td>
+        </tr>`
     );
 }
 
@@ -226,7 +206,7 @@ function cambiarEstadoSend() {
         }).then((response) => {
             console.log(response);
             location.href = "/admin/comprobacion";
-            let table = $('#estudiantes_TableOrder').DataTable();
+            let table = $('#table').DataTable();
             table.destroy();
             traer_estudiantes();
         }, (error) => {
@@ -245,7 +225,7 @@ function cambiarEstadoSend() {
             console.log(response);
             location.href = "/admin/comprobacion";
             $('#modalCambiarEstado').modal('hide');
-            let table = $('#estudiantes_TableOrder').DataTable();
+            let table = $('#table').DataTable();
             table.destroy();
         }, (error) => {
             $('#alerta_error_estado').css('display', 'block');

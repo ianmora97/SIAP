@@ -140,10 +140,10 @@ router.get('/admin/talleres',(req,res)=>{
             let s = 'talleres';
             res.render('admin/talleres', {usuario,s,token});
         }else{
-            res.redirect('/admin');
+            res.redirect('/index');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('/index');
     }
 });
 router.get('/admin/reposiciones',(req,res)=>{
@@ -152,7 +152,12 @@ router.get('/admin/reposiciones',(req,res)=>{
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reposiciones';
-            res.render('admin/reposiciones', {usuario,s,token});
+            if(typeof req.query.newUI == 'undefined'){
+                res.render('admin/reposiciones', {usuario,s,token});
+            }else{
+                let newUI = true;
+                res.render('admin/reposiciones', {usuario,s,token,newUI});
+            }
         }else{
             res.render('index');
         }
@@ -183,10 +188,10 @@ router.get('/admin/matricula/reportes',(req,res)=>{
             let s = 'reportes-matricula';
             res.render('admin/matriculaReporte', {usuario,s, token});
         }else{
-            res.redirect('/admin');
+            res.redirect('/');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('/');
     }
 });
 
@@ -257,10 +262,10 @@ router.get('/admin/reportes/sistema',(req,res)=>{
             let s = 'reportes-sistema';
             res.render('admin/reportes/sistema', {usuario,s, token});
         }else{
-            res.redirect('/admin');
+            res.redirect('/index');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('/index');
     }
 });
 router.get('/admin/reportes/uso',(req,res)=>{
@@ -271,10 +276,10 @@ router.get('/admin/reportes/uso',(req,res)=>{
             let s = 'reportes-uso';
             res.render('admin/reportes/usodeinstalacion', {usuario,s, token});
         }else{
-            res.redirect('/admin');
+            res.redirect('/index');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('/index');
     }
 });
 router.get('/admin/reportes/conducta',(req,res)=>{
@@ -285,10 +290,10 @@ router.get('/admin/reportes/conducta',(req,res)=>{
             let s = 'reportes-conducta';
             res.render('admin/reportes/conductas', {usuario,s, token});
         }else{
-            res.redirect('/admin');
+            res.redirect('/index');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('/index');
     }
 });
 // ! ----------------------------------- inside routes ------------------------------------

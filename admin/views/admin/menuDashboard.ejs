@@ -1,6 +1,6 @@
 <div class="hover-menu-items-parent d-flex flex-column" id="sidebar-wrapper">
     <div class="sidebar-heading bg-primary d-flex align-items-center">
-        <img src="../../img/logo-vive-promocion-transparency.png" alt="UNA" loading="lazy" 
+        <img src="/img/logo-vive-promocion-transparency.png" alt="UNA" loading="lazy" 
         class="d-inline mx-2 my-auto" height="30px" style="filter: brightness(0) invert(1);">
         <h4 class="text-white m-0">SIAP</h4>
         <!-- <div class="text-center text-white d-flex justify-content-center align-items-center h-100 d-inline">
@@ -42,9 +42,9 @@
         data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
             <i class="fas fa-table"></i></i>&nbsp; Matricula <i class="fas fa-angle-down float-right"></i>
         </a>
-        <div class="collapse <%if(s == 'solicitudes' || s == 'reportes-matricula'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
-            <a href="/admin/matricula" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "solicitudes"){%> menu-active <%}%>" title="Lista de estudiantes matriculados">
-                <i class="fas fa-bell"></i>&nbsp; Estudiantes matriculados
+        <div class="collapse <%if(s == 'matricula' || s == 'reportes-matricula'){%> show <%}%>" id="collapseMatricula" data-parent="#accordion-menu-lateral">
+            <a href="/admin/matricula" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "matricula"){%> menu-active <%}%>" title="Lista de estudiantes matriculados">
+                <i class="fas fa-bell"></i>&nbsp; Matricula
             </a>
             <a href="/admin/matricula/reportes" class="menu-items-var text-white list-group-item list-group-item-action border-0 pl-4 pr-0 bg-menu <%if(s == "reportes-matricula"){%> menu-active <%}%>" title="Reportes de Matricula">
                 <i class="fas fa-clipboard-list"></i>&nbsp; Reportes

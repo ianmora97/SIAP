@@ -71,18 +71,9 @@
          <%- include('../menuDashboard') %>
          <div id="page-content-wrapper">
              <%- include('../headerDashboard') %>
-             <%- include('../filterEstudianteDashboard') %>
-             
-             <nav aria-label="breadcrumb ">
-                 <ol class="breadcrumb ">
-                     <li class="breadcrumb-item"><a href="#">Reportes</a></li>
-                     <li class="breadcrumb-item"><a href="#">Uso de instalacion</a></li>
-                     <li class="breadcrumb-item active" aria-current="page">Graficos</li>
-                 </ol>
-             </nav>
-             <div class="container-fluid">
-                 <div class="card border-0 shadow-sm my-3"> 
-                     <div class="card-body py-2">
+             <div class="container-fluid mt-4">
+                 <div class="card border-0 shadow-primary my-3 rounded-3"> 
+                     <div class="card-body py-4">
                          <div class="row">
                              <div class="col-md-6 ">
                                  <h2 class="font-weight-bolder">Graficos de uso de instalacion</h2>
@@ -94,17 +85,17 @@
                                  <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                              </div>
                              <div class="col border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="matriculas_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" id="matriculas_stats">0</h1>
                                  <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                  title="Matriculas que se han realizado">Matriculas &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                              <div class="col border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="estudiantes_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" id="estudiantes_stats">0</h1>
                                  <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                  title="Estudiantes que se encuentran en el sistema">Estudiantes &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                              <div class="col">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="talleres_stats">0</h1>
+                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3" id="talleres_stats">0</h1>
                                  <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
                                  title="Talleres que se imparten actualmente en la piscina">Talleres  &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
@@ -113,8 +104,8 @@
                  </div>
                 <div class="row mx-0 px-0 my-2 w-100">
                     <div class="col-lg-6 pl-0">
-                        <div class="chart-container cards-dash">
-                            <div class="row py-2 px-3">
+                        <div class="chart-container border-0 shadow-primary mt-2 bg-white rounded-3">
+                            <div class="row mx-0 py-3 px-4">
                                 <div class="w-100">
                                     <h4 id="data-selected-chart" class="font-weight-bold d-block">Reporte de uso por dia</h4>
                                 </div>
@@ -126,8 +117,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 pr-0">
-                        <div class="chart-container cards-dash">
-                            <div class="row py-2 px-3">
+                        <div class="chart-container border-0 shadow-primary mt-2 bg-white rounded-3">
+                            <div class="row mx-0 py-3 px-4">
                                 <div class="w-100">
                                     <h4 id="data-selected-chart" class="font-weight-bold d-block">Reporte de uso por hora</h4>
                                 </div>
@@ -141,8 +132,8 @@
                 </div>
                 <div class="row mx-0 px-0 my-2 w-100">
                     <div class="col-lg-6 pl-0">
-                        <div class="chart-container cards-dash">
-                            <div class="row py-2 px-3">
+                        <div class="chart-container border-0 shadow-primary mt-2 bg-white rounded-3">
+                            <div class="row mx-0 py-3 px-4">
                                 <div class="w-100 d-flex justify-content-between">
                                     <div>
                                         <h4 id="data-selected-chart" class="font-weight-bold d-block">Reporte de uso por dia y hora</h4>
@@ -169,8 +160,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 pr-0">
-                        <div class="chart-container cards-dash">
-                            <div class="row py-2 px-3">
+                        <div class="chart-container border-0 shadow-primary mt-2 bg-white rounded-3">
+                            <div class="row mx-0 py-3 px-4">
                                 <div class="w-100">
                                     <h4 id="data-selected-chart" class="font-weight-bold d-block">Reporte de uso por taller</h4>
                                 </div>

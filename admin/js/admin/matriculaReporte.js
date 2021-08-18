@@ -7,12 +7,7 @@ function events(event) {
     toogleMenu();
     onFilterDate();
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-  }
+
 $(function () {
     $('[data-toggle="popover"]').popover();
 })
@@ -22,7 +17,7 @@ $(function () {
 var g_filtrado = [];
 function onFilterDate() {
     $('#filtrarDate').on('change', function () {
-        var table = $('#table_reportes').DataTable();
+        var table = $('#table').DataTable();
         let val = $('#filtrarDate').val();
         console.log(val);
         g_filtrado = registro.filter(e => e.created_at.match(val));
@@ -32,7 +27,7 @@ function onFilterDate() {
 }
 
 function searchonfind(barra) {
-    var table = $('#table_reportes').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();           
     let result1 = table.search( val ).draw();
 }
@@ -71,13 +66,20 @@ function reportesList(data) {
         $('#cantidad_desmatriculados').html(cont);
         $('#cantidad_matriculados').html(data.length - cont);
     }
-    $('#table_reportes').DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron reportes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -86,23 +88,35 @@ function reportesList(data) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+
     });
-    $('#table_reportes_info').appendTo('#infoTable_reportes');
-    $('#table_reportes_paginate').appendTo('#botonesTable_reportes');
-    $('#table_reportes_length').find('select').removeClass('custom-select-sm');
-    $('#table_reportes_length').find('select').appendTo('#showlenghtentries');
-    $('#table_reportes_length').html('');
-    $('#table_reportes_filter').html('');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
+
+    $('#table_wrapper').addClass('px-0')
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+    
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function showReportesList(data) {
-    let badge = data.accion.match('ELIMINADA') ? '<h4><span class="badge badge-danger">ELIMINADA</span></h4>' : '<h4><span class="badge badge-success">AGREGADA</span></h4>';
+    let badge = data.accion.match('ELIMINADA') ? '<h5><span class="badge badge-red-light">Desmatricula</span></h5>' : '<h5><span class="badge badge-green-light">Matriculado</span></h5>';
     $("#lista_reportes").append(`
         <tr>
             <td class="text-center">${data.id}</td>
@@ -119,10 +133,17 @@ function openModal(modal) {
 function pdfDownload() {
     let titulo = $('#tituloPdf').val();
     let data = [];
-    g_filtrado.forEach(e=>{
-        data.push(Object.values(e))
-    })
+    if(g_filtrado.length){
+        g_filtrado.forEach(e=>{
+            data.push(Object.values(e))
+        })
+    }else{
+        registro.forEach(e=>{
+            data.push(Object.values(e))
+        })
+    }
     var doc = new jsPDF('p', 'pt', 'letter');  
+
     var htmlstring = '';  
     var tempVarToCheckPageHeight = 0;  
     var pageHeight = 0;  
@@ -140,37 +161,35 @@ function pdfDownload() {
         width: 600  
     };  
     var y = 20;  
-    doc.setLineWidth(2);  
-    doc.text(200, y = y + 30, "Reportes de Matricula");
-    doc.text(200, y = y + 30, titulo);
+    doc.setLineWidth(2);
+    var img = new Image()
+    img.src = '/img/logo-vive-promocion-transparency.png'
+    doc.addImage(img, 'png',  15, 15, 50, 50)
+    doc.text(80, 40 ,'Sistema de Administracion de la Piscina del');
+    doc.text(80, 58 ,'Departamento de Promocion Estudiantil');
+
+    let fecha = new Date();
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(525, 30, fecha.toLocaleDateString());
+
+    doc.setFontSize(11);
+    doc.text(40, y = y + 65, "Reportes de Matricula y desmatricula del sistema");
+
+    doc.setDrawColor(183, 183, 183);
+    doc.setLineWidth(0.5);
+    doc.line(40, y + 20, 570, y + 20); 
+
     doc.autoTable({
+        headStyles: { fillColor: [70, 89, 228] },
         head: [['#', 'Grupo', 'Estudiante','Fecha','Acción']],
         body: data,
-        startY: 110,  
-        theme: 'grid',  
-        
+        startY: y = y + 30,  
+        theme: 'grid'
     })
-    doc.save('Reportes_Matricula.pdf');
+    titulo = titulo.split(" ").join("_");
+    doc.save(titulo+'.pdf');
 }
 
-const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
-
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 
 document.addEventListener("DOMContentLoaded", loaded);

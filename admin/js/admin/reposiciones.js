@@ -27,6 +27,9 @@ function searchonfind() {
 var g_vecAsistencias = [];
 var g_vecGrupos = [];
 var g_mapReposiciones = new Map();
+var g_mapEstudiantes = new Map();
+
+
 function obtenerReposiciones(){
     let bearer = 'Bearer '+g_token;
     let ajaxTime= new Date().getTime();
@@ -65,6 +68,7 @@ function obtenerReposiciones(){
         }).then((grupos) => {
             g_vecGrupos = grupos;
             listaGrupos(grupos);
+            fillCalendar(grupos);
         }, (error) => {
         });
 
@@ -80,12 +84,29 @@ function obtenerReposiciones(){
         }, (error) => {
 
         });
+        // $.ajax({
+        //     type: "GET",
+        //     url: "/admin/talleres/getGrupos", 
+        //     contentType: "appication/json",
+        //     headers:{
+        //         'Authorization':bearer
+        //     }
+        // }).then((grupos) => {
+        //     $('#grupos_stats').html(grupos.length)
+        //     let totalTime = new Date().getTime() - ajaxTime;
+        //     let a = Math.ceil(totalTime / 1000);
+        //     let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        //     $('#infoTiming').text(t);
+        //     showGrupos(grupos);
+        //     fillCalendar(grupos);
+        // }, (error) => {
+        // });
     });
 }
 function listaGrupos(data) {
     $('#grupoAddSelect').html('');
     $('#grupoAddSelect').append(`
-        <option value="null">Seleccione un estudiante</option>
+        <option value="null" >Seleccione un Grupo</option>
     `)
     data.forEach(e => {
         let hora = e.hora < 10 ? '0'+e.hora : e.hora;
@@ -96,9 +117,26 @@ function listaGrupos(data) {
 }
 function selecEstudianteAdd() {
     $('#estudiantesAddSelect').on('change',function(){
-        // filtro por estudiante la lista de asistencia
-        let filt = g_vecAsistencias.filter(e => e.id_estudiante == parseInt($('#estudiantesAddSelect').val()))
-        buildRowListAusencia(filt)
+        if($('#estudiantesAddSelect').val() != 'null'){
+            let estudiante = g_mapEstudiantes.get(parseInt($('#estudiantesAddSelect').val()))
+            let filt = g_vecAsistencias.filter(e => e.id_estudiante == parseInt($('#estudiantesAddSelect').val()))
+            if(filt.length > 0){
+                $("#escogerReposicion").slideToggle();
+                buildRowListAusencia(filt)
+            }else{
+                $("#ausenciasAgregarReposicion").html(
+                    `<div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Sin ausencias</h4>
+                    <p>${estudiante.nombre + " " + estudiante.apellido} no presenta ausencias!</p>
+                    <hr class="my-2">
+                    <p class="my-2 d-inline mr-3">El estudiante necesita al menos de una ausencia para reponer la clase.</p>
+                    <button class="btn btn-sm btn-warning d-inline" onclick="$('#escogerReposicion').slideToggle();">Solicitar Reposición</button>
+                    
+                    </div>`);
+            }
+        }else{
+            $("#ausenciasAgregarReposicion").html("");
+        }
     })
 }
 function buildRowListAusencia(data) {
@@ -124,10 +162,12 @@ function showRowListAusencia(ele) {
 }
 function listaEstudiantes(data){
     $('#estudiantesAddSelect').html('');
+    
     $('#estudiantesAddSelect').append(`
-        <option value="null">Seleccione un estudiante</option>
+        <option value="null" id="valorreposicionulo">Seleccione un estudiante</option>
     `)
     data.forEach(e => {
+        g_mapEstudiantes.set(e.id_estudiante,e);
         $('#estudiantesAddSelect').append(`
             <option value="${e.id_estudiante}">${e.cedula} - ${e.nombre + " " + e.apellido}</option>
         `)
@@ -142,41 +182,57 @@ function listaReposiciones(reposiciones) {
             showReposicion(r);
         });
     }
-    $('#reposiciones_TableOrder').DataTable({
-      "language": {
-          "zeroRecords": "No se encontraron profesores",
-          "infoEmpty": "No hay registros disponibles!",
-          "infoFiltered": "(filtrado de _MAX_ registros)",
-          "lengthMenu": "_MENU_ ",
-          "info": "Mostrando pagina _PAGE_ de _PAGES_",
-          "paginate": {
-              "first": '<i class="fas fa-angle-double-left"></i>',
-              "previous": '<i class="fas fa-angle-left"></i>',
-              "next": '<i class="fas fa-angle-right"></i>',
-              "last": '<i class="fas fa-angle-double-right"></i>'
-          },
-          "aria": {
-              "paginate": {
-                  "first": 'Primera',
-                  "previous": 'Anterior',
-                  "next": 'Siguiente',
-                  "last": 'Última'
-              }
-          }
-      }
+    $('#table').DataTable({
+        "language": {
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
+            "paginate": {
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
+            },
+            "aria": {
+                "paginate": {
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
+                }
+            }
+        },
+        columnDefs: [
+            { targets: [5], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#informacionTable').html('');
-    $('#botonesCambiarTable').html('');
-    $('#showlenghtentries').html('');
-  
-    $('#reposiciones_TableOrder_filter').css('display', 'none');
-    $('#reposiciones_TableOrder_info').appendTo('#informacionTable');
-  
-    $('#reposiciones_TableOrder_paginate').appendTo('#botonesCambiarTable');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
+
+    $('#table_wrapper').addClass('px-0')
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
     
-    $('#reposiciones_TableOrder_length').appendTo('#showlenghtentries');
-    $('#reposiciones_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
-    $('#reposiciones_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function showReposicion(r) {
 
@@ -247,6 +303,176 @@ function openModalComprobante() {
         }
         
     });
+    $('#modalAdd').on('hide.bs.modal', function (event) {
+       $("#escogerReposicion").hide()
+       $("#ausenciasAgregarReposicion").html('');
+    })
 }
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("agregarRepo").addEventListener('submit', validarFormulario); 
+});
 
+function validarFormulario(evento) {
+    evento.preventDefault();
+    var grupoAdd = document.getElementById('grupoAddSelect').options[document.getElementById('grupoAddSelect').selectedIndex].value;
+    if(grupoAdd == "null") {
+        $("#modalbodyAddFeedback").html(
+            `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <img src="/img/emoji/no-entry.png" class="emoji" width="20px">
+                <strong>Grupo incorrento!</strong> Debe seleccionar un grupo.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`
+        );
+        return;
+    }
+    this.submit();
+}
+function toWeekDay(dia) {
+    switch (dia) {
+        case 'LUNES':
+            return 1;
+        case 'MARTES':
+            return 2;
+        case 'MIERCOLES':
+            return 3;
+        case 'JUEVES':
+            return 4;
+        case 'VIERNES':
+            return 5;
+        case 'SABADO':
+            return 6;
+        case 'SÁBADO':
+            return 6;
+        case 'DOMINGO':
+            return 7;
+        default:
+            break;
+    }
+}
+function toDayWeek(dia) {
+    switch (dia) {
+        case 1:
+            return 'LUNES';
+        case 2:
+            return 'MARTES';
+        case 3:
+            return 'MIERCOLES';
+        case 4:
+            return 'JUEVES';
+        case 5:
+            return 'VIERNES';
+        case 6:
+            return 'SABADO';
+        case 7:
+            return 'DOMINGO';
+        default:
+            return 'DOMINGO';
+    }
+}
+var calendar;
+function fillCalendar(grupos) {
+    var eventsArray = [];
+    grupos.forEach(e => {
+        let p = e.nombre + " "+ e.apellido;
+        let id_matricula = e.id_matricula;
+        let grupo = e.id_grupo;
+        let codigo = e.codigo_taller;
+        let descripcion = e.descripcion;
+        // let titulo = e.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+        let dia = e.dia;
+        let hora = e.hora > 12 ? e.hora - 12 + 'pm' : e.hora + 'am';
+        let horaF = e.hora > 12 ? e.hora - 12 +':00': e.hora +':00' ;
+        let horaFi = e.hora > 12 ? e.hora - 11 +':00': e.hora + 1 +':00' ;
+        let weekday = toWeekDay(dia.toUpperCase());
+        
+        let todo = `Profesor: ${p} <br>${dia}: ${e.hora}`;
+        let horainicio = e.hora + ":00";
+        let horafinal = (e.hora + 1) + ":00";
+
+        eventsArray.push({
+            id: grupo,
+            title: descripcion,
+            hora: hora,
+            startTime: horainicio,
+            endTime: horafinal,
+            daysOfWeek: [ weekday ], 
+            display: 'block',
+            backgroundColor: '#4659E4',
+            borderColor: '#4659E4',
+            icon : "swimmer",
+            codigo: codigo,
+            description: todo,
+        });
+
+        
+    })
+    var calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        initialView: 'dayGridMonth',
+        height: 750,
+        nowIndicator: true,
+        themeSystem: 'bootstrap',
+        businessHours: {
+            startTime: '7:00',
+            endTime: '22:00',
+            dow: [ 1, 2, 3, 4, 5 ],
+        },
+        customButtons: {
+            doHorario: {
+              text: 'Crear Horario',
+              click: function() {
+                $('#agregarHorario').modal();
+              }
+            },
+            doGrupo: {
+              text: 'Agregar Grupo',
+              click: function() {
+                g_modalFechaCalendario = undefined;
+                $('#agregarGrupo').modal();
+              }
+            }
+        },
+        headerToolbar: {
+            start: '',
+            center: '',
+            end: ''
+        },
+        events: eventsArray,
+
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Dia',
+            list:     'Lista'
+        },
+        dateClick: function(info) {
+            g_modalFechaCalendario = info.dateStr;
+            $('#agregarGrupo').modal();
+        },
+        eventClick: function(event) {
+            let info = event.event._def.extendedProps
+            console.log(event.event._def.extendedProps)
+            $('.event-icon').html("<i class='fa fa-"+info.icon+"'></i>");
+            $('.event-title').html(info.codigo);
+            $('.event-body').html(info.description);
+            $('#modal-view-event').modal();
+        },
+        eventContent: function (args, createElement) {
+            const hora = args.event._def.extendedProps.hora;
+            const icon = args.event._def.extendedProps.icon;
+            const text = `<i class="fa fa-${icon}"></i> <span class="font-weight-bold">${args.event._def.title}</span> <span class="badge badge-light">${hora}</span>`;
+            return {
+              html: text
+            };
+        }
+    });
+    calendar.render();
+    setTimeout(() => {
+        $(".fc-dayGridMonth-button").trigger("click");
+    }, 1000);
+}
 document.addEventListener("DOMContentLoaded", loaded);

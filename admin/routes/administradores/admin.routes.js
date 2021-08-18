@@ -28,6 +28,28 @@ var email = nodemailer.createTransport({
 
 const con = require('../../database');
 
+
+router.get('/admin/administrador/agregarEstudiante',ensureToken,(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let d = req.query;
+            
+            res.send({type:"good"})
+            // con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
+            // [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
+            // (err,rows,fields)=>{
+            //     if(!err){
+            //         logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
+            //         res.redirect('/admin/estudiantes');
+            //     }else{
+            //         console.log(err)
+            //         res.redirect('/admin/estudiantes');
+            //     }
+            // });       
+        }
+    }
+});
+
 router.get('/admin/administrador/getAdministradores',ensureToken,(req,res)=>{
     let script = "select * from vta_administradores";
     var query = con.query(script,
@@ -106,7 +128,6 @@ router.get('/admin/administrador/getTables', ensureToken,(req,res)=>{
             getColumnsTables(rows).then(resTables=>{
                 let tables = resTables;
                 getColumnsViews(rows).then(resViews=>{
-                    console.log(resViews);
                     let views = resViews;
                     res.send({tables,views});
                 })

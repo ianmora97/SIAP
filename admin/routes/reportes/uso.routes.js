@@ -22,7 +22,7 @@ const con = require('../../database');
 
 
 router.get('/admin/reportes/uso/getMatriculadosPorGrupo',ensureToken,(req,res)=>{
-    let script = "SELECT * FROM siapd.vta_matriculados_por_grupo";
+    let script = "SELECT * FROM vta_matriculados_por_grupo";
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
             res.send(rows)

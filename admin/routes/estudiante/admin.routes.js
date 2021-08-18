@@ -44,6 +44,23 @@ router.get('/admin/estudiante/getTalleres',ensureToken,(req,res)=>{
     });
 });
 
+router.get('/admin/estudiantes/getEstudiante/:cedula',(req,res)=>{
+    // req.params.cedula = 123456789
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let token = req.session.token;
+            let cedula = req.params.cedula;
+            let s = 'estudiantes';
+            res.render('admin/estudianteInfo', {usuario,s,token,cedula});
+        }else{
+            res.render('index');
+        }
+    }else{
+        res.render('index');
+    }
+});
+
 router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol){
@@ -54,7 +71,7 @@ router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
                 let s = 'estudiantes';
                 if(!err){
                     logSistema(req.session.value.cedula, `CAMBIO FOTO ${req.query.cedula}`, DDL.UPDATE, TABLE.ESTUDIANTE);
-                    res.render('admin/estudiantes', {usuario,s,token});
+                    res.render('admin/estudiante', {usuario,s,token});
                 }else{
                     res.render('admin/estudiantes', {usuario,s,token});
                 }

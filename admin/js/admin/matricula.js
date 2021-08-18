@@ -28,7 +28,7 @@ function onChangeSelectsMatricula() {
 }
 
 function searchonfind() {
-    var table = $('#matriculasTable').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 }
@@ -54,11 +54,12 @@ var g_VecTalleres = [];
 var g_VecEstudiantes = [];
 
 function loadFromDb() {
+    console.log("se pide")
     let bearer = 'Bearer '+g_token;
     let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
-        url: "/admin/matricula/listaest",
+        url: "/admin/matricula/listaMatriculados",
         contentType: "application/json",
         headers:{
             'Authorization':bearer
@@ -73,7 +74,7 @@ function loadFromDb() {
         cargarEstudiantes(matriculas);
         $('#cargarDatosSpinner').hide();
     },(error) => {
-        alert(error.status);
+        console.log('error')
     });
     $.ajax({
         type: "GET",
@@ -237,37 +238,61 @@ function cargarEstudiantes(matricula) {
     $('#est_activos_stats').text(cont);
     $('#est_inactivos_stats').text(matricula.length - cont);
 
-    $('#matriculasTable').DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron matriculas",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ registros",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
-                "first":    '<i class="fas fa-angle-double-left"></i>',
+                "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
-                "next":     '<i class="fas fa-angle-right"></i>',
-                "last":     '<i class="fas fa-angle-double-right"></i>'
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
-                    "first":    'Primera',
-                    "previous": 'Anterior',
-                    "next":     'Siguiente',
-                    "last":     'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [8], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $(`#matriculasTable_length`).css('display','none');
-    $(`#matriculasTable_filter`).css('display','none');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
 
-    $(`#matriculasTable_info`).appendTo(`#informacionTable`);
-    $(`#matriculasTable_paginate`).appendTo(`#botonesCambiarTable`);
+    $('#table_wrapper').addClass('px-0')
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+    
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 
 function llenarEstudiantes(data) {
+    console.log(data)
     let id_matricula = data.id_matricula;
     let nivel = data.descripcion;
     let nombre_pro = data.nombre_profesor;
@@ -277,8 +302,9 @@ function llenarEstudiantes(data) {
     let horario = data.dia.toUpperCase() + " " + data.hora + "-" + parseInt(data.hora + 1);
     let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px">`;
     
-    $("#lista-estudiantes").append(`
+    $("#lista_estudiantes").append(`
         <tr>
+            <td>${id_matricula}</td>
             <td>${foto}&nbsp;&nbsp; ${nomb}</td>
             <td>${cedul}</td>
             <td>${horario}</td>

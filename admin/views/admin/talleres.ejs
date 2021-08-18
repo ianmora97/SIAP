@@ -27,9 +27,9 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="modalEditTallerLabel">Editar Taller</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -61,9 +61,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer py-1">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarTaller()">Eliminar</button>
-                    <button type="button" class="btn btn-success btn-sm" id="actualizarTaller" onclick="actualizarDatosTaller()">Actualizar</button>
+                <div class="modal-footer py-1 border-0">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarTaller()"><i class="fas fa-trash"></i> Eliminar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="actualizarTaller" onclick="actualizarDatosTaller()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
             </div>
         </div>
@@ -115,9 +115,9 @@
     <div class="modal fade" id="agregarHorario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="exampleModalLabel">Agregar Horario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -160,8 +160,8 @@
                         <small class="text-muted">5 - 21 horas</small>
                     </div>
                 </div>
-                <div class="modal-footer py-0">
-                    <button type="button" class="btn btn-success" onclick="agregarHorario()"><i class="fas fa-plus"></i> Agregar</button>
+                <div class="modal-footer pt-0 border-0">
+                    <button type="button" class="btn btn-primary" onclick="agregarHorario()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
         </div>
@@ -170,9 +170,9 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="modalEditHoraioLabel">Editar Horario</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -216,9 +216,9 @@
                         <small class="text-muted">5 - 21 horas</small>
                     </div>
                 </div>
-                <div class="modal-footer py-1">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarHorario()">Eliminar</button>
-                    <button type="button" class="btn btn-success btn-sm" id="actualizarHorario" onclick="actualizarDatosHorario()">Actualizar</button>
+                <div class="modal-footer py-1 border-0">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarHorario()"><i class="fas fa-trash"></i> Eliminar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="actualizarHorario" onclick="actualizarDatosHorario()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
             </div>
         </div>
@@ -227,7 +227,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-primary">
-                    <h5 class="modal-title pl-3 text-white" id="exampleModalLabel">Agregar Grupo</h5>
+                    <h5 class="modal-title pl-3 text-white" id="exampleModalLabel"><i class="fas fa-users"></i> Agregar Grupo</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -271,8 +271,8 @@
                         <small class="text-muted">Fecha en la que termina el curso</small>
                     </div>
                 </div>
-                <div class="modal-footer py-0">
-                    <button type="button" class="btn btn-success" onclick="agregarGrupo()"><i class="fas fa-plus"></i> Agregar</button>
+                <div class="modal-footer py-0 border-0 mb-2">
+                    <button type="button" class="btn btn-primary" onclick="agregarGrupo()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
         </div>
@@ -280,9 +280,9 @@
     <div class="modal fade" id="actualizarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="modalEditGrupoLabel">Editar Grupo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -328,10 +328,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer py-0">
+                <div class="modal-footer py-0 border-0 mb-2">
                     <div id="feedbackActualizarGrupo"></div>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarGrupo()">Eliminar</button>
-                    <button type="button" class="btn btn-success btn-sm" id="actualizarTaller" onclick="actualizarDatosGrupo()">Actualizar</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarGrupo()"><i class="fas fa-trash"></i> Eliminar</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="actualizarTaller" onclick="actualizarDatosGrupo()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
             </div>
         </div>
@@ -387,17 +387,7 @@
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-talleres" role="tabpanel" aria-labelledby="nav-talleres-tab">
-                                <div class="card-body px-2 py-2">
-                                    <div class="row mx-0">
-                                        <div class="col-lg-8 px-2 py-2">
-                                            <p class="text-muted">
-                                                Aqui se muestran todos los talleres que se imparten en la piscina.
-                                                Estos talleres tendran un nivel, una descripcion y un <strong>codigo</strong>, el cual 
-                                                va a diferenciar de los demas talleres.
-                                                Los talleres tienen un costo por estudiante y por funcionario.
-                                            </p>
-                                        </div>                                        
-                                    </div>
+                                <div class="card-body px-0 py-2">
                                     <div class="row mx-0 d-flex justify-content-between mb-3">
                                         <div class="col">
                                             <div class="mb-1">
@@ -433,7 +423,7 @@
                                             </div> 
                                         </div>
                                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
-                                            <div id="pagination">
+                                            <div id="pagination_talleres">
                                                 <nav aria-label="Page navigation example">
                                                     <ul class="pagination">
                                                       <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
@@ -447,17 +437,17 @@
                                         </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-md table-borderless"
+                                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
                                             id="talleres_table" >
-                                            <thead>
+                                            <thead class="table-light-header">
                                                 <tr>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><strong>#</strong></th>
-                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-barcode"></i> Codigo</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-align-justify"></i> Descripcion</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-layer-group"></i> Nivel</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="far fa-money-bill-alt"></i> Costo Estudiante</th>
-                                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="far fa-money-bill-alt"></i> Costo Funcionario</th>
-                                                    <th class="bg-dark text-white sticky-top text-center" scope="col"><i class="fas fa-pen"></i> Edit</th>
+                                                    <th class="" scope="col"><strong>#</strong></th>
+                                                    <th class="" data-class-name="priority" scope="col">Codigo</th>
+                                                    <th class="" scope="col">Descripcion</th>
+                                                    <th class="" scope="col">Nivel</th>
+                                                    <th class="" scope="col">Costo Estudiante</th>
+                                                    <th class="" scope="col">Costo Funcionario</th>
+                                                    <th class="" scope="col">Edit</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="talleres_list">
@@ -466,12 +456,8 @@
                                         </table>
                                         <div class="d-flex align-items-center align-self-end border-info w-100">
                                             <div class="row w-100 ml-0">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-2">
                                                     <small id="infoTable_talleres" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end"
-                                                    id="botonesTable_talleres">
-        
                                                 </div>
                                             </div>
                                         </div>
@@ -480,60 +466,63 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-horarios" role="tabpanel" aria-labelledby="nav-horarios-tab">
-                                <div class="card-body px-2 py-2">
-                                    <div class="row mx-0">
-                                        <div class="col-lg-8 px-2 py-2">
-                                            <h2 class="font-weight-bolder">Horarios</h2>
-                                            <p class="text-muted">
-                                                En esta seccion se muestran los horarios disponibles para un grupo 
-                                                en especifico, donde estos muestran el dia y la hora que el grupo se imparte.
-                                            </p>
-                                        </div>                                        
-                                    </div>
-                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
-                                        <div class="col-md-8 pl-1">
-                                            <div class="input-group flex-nowrap">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn bg-white" type="button" id="button_search"><i
-                                                            class="fas fa-search"></i></button>
-                                                </div>
-                                                <input type="search" class="form-control border-0 shadow-none bg-white "
-                                                    onkeyup="searchonfind(this)" data-type="horarios" placeholder="Buscar..."
-                                                    id="barraBuscar_horarios">
-                                            </div>
-        
-                                        </div>
-                                        <div class="col-md-4 d-flex justify-content-around px-0">
-                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                                <div class="col-lg-9">
-                                                    <div id="lenghtTable_horarios" class="px-1 m-0">
+                                <div class="card-body px-0 py-2">
+                                    <div class="row mx-0 d-flex justify-content-between mb-3">
+                                        <div class="col">
+                                            <div class="mb-1">
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <div class="btn bg-light" id="button_search">
+                                                            <i class="fas fa-search"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
-                                                    <button type="button" name="agregarHorario" id="agregarHorario"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar nuevo Horario" onclick="openmodal('#agregarHorario')" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
-                                                    </button>
-
-                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Actualizar lista" class="btn bg-white btn-sm"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-sync-alt"></i></a>
+                                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                                        onkeyup="searchonfind(this)" data-type="horarios" placeholder="Buscar..."
+                                                         id="barraBuscar_horarios">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                            <div class="w-100">
+                                                <button type="button" name="agregarHorario" id="agregarHorario" 
+                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                data-toggle="modal" data-target="#agregarHorario">
+                                                <i class="fas fa-plus"></i> Agregar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
+                                            <h4 class="font-weight-bold mb-0 ">Horarios</h4>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                                            <h6 class="font-weight-bold">Show</h6>
+                                            <div id="lenghtTable_horarios" class="px-1 m-0 w-100">
+                                            </div> 
+                                        </div>
+                                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                                            <div id="pagination_horarios">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-md table-borderless w-100"
+                                        <table class="table custom-table table-responsive-xs table-borderless text-center table-hover"
                                             id="horarios_table" data-order="[[ 1, &quot;asc&quot; ]]">
-                                            <thead>
+                                            <thead class="table-light-header">
                                                 <tr>
-                                                    <th class="bg-dark text-white sticky-top " scope="col"><strong>#</strong></th>
-                                                    <th class="bg-dark text-white sticky-top text-center" data-class-name="priority" scope="col"><i class="fas fa-calendar-day"></i> Dia</th>
-                                                    <th class="bg-dark text-white sticky-top text-center" scope="col"><i class="far fa-clock"></i> Hora</th>
-                                                    <th class="bg-dark text-white sticky-top text-center" style="width: 50px" scope="col"><i class="fas fa-pen"></i></th>
+                                                    <th class="text-center" ><strong>#</strong></th>
+                                                    <th class="text-center" data-class-name="priority" >Dia</th>
+                                                    <th class="text-center" >Hora</th>
+                                                    <th class="text-center" style="width: 50px !important;" >Edit</th>
                                                     
                                                 </tr>
                                             </thead>
@@ -543,12 +532,8 @@
                                         </table>
                                         <div class="d-flex align-items-center align-self-end border-info w-100">
                                             <div class="row w-100 ml-0">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-2">
                                                     <small id="infoTable_horarios" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end"
-                                                    id="botonesTable_horarios">
-        
                                                 </div>
                                             </div>
                                         </div>
@@ -557,63 +542,66 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-grupos" role="tabpanel" aria-labelledby="nav-grupos-tab">
-                                <div class="card-body px-2 py-2">
-                                    <div class="row mx-0">
-                                        <div class="col-lg-8 px-2 py-2">
-                                            <h2 class="font-weight-bolder">Grupos</h2>
-                                            <p class="text-muted">
-                                                En esta seccion se muestran los diferentes grupos que se encuentran en la piscina,
-                                                estos grupos se conforman de un profesor un horario y un taller. Estos grupos se 
-                                                diferencian por numero o por horario.
-                                            </p>
-                                        </div>                                        
-                                    </div>
-                                    <div class="row bg-light mx-auto rounded-lg justify-content-between py-1 my-1">
-                                        <div class="col-md-8 pl-1">
-                                            <div class="input-group flex-nowrap">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn bg-white" type="button" id="button_search"><i
-                                                            class="fas fa-search"></i></button>
-                                                </div>
-                                                <input type="search" class="form-control border-0 shadow-none bg-white "
-                                                    onkeyup="searchonfind(this)" data-type="grupos" placeholder="Buscar..."
-                                                    aria-label="Username" id="barraBuscar_grupos">
-                                            </div>
-        
-                                        </div>
-                                        <div class="col-md-4 d-flex justify-content-around px-0">
-                                            <div class="row no-gutters px-0 w-100 d-flex justify-content-between">
-                                                <div class="col-lg-9">
-                                                    <div id="lenghtTable_grupos" class="px-1 m-0">
+                                <div class="card-body px-0 py-2">
+                                    <div class="row mx-0 d-flex justify-content-between mb-3">
+                                        <div class="col">
+                                            <div class="mb-1">
+                                                <div class="input-group flex-nowrap">
+                                                    <div class="input-group-prepend">
+                                                        <div class="btn bg-light" id="button_search">
+                                                            <i class="fas fa-search"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-3 d-flex align-items-center justify-content-around pr-2">
-                                                    <button type="button" name="agregarTaller" id="agregarTaller"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Agregar un Grupo" onclick="openmodal('#agregarGrupo')" class="btn bg-success btn-sm text-white"
-                                                        style="border-radius: 50px;"><i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <a type="button" name="actualizar_lista" href="/admin/talleres"
-                                                        data-toggle="tooltip" data-placement="top"
-                                                        title="Actualizar lista" class="btn bg-white btn-sm"
-                                                        style="border-radius: 50px;"><i
-                                                            class="fas fa-sync-alt"></i></a>
+                                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                                        onkeyup="searchonfind(this)" data-type="grupos" placeholder="Buscar..."
+                                                         id="barraBuscar_grupos">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                            <div class="w-100">
+                                                <button type="button" name="agregarGrupo" id="agregarGrupo" 
+                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                data-toggle="modal" data-target="#agregarGrupo">
+                                                <i class="fas fa-plus"></i> Agregar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
+                                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
+                                            <h4 class="font-weight-bold mb-0 ">Grupos</h4>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                                            <h6 class="font-weight-bold">Show</h6>
+                                            <div id="lenghtTable_grupos" class="px-1 m-0 w-100">
+                                            </div> 
+                                        </div>
+                                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                                            <div id="pagination_grupos">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 750px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-md table-borderless"
+                                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
                                             id="grupos_table" data-order="[[ 1, &quot;asc&quot; ]]">
-                                            <thead>
+                                            <thead class="table-light-header">
                                                 <tr>
-                                                    <th class="bg-dark text-white sticky-top"><strong>#</strong></th>
-                                                    <th class="bg-dark text-white sticky-top" data-class-name="priority"><i class="fas fa-calendar-day"></i> Horario</th>
-                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-user-tie"></i> Profesor</th>
-                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-swimmer"></i> Taller</th>
-                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-clipboard-list"></i> Cupo</th>
-                                                    <th class="bg-dark text-white sticky-top"><i class="fas fa-ticket-alt"></i> Extra</th>
-                                                    <th class="bg-dark text-white sticky-top text-right"><i class="fas fa-pen"></i></th>
+                                                    <th class=""><strong>#</strong></th>
+                                                    <th class="" data-class-name="priority">Horario</th>
+                                                    <th class="">Profesor</th>
+                                                    <th class="">Taller</th>
+                                                    <th class="">Cupo</th>
+                                                    <th class="">Extra</th>
+                                                    <th class="">Edit</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="grupos_list">
@@ -622,12 +610,8 @@
                                         </table>
                                         <div class="d-flex align-items-center align-self-end border-info w-100">
                                             <div class="row w-100 ml-0">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-0">
+                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-2">
                                                     <small id="infoTable_grupos" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end"
-                                                    id="botonesTable_grupos">
-        
                                                 </div>
                                             </div>
                                         </div>

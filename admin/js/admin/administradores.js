@@ -1,4 +1,5 @@
 var g_mapAdmins = new Map();
+var estudiantesXLS = [];
 
 function loaded(event){
   events(event);
@@ -191,7 +192,7 @@ function bringDB() {
   });
 }
 function searchonfind() {
-  var table = $('#administradores_TableOrder').DataTable();
+  var table = $('#table').DataTable();
   let val = $('#barraBuscar').val();
   let result = table.search(val).draw();
 }
@@ -202,13 +203,20 @@ function showAdminList(data){
     g_mapAdmins.set(e.cedula,e);
     showRowAdminList(e)
   })
-  $('#administradores_TableOrder').DataTable({
+  $('#table').DataTable({
     "language": {
-        "zeroRecords": "No se encontraron estudiantes",
-        "infoEmpty": "No hay registros disponibles!",
-        "infoFiltered": "(filtrado de _MAX_ registros)",
-        "lengthMenu": "_MENU_ ",
-        "info": "Mostrando pagina _PAGE_ de _PAGES_",
+        "decimal":        "",
+        "emptyTable":     "No hay datos en la tabla",
+        "info":           "Mostrando _END_ de _TOTAL_ registros",
+        "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+        "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+        "infoPostFix":    "",
+        "thousands":      ",",
+        "lengthMenu":     "_MENU_",
+        "loadingRecords": "Cargando...",
+        "processing":     "Procesando...",
+        "search":         "Buscar:",
+        "zeroRecords":    "No se encontraron registros similares",
         "paginate": {
             "first": '<i class="fas fa-angle-double-left"></i>',
             "previous": '<i class="fas fa-angle-left"></i>',
@@ -217,28 +225,31 @@ function showAdminList(data){
         },
         "aria": {
             "paginate": {
-                "first": 'Primera',
-                "previous": 'Anterior',
-                "next": 'Siguiente',
-                "last": 'Última'
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             }
         }
-    }
+    },
   });
-  $('#informacionTable').html('');
-  $('#botonesCambiarTable').html('');
-  $('#showlenghtentries').html('');
-  
-  $('#administradores_TableOrder_filter').css('display', 'none');
-  $('#administradores_TableOrder_info').appendTo('#informacionTable');
-  
-  $('#administradores_TableOrder_paginate').appendTo('#botonesCambiarTable');
-  
+  $('#info').html('');
+  $('#pagination').html('');
+  $('#length').html('');
 
-  $('#administradores_TableOrder_length').appendTo('#showlenghtentries');
-  $('#administradores_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
-  $('#administradores_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
-  $('#administradores_TableOrder_length').html('');
+  $('#table_wrapper').addClass('px-0')
+  let a = $('#table_wrapper').find('.row')[1];
+  $(a).addClass('mx-0')
+  $(a).find('.col-sm-12').addClass('px-0');
+
+  $('#table_filter').css('display', 'none');
+  $('#table_info').appendTo('#info');
+
+  $('#table_paginate').appendTo('#pagination');
+
+  $('#table_length').find('label').find('select').removeClass('form-control form-control-sm')
+  $('#table_length').find('label').find('select').appendTo('#length');
+  $('#table_length').html('');
 
 }
 function showRowAdminList(data){
@@ -451,6 +462,182 @@ function printTableRow(data) {
     resolve('row_created');
   })
 }
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function cargarDatos() {
+	$("#barraProgreso").show();
+	$("#textTodelete").hide();
+	$("#headertochange").html(`
+		<img src="/img/emoji/hourglass.png" width="30px">
+		Cargando Datos
+	`);
+	let cantidad = estudiantesXLS.length; // 20
+	let cont = 0;
+	let cont2 = 0;
+	let sum = 100 / cantidad;
+	let bearer = 'Bearer '+g_token;
+	for (let i = 0; i < cantidad; i++) {
+		cont += sum;
+		$("#barraProgreso").css("width", `${cont}%`);
+		const e = estudiantesXLS[i];
+		let data = {
+			cedula: e.cedula,
+			nombre: e.nombre,
+			apellido: e.apellidos,
+			fechaNacimiento: e.fechaNacimiento,
+			sexo: e.sexo,
+			perfil: e.perfil,
+			correo: e.correo,
+		}
+		console.log(data)
+		$.ajax({
+			type: "GET",
+			url: "/admin/administrador/agregarEstudiante",
+			data: data,
+			contentType: "appication/json",
+			headers:{
+				'Authorization':bearer
+			}
+		}).then((response) => {
+			cont2++;
+			if(cont2 == cantidad){
+				setTimeout(() => {
+					$("#barraProgreso").removeClass("progress-bar-animated");
+					$("#headertochange").html(`
+						<h4 class="text-white font-weight-bold" >
+						<img src="/img/emoji/happy-face.png" width="30px">
+						Datos Cargados
+						</h4>
+					`);
+					$("#uploadingWhile").html(`
+						<a href="/admin/estudiantes" class="btn btn-light"><i class="fas fa-external-link-alt text-primary"></i> Ver Estudiantes</a>
+					`);
+					$("#btnparacargardatos").remove();
+					$("#resultTableScript").html("");
+				}, 3000);
+			}
+		}, (error) => {
+		});
+		$('#uploadingWhile').html(`
+			<div class="bg-primary rounded-3 shadow p-3 w-75 animate__animated animate__slideInRight" style="height:130px;">
+				<div class="d-flex justify-content-between">
+					<div>
+						<h4 class="text-white font-weight-bold animate__animated animate__slideInRight animate_delay_t1">${e.nombre + " " + e.apellidos}</h4>
+						<h5 class="text-white animate__animated animate__slideInRight animate_delay_t2">${e.cedula}</h5>
+						<h5 class="animate__animated animate__slideInRight animate_delay_t3"><span class="badge bg-white text-primary">${e.correo}</span></h5>
+					</div>
+					<div class="mr-2">
+						<i class="fas fa-user-circle fa-6x text-white animate__animated animate__bounce animate_delay_t4"></i>
+					</div>
+				</div>
+			</div>
+		`)
+		await sleep(3000);
+		$(`#ced-${e.cedula}`).remove();
+	}
+}
 
+function tableafterreadXLSX(){
+	let table = `
+	<table class="table table-sm">
+		<thead class="bg-light text-dark">
+			<tr>
+				<th scope="col">Cedula</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Apellido</th>
+				<th scope="col">Nacimiento</th>
+				<th scope="col">Sexo</th>
+				<th scope="col">Perfil</th>
+				<th scope="col">Correo</th>
+				<th scope="col">Eliminar</th>
+			</tr>
+		</thead>
+		<tbody>`
+	;
+	estudiantesXLS.forEach(e => {
+		table += `
+			<tr id="ced-${e.cedula}">
+				<td>${e.cedula}</td>
+				<td>${e.nombre}</td>
+				<td>${e.apellidos}</td>
+				<td>${e.fechaNacimiento}</td>
+				<td>${e.sexo}</td>
+				<td>${e.perfil}</td>
+				<td>${e.correo}</td>
+				<td class="text-center" role="button" onclick="deleteEntry('${e.cedula}')"><i class="fas fa-trash-alt text-danger"></i></td>
+			</tr>
+		`;
+	});
+	table += `
+		</tbody>
+	</table>`;
+	$('#resultTableScript').html(table);
+	showFeedback();
+}
+//delete row
+function deleteEntry(cedula){
+	$("#cantidadEstudiantesbadge").html(`${estudiantesXLS.length - 1}`);
+	$(`#ced-${cedula}`).remove();
+	estudiantesXLS = estudiantesXLS.filter(function(value, index, arr){ 
+        return value.cedula != parseInt(cedula);
+    });
+}
+function showFeedback(){
+	$('#feedbackAfterUpload').html(`
+		<div class="d-flex justify-content-between border-bottom border-light mb-3">
+			<div id="headertochange">
+				<h4 class="text-white font-weight-bold" >
+				<img src="/img/emoji/check-mark.png" width="30px">
+				Excel leido correctamente</h4>
+				<p class="text-white">Se encontraron <span class="badge badge-primary" id="cantidadEstudiantesbadge">${estudiantesXLS.length}</span> estudiantes</p>
+			</div>
+			<div>
+				<button class="btn btn-primary" onclick="cargarDatos()" id="btnparacargardatos">
+					<i class="fas fa-cloud-upload-alt "></i> Cargar Datos
+				</button>
+			</div>
+		</div>
+		<div id="textTodelete">
+			<p><i class="fas fa-circle text-primary" style="font-size: 10px;"></i> Debe revisar que los datos se encuentren bien escritos y que no se repitan</p>
+			<p><i class="fas fa-circle text-primary" style="font-size: 10px;"></i> Cada Dato debe corresponder a su columna</p>
+		</div>
+		<div class="progress my-4" >
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
+			aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="barraProgreso" style="display:none;"></div>
+		</div>
+		<div id="uploadingWhile">
+		</div>
 
+	`);
+}
+var ExcelToJSON = function() {
+  this.parseExcel = function(file) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+      var data = e.target.result;
+      var workbook = XLSX.read(data, {
+          type: 'binary'
+      });
+      workbook.SheetNames.forEach(function(sheetName) {
+          // Here is your object
+          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+          var json_object = JSON.stringify(XL_row_object);
+          estudiantesXLS = JSON.parse(json_object);
+		  console.log(estudiantesXLS);
+      })
+	  tableafterreadXLSX();
+  };
+  reader.onerror = function(ex) {
+      console.log(ex);
+  };
+  reader.readAsBinaryString(file);
+  };
+};
+function handleFileSelect(evt) {
+  var files = evt.target.files; // FileList object
+  var xl2json = new ExcelToJSON();
+  xl2json.parseExcel(files[0]);
+}
+document.getElementById('upload').addEventListener('change', handleFileSelect, false);
 document.addEventListener("DOMContentLoaded", loaded);

@@ -635,13 +635,19 @@ function showTalleres(data) {
         createRowTalleres(e)
     });
     $('#talleres_table').DataTable({
-        
         "language": {
-            "zeroRecords": "No se encontraron talleres",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -650,20 +656,35 @@ function showTalleres(data) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [6], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#talleres_table_length').find('select').removeClass('custom-select-sm');
-    $('#talleres_table_length').find('select').appendTo('#lenghtTable_talleres');
-    $('#talleres_table_length').html('');
+    $('#infoTable_talleres').html('');
+    $('#pagination_talleres').html('');
+    $('#lenghtTable_talleres').html('');
+
+    $('#talleres_table_wrapper').addClass('px-0')
+    let a = $('#talleres_table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#talleres_table_filter').css('display', 'none');
     $('#talleres_table_info').appendTo('#infoTable_talleres');
-    $('#talleres_table_paginate').appendTo('#botonesTable_talleres');
-    $('#talleres_table_filter').html('');
+    
+    $('#talleres_table_paginate').appendTo('#pagination_talleres');
+
+    $('#talleres_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#talleres_table_length').find('label').find('select').appendTo('#lenghtTable_talleres');
+    $('#talleres_table_length').html('');
 }
 function showHorarios(data) {
     data.forEach(e => {
@@ -673,13 +694,19 @@ function showHorarios(data) {
         createRowHorarios(e)
     });
     $('#horarios_table').DataTable({
-        
         "language": {
-            "zeroRecords": "No se encontraron horarios",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -688,20 +715,35 @@ function showHorarios(data) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [3], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#horarios_table_length').find('select').removeClass('custom-select-sm');
-    $('#horarios_table_length').find('select').appendTo('#lenghtTable_horarios');
-    $('#horarios_table_length').html('');
+    $('#infoTable_horarios').html('');
+    $('#pagination_horarios').html('');
+    $('#lenghtTable_horarios').html('');
+
+    $('#horarios_table_wrapper').addClass('px-0')
+    let a = $('#horarios_table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#horarios_table_filter').css('display', 'none');
     $('#horarios_table_info').appendTo('#infoTable_horarios');
-    $('#horarios_table_paginate').appendTo('#botonesTable_horarios');
-    $('#horarios_table_filter').html('');
+    
+    $('#horarios_table_paginate').appendTo('#pagination_horarios');
+
+    $('#horarios_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#horarios_table_length').find('label').find('select').appendTo('#lenghtTable_horarios');
+    $('#horarios_table_length').html('');
 }
 function showGrupos(data) {
     data.forEach(e => {
@@ -711,13 +753,19 @@ function showGrupos(data) {
         createRowGrupos(e)
     });
     $('#grupos_table').DataTable({
-        
         "language": {
-            "zeroRecords": "No se encontraron grupos",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -726,20 +774,35 @@ function showGrupos(data) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [6], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#grupos_table_length').find('select').removeClass('custom-select-sm');
-    $('#grupos_table_length').find('select').appendTo('#lenghtTable_grupos');
-    $('#grupos_table_length').html('');
+    $('#infoTable_grupos').html('');
+    $('#pagination_grupos').html('');
+    $('#lenghtTable_grupos').html('');
+
+    $('#grupos_table_wrapper').addClass('px-0')
+    let a = $('#grupos_table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#grupos_table_filter').css('display', 'none');
     $('#grupos_table_info').appendTo('#infoTable_grupos');
-    $('#grupos_table_paginate').appendTo('#botonesTable_grupos');
-    $('#grupos_table_filter').html('');
+    
+    $('#grupos_table_paginate').appendTo('#pagination_grupos');
+
+    $('#grupos_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#grupos_table_length').find('label').find('select').appendTo('#lenghtTable_grupos');
+    $('#grupos_table_length').html('');
 }
 function createRowTalleres(e) {
     $('#talleres_list').append(`
