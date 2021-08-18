@@ -25,7 +25,25 @@ function loaded(event){
 function events(event){
     bringData();
     openModalOn();
+    toogleMenu();
 }
+function toogleMenu() {
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        //$('#sidebar-wrapper').css('position','relative');
+        $("#wrapper").toggleClass("toggled");
+        //$("#side-panel").css('margin-left','-12px');
+        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+        //$("#sidebar-wrapper").animate({left:'-200'},1000);
+    });
+  }
+$(function () {
+    $('[data-toggle="popover"]').popover();
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 function openModalOn() {
     $('#verConductaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
@@ -169,7 +187,7 @@ function fillListConductas(conductas) {
     $('#conductas_Table_paginate').appendTo('#botonesCambiarTable');
 }
 function showonListMorosos(u){
-    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#lista_conductas').append(`
         <tr>
             <td class="text-center">${foto}</td>

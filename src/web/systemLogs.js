@@ -1,13 +1,12 @@
 var mysql = require('mysql');
 const chalk = require('chalk');
-require('dotenv').config();
 
 var config = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    dateStrings: process.env.DB_DATESTRINGS
+    host: '52.171.213.23',
+    user: 'proyecto',
+    password: 'proyecto',
+    database: 'siapd',
+    dateStrings: true
 };
 
 var con = mysql.createPool(config);
@@ -38,6 +37,9 @@ const TABLE = {
     MATRICULA : 'T_MATRICULA',
     COMPROBACION : 'T_COMPROBACION',
     USUARIO : 'T_USUARIO',
+    CASILLERO_ESTUDIANTE : 'T_CASILLERO_ESTUDIANTE',
+    CASILLERO : 'T_CASILLERO',
+    REPORTES : 'T_REPORTE',
     CONDUCTA : 'T_CONDUCTA'
 }
 

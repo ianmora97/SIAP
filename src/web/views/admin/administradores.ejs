@@ -164,11 +164,13 @@
                              </div>
                              <div class="col border-right">
                                  <h1 class="m-0 font-weight-bolder text-primary" id="administradores_total_stats">0</h1>
-                                 <small class="text-muted">Total de Administradores&nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                 <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                 title="Cantidad Total de Administradores">Total de Administradores&nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
                              <div class="col border-right">
                                  <h1 class="m-0 font-weight-bolder text-primary" id="superusuarios_stats">0</h1>
-                                 <small class="text-muted">Super Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                 <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                 title="Cantidad Total de Administradores Super Usuarios">Super Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
                              </div>
 
                          </div>
@@ -206,9 +208,10 @@
                                             </div>
                                             <div class="col-7 d-flex align-items-center justify-content-end pr-2" style="max-height: 40px">
                                                 <% if(usuario.rol > 3){ %>
-                                                <button type="button" class="btn btn-primary btn-sm mr-2" style="border-radius: 10px;" id="modalButtonAgregarAdmin"
-                                                data-toggle="modal" data-target="#modalAdd"
-                                                >Agregar <i class="fas fa-plus-square"></i></button>
+                                                <button type="button" name="agregarTaller" id="modalButtonAgregarAdmin"
+                                                data-toggle="tooltip" data-placement="top"
+                                                title="Agregar un Administrador" onclick="openModal('#modalAdd')" class="btn bg-success btn-sm text-white mr-2"
+                                                style="border-radius: 50px;"><i class="fas fa-plus"></i></button>
                                                 <%}%>
                                                 <a href="/admin/administradores" name="actualizar_lista" id="actualizar_lista" 
                                                 data-toggle="tooltip" data-placement="top" title="Actualizar lista"
@@ -217,7 +220,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row w-100 mx-0" style="height: 65vh; overflow-y: auto;">
+                                <div class="row w-100 mx-0" style="min-height: 700px; overflow-y: auto;">
                                     <table class="table custom-table table-responsive-md table-borderless" id="administradores_TableOrder" data-order="[[ 1, &quot;asc&quot; ]]">
                                         <thead>
                                             <tr>
@@ -289,11 +292,9 @@
                                                 </div>
                                             </div>
                                             
-
-                                            <div contenteditable="true" class="form-control mt-2" 
-                                            id="scripts" style="height: 20vh; overflow-y: auto;">
-                                                
-                                            </div>
+                                            <textarea rows="4" class="form-control mt-2" 
+                                            id="scripts" style="height: 20vh; overflow-y: auto;"></textarea>
+        
                                             <div class="border rounded mt-3" 
                                             id="resultScript" style="height: 30vh; overflow-y: auto;">
                                                 

@@ -40,7 +40,7 @@ router.post('/admin/log',(req,res)=>{ //login
                         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let dateTime = date+' '+time;
-                        console.log('[',chalk.green('OK'),']',chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
+                        console.log('[',chalk.green('OK'),']',chalk.green('(ADMIN)'),chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
                         let usuario = req.session.value;
                         let s = 'dash';
                         res.render('admin/dashboard', {usuario,s,token});
@@ -78,7 +78,7 @@ router.get('/admin/logout',(req,res)=>{ //logout
 
 router.get('/admin/dashboard', (req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'dash';
@@ -94,7 +94,7 @@ router.get('/admin/dashboard', (req,res)=>{
 // -------- #menu items-------------
 router.get('/admin/estudiantes',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'estudiantes';
@@ -108,7 +108,7 @@ router.get('/admin/estudiantes',(req,res)=>{
 });
 router.get('/admin/administradores',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'administradores';
@@ -122,7 +122,7 @@ router.get('/admin/administradores',(req,res)=>{
 });
 router.get('/admin/profesores',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'profesores';
@@ -136,7 +136,7 @@ router.get('/admin/profesores',(req,res)=>{
 });
 router.get('/admin/talleres',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'talleres';
@@ -150,7 +150,7 @@ router.get('/admin/talleres',(req,res)=>{
 });
 router.get('/admin/reposiciones',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reposiciones';
@@ -164,7 +164,7 @@ router.get('/admin/reposiciones',(req,res)=>{
 });
 router.get('/admin/solicitudes',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'solicitudes';
@@ -177,9 +177,24 @@ router.get('/admin/solicitudes',(req,res)=>{
     }
 });
 
+router.get('/admin/matricula/reportes',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-matricula';
+            res.render('admin/matriculaReporte', {usuario,s, token});
+        }else{
+            res.redirect('/admin');
+        }
+    }else{
+        res.redirect('/admin');
+    }
+});
+
 router.get('/admin/comprobacion',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'comprobacion';
@@ -193,7 +208,7 @@ router.get('/admin/comprobacion',(req,res)=>{
 });
 router.get('/admin/reportes',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes';
@@ -207,7 +222,7 @@ router.get('/admin/reportes',(req,res)=>{
 });
 router.get('/admin/casilleros',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'casilleros';
@@ -222,7 +237,7 @@ router.get('/admin/casilleros',(req,res)=>{
 
 router.get('/admin/reportes/morosos',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-morosos';
@@ -237,7 +252,7 @@ router.get('/admin/reportes/morosos',(req,res)=>{
 
 router.get('/admin/reportes/asistencia',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-asistencia';
@@ -251,7 +266,7 @@ router.get('/admin/reportes/asistencia',(req,res)=>{
 });
 router.get('/admin/reportes/sistema',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-sistema';
@@ -265,7 +280,7 @@ router.get('/admin/reportes/sistema',(req,res)=>{
 });
 router.get('/admin/reportes/uso',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-uso';
@@ -279,7 +294,7 @@ router.get('/admin/reportes/uso',(req,res)=>{
 });
 router.get('/admin/reportes/conducta',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'reportes-conducta';
@@ -296,7 +311,7 @@ router.get('/admin/reportes/conducta',(req,res)=>{
 // TODO: rutas del navbar del panel administrativo
 router.get('/admin/perfil',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let usuario = req.session.value;
             let token = req.session.token;
             let s = 'dash';
@@ -311,7 +326,7 @@ router.get('/admin/perfil',(req,res)=>{
 
 router.post('/admin/cambiarfotoperfil',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol){
+        if(req.session.value.rol > 2){
             let usuario = req.session.value;
             let token = req.session.token;
             let s = 'dash';

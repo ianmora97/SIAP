@@ -22,6 +22,10 @@ router.get('/', (req, res) => {
     res.render('index');
 });
 
+// router.get('*', (req, res) => {
+//     res.render('notAllowedAdmin');
+// });
+
 router.get('/cambiarClave', (req, res) => {
     res.render('solicitudCambioClave');
 });

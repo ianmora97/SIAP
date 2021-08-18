@@ -41,7 +41,7 @@
                     <h5><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h5>
                 </div>
                 <div class="w-100 row mx-0">
-                    <button type="button" class="w-50 rounded-0 btn btn-secondary" onclick="saltarAsitenciaProfesor()">Cerrar</button>
+                    <button type="button" class="w-50 rounded-0 btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="w-50 rounded-0 btn btn-primary" onclick="ingresarAsitenciaProfesor()">Presente</button>
                 </div>
             </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="modal px-0" id="asistenciaModal" data-backdrop="static" data-keyboard="false" 
     tabindex="-1" aria-labelledby="asistenciaModalLabel" aria-hidden="true" style="padding: none !important;">
-        <div class=" modal-dialog-centered modal-fs modal-dialog-scrollable">
+        <div class=" modal-dialog-centered modal-fs">
             <div class="modal-content h-100">
                 <div class="modal-body">
                     <h4 id="grupoIdModal">Grupo</h4>
@@ -65,29 +65,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="row">
-                                <div class="col-lg-6 mt-lg-0 mt-2" data-toggle="tooltip" data-placement="top" title="Filtrar por dia y hora">
-                                    <div class="row mx-auto no-gutters">
-                                        <div class="col-2">
-                                            <div class="input-group-text h-100" role="button" id="btnGroupAddon" onclick="borrarFecha()"><i class="fa fa-trash"></i></div>
-                                        </div>
-                                        <div class="col-10">
-                                            <input id="datepicker" onchange="buscarFechaAsistencia()"/>
-                                        </div>
-                                    </div> 
-                                    
-                                    <script>
-                                        $('#datepicker').datetimepicker({ 
-                                            footer: true,
-                                            modal: true,
-                                            uiLibrary: 'bootstrap4', 
-                                            iconsLibrary: 'fontawesome',
-                                            format: 'dd/mm/yyyy HH:MM'
-                                        });
-                                    </script>                       
-                                </div>
-                                <div class="col-lg-6 mt-lg-0 mt-2" data-toggle="tooltip" data-placement="top" title="Mostrar Registros">
-                                    <div id="showlenghtentries" class="w-100"></div>
-                                </div>
+                                <div id="showlenghtentries" class="w-100"></div>
                             </div>
                         </div>
                     </div>
@@ -95,11 +73,11 @@
                         <table class="table table-hover table-responsive-md table-borderless" id="tablaModalAsistencia">
                             <thead>
                                 <tr>
-                                    <th class="bg-dark text-white sticky-top " style="width: 40px;" scope="col">&nbsp;</th>
-                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
-                                    <th class="bg-dark text-white sticky-top" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
-                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-clock"></i> Fecha de Asistencia</th>
-                                    <th class="bg-dark text-white sticky-top" scope="col"><i class="fas fa-toggle-on"></i> Estado</th>
+                                    <th class="bg-dark text-white" style="width: 40px;" scope="col">&nbsp;</th>
+                                    <th class="bg-dark text-white" scope="col"><i class="fas fa-address-card"></i> Cedula</th>
+                                    <th class="bg-dark text-white" data-class-name="priority" scope="col"><i class="fas fa-id-card"></i> Nombre</th>
+                                    <th class="bg-dark text-white" scope="col"><i class="fas fa-clock"></i> Fecha de Asistencia</th>
+                                    <th class="bg-dark text-white" scope="col"><i class="fas fa-toggle-on"></i> Estado</th>
                                 </tr>
                             </thead>
                             <tbody id="bodyTableModal"></tbody>
@@ -124,12 +102,6 @@
     <%- include('perfilHeader') %>
     <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
     <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0" id="breadcrumbPages">
-            <li class="breadcrumb-item active"><a href="#">Grupos</a></li>
-            <li class="breadcrumb-item" id="breadcrum-item-listaestudiantes" style="display: none;"><a href="#">Lista de Estudiantes</a></li>
-        </ol>
-    </nav>
     <div class="container px-0 mt-3">
         <div class="alert alert-warning alert-dismissible fade" role="alert" style="display: none;">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -137,6 +109,7 @@
           </button>
           <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
         </div>
+        <button type="button" class="btn btn-info btn-sm my-2" data-toggle="modal" data-target="#pasarAsistenciaProfesor">Asistencia Profesor</button>
         <div class="justify-content-between p-2 bg-light rounded d-flex">
             <h5 class="font-weight-bold m-0"><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h5>
             <button type="button" class="btn btn-primary btn-sm" id="buttonTriggerModalAsistencia" 

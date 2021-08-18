@@ -56,7 +56,14 @@ function modals() {
     let admintemp = g_mapAdmins.get(id);
     $('#editLabelTitle').html(`${admintemp.nombre} (${admintemp.cedula})`);
   })
-}  
+}
+function runSelect(table) {
+  $('#scripts').val(`SELECT * FROM ${table}`);
+  runQueryIntoBase();
+}
+function openModal(modal) {
+  $(modal).modal('show');
+}
 function openModalEdit(id) {
   $('#idAdministradorEdit').html(id)
   $('#modalEdit').modal('show');
@@ -156,7 +163,7 @@ function eliminarAdmin(){
     }, (error) => {
       
   }); 
-}// 	moiso0499@outlook.com  	117410572
+}
 function agregarUsuario(){
   let bearer = 'Bearer '+g_token;
   let cedula = $('#cedulaAdd').val();
@@ -231,7 +238,7 @@ function showAdminList(data){
         "zeroRecords": "No se encontraron estudiantes",
         "infoEmpty": "No hay registros disponibles!",
         "infoFiltered": "(filtrado de _MAX_ registros)",
-        "lengthMenu": "Mostrar _MENU_ ",
+        "lengthMenu": "_MENU_ ",
         "info": "Mostrando pagina _PAGE_ de _PAGES_",
         "paginate": {
             "first": '<i class="fas fa-angle-double-left"></i>',
@@ -258,12 +265,15 @@ function showAdminList(data){
   
   $('#administradores_TableOrder_paginate').appendTo('#botonesCambiarTable');
   
-  $('#administradores_TableOrder_length').find('label').find('select').appendTo('#showlenghtentries');
+
+  $('#administradores_TableOrder_length').appendTo('#showlenghtentries');
+  $('#administradores_TableOrder_length').find('label').addClass('d-flex align-items-center m-0')
+  $('#administradores_TableOrder_length').find('label').find('select').addClass('custom-select custom-select-sm mx-2')
   $('#administradores_TableOrder_length').html('');
 
 }
 function showRowAdminList(data){
-  let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px">';
+  let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px" height="30px">';
   $('#lista_administradores').append(`
     <tr ondblclick="openModalEdit(${data.cedula})">
       <td class="text-center">${foto}</td>
@@ -306,7 +316,8 @@ function showTableTree(data) {
     let cont = 0;
     data.forEach(e => {
       $('#ulTables').append(`
-        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name}</span>
+        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name} &nbsp; <i role="button" data-toggle="tooltip" data-placement="bottom" 
+        title="Ver Tabla" onclick="runSelect('${e.name}')" class="far fa-object-group text-info"></i></span>
             <ul class="nested" id="table_name_${e.name}">
 
             </ul>
@@ -324,6 +335,9 @@ function showTableTree(data) {
         resolve('FINISH')
       }
     })
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    })
   })
 }
 
@@ -332,8 +346,10 @@ function showviewTree(data) {
     let cont = 0;
     data.forEach(e => {
       $('#ulViews').append(`
-        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name}</span>
+        <li><span class="caret"><i class="fas fa-chevron-right"></i> ${e.name} &nbsp; <i role="button" data-toggle="tooltip" data-placement="bottom" 
+        title="Ver Tabla" onclick="runSelect('${e.name}')" class="far fa-object-group text-info"></i></span>
             <ul class="nested" id="table_name_${e.name}">
+
             </ul>
         </li>
       `);
@@ -355,95 +371,7 @@ function addTableToQuery(table) {
   let valMoment = $('#scripts').html();
   $('#scripts').html(valMoment + table);
 }
-// const editor = document.getElementById('scripts');
-// const selectionOutput = document.getElementById('selection');
 
-// function getTextSegments(element) {
-//     const textSegments = [];
-//     Array.from(element.childNodes).forEach((node) => {
-//         switch(node.nodeType) {
-//             case Node.TEXT_NODE:
-//                 textSegments.push({text: node.nodeValue, node});
-//                 break;
-                
-//             case Node.ELEMENT_NODE:
-//                 textSegments.splice(textSegments.length, 0, ...(getTextSegments(node)));
-//                 break;
-                
-//             default:
-//                 throw new Error(`Unexpected node type: ${node.nodeType}`);
-//         }
-//     });
-//     return textSegments;
-// }
-
-
-
-// function updateEditor() {
-//     const sel = window.getSelection();
-//     const textSegments = getTextSegments(editor);
-//     const textContent = textSegments.map(({text}) => text).join('');
-//     let anchorIndex = null;
-//     let focusIndex = null;
-//     let currentIndex = 0;
-//     textSegments.forEach(({text, node}) => {
-//         if (node === sel.anchorNode) {
-//             anchorIndex = currentIndex + sel.anchorOffset;
-//         }
-//         if (node === sel.focusNode) {
-//             focusIndex = currentIndex + sel.focusOffset;
-//         }
-//         currentIndex += text.length;
-//     });
-    
-//     editor.innerHTML = renderText(textContent);
-    
-//     restoreSelection(anchorIndex, focusIndex);
-// }
-
-// function restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
-//     const sel = window.getSelection();
-//     const textSegments = getTextSegments(editor);
-//     let anchorNode = editor;
-//     let anchorIndex = 0;
-//     let focusNode = editor;
-//     let focusIndex = 0;
-//     let currentIndex = 0;
-//     textSegments.forEach(({text, node}) => {
-//         const startIndexOfNode = currentIndex;
-//         const endIndexOfNode = startIndexOfNode + text.length;
-//         if (startIndexOfNode <= absoluteAnchorIndex && absoluteAnchorIndex <= endIndexOfNode) {
-//             anchorNode = node;
-//             anchorIndex = absoluteAnchorIndex - startIndexOfNode;
-//         }
-//         if (startIndexOfNode <= absoluteFocusIndex && absoluteFocusIndex <= endIndexOfNode) {
-//             focusNode = node;
-//             focusIndex = absoluteFocusIndex - startIndexOfNode;
-//         }
-//         currentIndex += text.length;
-//     });
-    
-//     sel.setBaseAndExtent(anchorNode,anchorIndex,focusNode,focusIndex);
-// }
-// editor.addEventListener('input', updateEditor);
-function renderText(text) {
-    const words = text.split(/(\s+)/);
-    const output = words.map((word) => {
-      
-      if (checkWordColor(word,'azul')) {
-        return `<span class="text-info">${word.toUpperCase()}</span>`;
-      }
-      else if (checkWordColor(word,'rojo')) {
-        return `<span class="text-danger">${word.toUpperCase()}</span>`;
-      }else if(typeof word === 'number') {
-        return `<span class="text-warning">${word.toUpperCase()}</span>`;
-      }
-      else {
-          return word;
-      }
-    })
-    return output.join('');
-}
 function checkWordColor(palabra,color) {
   let s_azul = ['select','from','as','join','distinct','view','call','where'
   ,'and','update','create','in','begin','end','insert','into','procedure','delete','set'
@@ -468,7 +396,7 @@ var g_vecResponseQuery = [];
 var g_MapResponseQuery = new Map();
 function runQueryIntoBase() {
   let bearer = 'Bearer '+g_token;
-  let text = $('#scripts').html();
+  let text = $('#scripts').val();
   $.ajax({
       type: "GET",
       url: "/admin/administrador/runScript",
@@ -493,13 +421,13 @@ function runQueryIntoBase() {
   });
 }
 function showResponseTable(data) {
-    buildtable().then(res=>{
-      buildHeaders(data.campos).then(res1 =>{
-        buildRows(data.filas).then(res2 =>{
-          
-        });
+  buildtable().then(res=>{
+    buildHeaders(data.campos).then(res1 =>{
+      buildRows(data.filas).then(res2 =>{
+        
       });
     });
+  });
 }
 function buildtable() {
   return new Promise((resolve, reject) => {

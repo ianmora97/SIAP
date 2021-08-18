@@ -219,6 +219,10 @@ function matricularCursos(){
     });
 }
 function fillSelected(data) {
+    $('#EstudiantesModalMatricular').html('');
+    $('#EstudiantesModalMatricular').append(`
+            <option>Seleccione un estudiante...</option>
+    `);
     data.forEach(e => {
         g_MapEstudiantes.set(e.cedula,e);
         $('#EstudiantesModalMatricular').append(`
@@ -227,6 +231,10 @@ function fillSelected(data) {
     })
 }
 function fillSelectGrupo(data) {
+    $('#GrupoModalMatricular').html('');
+    $('#GrupoModalMatricular').append(`
+        <option>Seleccione un grupo...</option>
+    `);
     let cont = 0;
     data.forEach(e => {
         if(e.cupo_actual < e.cupo_base ){
@@ -244,10 +252,12 @@ function openmodal(modal) {
 function cargarEstudiantes(matricula) {
     $("#lista-estudiantes").html("");
     let cont = 0;
-    matricula.forEach((m) => {
-        if(m.activa) cont ++;
-        llenarEstudiantes(m);
-    });
+    if(matricula.length){
+        matricula.forEach((m) => {
+            if(m.activa) cont ++;
+            llenarEstudiantes(m);
+        });
+    }
     $('#est_activos_stats').text(cont);
     $('#est_inactivos_stats').text(matricula.length - cont);
 

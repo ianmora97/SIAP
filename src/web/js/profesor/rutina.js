@@ -1,35 +1,12 @@
 var g_grupos = [];
-var g_profesores = [];
 
 function loaded(event){
     events(event);
 }
 
 function events(event){
-    bringDBAlt();
-
+    bringDB();
 }
-
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-    Swal.fire({
-        title: 'Antes...',
-        width: 600,
-        html: `Debe cumplir con los siguientes puntos antes de hacer la repocicion:<br> <br>
-        1. Hablar con el profesor de reposicion antes. <br>
-        2. Hablar con un administrador antes de hacer la repocicion. <br>
-        3. Solamente se pueden hacer repociciones los domingos o Lunes en la mañana. <br>
-        `,
-        icon:'info',
-        confirmButtonText: 'Entendido',
-        showClass: {
-            popup: 'animate__animated animate__zoomIn'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__zoomOut'
-          }
-    })
-})
 
 const animateCSS = (element, animation) =>
     
@@ -51,42 +28,47 @@ const animateCSS = (element, animation) =>
     node.addEventListener('animationend', handleAnimationEnd, {once: true});
 });
 
-function enviarSolicitud() {
+function enviarRutina() {
     let bearer = 'Bearer '+g_token;
-    let idProfesor = parseInt($('#id_profesor').text());
+    let profesor = parseInt($('#id_profesor').text());
     let grupo = parseInt($('#selectDropdownGrupos option:selected').val());
-    let profesorRepo = parseInt($('#selectDropdownProfesores option:selected').val());
-    let fecha = new Date();
-    fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate();
+    let texto = $('#textoRutina').val();
     let data = {
-        idProfesor, 
+        profesor, 
         grupo, 
-        profesorRepo,
-        fecha
+        texto,
     }
     $.ajax({
         type: "GET",
-        url: "/profesor/reponer/reponerClase",
+        url: "/profesor/rutina/crear",
         data: data,
         contentType: "application/json",
         headers:{
             'Authorization':bearer
         }
     }).then((response) => {
-        showSuccessSolicitud();
-
+        bringDB();
+        $('#feedback').append(`
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Rutina creada!</strong> Revise las rutinas para visualizar todas sus rutinas.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `)
     }, (error) => {
         console.log(error);
     });
 }
 
-function bringDBAlt() {
+function bringDB() {
     let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
+    let id = parseInt($('#id_profesor').text());
     let data = {cedula}
     $.ajax({
         type: "GET",
-        url: "/profesor/grupos/getGrupos",
+        url: "/profesor/rutinas/getGrupos",
         data: data,
         contentType: "application/json",
         headers:{
@@ -100,19 +82,45 @@ function bringDBAlt() {
 
     $.ajax({
         type: "GET",
-        url: "/profesor/reponer/profesores",
-        data: data,
+        url: "/profesor/rutinas/ver",
+        data: {id},
         contentType: "application/json",
         headers:{
             'Authorization':bearer
         }
     }).then((response) => {
-        g_profesores = response;
-        eachProfesores(response);
+        console.log(response);
+        verListRutina(response);
     }, (error) => {
     });
 }
 
+function verListRutina(data) {
+    $('#listaRutinas').html('');
+    if(data.length){
+        data.forEach((e)=>{
+            mostrarItemRutina(e);
+        })
+    }else{
+        
+    }
+}
+function mostrarItemRutina(r) {
+    let fecha = r.fecha.split(' ')[0];
+    let hora = r.fecha.split(' ')[1].slice(0,5);
+    $('#listaRutinas').append(`
+        <a href="#" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <button type="button" class="btn btn-info btn-sm">
+                    Rutina <span class="badge badge-light">Grupo: ${r.id_grupo}</span>
+                </button>
+                <small class="text-muted">Fecha de creacion: ${fecha}</small>
+            </div>
+            <p class="my-2">${r.texto}</p>
+            <small>${r.dia} - ${r.hora}</small>
+        </a>
+    `);
+}
 function eachGrupos(data) {
     if(data.length){
         let r = filtrarCuposActuales(data);
@@ -125,12 +133,6 @@ function eachGrupos(data) {
         `);
     }
 }
-function eachProfesores(data) {
-    let r = filtrarProfesor(data,$('#id_cedula').text())
-    r.forEach((e)=>{
-        showeachProfesoresOption(e);
-    })
-}
 
 function showGrupoOption(g) {
     let id = g.id_grupo;
@@ -141,31 +143,8 @@ function showGrupoOption(g) {
         <option value="${id}">Grupo #${id} - ${dia + ' ' + hora} : ${nivel}</option>
     `);
 }
-
-function showeachProfesoresOption(g) {
-    let id = g.id_profesor;
-    let idUs = g.id_usuario;
-    let cedula = g.cedula;
-    let nombre = g.nombre + ' ' + g.apellido;
-    nombre = nombre.toUpperCase();
-
-    $('#selectDropdownProfesores').append(`
-        <option value="${id}">${nombre} - ${cedula}</option>
-    `);
-}
 function filtrarCuposActuales(data) {
     return data.filter(e => e.cupo_actual != 0);
-}
-function filtrarProfesor(data,cedula){
-    return data.filter(e => e.cedula != cedula)
-}
-
-function showSuccessSolicitud() {
-    Swal.fire(
-        'Solicitud Enviada',
-        'Debe presentarse a la oficina para presentar el documento para justificar la ausencia.',
-        'success'
-    )
 }
 
 

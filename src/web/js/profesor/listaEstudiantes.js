@@ -245,7 +245,7 @@ function mostrarCursosActuales(c) {
     let id_usuario = c.id_usuario;
     let cedula = c.cedula;
     let nombre = c.nombre + ' ' + c.apellido;
-    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px">';
+    let foto = '<img src="/public/uploads/'+c.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#EstudiantesPorClaseLista').append(
         '<div class="card-list-custom-2" id="idEstudiantexGrupo-'+id_usuario+'" onclick="abrirEstudiante('+cedula+')">'+
         '<div class="card-body d-flex">'+
@@ -273,10 +273,18 @@ function traerCursosEstudiante(){
         data: data,
         contentType: "application/json"
     }).then((response) => {
-        g_grupos = response;
-        eachGrupos(response);
         if(response.length){
-            $('#alertaNoHay').hide();
+            g_grupos = response;
+            eachGrupos(response);
+        }else{
+            $('#alertaVacia').append(`
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertaNoHay">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong class="text-center d-block">No tiene estudiantes matriculados en ningun grupo.</strong>
+                </div>
+            `)
         }
     }, (error) => {
     });

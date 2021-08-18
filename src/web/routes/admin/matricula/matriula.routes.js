@@ -92,6 +92,17 @@ router.post('/admin/matricula/desmatricular',ensureToken,(req,res)=>{
     });
 });
 
+router.get('/api/admin/matricula/reportes',ensureToken,(req,res)=>{
+    con.query("select * from t_matricula_reporte",
+    (err,rows,fields)=>{
+        if(err){
+            res.status(501).send(err); 
+        }else{
+            res.send(rows);
+        }
+    });
+});
+
 // ! ----------------------------------- SECURITY ------------------------------------
 function ensureToken(req,res,next) {
     const bearerHeader = req.headers['authorization'];

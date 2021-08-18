@@ -31,16 +31,25 @@
                 <li class="nav-item">
                     <a class="nav-link pro-nav-link text-center" href="/profesores/reponer">
                         <%if(selected == "reponer"){%>
-                            Reponer
+                            Reposiciones
                         <%} else{ %>
                             Reponer
+                        <%}%>   
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pro-nav-link text-center" href="/profesores/rutinas">
+                        <%if(selected == "rutinas"){%>
+                            Rutinas
+                        <%} else{ %>
+                            Rutinas
                         <%}%>
                     </a>
                 </li>
             </div>
             <div class="d-lg-flex d-sm-flex d-md-block">
                 <li class="nav-item ml-3 dropdown">
-                    <a class="nav-link text-center text-uppercase" href="/profesores/perfil">
+                    <a class="nav-link text-center text-uppercase">
                         <i class="fa fa-user-circle"></i>
                         <%if(selected == "perfil"){%>
                             <%= usuario.usuario %>

@@ -740,10 +740,9 @@ function createRowTalleres(e) {
         <td>${e.costo}</td>
         <td>${e.costo_funcionario}</td>
         <td class="text-center">
-            <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditTaller" >
-                Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
-            </button>
+          <span class="button-circle" role="button" data-id="${e.id}" data-toggle="modal" data-target="#modalEditTaller">
+              <i class="fas fa-ellipsis-v"></i>
+          </span>
         </td>
     </tr>
     `);
@@ -754,11 +753,10 @@ function createRowHorarios(e) {
         <td>${e.id}</td>
         <td class="text-center">${e.dia}</td>
         <td class="text-center">${e.hora}:00</td>
-        <td class="text-right">
-            <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id}" data-toggle="modal" data-target="#modalEditHoraio" >
-                Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
-            </button>
+        <td class="text-center">
+          <span class="button-circle" role="button" data-id="${e.id}" data-toggle="modal" data-target="#modalEditHoraio">
+              <i class="fas fa-ellipsis-v"></i>
+          </span>
         </td>
     </tr>
     `);
@@ -789,11 +787,10 @@ function createRowGrupos(e) {
         </td>
         <td style="line-height: 1.5;">${e.cupo_actual}/${e.cupo_base}</td>
         <td style="line-height: 1.5;">${e.cupo_extra}</td>
-        <td style="line-height: 1.5;" class="text-center">
-            <button type="button" class="btn btn-sm btn-primary" 
-            data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo" >
-                Editar <span class="badge badge-light"><i class="fas fa-pen"></i></span>
-            </button>
+        <td class="text-center">
+          <span class="button-circle" role="button" data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo">
+              <i class="fas fa-ellipsis-v"></i>
+          </span>
         </td>
     </tr>
     `);

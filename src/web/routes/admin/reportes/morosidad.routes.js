@@ -22,12 +22,10 @@ router.get('/admin/reportes/morosos/estudiantesMorosos',(req,res)=>{
     //SELECT * FROM siapd.vta_estudiante_moroso;
     let script = "SELECT * FROM siapd.vta_estudiante_moroso";
     var query = con.query(script, (err,rows,fields)=>{
-        if(rows != undefined){
-            if(rows.length != 0){
-                res.send(rows)
-            }
+        if(!err){
+            res.send(rows)
         }else{
-            res.send({err:'NotFound'});
+            res.send(err);
         }
     });
 });

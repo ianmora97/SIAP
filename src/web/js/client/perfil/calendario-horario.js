@@ -4,21 +4,10 @@
         locale: 'es',
         themeSystem: 'bootstrap4',
         defaultView: 'agendaWeek', //agendaWeek, listWeek, month, dayGridWeek, timeGridDay
-        height: 500,
-
+        height: 650,
         events: [
             
         ],
-        validRange: function(nowDate) {
-            let d = new Date();
-            let startDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + '1';
-            let endDate = d.getFullYear() + '-' + (d.getMonth() + 2) + '-' + '2';
-            
-            return {
-              start: startDate,
-              end: endDate //startDate.clone().add(1, 'months')
-            };
-        },
         eventRender: function(event, element) {
             if(event.icon){
                 element.find(".fc-title").prepend("<i class='fa fa-"+event.icon+"'></i>");
@@ -34,7 +23,5 @@
                 $('.eventUrl').attr('href',event.url);
                 $('#modal-view-event').modal();
         },
-    }
-    );
-    console.log('se construyo bien');
+    });
 });

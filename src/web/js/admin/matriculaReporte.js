@@ -4,49 +4,46 @@ function loaded(event) {
 
 function events(event) {
     cargar_registros();
-    cargar_administradores();
     toogleMenu();
+    onFilterDate();
 }
 function toogleMenu() {
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
-        //$('#sidebar-wrapper').css('position','relative');
         $("#wrapper").toggleClass("toggled");
-        //$("#side-panel").css('margin-left','-12px');
-        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-        //$("#sidebar-wrapper").animate({left:'-200'},1000);
     });
   }
-  $(function () {
+$(function () {
     $('[data-toggle="popover"]').popover();
-  })
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+})
+var g_filtrado = [];
+function onFilterDate() {
+    $('#filtrarDate').on('change', function () {
+        var table = $('#table_reportes').DataTable();
+        let val = $('#filtrarDate').val();
+        console.log(val);
+        g_filtrado = registro.filter(e => e.created_at.match(val));
+        console.log(g_filtrado)
+        let result1 = table.search( val ).draw();
+    });
+}
+
 function searchonfind(barra) {
     var table = $('#table_reportes').DataTable();
     let val = $('#barraBuscar').val();           
     let result1 = table.search( val ).draw();
 }
-function cargar_administradores(){
-    $.ajax({
-        type: "GET",
-        url: "/admin/registro/sistemaCanAdmin",
-        contentType: "application/json",
-    }).then((solicitudes) => {
-        $('#cantidad_administrativos').html(solicitudes.length);
-    },(error) => {
-        alert(error.status);
-    });
-}
+
 var registro = [];
 function cargar_registros() {
     let bearer = 'Bearer '+g_token;
     let ajaxTime = new Date().getTime();
     $.ajax({
         type: "GET",
-        url: "/admin/registro/sistema",
+        url: "/api/admin/matricula/reportes",
         contentType: "application/json",
         headers:{
             'Authorization':bearer
@@ -57,7 +54,7 @@ function cargar_registros() {
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
         registro = reportes;
-        $('#cantidad_registros').text(reportes.length);
+        
         reportesList(reportes);
     },(error) => {
       
@@ -65,10 +62,14 @@ function cargar_registros() {
 }
 function reportesList(data) {
     $("#lista_reportes").html("");
-    if(data){
+    let cont = 0;
+    if(data.length){
         data.forEach((e) => {
+            if(e.accion.match('ELIMINADA')) cont++;
             showReportesList(e); 
         });
+        $('#cantidad_desmatriculados').html(cont);
+        $('#cantidad_matriculados').html(data.length - cont);
     }
     $('#table_reportes').DataTable({
         "language": {
@@ -101,20 +102,57 @@ function reportesList(data) {
     $('#table_reportes_filter').html('');
 }
 function showReportesList(data) {
-    let badge = data.ddl == 'ELIMINAR' ? 'danger' : 
-                data.ddl == 'AGREGAR' ? 'success' : 
-                data.ddl == 'ACTUALIZAR' ? 'warning' : 'info';
+    let badge = data.accion.match('ELIMINADA') ? '<h4><span class="badge badge-danger">ELIMINADA</span></h4>' : '<h4><span class="badge badge-success">AGREGADA</span></h4>';
     $("#lista_reportes").append(`
-        <tr style="height:calc(60vh/10);">
-            <td>${data.id}</td>
-            <td>${data.usuario}</td>
-            <td><h5 class="m-0"><span class="badge badge-${badge}">${data.ddl}</span></h5></td>
-            <td>${data.descripcion}</td>
-            <td>${data.tabla}</td>
-            <td>${data.created_at}</td>
+        <tr>
+            <td class="text-center">${data.id}</td>
+            <td>${data.grupo}</td>
+            <td>${data.estudiante}</td>
+            <td>${badge}</td>
+            <td>${data.created_at.split(' ')[0]}</td>
         </tr>
     `);
 }
+function openModal(modal) {
+    $(modal).modal('show');
+}
+function pdfDownload() {
+    let titulo = $('#tituloPdf').val();
+    let data = [];
+    g_filtrado.forEach(e=>{
+        data.push(Object.values(e))
+    })
+    var doc = new jsPDF('p', 'pt', 'letter');  
+    var htmlstring = '';  
+    var tempVarToCheckPageHeight = 0;  
+    var pageHeight = 0;  
+    pageHeight = doc.internal.pageSize.height;  
+    specialElementHandlers = {  
+        '#bypassme': function(element, renderer) {  
+            return true  
+        }  
+    };  
+    margins = {  
+        top: 150,  
+        bottom: 60,  
+        left: 40,  
+        right: 40,  
+        width: 600  
+    };  
+    var y = 20;  
+    doc.setLineWidth(2);  
+    doc.text(200, y = y + 30, "Reportes de Matricula");
+    doc.text(200, y = y + 30, titulo);
+    doc.autoTable({
+        head: [['#', 'Grupo', 'Estudiante','Fecha','Acción']],
+        body: data,
+        startY: 110,  
+        theme: 'grid',  
+        
+    })
+    doc.save('Reportes_Matricula.pdf');
+}
+
 const animateCSS = (element, animation) =>
     
   // We create a Promise and return it

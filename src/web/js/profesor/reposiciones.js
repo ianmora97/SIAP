@@ -1,49 +1,20 @@
 
-var g_estudiantes = [];
-var g_mapEstudiantes = new Map();
-
 var g_grupos = [];
-var g_informacionEstudiantes = [];
-var g_mapGrupos = new Map();
-var g_mapAsistencia = new Map();
-var g_asistencia = [];
 
-var g_grupoAbierto ='';
+var g_mapGrupos = new Map();
+
 var g_grupoReposicion = [];
 
-function loaded(event){
-    events(event);
-}
-
-function events(event){
-    traerEstudantesXGrupo();
-    traerGrupos();
-    bringEstudiantesInfo();
+function cambioLoaded(event){
+    bringDB();
     movePageBack();
     modalsOpen();
 }
+
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
-const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
 
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 function modalsOpen() {
     $('#asistenciaModal').on('show.bs.modal', function (event) {
         animateCSS("#asistenciaModal", 'fadeInUpBig');
@@ -51,7 +22,9 @@ function modalsOpen() {
     $('#asistenciaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = $('#idGrupoTemp').html();
+        console.log(id);
         var grupo = g_mapGrupos.get(parseInt(id));
+        
         buildAsistenciaTable(grupo);
     })
     $('#asistenciaModal').on('hide.bs.modal', function (event) {
@@ -62,7 +35,7 @@ function modalsOpen() {
 function searchonfind(barra){
     let bar = $(barra);
     var table = $('#tablaModalAsistencia').DataTable();
-    let val = bar.val();
+    let val = bar.val();           
     let result = table.search( val ).draw();
 }
 function borrarFecha() {
@@ -76,7 +49,6 @@ function buscarFechaAsistencia() {
     var table = $('#tablaModalAsistencia').DataTable();         
     let result = table.search( fecha ).draw();
 }
-
 function buildAsistenciaTable(grupo) {
     let id = parseInt(grupo.id_grupo);
     $('#bodyTableModal').html('');
@@ -89,7 +61,7 @@ function buildAsistenciaTable(grupo) {
                 <td>${foto}</td>
                 <td>${e.cedula}</td>
                 <td>${e.nombre.toUpperCase() +' '+e.apellido.toUpperCase()}</td>
-                <td>${moment(e.fecha,'DD-MM-YYYY-HH-mm').calendar()}</td>
+                <td>${fecha}</td>
                 <td>
                     <h4><span class="w-100 badge badge-${e.estado == 'Presente' ? 'success' : e.estado == 'Tarde' ? 'warning' : 'danger'}">${e.estado}</span></h4>
                 </td>
@@ -130,10 +102,6 @@ function buildAsistenciaTable(grupo) {
     $('#tablaModalAsistencia_length').find('select') .appendTo(`#showlenghtentries`);
     $('#tablaModalAsistencia_filter').html('');
 }
-
-// ? ----------------------------------- TABLA MODAL ---------------------------------------
-// ! ---------------------------------------------------------------------------------------
-
 
 function movePageBack() {
     $('#pag_ant').on('click',function(){
@@ -179,7 +147,7 @@ function abrirCurso(grupo){
     let curso = $('#idGrupo-'+grupo);
     $('html').scrollTop(0);
     forEachEstudiantesxGrupo(grupo);
-    //revisarAsistenciaProfesor(grupo);
+    revisarAsistenciaProfesor(grupo);
     $('#clasesLista').removeClass('animate__bounceInLeft');
     $('#EstudiantesPorClaseLista').removeClass('animate__bounceOutRight');
     
@@ -216,11 +184,6 @@ function abrirEstudiante(id){
         $('#estudianteInformacionLista').addClass('animate__animated animate__bounceInRight');
     },500);
 }
-
-// ? --------------------------------------- TRANSICION --------------------------------------------------
-// ! ---------------------------------------  NAV --------------------------------------------------
-
-
 async function traerEstudantesXGrupoAfter() {
     return new Promise((resolve, reject) => {
         let bearer = 'Bearer '+g_token;
@@ -242,12 +205,9 @@ async function traerEstudantesXGrupoAfter() {
                 }
             }).then((response) => {
                 g_mapAsistencia.clear();
-                console.log(response);
-                if(response.length){
-                    response.forEach((e =>{
-                        g_mapAsistencia.get(e.id_asistencia,e);
-                    }));
-                }
+                response.forEach((e =>{
+                    g_mapAsistencia.get(e.id_asistencia,e);
+                }));
                 g_asistencia = response;
                 resolve('done');
             }, (error) => {
@@ -289,77 +249,31 @@ function traerEstudantesXGrupo(){
         
     });
 }
-function ingresarAsitenciaProfesor(){
-    let bearer = 'Bearer '+g_token;
 
-    let estado = 'Presente';
-    let idProfesor = parseInt($('#id_profesor').text());
-    let fecha = new Date();
-    fecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate();
-    let grupo = parseInt(g_grupoAbierto);
-    console.log(grupo)
-    $.ajax({
-        type: "GET",
-        url: "/profesor/asistenciaProfesor/insertarAsistencia",
-        data: {estado,fecha,idProfesor,grupo},
-        contentType: "application/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        $('#pasarAsistenciaProfesor').modal('hide');
-        
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-          
-        Toast.fire({
-            icon: 'success',
-            title: 'Asistencia Agregada'
-        })
-    }, (error) => {
-        
-    });
-}
-function saltarAsitenciaProfesor() {
-    $('#pasarAsistenciaProfesor').modal('hide');
-}
 
 function filtrarEstudiantesxGrupo(grupo) {
-    return g_estudiantes.filter(e => e.id_grupo == grupo);
+    let result=[];
+    for(let i=0;i<g_estudiantes.length; i++){
+        if(g_estudiantes[i].id_grupo == grupo){
+            result.push(g_estudiantes[i]);
+        }
+    }
+    return result;
 }
 function forEachEstudiantesxGrupo(grupo){
-    console.log(grupo,g_mapGrupos.get(grupo))
     setTimeout(() => {
         $('#buttonTriggerModalAsistencia').show();
     }, 2000);
     $('#buttonTriggerModalAsistencia').attr("data-grupo",grupo);
     $('#grupoIdModal').html('Grupo ' + grupo);
     $('#idGrupoTemp').html( grupo);
-    $('#listaUlEstudiantes').html('');
-    let result = filtrarEstudiantesxGrupo(grupo);
-    result.forEach((c)=>{
-        mostrarEstudiantesporGrupo(c);
+    traerEstudantesXGrupoAfter().then((response) => {
+        let result = filtrarEstudiantesxGrupo(grupo);
+        $('#listaUlEstudiantes').html('');
+        result.forEach((c)=>{
+            mostrarCursosActuales(c);
+        });
     });
-}
-
-function reiniciarListaAsistencia() {
-    // traer los estudiantes de nuevo para reinicar la asistencia edl lado del cliente
-    traerEstudantesXGrupo();
-    let table = $('#tablaModalAsistencia').DataTable();
-    table.destroy();
-    // var id = $('#idGrupoTemp').html();
-    // var grupo = g_mapGrupos.get(parseInt(id));
-    // buildAsistenciaTable(grupo);
-
 }
 function updateStatus(estudiante,estado,grupo,) {
     let bearer = 'Bearer '+g_token;
@@ -372,7 +286,6 @@ function updateStatus(estudiante,estado,grupo,) {
             'Authorization':bearer
         }
     }).then((response) => {
-        reiniciarListaAsistencia();
         let est = g_estudiantes.filter(e => e.id_estudiante == estudiante)[0];
         est = est.nombre.toUpperCase() + ' ' + est.apellido.toUpperCase();
         switch (estado) {
@@ -415,7 +328,7 @@ function updateStatus(estudiante,estado,grupo,) {
         
     });
 }
-function mostrarEstudiantesporGrupo(c) {
+function mostrarCursosActuales(c) {
     let id_estudiante = c.id_estudiante;
     let cedula = c.cedula;
     let id_grupo = c.id_grupo;
@@ -440,18 +353,13 @@ function mostrarEstudiantesporGrupo(c) {
                 <small>${c.dia} ${hora}</small>
             </div>
             <div class="col-2 px-1 d-flex flex-column">
-                <div class="mx-auto" id="idEstudiantexGrupo-${id_estudiante}" onclick="abrirEstudiante('${cedula}')" role="button">${foto}</div>
+                <div class="mx-auto" id="idEstudiantexGrupo-${id_estudiante}" onclick="abrirEstudiante(${cedula})" role="button">${foto}</div>
             </div>
         </li>
     `);
 }
 
-
-function mostartClasesFiltro(fil) {
-    eachGrupos(g_grupos,fil.value)
-    eachGruposRepo(g_grupoReposicion,"REPO")
-}
-function traerGrupos(){
+function bringDB(){
     let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
@@ -465,8 +373,31 @@ function traerGrupos(){
         }
     }).then((response) => {
         g_grupos = response;
-        eachGrupos(response);
+        //eachGrupos(response);
     }, (error) => {
+    });
+    $.ajax({ // trae los grupos de la semana de reposicion que se le asignaron al profesor
+        type: "GET",
+        url: "/profesor/grupos/getReposicion",
+        data: data,
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        g_grupoReposicion = response;
+        eachGruposRepo(g_grupoReposicion,"REPO");
+    }, (error) => {
+    });
+}
+function eachGruposRepo(grupos,filtro) {
+    let vec = filtrarRepoPorProfesor(grupos,$('#id_cedula').text())
+    console.log(vec)
+    // vec = filtrarPorFecha(vec);
+    vec.forEach((e)=>{
+        if(e.cupo_actual != 0){
+            showGrupos(e,filtro);
+        }
     });
 }
 function filtrarRepoPorProfesor(grupo,cedula) {
@@ -483,16 +414,6 @@ function filtrarPorFecha(grupo) {//fecha_reposicion
     })
     return res;
 }
-function eachGrupos(grupos,filtro = "HOY") {
-    $('#clasesLista').html('');
-    g_mapGrupos.clear();
-    grupos.forEach((e)=>{
-        if(e.cupo_actual != 0){
-            showGrupos(e,filtro);
-            g_mapGrupos.set(e.id_grupo,e);
-        }
-    });
-}
 async function showGrupos(g,filtro){
     let id = g.id_grupo;
     let dia = g.dia;
@@ -506,41 +427,24 @@ async function showGrupos(g,filtro){
     let hoy = diaSemana == today.getUTCDay() ? '<div class="circleHoy"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/279/fire_1f525.png" width="30"></div>' : '';
     let rep = '<div class="circleRepo"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/279/umbrella-on-ground_26f1-fe0f.png" width="30"></div>';
 
-    if(filtro == 'HOY'){
-        if(allow){
-            $('#clasesLista').append(`
-            <div class="col-md px-0 mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
-                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
-                    <div class="position-absolute" style="right:-20px; top:-20px;">${hoy}</div>
-                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6>
-                        <p class="card-text">${cupo_actual} ${est}</p>
-                        <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
+    $('#clasesLista').append(`
+        <div class="col-md mb-5 mostrarAsistenciaCol">
+            <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
+                <div class="position-absolute" style="right:-20px; top:-20px;">${rep}</div>
+                <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6> 
+                    <p class="card-text">${cupo_actual} ${est}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" 
+                        id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
+                        <h6 class="m-0"><span class="badge badge-info">REPOSICION</span></h6> 
                     </div>
                 </div>
             </div>
-            `);
-            
-        }else{
-        }
-    }else{
-        $('#clasesLista').append(`
-            <div class="col-md mb-5 ${allow ? 'mostrarAsistenciaCol' : 'ocultarAsistenciaCol'}">
-                <div class="card rounded-xl shadow border-0 mx-auto" style="width: 320px; position:relative;">
-                    <div class="position-absolute" style="right:-20px; top:-20px;">${hoy}</div>
-                    <img src="../../../img/piscina4.jpg" class="card-img-top" alt="..." height="">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="far fa-calendar-alt"></i> Grupo ${dia} ${hora} </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">${nivel}</h6>
-                        <p class="card-text">${cupo_actual} ${est}</p>
-                        <button class="btn btn-primary ${allow ? '' : 'disabled'}" data-grupo="${id}" id="idGrupo-${id}" onclick="abrirCurso(${id})" ${allow ? '' : 'disabled'}>Pasar Asistencia</button>
-                    </div>
-                </div>
-            </div>
-        `);
-    }
+        </div>
+    `);
 }
 function daytoWeekDay(day) {
     return new Promise((resolve, reject) => {
@@ -562,7 +466,8 @@ function daytoWeekDay(day) {
         }
     })
 }
-function bringEstudiantesInfo(){
+
+function traerInformacionDeEstudiante(){
     let bearer = 'Bearer '+g_token;
     let cedula = $('#id_cedula').text();
     let data = {cedula}
@@ -575,9 +480,6 @@ function bringEstudiantesInfo(){
             'Authorization':bearer
         }
     }).then((response) => {
-        response.forEach(e => {
-            g_mapEstudiantes.set(e.cedula_estudiante,e)
-        });
         g_informacionEstudiantes = response;
     }, (error) => {
     });
@@ -585,8 +487,7 @@ function bringEstudiantesInfo(){
 
 function showInformacionDeEstudiante(id){
     $('#estudianteInformacionLista').html('');
-    let e = g_mapEstudiantes.get(id);
-    console.log(e)
+    let e = buscarEstudiantexCedula(id);
     let foto;
     let celular = e.celular_estudiante == null ? 'No Asignado' : e.celular_estudiante;
     let correo = e.correo_estudiante == null ? 'No Asignado' : e.correo_estudiante;
@@ -620,11 +521,18 @@ function showInformacionDeEstudiante(id){
         '</div>'
     );
 }
-var getEdad = (birthday) =>{
+function buscarEstudiantexCedula(id) {
+    for(let i =0;i<g_informacionEstudiantes.length;i++){
+        // console.log(g_informacionEstudiantes[i].cedula_estudiante,id);
+        if(g_informacionEstudiantes[i].cedula_estudiante == id){
+            return g_informacionEstudiantes[i];
+        }
+    }
+}
+function getEdad(birthday) {
     let b = new Date(birthday);
     var ageDifMs = Date.now() - b.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
-
-document.addEventListener("DOMContentLoaded", loaded);
+document.addEventListener("DOMContentLoaded", cambioLoaded);

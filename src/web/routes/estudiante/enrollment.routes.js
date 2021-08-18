@@ -4,13 +4,14 @@ const con = require('../../database');
 
 //Selecciona matriculas de un estudiante en especifico
 router.get('/client/matricula/seleccionaMatriculaEstudiante',(req,res)=>{
+    
     const script = 'call prc_seleccionar_matricula_por_estudiante(?)'; 
     con.query(script,[req.query.cedula],
         (err,rows,fields)=>{
         if(!err){
-            if(rows[0].lenght != 0){
-                res.send(rows[0]);
-            }
+            res.send(rows[0]);
+        }else{
+            res.send(err);
         }   
     });
 });

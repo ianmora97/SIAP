@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
     <title>Clases</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/calendar-horario.css">
     <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="/css/datatables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="/css/animate.css">
     <script src="../js/jq-bs-bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
@@ -21,15 +22,9 @@
 </head>
 
 <body class="bg-white">
-    <span class="sr-only" id="id_nivel">
-        <%=usuario.nivel%>
-    </span>
-    <span class="sr-only" id="id_cedula">
-        <%=usuario.cedula%>
-    </span>
-    <span class="sr-only" id="id_estudiante">
-        <%=usuario.id_estudiante%>
-    </span>
+    <span class="sr-only" id="id_nivel"><%=usuario.nivel%></span>
+    <span class="sr-only" id="id_cedula"><%=usuario.cedula%></span>
+    <span class="sr-only" id="id_estudiante"><%=usuario.id_estudiante%></span>
     <div id="editMatriculaActual" class="modal fade">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -115,15 +110,6 @@
                             role="tab" aria-controls="matricula-activa" aria-selected="true">Cursos</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="historial-matricula-tab" data-toggle="tab" href="#historial-matricula"
-                            role="tab" aria-controls="historial-matricula" aria-selected="false">Historial</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="reposicion-matricula-tab" data-toggle="tab" href="#reposicion-matricula"
-                            role="tab" aria-controls="reposicion-matricula" aria-selected="false">Reposición de
-                            clases</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="asistencia-usuario-tab" data-toggle="tab" href="#asistencia-usuario"
                             role="tab" aria-controls="asistencia-usuario" aria-selected="false">Asistencia</a>
                     </li>
@@ -160,163 +146,6 @@
 
                         </div>
                     </div>
-                    <div class="tab-pane fade  bg-white" id="historial-matricula" role="tabpanel"
-                        aria-labelledby="historial-matricula-tab" style="min-height: 450px;">
-                        <div class="row px-3 py-1 mx-auto d-flex justify-content-between">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="nivel">Nivel</label>
-                                    <select class="form-control" id="nivel">
-                                        <option>Principiante</option>
-                                        <option>Intermedio-Avanzado</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3 d-flex justify-content-end">
-                                <button class="btn" onclick="window.print()"><i class="fa fa-print fa-2x"
-                                        aria-hidden="true"></i> </button>
-                            </div>
-                        </div>
-                        <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
-                            <table class="table table-hover table-borderless">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-primary text-white sticky-top" scope="col"><i
-                                                class="fas fa-swimmer"></i> Titulo</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col"><i
-                                                class="fas fa-qrcode"></i> Codigo</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col"><i
-                                                class="fas fa-layer-group"></i> Periodo</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col"><i
-                                                class="fas fa-calendar-day"></i> Dia</th>
-                                        <th class="bg-primary text-white sticky-top" scope="col"><i
-                                                class="fas fa-clock"></i> Hora</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lista_historial_cursos">
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade  bg-white py-2" id="reposicion-matricula" role="tabpanel"
-                        aria-labelledby="reposicion-matricula-tab" style="min-height: 550px;">
-                        <form action="/client/reposicion/insertar" method="POST" enctype="multipart/form-data">
-                            <div class="modal fade" id="modalAgregarComprobanteReposicion" tabindex="-1"
-                                aria-labelledby="modalAgregarComprobanteReposicionLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-secondary">
-                                            <h5 class="modal-title text-white">Comprobante</h5>
-                                            <button type="button" class="close " data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert"
-                                                style="display: none;">
-                                                <p class="m-0">Formato de documento invalido!</p>
-                                            </div>
-                                            <label for="file" class="">Subir comprobante</label>
-                                            <input type="file" class="form-control-file" name="image" id="comprobante"
-                                                placeholder="Combrobante" aria-describedby="fileHelpId">
-                                            <small id="fileHelpId" class="form-text text-muted">Formatos aceptados: PDF,
-                                                PNG, PGJ,
-                                                JPEG
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h5 class="text-dark" style="margin-top: 13px;">Reposición de clases</h5>
-                            <div class="card-body text-center pt-0">
-                                <div class="row">
-                                    <div class="col-md-6 d-block float-left">
-                                        <p class="text-dark m-0 font-weight-bold">Clases perdidas</p>
-                                        <div class=" text-center border rounded border-danger table mt-2"
-                                            id="dataTable-1" role="grid" aria-describedby="dataTable_info"
-                                            style="height: 300px; overflow-y: auto;">
-                                            <table class="table table-striped my-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Código</th>
-                                                        <th>Fecha de la clase perdida</th>
-                                                        <th>Tiempo restante para justificar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tablaClasesPerdidas">
-
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><strong>Código</strong></td>
-                                                        <td><strong>Fecha de la clase perdida</strong></td>
-                                                        <td><strong>Tiempo restante para justificar</strong></td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p class="text-dark m-0 font-weight-bold">Clases disponibles</p>
-                                        <div class=" text-center border rounded border-success table mt-2"
-                                            id="dataTable-2" role="grid" aria-describedby="dataTable_info"
-                                            style="height: 300px; overflow-y: auto;">
-                                            <table class="table table-striped my-0" id="dataTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>Código</th>
-                                                        <th>Fecha de la clase de reposición</th>
-                                                        <th>Cupos disponibles</th>
-                                                        <th>Profesor</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tablaClasesDisponibles">
-
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td><strong></strong></td>
-                                                        <td><strong>Código</strong></td>
-                                                        <td><strong>Fecha de la clase de reposición</strong></td>
-                                                        <td><strong>Cupos disponibles</strong></td>
-                                                        <td><strong>Profesor</strong></td>
-
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="text" id="observacionesReposicion" name="observacionTexto"
-                                            class="form-control mb-3" placeholder="Observaciones" required=""
-                                            autofocus="">
-                                    </div>
-                                    <div class="col text-left">
-                                        <div class="btn btn-outline-danger w-100" role="button" data-toggle="modal"
-                                            data-target="#modalAgregarComprobanteReposicion">Subir
-                                            comprobante </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <input type="date" id="fechaReposicion" name="fecha_reposicion"
-                                        style="display: none;">
-                                    <div class="col">
-                                        <input type="submit" class="btn btn-primary" type="button"
-                                            value="Enviar solicitud">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                     <div class="tab-pane fade  bg-white py-2" id="asistencia-usuario" role="tabpanel"
                         aria-labelledby="asistencia-usuario-tab" style="min-height: 450px;">
                         <div class="w-100 d-flex justify-content-between">
@@ -325,7 +154,7 @@
                                     aria-hidden="true"></i> </button>
                         </div>
                         <div class="w-100 mx-0" style="height: 100%; overflow-y: auto;">
-                            <table class="table table-hover table-borderless">
+                            <table class="table table-hover table-borderless" id="tabla_asistencia">
                                 <thead>
                                     <tr>
                                         <th class="bg-primary text-white sticky-top" scope="col"><i
@@ -354,11 +183,12 @@
             </div>
         </div>
         </div>
-        </div>
-        <%- include('perfilFooter') %>
-            <script src="../js/client/perfil/calendario-horario.js"></script>
-            <script src="../js/client/perfil/reposicion-clases.js"></script>
-            <script src="../js/client/perfil/clases-ui.js"></script>
+    </div>
+    <%- include('perfilFooter') %>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="../js/client/perfil/calendario-horario.js"></script>
+    <script src="../js/client/perfil/reposicion-clases.js"></script>
+    <script src="../js/client/perfil/clases-ui.js"></script>
 </body>
-
 </html>

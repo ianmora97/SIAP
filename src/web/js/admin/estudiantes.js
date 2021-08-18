@@ -10,6 +10,7 @@ function events(event) {
     loadFromDb();
     changeProfilePhoto();
     fotoonChange();
+    llenarDatos();
 }
 const animateCSS = (element, animation) =>
 
@@ -105,19 +106,58 @@ function searchonfind() {
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 }
-
+function llenarDatos() {
+    $('#cedula_add').on('keyup',(cantidad)=>{
+        let id = $('#cedula_add').val();
+        
+        if(id.length == 9){
+            // $('#id_registro').addClass('is-valid');
+            $.ajax({
+                type: "GET",
+                url: '/buscarUsuarioRegistro',
+                contentType: "application/json",
+                data: {id:id}
+            }).then((response) => {
+                let p = JSON.parse(response)
+                $('#nombre_add').val(p.results[0].firstname1);
+                $('#apellido_add').val(p.results[0].lastname);
+                
+                // $('#nombre_add').addClass('is-valid');
+                // $('#apellido_add').addClass('is-valid');
+  
+                $('#nombre_add').attr('readonly', true);
+                $('#apellido_add').attr('readonly', true);
+            }, (error) => {
+            
+            });
+        }
+        else if(id.length == 12){ //revisar si es residente
+            // $('#id_registro').addClass('is-valid');
+        }else{ // si no se encontro
+            // $('#id_registro').removeClass('is-valid');
+  
+            // $('#nombre_add').removeClass('is-valid');
+            // $('#apellido_add').removeClass('is-valid');
+  
+            $('#nombre_add').attr('readonly', false);
+            $('#apellido_add').attr('readonly', false);
+        }
+    });
+  }
 function load_stats(solicitudes) {
-    let cantidad = solicitudes.length;
-    let inactivos = 0;
-    let morosos = 0;
-    for (let i of solicitudes) {
-        if (!i.estado) inactivos++;
-        if (i.moroso) morosos++;
-    }
+    if(solicitudes.length){
+        let cantidad = solicitudes.length;
+        let inactivos = 0;
+        let morosos = 0;
+        for (let i of solicitudes) {
+            if (!i.estado) inactivos++;
+            if (i.moroso) morosos++;
+        }
 
-    $('#estudiantes_matriculados_stats').text(cantidad);
-    $('#estudiantes_inactivos_stats').text(inactivos);
-    $('#estudiantes_morosos_stats').text(morosos);
+        $('#estudiantes_matriculados_stats').text(cantidad);
+        $('#estudiantes_inactivos_stats').text(inactivos);
+        $('#estudiantes_morosos_stats').text(morosos);
+    }
 }
 
 var estudiantes = [];
@@ -143,7 +183,6 @@ function loadFromDb() {
         estudiantes = solicitudes;
         cargar_estudiante(solicitudes);
         load_stats(solicitudes);
-        $('#cargarDatosSpinner-usuarios-estudiantes').hide();
     }, (error) => {
     });
     
@@ -168,12 +207,13 @@ function loadFromDb() {
 
 function cargar_estudiante(data) {
     $("#lista_estudiantes").html("");
+    if(data.length){
+        data.forEach((e) => {
+            g_estudiantes_map.set(e.cedula, e);
+            llenar_Estudiantes(e);
     
-    data.forEach((e) => {
-        g_estudiantes_map.set(e.cedula, e);
-        llenar_Estudiantes(e);
-
-    });
+        });
+    }
     $('#estudiantes_TableOrder').DataTable({
         "language": {
             "zeroRecords": "No se encontraron estudiantes",
@@ -377,10 +417,10 @@ function fotoonChange() {
         let archivos = fileInput.files;
         let nombre = archivos[0].name;
         let tipo = nombre.split('.')[archivos.length];
-        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' 
-        || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
             readURL(this);
-            $('#fileFoto').after(
+            $('#sendFileFoto').html('')
+            $('#sendFileFoto').html(
                 '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
                 'id="btn_cambiar_foto" type="submit" '+
                 'style="display: none;">Cambiar foto</button>'
@@ -440,7 +480,7 @@ function openModalToTakePhoto(){
     });
 }
 function llenar_Estudiantes(data) {
-    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
     $("#lista_estudiantes").append(`
         <tr style="height:calc(55vh / 10);">
             <td class="align-center">${foto} &nbsp;&nbsp;${data.nombre + " " + data.apellido}</td>

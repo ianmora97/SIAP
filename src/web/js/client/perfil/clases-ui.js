@@ -6,7 +6,6 @@ function loaded(event){
 
 function events(event){
     traerCursosEstudiante();
-    filtarHistorial();
     desmatricula();
 }
 function desmatricula(){
@@ -70,8 +69,9 @@ function imprimirHistorial(){
     alert('imprimir');
 }
 function traerCursosEstudiante(){
-    let cedula = $('#id_cedula').text();
+    let cedula = $('#id_cedula').html();
     let data = {cedula}
+    console.log('CEDULA:',data);
     $.ajax({
         type: "GET",
         url: "/client/matricula/seleccionaMatriculaEstudiante",
@@ -80,8 +80,8 @@ function traerCursosEstudiante(){
     }).then((response) => {
         $('#cargarCursosActuales').hide();
         $('#cargarHistorialCursos').hide();
+        console.log(response);
         cursos_matriculados = response;
-        forEachCursosMatriculados(response);
         forEachCursosActuales(response);
     }, (error) => {
     });
@@ -117,34 +117,7 @@ function toWeekDay(dia) {
             break;
     }
 }
-function filtarHistorial(){
-    $('#nivel').on('change', function(){
-        let opcion = $( "#nivel option:selected" ).text();
-        let result = [];
-        for(let i=0; i<cursos_matriculados.length; i++){
-            let nivel = cursos_matriculados[i].nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
-            if(nivel == opcion){
-                result.push(cursos_matriculados[i]);
-            }
-        }
-        forEachCursosMatriculados(result);
-    });
-}
-
-function filtrarCursosActuales(cursos) {
-    let today = get_today_date().split('-')[1];
-    let result = [];
-    for(let i=0; i<cursos.length; i++){
-        if(cursos[i].periodo.split('-')[1] == today){
-            result.push(cursos[i]);
-        }
-    }
-    return result;
-}
 function forEachCursosActuales(cursos){
-    
-    let result = filtrarCursosActuales(cursos);
-    console.log(result);
     $('#lista_cursos_actuales').html('');
     cursos.forEach((c)=>{
         mostrarCursosActuales(c);
@@ -154,7 +127,7 @@ function mostrarCursosActuales(c) {
     let id_matricula = c.id_matricula;
     let grupo = c.id_grupo;
     let codigo = c.codigo_taller;
-    let titulo = c.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
+    let titulo = c.descripcion;
     let dia = c.dia;
     let hora = c.hora > 12 ? c.hora - 12 + 'pm' : c.hora + 'am';
     let horaF = c.hora > 12 ? c.hora - 12 +':00': c.hora +':00' ;
@@ -167,18 +140,21 @@ function mostrarCursosActuales(c) {
         '<th role="button" data-id="'+id_matricula+'" data-codigocurso="'+grupo+'" data-toggle="modal" data-target="#editMatriculaActual">'+hora+'</th>'+
         '<tr>'
     );
+    let p = c.nombre + c.apellido;
     let weekday = toWeekDay(dia.toUpperCase());
-    console.log('weekday: ',weekday,dia);
+    let todo = `Profesor: ${p} <br>${dia}: ${c.hora}`;
+    let horainicio = c.hora + ":00";
+    let horafinal = (c.hora + 1) + ":00";
+
     $('#calendar').fullCalendar('renderEvent', {
-        title: 'Piscina Day!',
-        description: 'Taller de la piscina',
-        start: horaF,
-        end: horaFi,
+        title: titulo,
+        description: todo,
+        start: horainicio,
+        end: horafinal,
         dow: [ weekday ], 
         className: 'fc-bg-default',
         icon : "swimmer"
     });
-    console.log('termino',id_matricula)
 }
 function forEachCursosMatriculados(cursos) {
     $('#lista_historial_cursos').html('');

@@ -17,6 +17,7 @@ const express = require('express');
 const chalk = require('chalk');
 const router = express.Router();
 
+const {logSistema, DDL, TABLE} = require('../../../systemLogs')
 const con = require('../../../database');
 
 router.get('/admin/casilleros/bringCasilleros',ensureToken,(req,res)=>{
@@ -74,7 +75,7 @@ router.get('/admin/casilleros/asignarCasillero',ensureToken,(req,res)=>{
         [req.query.cedula,req.query.codigo,req.query.horaEntrada,req.query.horaSalida],
         (err,result,fields)=>{
             if(!err){
-                logSistema(req.session.value.cedula, `${req.query.cedula} ASIGNAR CASILLERO -> ${req.query.codigo}`, 'INSERT', 'T_CASILLERO_ESTUDIANTE');
+                logSistema(req.session.value.cedula, `${req.query.cedula} ASIGNAR CASILLERO -> ${req.query.codigo}`, DDL.INSERT, TABLE.CASILLERO_ESTUDIANTE);
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -92,7 +93,7 @@ router.get('/admin/casilleros/revocarCasillero',ensureToken,(req,res)=>{
         [req.query.id, req.query.codigo],
         (err,result,fields)=>{
             if(!err){
-                logSistema(req.session.value.cedula, `${req.query.id} REVOCAR CASILLERO -> ${req.query.codigo}`, 'DELETE', 'T_CASILLERO_ESTUDIANTE');
+                logSistema(req.session.value.cedula, `${req.query.id} REVOCAR CASILLERO -> ${req.query.codigo}`, DDL.DELETE, TABLE.CASILLERO_ESTUDIANTE);
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -111,7 +112,7 @@ router.get('/admin/casilleros/agregarCasillero',ensureToken,(req,res)=>{
         [req.query.codigo],
         (err,result,fields)=>{
             if(!err){
-                logSistema(req.session.value.cedula, `AGREGAR CASILLERO -> ${req.query.codigo}`, 'INSERT', 'T_CASILLERO');
+                logSistema(req.session.value.cedula, `AGREGAR CASILLERO -> ${req.query.codigo}`, DDL.INSERT, TABLE.CASILLERO);
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -129,7 +130,7 @@ router.get('/admin/casilleros/eliminarCasillero',ensureToken,(req,res)=>{
         [req.query.codigo],
         (err,result,fields)=>{
             if(!err){
-                logSistema(req.session.value.cedula, `ELIMINAR CASILLERO -> ${req.query.codigo}`, 'DELETE', 'T_CASILLERO');
+                logSistema(req.session.value.cedula, `ELIMINAR CASILLERO -> ${req.query.codigo}`, DDL.INSERT, TABLE.CASILLERO);
                 res.send(result);
             }else{
                 res.send({err:'Server Error',id: 3});
@@ -140,16 +141,6 @@ router.get('/admin/casilleros/eliminarCasillero',ensureToken,(req,res)=>{
     }
 });
 
-
-function logSistema(usuario, descripcion, ddl, tabla) {
-    con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{
-        if(!err){
-            console.log(`[ ${chalk.green('OK')} ] ${chalk.yellow('ACTIVITY')} (${usuario}) @ ${descripcion} | ${ddl} ON ${tabla}`);
-        }else{
-            console.log(err);
-        }
-    });
-}
 function ensureToken(req,res,next) {
     const bearerHeader = req.headers['authorization'];
     if (bearerHeader === undefined) {

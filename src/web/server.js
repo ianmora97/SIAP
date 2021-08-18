@@ -6,11 +6,11 @@ const chalk = require('chalk');
 const multer = require('multer');
 const uuid = require('uuid');
 const app = express();
-require('dotenv').config();
+require('dotenv').config({path:".env"});
 
 //server variables
-process.env.ENV == 'dev' ? app.set('port', process.env.PORT_DEV) : app.set('port', process.env.PORT_PRO);
-app.set('host',process.env.HOST);
+app.set('port', 80);
+app.set('host', 'localhost');
 app.set('views', path.join(__dirname,'views')); //se crea el path de las views
 app.set('view engine', 'ejs'); //se prepara el motor para lectura de .ejs
 
@@ -52,6 +52,10 @@ app.use(multer({
     }
 }).single('image'));
 
+//Archivos estaticos
+app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname,'/public')));
+
 //REST API --routering
 app.use(require('./routes/main/main.routes'));
 app.use(require('./routes/main/solicitudes.routes'));
@@ -69,8 +73,10 @@ app.use(require('./routes/admin/reportes/uso.routes'));
 
 app.use(require('./routes/admin/estudiante/admin.routes'));
 app.use(require('./routes/admin/administradores/admin.routes'));
+app.use(require('./routes/admin/profesores/profesor.routes'));
 app.use(require('./routes/admin/talleres/talleres.routes'));
 app.use(require('./routes/admin/comprobacion/admin.routes'));
+app.use(require('./routes/admin/reposiciones/reposicion.routes'));
 
 app.use(require('./routes/estudiante/reposition.routes'));
 app.use(require('./routes/estudiante/medica.routes'));
@@ -89,9 +95,7 @@ app.use(require('./routes/estudiante/enrollment.routes'));
 app.use(require('./routes/illness.routes'));
 app.use(require('./routes/group.routes'));
 
-//Archivos estaticos
-app.use(express.static(path.join(__dirname)));
-app.use(express.static(path.join(__dirname,'/public')));
+
 
 
 const server = app.listen(app.get('port'), () =>{

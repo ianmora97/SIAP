@@ -32,14 +32,12 @@ router.get('/admin/reportes/asistencia/getGrupos',(req,res)=>{
 });
 
 router.get('/admin/reportes/asistencia/getAsistencia',(req,res)=>{
-    let script = "SELECT * FROM vta_asistencia_admin";
-    var query = con.query(script, (err,rows,fields)=>{
-        if(rows != undefined){
-            if(rows.length != 0){
-                res.send(rows)
-            }
+    con.query("SELECT * FROM vta_asistencia_admin", 
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows)
         }else{
-            res.send({err:'NotFound'});
+            res.send(err);
         }
     });
 });
