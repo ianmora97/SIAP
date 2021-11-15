@@ -20,8 +20,12 @@
                     <div class="col-md-5">
                         <h4 class="font-weight-bold mt-1">Panel de administracion</h4>
                     </div>
-                    <div class="col-md-7">
-                        
+                    <div class="col-md-7 d-flex justify-content-end">
+                        <% let usernameNombre1 = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
+                        <% let usernameApellido1 = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
+                        <h4>
+                            Bienvenido <%= usernameNombre1 %>&nbsp;<%= usernameApellido1 %> 
+                        </h4>
                     </div>
                 </div>
                 <div class="row mx-auto">
@@ -30,7 +34,7 @@
                             <div class="row mx-0 pt-2 px-2  card-border-header">
                                 <div class="w-100 d-flex justify-content-between align-items-baseline">
                                     <h4 id="data-selected-chart" class="font-weight-bold d-block">Reportes</h4>
-                                    <small class="text-muted d-block"></small>
+                                    <h6 class="text-muted d-block reportes-stats-aea mb-0"></h6>
                                 </div>
                             </div>
                             <div class="row mr-auto py-2 px-3" style="height:350px;">
@@ -60,8 +64,8 @@
                                 <div class="chart-container cards-dash animate__animated animate__zoomIn " id="talleres_chart">
                                     <div class="row px-2 mx-0 pt-2  card-border-header">
                                         <div class="w-100 d-flex justify-content-between align-items-baseline">
-                                            <h4 id="data-selected-chart" class="font-weight-bold d-block">Talleres</h4>
-                                            <small class="text-muted d-block"></small>
+                                            <h2 id="data-selected-chart" class="font-weight-bold d-block">Matriculados</h2>
+                                            <h6 class="text-muted d-block mb-0" id="talleres-stats"></h6>
                                         </div>
                                     </div>
                                     <div class="row py-2 px-3" style="height:237px;">

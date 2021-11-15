@@ -30,7 +30,7 @@ async function getRegistroPersona(url) {
 }
 router.get('/buscarUsuarioRegistro',(req,res)=>{
     
-    let url = 'https://apis.gometa.org/cedulas/'+req.query.id;
+    let url = 'https://apis.gometa.org/cedulas/'+req.query.id+'&key=uLpply0Tn1tAwQo';
     getRegistroPersona(url).then((persona)=>{
         res.send(persona)
     });

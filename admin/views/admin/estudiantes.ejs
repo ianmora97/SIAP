@@ -31,6 +31,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+    <script src="../../js/admin/xls-export.js"></script>
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
@@ -138,6 +141,14 @@
                         <form action="/admin/estudiantes/agregarEstudiantes" method="post" id="formAgregar">
                             <div class="row mt-2">
                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nacionalidad">Tipo de Identificacion</label>
+                                        <select class="form-control" id="nacionalidadModalSelect" name="nacionalidad">
+                                            <option value="null">Seleccione una opcion...</option>
+                                            <option value="1">Nacional</option>
+                                            <option value="2">Residente</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group">
                                         <label>Cedula</label>
                                         <input class="form-control" type="text" name="cedula_add" id="cedula_add" required autocomplete="off" />
@@ -388,7 +399,7 @@
                     </div>
                 </div>
                 <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
-                    <div class="row mx-0 d-flex justify-content-between">
+                    <div class="row mx-0 d-flex justify-content-between align-items-center">
                         <div class="col">
                             <div class="mb-1">
                                 <div class="input-group flex-nowrap">
@@ -428,6 +439,14 @@
                             </div>
                         </div>
                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
+                            <div class="mr-2">
+                                <button type="button" class="btn btn-outline-success btn-sm" onclick="excelDownload()">
+                                    <i class="fas fa-file-excel"></i> Excel</button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="pdfDownload()">
+                                    <i class="fas fa-file-pdf"></i> PDF</button>
+                            </div>
                             <div id="pagination">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">

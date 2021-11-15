@@ -54,7 +54,7 @@ body::-webkit-scrollbar-thumb {
 #page-content-wrapper {
   min-width: 100vw;
   position: relative;
-  background-color: #F9FAFE;
+  background-color: #edf0ff;
 }
 @media (min-width: 770px) { //si el ancho de la pantalla es mayor que 768px 
   #sidebar-wrapper {
@@ -792,4 +792,23 @@ input,select{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;  
+}
+
+// ! -------------------------- CARDS -----------------------------
+
+.card-custom{
+  border-radius: 15px !important;
+  border: none !important;
+  box-shadow: 0 5px 20px -3px rgba(25, 31, 88, 0.2) !important;
+}
+.card-custom > .card-header{
+  border-radius: 15px 15px 0 0 !important;
+  padding: 10px 20px;
+}
+
+.alert-success{
+  background-color: #2da84a !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 15px !important;
 }

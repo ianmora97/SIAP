@@ -35,17 +35,17 @@ router.get('/admin/administrador/agregarEstudiante',ensureToken,(req,res)=>{
             let d = req.query;
             
             res.send({type:"good"})
-            // con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
-            // [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
-            // (err,rows,fields)=>{
-            //     if(!err){
-            //         logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
-            //         res.redirect('/admin/estudiantes');
-            //     }else{
-            //         console.log(err)
-            //         res.redirect('/admin/estudiantes');
-            //     }
-            // });       
+            con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
+            [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
+            (err,rows,fields)=>{
+                if(!err){
+                    logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
+                    res.redirect('/admin/estudiantes');
+                }else{
+                    console.log(err)
+                    res.redirect('/admin/estudiantes');
+                }
+            });       
         }
     }
 });

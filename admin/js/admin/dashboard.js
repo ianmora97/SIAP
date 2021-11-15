@@ -112,10 +112,27 @@ function load_stats() {
 }
 function cargarTablaUsuariosNuevos(usuarios) {
     $('#list-comprobacion').html('');
-    $('#statNuevoUsusariosNotificacion').append(usuarios.length);
-    usuarios.forEach((u)=>{
-        showTablaUsuariosNuevos(u);
-    });
+    if(usuarios.length > 0){
+        $('#statNuevoUsusariosNotificacion').append(usuarios.length);
+        usuarios.forEach((u)=>{
+            showTablaUsuariosNuevos(u);
+        });
+    }else{
+        $('#statNuevoUsusariosNotificacion').append(0);
+        $('#list-comprobacion').append(
+            `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div>
+                    <h4>No hay usuarios nuevos</h4>
+                    <hr>
+                    <p class="mb-0">Puede registrar a un usuario desde el <a href="/admin/estudiantes" class="alert-link">panel de administracion</a> 
+                    , o bien dirijase al <a href="${window.location.hostname}/registrarse" class="alert-link">sistema de registro</a></p>
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`
+        );
+    }
 }
 function showTablaUsuariosNuevos(u) {
     $('#list-comprobacion').append(`
@@ -174,9 +191,14 @@ function cargarDatos() {
     }).then(
         (response) => {
             let grupos = response.grupos;
-            $('#talleres-stats').text(response.mxg.length);
-            for (var [key, value] of Object.entries(grupos)) {
-                addData(tallerCh,key, value);
+            // $('#talleres-stats').text(response.mxg.length);
+            if(response.mxg.length > 0){
+                $('#talleres-stats').append(`<span class="badge badge-primary ml-1">${response.mxg.length} matriculados</span>`);
+                for (var [key, value] of Object.entries(grupos)) {
+                    addData(tallerCh,key, value);
+                }
+            }else{
+                $('#talleres-stats').append(`<span class="badge badge-warning ml-1">No hay ningun estudiante matriculado</span>`);
             }
         },
         (error) => {}
@@ -212,9 +234,16 @@ function cargarDatos() {
         (response) => {
             $('.casilleros-stats').text(response.total.length);
             let percentage = 100 - Math.round((response.uso.length / response.total.length) * 100);
-            $('.casilleros-stats-per').text(percentage+'%');
-            addData(casillerosChartVar,'En Uso', response.uso.length);
-            addData(casillerosChartVar,'Sin Usar',response.total.length - response.uso.length);
+            percentage = percentage.toString();
+            if(percentage != "" && percentage != "NaN"){
+                $('.casilleros-stats-per').text(percentage+'%');
+                addData(casillerosChartVar,'En Uso', response.uso.length);
+                addData(casillerosChartVar,'Sin Usar',response.total.length - response.uso.length);
+            }else{
+                $('.casilleros-stats-per').text('0%');
+                addData(casillerosChartVar,'En Uso', 0);
+                addData(casillerosChartVar,'Sin Usar',response.total.length);
+            }
         },
         (error) => {}
     );
@@ -233,13 +262,26 @@ function cargarDatos() {
             $('.reposiciones-stats').text(response.estudiantes - response.estado);
             let percentage = Math.round((response.morosos / response.estudiantes) * 100);
             let percentage1 = Math.round((response.estado / response.estudiantes) * 100);
-            $('.morosidad-stats-per').text(percentage+'%');
-            $('.reposiciones-stats-per').text(percentage1+'%');
-            addData(morosidadChartVar,'Morosos', response.morosos);
-            addData(morosidadChartVar,'Al dia', response.estudiantes - response.morosos);
-
-            addData(reposicionesChartVar,'Activos', response.estado);
-            addData(reposicionesChartVar,'Inactivos', response.estudiantes - response.estado);
+            percentage = percentage.toString();
+            percentage1 = percentage1.toString();
+            if(percentage != "" && percentage != "NaN"){
+                $('.morosidad-stats-per').text(percentage+'%');
+                addData(morosidadChartVar,'Morosos', response.morosos);
+                addData(morosidadChartVar,'Al dia', response.estudiantes - response.morosos);
+            }else{
+                $('.morosidad-stats-per').text('0%');
+                addData(morosidadChartVar,'Morosos', 0);
+                addData(morosidadChartVar,'Al dia', response.estudiantes);
+            }
+            if(percentage1 != "" && percentage1 != "NaN"){
+                $('.reposiciones-stats-per').text(percentage1+'%');
+                addData(reposicionesChartVar,'Activos', response.estado);
+                addData(reposicionesChartVar,'Inactivos', response.estudiantes - response.estado);
+            }else{
+                $('.reposiciones-stats-per').text('0%');
+                addData(reposicionesChartVar,'Activos', 0);
+                addData(reposicionesChartVar,'Inactivos', response.estudiantes);
+            }
         },
         (error) => {}
     );
@@ -254,9 +296,17 @@ function cargarDatos() {
     }).then(
         (reportes) => {
             let todos = reportes.Agregados + reportes.Eliminados + reportes.Actualizados;
-            addData(pieDonutChartVar,'Agregados', reportes.Agregados);
-            addData(pieDonutChartVar,'Eliminados', reportes.Eliminados);
-            addData(pieDonutChartVar,'Actualizados', reportes.Actualizados);
+            if(todos > 0){
+                $('.reportes-stats-aea').append(`<span class="badge badge-primary ml-1">${todos} reportes</span>`);
+                addData(pieDonutChartVar,'Agregados', reportes.Agregados);
+                addData(pieDonutChartVar,'Eliminados', reportes.Eliminados);
+                addData(pieDonutChartVar,'Actualizados', reportes.Actualizados);
+            }else{
+                $('.reportes-stats-aea').append(`<span class="badge badge-warning ml-1">No hay reportes en el sistema aun</span>`);
+                addData(pieDonutChartVar,'Agregados', 0);
+                addData(pieDonutChartVar,'Eliminados', 0);
+                addData(pieDonutChartVar,'Actualizados', 0);
+            }
         },
         (error) => {}
     );
@@ -277,11 +327,18 @@ function cargarDatos() {
                 cont+= (e.cupo_base - e.cupo_actual);
             }
         })
-        addData(cuposDisponiblesChartVar,'Disponibles', cont);
-        addData(cuposDisponiblesChartVar,'Matriculados', total - cont);
         $('.cupos-stats').text(cont);
         let percentage = Math.round((cont / total) * 100);
-        $('.cupos-stats-per').text(percentage+'%');
+        percentage = percentage.toString();
+        if(percentage != "" && percentage != "NaN"){
+            $('.cupos-stats-per').text(percentage+'%');
+            addData(cuposDisponiblesChartVar,'Disponibles', cont);
+            addData(cuposDisponiblesChartVar,'Matriculados', total - cont);
+        }else{
+            $('.cupos-stats-per').text('0%');
+            addData(cuposDisponiblesChartVar,'Disponibles', 0);
+            addData(cuposDisponiblesChartVar,'Matriculados', total);
+        }
         
     }, (error) => {
     });

@@ -485,7 +485,7 @@ async function cargarDatos() {
 			cedula: e.cedula,
 			nombre: e.nombre,
 			apellido: e.apellidos,
-			fechaNacimiento: e.fechaNacimiento,
+			fechaNacimiento: "",
 			sexo: e.sexo,
 			perfil: e.perfil,
 			correo: e.correo,
@@ -514,7 +514,7 @@ async function cargarDatos() {
 						<a href="/admin/estudiantes" class="btn btn-light"><i class="fas fa-external-link-alt text-primary"></i> Ver Estudiantes</a>
 					`);
 					$("#btnparacargardatos").remove();
-					$("#resultTableScript").html("");
+					$("#resultTableScript1").html("");
 				}, 3000);
 			}
 		}, (error) => {
@@ -538,43 +538,7 @@ async function cargarDatos() {
 	}
 }
 
-function tableafterreadXLSX(){
-	let table = `
-	<table class="table table-sm">
-		<thead class="bg-light text-dark">
-			<tr>
-				<th scope="col">Cedula</th>
-				<th scope="col">Nombre</th>
-				<th scope="col">Apellido</th>
-				<th scope="col">Nacimiento</th>
-				<th scope="col">Sexo</th>
-				<th scope="col">Perfil</th>
-				<th scope="col">Correo</th>
-				<th scope="col">Eliminar</th>
-			</tr>
-		</thead>
-		<tbody>`
-	;
-	estudiantesXLS.forEach(e => {
-		table += `
-			<tr id="ced-${e.cedula}">
-				<td>${e.cedula}</td>
-				<td>${e.nombre}</td>
-				<td>${e.apellidos}</td>
-				<td>${e.fechaNacimiento}</td>
-				<td>${e.sexo}</td>
-				<td>${e.perfil}</td>
-				<td>${e.correo}</td>
-				<td class="text-center" role="button" onclick="deleteEntry('${e.cedula}')"><i class="fas fa-trash-alt text-danger"></i></td>
-			</tr>
-		`;
-	});
-	table += `
-		</tbody>
-	</table>`;
-	$('#resultTableScript').html(table);
-	showFeedback();
-}
+
 //delete row
 function deleteEntry(cedula){
 	$("#cantidadEstudiantesbadge").html(`${estudiantesXLS.length - 1}`);
@@ -611,29 +575,101 @@ function showFeedback(){
 
 	`);
 }
+const removeDuplicades = (arr) => [...new Set(arr)];
+
+
 var ExcelToJSON = function() {
-  this.parseExcel = function(file) {
-  var reader = new FileReader();
-  reader.onload = function(e) {
-      var data = e.target.result;
-      var workbook = XLSX.read(data, {
-          type: 'binary'
-      });
-      workbook.SheetNames.forEach(function(sheetName) {
-          // Here is your object
-          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-          var json_object = JSON.stringify(XL_row_object);
-          estudiantesXLS = JSON.parse(json_object);
-		  console.log(estudiantesXLS);
-      })
-	  tableafterreadXLSX();
-  };
-  reader.onerror = function(ex) {
-      console.log(ex);
-  };
-  reader.readAsBinaryString(file);
-  };
+	this.parseExcel = function(file) {
+	var reader = new FileReader();
+	reader.onload = function(e) {
+			var data = e.target.result;
+			var workbook = XLSX.read(data, {
+				type: 'binary'
+			});
+			workbook.SheetNames.forEach(function(sheetName) {
+				// Here is your object
+				if(sheetName == "MACRO"){
+					var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName],{range:3});
+					var json_object = JSON.stringify(XL_row_object);
+					estudiantesXLS = JSON.parse(json_object);
+					console.log(estudiantesXLS)					
+					//filtrarybuscarEstudiantes(estudiantesXLS);
+				}
+			})
+	};
+	reader.onerror = function(ex) {
+		console.log(ex);
+	};
+	reader.readAsBinaryString(file);
+	};
 };
+function buscarRegistroNacional(cedula){
+	$.ajax({
+		type: "GET",
+		url: '/buscarUsuarioRegistro',
+		contentType: "application/json",
+		data: {id:cedula}
+	}).then((response) => {
+		let p = JSON.parse(response)
+		return {
+			nombre: p.results[0].firstname1,
+			apellidos: p.results[0].lastname,
+		};
+	}, (error) => {
+		return error;
+	});
+}
+function filtrarybuscarEstudiantes(estudiantes){
+	var vecEstudiantesTemp = [];
+	estudiantes.forEach(e => {
+		if(e.CEDULA != ""){
+			let c = e.CORREO.substring(0, e.CORREO.indexOf('@'))
+			vecEstudiantesTemp.push({
+				cedula: e.CEDULA,
+				nombre: dataR.nombre,
+				apellido: dataR.apellidos,
+				correo: e.CORREO,
+				perfil: c
+			});
+		}
+	});
+	console.log(vecEstudiantesTemp)
+}
+function tableafterreadXLSX(){
+	let table = `
+	<table class="table table-sm">
+		<thead class="bg-light text-dark">
+			<tr>
+				<th scope="col">Cedula</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Apellido</th>
+				<th scope="col">Sexo</th>
+				<th scope="col">Perfil</th>
+				<th scope="col">Correo</th>
+				<th scope="col">Eliminar</th>
+			</tr>
+		</thead>
+		<tbody>`
+	;
+	estudiantesXLS.forEach(e => {
+		table += `
+			<tr id="ced-${e.cedula}">
+				<td>${e.cedula}</td>
+				<td>${e.nombre}</td>
+				<td>${e.apellidos}</td>
+				<td>${e.sexo}</td>
+				<td>${e.perfil}</td>
+				<td>${e.correo}</td>
+				<td class="text-center" role="button" onclick="deleteEntry('${e.cedula}')"><i class="fas fa-trash-alt text-danger"></i></td>
+			</tr>
+		`;
+	});
+	table += `
+		</tbody>
+	</table>`;
+	$('#resultTableScript1').html(table);
+	showFeedback();
+}
 function handleFileSelect(evt) {
   var files = evt.target.files; // FileList object
   var xl2json = new ExcelToJSON();

@@ -135,7 +135,7 @@ router.get('/admin/ajax/stats/getReposiciones',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/ajax/getUrls',ensureToken,(req,res)=>{
-    con.query('SELECT * FROM vta_url_admin', 
+    con.query('SELECT * FROM t_urls', 
     (err, rows, fields) => {
         if(!err){
             res.send(rows);

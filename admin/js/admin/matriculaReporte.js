@@ -142,6 +142,7 @@ function pdfDownload() {
             data.push(Object.values(e))
         })
     }
+    console.log(data)
     var doc = new jsPDF('p', 'pt', 'letter');  
 
     var htmlstring = '';  

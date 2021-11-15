@@ -6,6 +6,12 @@
   "scripts": {
     "start": "nodemon index.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "admin/js/admin/*"
+    ],
+    "delay": 0
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -42,6 +48,7 @@
     "popper.js": "^1.16.1",
     "request-promise": "^4.2.6",
     "socket.io": "^4.1.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xlsexport": "^1.5.2"
   }
 }

@@ -17,7 +17,7 @@
      <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
      <meta name="apple-mobile-web-app-capable" content="yes">
      <meta name="mobile-web-app-capable" content="yes">
-     <title>Dashboard - Estudiantes</title>
+     <title>Dashboard - Informacion <%= cedula %></title>
      <link rel="stylesheet" href="/css/bootstrap.css">
      <link rel="stylesheet" href="/css/general.css">
      <link rel="stylesheet" href="/css/datatables.min.css">
@@ -31,6 +31,8 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
  </head>
  
  <body class="page bg-light d-flex flex-column h-100">
@@ -38,9 +40,25 @@
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <div class="container-fluid my-5">
-                <span class="sr-only"><%= cedula %></span>
-                <div class="row mx-0 rounded-3 position-relative" style="height: 200px;">
+            <div class="container-fluid my-2 position-relative">
+                <div style="position: fixed;z-index: 99; width: calc(100% - 260px);">
+                    <div class="d-flex justify-content-center align-items-center w-100">
+                        <div class="alert alert-success" role="alert" id="feedback_alerta_success" style="display: none;">
+                            <h4 class="alert-heading">
+                                <img src="/img/emoji/check-mark.png" alt="checkmarck" width="30px">
+                                Datos actualizados!</h4>
+                            <p id="textoAlertSuccessUp"></p>
+                        </div>
+                    </div>
+                </div>
+                <a href="/admin/estudiantes" role="button" class="btn btn-primary my-3" id="backEstudiantes"><i class="fas fa-chevron-left"></i></a>
+                <script>
+                    tippy('#backEstudiantes', {
+                        content: 'Lista de Estudiantes',
+                    });
+                </script>
+                <span class="sr-only" id="cedulaID"><%= cedula %></span>
+                <div class="row mx-0 rounded-3 position-relative mb-3 animate__animated animate__fadeIn" style="height: 200px;">
                     <div class="w-100 bg-white rounded-3" style="height: 130px;">
                         <svg width="100%" height="130px" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave" 
                         style="border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
@@ -54,21 +72,165 @@
                             <path id="feel-the-wave3" d=""/>
                         </svg>
                     </div>
-                    <div class="position-absolute shadow rounded-3" 
-                    style="width: 95%;height: 85px;bottom: 30px;left: 2.5%;
-                    backdrop-filter: blur(20px);background: rgba(255, 255, 255, 0.65);">
+                    <div class="position-absolute shadow rounded-3 animate__animated animate__fadeInUp" 
+                    style="width: 95%;height: 95px;bottom: 20px;left: 2.5%;
+                    backdrop-filter: blur(20px);background: rgba(255, 255, 255, 0.88);">
                         <div class="row mx-0 px-3">
                             <div class="col-md-6 d-flex justify-content-start">
                                 <div class="py-2">
-                                    <img src="/public/uploads/<%= usuario.foto%>" class="rounded-circle-2" width="70px">
+                                    <img src="/public/uploads/default-avatar.png" class="rounded-circle-2" width="70px" id="fotoPerfil">
                                 </div>
                                 <div class="pl-3 py-3">
-                                    <h5 class="font-weight-bold mb-1">Ambar Sancho</h5>
-                                    <h6 class="text-muted">Estudiante</h6>
+                                    <h5 class="font-weight-bold mb-1" id="nombreEstudiante"></h5>
+                                    <h6 class="text-muted" id="tipodeUsuario"></h6>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-
+                            <div class="col-md-6 d-flex justify-content-end align-items-start pt-2">
+                                <div class="p-2 rounded-3 bg-white shadow-lg mr-4" style="height: 80px; width: 140px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0 font-weight-bold">Moroso</h6>
+                                        <span id="morosoEstudianteText"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <label class="switch-cus" for="customSwitch_cedulaMorosidad">
+                                            <input type="checkbox" id="customSwitch_cedulaMorosidad" onclick="cambiarMorosidadEst(this)">
+                                            <span class="slider-cus round-cus"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="p-2 rounded-3 bg-white shadow-lg" style="height: 80px; width: 140px;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0 font-weight-bold">Estado</h6>
+                                        <span id="estadoEstudianteText"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <label class="switch-cus" for="customSwitch_cedulaEstado">
+                                            <input type="checkbox" id="customSwitch_cedulaEstado" onclick="cambiarEstadoEst(this)">
+                                            <span class="slider-cus round-cus"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 align-items-stretch">
+                    <div class="col-md-5">
+                        <div class="card h-100 card-custom animate__animated animate__zoomIn">
+                            <div class="card-header">
+                                <h5 class="font-weight-bold mb-0">Datos Personales</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mx-0 w-100">
+                                    <div class="col-md-6">
+                                        <span class="sr-only" id="idEstudiante"></span>
+                                        <span class="sr-only" id="cedulaEstudiante"></span>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_nombre_usuario">Nombre de usuario</label>
+                                            <input type="text" class="form-control" id="v_nombre_usuario">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_correo">Correo</label>
+                                            <input type="email" class="form-control" id="v_correo">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_fec_nacimiento">Fecha de nacimiento</label>
+                                            <input type="date" class="form-control" id="v_fec_nacimiento">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_sexo">Sexo</label>
+                                            <select id="v_sexo" class="form-control">
+                                                <option value="Masculino">Masculino</option>
+                                                <option value="Femenino">Femenino</option>
+                                                <option value="Otro">Otro</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_Dirección">Dirección</label>
+                                            <input type="text" class="form-control" id="v_Dirección">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_telefono">Teléfono</label>
+                                            <input type="text" class="form-control" id="v_telefono">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_celular">Celular</label>
+                                            <input type="text" class="form-control" id="v_celular">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_carrera">Carrera o Departamento</label>
+                                            <input type="text" class="form-control" id="v_carrera">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="v_perfil">Perfil</label>
+                                            <select class="form-control" id="v_perfil">
+                                                <option value="Estudiante">Estudiante</option>
+                                                <option value="Funcionario">Funcionario</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mx-auto">
+                                        <div class="col-md-12 d-flex justify-content-start">
+                                            <button type="button" class="btn btn-primary" id="Guardar-datos-estudiante" onclick="actualizarDatosEstudiante()"><i class="fas fa-pencil-alt"></i> Guardar Datos</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 card-custom animate__animated animate__zoomIn">
+                            <div class="card-header">
+                                <h5 class="font-weight-bold mb-0">Talleres</h5>
+                            </div>
+                            <div class="card-body px-2">
+                                <div class="list-group" id="talleresList">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 card-custom animate__animated animate__zoomIn">
+                            <div class="card-header">
+                                <h5 class="font-weight-bold mb-0">Progreso</h5>
+                            </div>
+                            <div class="card-body px-2" id="talleresP">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 card-custom animate__animated animate__zoomIn">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="font-weight-bold mb-0">Reportes Conducta</h5>
+                                <span class="badge badge-primary badge-pill" id="strikesCounter" data-toggle="tooltip" data-placement="top" title="Cantidad de Strikes"></span>
+                            </div>
+                            <div class="card-body px-2">
+                                <div class="list-group" id="conductaList">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $(function () {
+                                $('[data-toggle="tooltip"]').tooltip()
+                            })
+                        </script>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 card-custom animate__animated animate__zoomIn">
+                            <div class="card-header">
+                                <h5 class="font-weight-bold mb-0">Anotaciones</h5>
+                            </div>
+                            <div class="card-body px-2">
+                                <div class="list-group" id="anotacionesList">
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -157,6 +319,6 @@
 </style>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
-    <script src="/js/admin/estudiantes.js"></script>
+    <script src="/js/admin/estudianteInfo.js"></script>
 </body>
 </html>

@@ -11,8 +11,14 @@ function events(event) {
     changeProfilePhoto();
     fotoonChange();
     llenarDatos();
+    checkModalNacionalidadAgregar();
 }
-
+function checkModalNacionalidadAgregar() {
+    $('#nacionalidadModalSelect').on('change', function () {
+        let tipo = $(this).val();
+        // preguntar como es el tipo de cedula residente
+    });
+}
 function openModalCameras() {
     setTimeout(() => {
         $('#modalTakePic').modal('show');
@@ -266,9 +272,11 @@ function llenar_Estudiantes(data) {
                 </label>
             </td>
             <td class="text-center">
-                <span class="button-circle" role="button" data-id="${data.cedula}" data-toggle="modal" data-target="#modalVerEstudiante">
+                <a href="/admin/estudiantes/getEstudiante/${data.cedula}">
+                <span class="button-circle" role="button" data-id="${data.cedula}">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
+                </a>
             </td>
         </tr>
     S`);
@@ -517,5 +525,64 @@ function openModalToTakePhoto(){
         link.click();
     });
 }
+function excelDownload(){
+    const xls = new XlsExport(estudiantes, "Estudiantes");
+    xls.exportToXLS('export.xls')
+}
+function pdfDownload() {
+    let titulo = "Reporte de Estudiantes en el Sistema";
+    let data = [];
+    for (let i = 0; i < estudiantes.length; i++) {
+        const e = estudiantes[i];
+        data.push([e.cedula, e.nombre, e.apellido, e.correo, e.celular, e.sexo, e.tipo])
+    }
+    console.log(data);
+    var doc = new jsPDF('p', 'pt', 'letter');  
 
+    var htmlstring = '';  
+    var tempVarToCheckPageHeight = 0;  
+    var pageHeight = 0;  
+    pageHeight = doc.internal.pageSize.height;  
+    specialElementHandlers = {  
+        '#bypassme': function(element, renderer) {  
+            return true  
+        }  
+    };  
+    margins = {  
+        top: 150,  
+        bottom: 60,  
+        left: 40,  
+        right: 40,  
+        width: 600  
+    };  
+    var y = 20;  
+    doc.setLineWidth(2);
+    var img = new Image()
+    img.src = '/img/logo-vive-promocion-transparency.png'
+    doc.addImage(img, 'png',  15, 15, 50, 50)
+    doc.text(80, 40 ,'Sistema de Administracion de la Piscina del');
+    doc.text(80, 58 ,'Departamento de Promocion Estudiantil');
+
+    let fecha = new Date();
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(525, 30, fecha.toLocaleDateString());
+
+    doc.setFontSize(11);
+    doc.text(40, y = y + 65, "Reportes de Estudiantes registrados en el sistema SIAP.");
+
+    doc.setDrawColor(183, 183, 183);
+    doc.setLineWidth(0.5);
+    doc.line(40, y + 20, 570, y + 20); 
+
+    doc.autoTable({
+        headStyles: { fillColor: [70, 89, 228] },
+        head: [['Cedula', 'Nombre', 'Correo','Celular','Sexo','Tipo']],
+        body: data,
+        startY: y = y + 30,  
+        theme: 'grid'
+    })
+    titulo = titulo.split(" ").join("_");
+    doc.save(titulo+'.pdf');
+}
 document.addEventListener("DOMContentLoaded", loaded);
