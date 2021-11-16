@@ -826,7 +826,8 @@ function createRowHorarios(e) {
     <tr style="height:calc(52vh / 10);">
         <td>${e.id}</td>
         <td class="text-center">${e.dia}</td>
-        <td class="text-center">${e.hora}:00</td>
+        <td class="text-center">${e.hora}</td>
+        <td class="text-center">${e.hora_final}</td>
         <td class="text-center">
           <span class="button-circle" role="button" data-id="${e.id}" data-toggle="modal" data-target="#modalEditHoraio">
               <i class="fas fa-ellipsis-v"></i>
@@ -844,7 +845,7 @@ function createRowGrupos(e) {
         <td style="line-height: 1.5;">
             <div class="d-flex flex-column">
                 <div><strong>Dia: </strong>${h.dia}</div>
-                <div><strong>Hora: </strong>${h.hora}:00</div>
+                <div><strong>Hora: </strong>${h.hora} - ${h.hora_final}</div>
             </div>
         </td>
         <td style="line-height: 1.5;">

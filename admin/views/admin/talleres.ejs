@@ -124,7 +124,7 @@
                 <div class="modal-body">
                     <div id="feedbackHorarioAgregar"></div>
                     <div class="form-group">
-                        <label for="codigoHorarioModalAgregar">Dia</label>
+                        <label for="codigoHorarioModalAgregar" class="font-weight-bold">Dia</label>
                         <select class="custom-select" id="diaAgregarHorarioModal">
                             <option value="LUNES">LUNES</option>
                             <option value="MARTES">MARTES</option>
@@ -136,28 +136,73 @@
                         </select>
                         <small class="text-muted">Dia de la semana</small>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcionHorarioModalAgregar">Hora</label>
-                        <select class="custom-select" id="horaAgregarHorarioModal">
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                        </select>
-                        <small class="text-muted">5 - 21 horas</small>
+                    <label for="horaAgregarHorarioModal_horaInicio" class="font-weight-bold">Hora Inicio</label>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="form-group mb-0" style="width: 80px;">
+                            <select class="custom-select" id="horaAgregarHorarioModal_horaInicio">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <h4 class="mx-2">:</h4>
+                        <div class="form-group mb-0 mr-2" style="width: 100px;">
+                            <select class="custom-select" id="horaAgregarHorarioModal_minutosInicio">
+                                <option value="0">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <select class="custom-select" id="horaAgregarHorarioModal_ampmInicio">
+                                <option value="am">am</option>
+                                <option value="pm">pm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label for="horaAgregarHorarioModal_horaFinal" class="font-weight-bold">Hora Final</label>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="form-group mb-0" style="width: 80px;">
+                            <select class="custom-select" id="horaAgregarHorarioModal_horaFinal">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <h4 class="mx-2">:</h4>
+                        <div class="form-group mb-0 mr-2" style="width: 100px;">
+                            <select class="custom-select" id="horaAgregarHorarioModal_minutosFinal">
+                                <option value="0">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0 ">
+                            <select class="custom-select" id="horaAgregarHorarioModal_ampmFinal">
+                                <option value="am">am</option>
+                                <option value="pm">pm</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer pt-0 border-0">
@@ -371,8 +416,11 @@
                     <div class="card border-0 shadow">
                         <nav>
                             <div class="nav bg-light" id="nav-tab" role="tablist">
-                                <a class="nav-link-casilleros active" id="nav-talleres-tab" data-toggle="tab" 
-                                href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="true">
+                                <a class="nav-link-casilleros active" id="nav-calendario-tab" data-toggle="tab" 
+                                href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="true">
+                                <i class="fas fa-calendar-day text-primary"></i> Calendario</a>
+                                <a class="nav-link-casilleros " id="nav-talleres-tab" data-toggle="tab" 
+                                href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="fasle">
                                 <i class="fas fa-swimmer text-primary"></i> Talleres</a>
                                 <a class="nav-link-casilleros" id="nav-horarios-tab" data-toggle="tab" 
                                 href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">
@@ -380,13 +428,27 @@
                                 <a class="nav-link-casilleros" id="nav-grupos-tab" data-toggle="tab" 
                                 href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">
                                 <i class="fas fa-users text-primary"></i> Grupos</a>
-                                <a class="nav-link-casilleros" id="nav-calendario-tab" data-toggle="tab" 
-                                href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="false">
-                                <i class="fas fa-calendar-day text-primary"></i> Calendario</a>
                             </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-talleres" role="tabpanel" aria-labelledby="nav-talleres-tab">
+                            <div class="tab-pane fade show active" id="nav-calendario" role="tabpanel" aria-labelledby="nav-calendario-tab">
+                                <div class="mx-0 w-100 mt-4 bg-white rounded p-2">
+                                    <div id="calendar"></div>
+                                    
+                                      <style>
+                                          #calendar {
+                                              width:100%;
+                                          }
+                                          
+                                          .fc-daygrid-event{
+                                              white-space: normal !important;
+                                              padding: 5px;
+                                          }
+                                      </style>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade " id="nav-talleres" role="tabpanel" aria-labelledby="nav-talleres-tab">
                                 <div class="card-body px-0 py-2">
                                     <div class="row mx-0 d-flex justify-content-between mb-3">
                                         <div class="col">
@@ -521,9 +583,9 @@
                                                 <tr>
                                                     <th class="text-center" ><strong>#</strong></th>
                                                     <th class="text-center" data-class-name="priority" >Dia</th>
-                                                    <th class="text-center" >Hora</th>
+                                                    <th class="text-center" >Hora de Inicio</th>
+                                                    <th class="text-center" >Hora Final</th>
                                                     <th class="text-center" style="width: 50px !important;" >Edit</th>
-                                                    
                                                 </tr>
                                             </thead>
                                             <tbody id="horarios_list">
@@ -618,23 +680,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-calendario" role="tabpanel" aria-labelledby="nav-calendario-tab">
-                                <div class="mx-0 w-100 mt-4 bg-white rounded p-2">
-                                    <div id="calendar"></div>
-                                    
-                                      <style>
-                                          #calendar {
-                                              width:100%;
-                                          }
-                                          
-                                          .fc-daygrid-event{
-                                              white-space: normal !important;
-                                              padding: 5px;
-                                          }
-                                      </style>
-
-                                </div>
-                            </div>
+                            
                         </div>
                         
                     </div>
