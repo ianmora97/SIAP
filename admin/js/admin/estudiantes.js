@@ -8,8 +8,6 @@ function loaded(event) {
 function events(event) {
     openModalAdd();
     loadFromDb();
-    changeProfilePhoto();
-    fotoonChange();
     llenarDatos();
     checkModalNacionalidadAgregar();
 }
@@ -256,7 +254,7 @@ function cargar_estudiante(data) {
 
 }
 function llenar_Estudiantes(data) {
-    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px" role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`;
+    let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="40px" height="40px">`;
     $("#lista_estudiantes").append(`
         <tr style="height:calc(55vh / 10);" class="">
             <td class="align-center">${foto}</td>
@@ -420,36 +418,7 @@ function actualizarDatosEstudiante() {
     }, (error) => {
     });
 }
-function openImageModal(foto,cedula) {
-    $('#modalImage').modal('show');
-    $('#cedulaHiddenCambiarFotoModal').val(cedula);
 
-    $('.avatar-bg').css({
-        'background':'url('+foto+')',
-        'background-size':'cover',
-        'background-position': '50% 50%'
-    });
-    $('#contentImageModal').attr('src',foto);
-}
-
-function readURL(input) { 
-    if (input.files && input.files[0]) {
-        var reader = new FileReader(); 
-        reader.onload = function (e) {
-            $('.avatar-bg').css({
-                'background':'url('+e.target.result+')',
-                'background-size':'cover',
-                'background-position': '50% 50%'
-            });
-        }; 
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-function changeProfilePhoto() {
-    $("#profileImageChange").click(function(e) {
-        $("#fileFoto").click();
-    });
-}
 function cambiarClaveModal() {
     $('#modalcambiarclave').modal('show');
     let cedula = t_modalCedulaEstudiante;
@@ -457,77 +426,31 @@ function cambiarClaveModal() {
     $('#cambiarclaveID').val(cedula);
     $('#claveCedulaID').html(cedula);
 }
-function fotoonChange() {
-    $("#fileFoto").change(function(event){
-        let fileInput = event.currentTarget;
-        let archivos = fileInput.files;
-        let nombre = archivos[0].name;
-        let tipo = nombre.split('.')[archivos.length];
-        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
-            readURL(this);
-            $('#sendFileFoto').html('')
-            $('#sendFileFoto').html(
-                '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
-                'id="btn_cambiar_foto" type="submit" '+
-                'style="display: none;">Cambiar foto</button>'
-            );
-            $('#formatoImagenInvalido').hide();
-        }else{
-            $('#formatoImagenInvalido').show();
-        }
-                    
-    });
-}
-var f_videoRecording = false;
-function openModalToTakePhoto(){
-    $('#theVideo').show();
-    f_videoRecording = true;
-    var videoWidth = 500;
-    var videoHeight = 500;
-    var videoTag = document.getElementById('theVideo');
-    var canvasTag = document.getElementById('theCanvas');
-    var btnCapture = document.getElementById("btnCapture");
-    var btnDownloadImage = document.getElementById("btnDownloadImage");
-    videoTag.setAttribute('width', videoWidth);
-    videoTag.setAttribute('height', videoHeight);
-    canvasTag.setAttribute('width', videoWidth);
-    canvasTag.setAttribute('height', videoHeight);
-    navigator.mediaDevices.getUserMedia({
-        video: {
-            width: videoWidth,
-            height: videoHeight
-        }
-    }).then(stream => {
-        videoTag.srcObject = stream;
-        
-    }).catch(e => {
-        document.getElementById('errorTxt').innerHTML = 'ERROR: ' + e.toString();
-    });
-    var canvasContext = canvasTag.getContext('2d');
-    btnCapture.addEventListener("click", () => {
-        canvasContext.drawImage(videoTag, 0, 0, videoWidth, videoHeight);
-        var videoEl = document.getElementById('theVideo');
-        stream = videoEl.srcObject;
-        tracks = stream.getTracks();
-        tracks.forEach(function(track) {
-            track.stop();
-        });
-        videoEl.srcObject = null;
-        f_videoRecording = false;
-        setTimeout(() => {
-            $('#theVideo').hide();
-        }, 1500);
-    });
-    btnDownloadImage.addEventListener("click", () => {
-        var link = document.createElement('a');
-        link.download = 'capturedImage.png';
-        link.href = canvasTag.toDataURL();
-        link.click();
-    });
-}
+
 function excelDownload(){
-    const xls = new XlsExport(estudiantes, "Estudiantes");
-    xls.exportToXLS('export.xls')
+    let data = new Array();
+    for (let i = 0; i < estudiantes.length; i++) {
+        const e = estudiantes[i];
+        data.push({
+            Id: e.id,
+            Cedula: e.cedula, 
+            Nombre: e.nombre + " " + e.apellido, 
+            Correo: e.correo, 
+            Usuario: e.usuario, 
+            Celular: e.celular, 
+            Telefono: e.telefono, 
+            "Telefono Emergencia": e.telefono_emergencia, 
+            Sexo: e.sexo, 
+            Tipo: e.tipo, 
+            "Carrera o Departamento":e.carrera_departamento, 
+            Direccion: e.direccion, 
+            "Fecha de Nacimiento": e.nacimiento, 
+            Estado: e.estado ? "Activo" : "Inactivo", 
+            Morosidad: e.moroso ? "Si" : "No",
+        })
+    }
+    const xls = new XlsExport(data, "Estudiantes");
+    xls.exportToXLS('Reporte_Estudiantes.xls')
 }
 function pdfDownload() {
     let titulo = "Reporte de Estudiantes en el Sistema";

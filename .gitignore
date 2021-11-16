@@ -8,3 +8,5 @@ src/web/.env
 
 src/node_modules/
 node_modules
+
+admin/public/uploads/

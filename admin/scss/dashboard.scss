@@ -424,7 +424,42 @@ h1.text-primary{
 .btn-success{
   box-shadow: 0 5px 10px -2px rgba(9, 224, 9, 0.562) !important;
 }
-
+.btn-light-success{
+  background-color: #edf0ff !important;
+  color: #28a745 !important;
+  box-shadow: 0 5px 10px -2px rgba(175, 175, 175, 0.5) !important;
+  transition: all .4s ease-out;
+  &:hover{
+    box-shadow: 0 5px 10px -2px rgba(82, 235, 90, 0.5) !important;
+    background-color: #28a745 !important;
+    color: #ffffff !important;
+    transition: all .4s ease-out; 
+  }
+}
+.btn-light-danger{
+  background-color: #fef0f0 !important;
+  color: #dc3545 !important;
+  box-shadow: 0 5px 10px -2px rgba(175, 175, 175, 0.5) !important;
+  transition: all .4s ease-out;
+  &:hover{
+    box-shadow: 0 5px 10px -2px rgba(209, 26, 26, 0.5) !important;
+    background-color: #dc3545 !important;
+    color: #ffffff !important;
+    transition: all .4s ease-out;
+  }
+}
+.btn-light-primary{
+  background-color: #f0f0f0 !important;
+  color: #4659E4 !important;
+  box-shadow: 0 5px 10px -2px rgba(175, 175, 175, 0.5) !important;
+  transition: all .4s ease-out;
+  &:hover{
+    box-shadow: 0 5px 10px -2px rgba(70, 88, 228, 0.5) !important;
+    background-color: #4659E4 !important;
+    color: #ffffff !important;
+    transition: all .4s ease-out;
+  }
+}
 .badge-green-light{
   background-color: #89e489 !important;
   color: #fff !important;
@@ -804,6 +839,7 @@ input,select{
 .card-custom > .card-header{
   border-radius: 15px 15px 0 0 !important;
   padding: 10px 20px;
+  border: none !important;
 }
 
 .alert-success{

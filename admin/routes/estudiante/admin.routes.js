@@ -134,12 +134,13 @@ router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
             [req.body.cedula, req.file.filename],(err,rows,fields)=>{
                 let usuario = req.session.value;
                 let token = req.session.token;
+                let cedula = req.body.cedula;
                 let s = 'estudiantes';
                 if(!err){
                     logSistema(req.session.value.cedula, `CAMBIO FOTO ${req.query.cedula}`, DDL.UPDATE, TABLE.ESTUDIANTE);
-                    res.render('admin/estudiante', {usuario,s,token});
+                    res.render('admin/estudianteInfo', {usuario,s,token,cedula});
                 }else{
-                    res.render('admin/estudiantes', {usuario,s,token});
+                    res.render('admin/estudianteInfo', {usuario,s,token,cedula});
                 }
             });
         }else{

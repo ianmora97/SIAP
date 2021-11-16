@@ -37,64 +37,7 @@
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
-    <div class="modal fade" id="modalTakePic" tabindex="-1" aria-labelledby="modalTakePic" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header border-bottom-0 bg-primary text-white">
-                    <h5 class="modal-title pl-3 font-weight-bold"><i class="fas fa-camera"></i>&nbsp; Tomar Foto</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p id="errorTxt"></p>
-                    <div class="d-block">
-                        <video id="theVideo" autoplay></video>
-                        <canvas id="theCanvas"></canvas>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary mr-3" onclick="openModalToTakePhoto()"><i class="fas fa-camera"></i> Abrir Camara</button>
-                    <button class="btn btn-primary mr-3" id="btnCapture"><i class="fas fa-camera"></i> Capturar</button>
-                    <button class="btn btn-danger" id="btnDownloadImage"><i class="fas fa-download"></i> Descargar Imagen</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modalImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header border-bottom-0 bg-primary text-white">
-                    <h5 class="modal-title pl-3 font-weight-bold">Foto de perfil</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-3">
-                        <form action="/admin/listEstudiantes/cambiarfotoperfil" method="POST" enctype="multipart/form-data">
-                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
-                                <p class="m-0">Formato de Imagen invalida!</p>
-                            </div>
-                            <span class="sr-only" id="usuario_foto"></span>
-                            <label for="image" role="button" id="profileImageChange" class="d-block">
-                                <div class="avatar-bg center profile-pic mx-auto mt-4 "style="width: 450px;height: 450px;">
-                                    <span class="fas fa-camera"></span>
-                                    <span class="user-select-none">Cambiar Imagen</span>
-                                </div>
-                            </label>
-                            <input type="text" name="cedula" id="cedulaHiddenCambiarFotoModal" hidden>
-                            <input type="file" id="fileFoto" name="image" style="visibility: hidden;">
-                            <div id="sendFileFoto">
-
-                            </div>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="openModalCameras()"><i class="fas fa-camera"></i>&nbsp; Tomar foto</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="modal fade" id="modalcambiarclave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -423,7 +366,7 @@
                     </div>
                 </div>
                 <div class="bg-white px-0 py-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
-                    <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
+                    <div class="row mx-0 mx-auto rounded-3 justify-content-between align-items-center pb-1">
                         <div class="col-md-3 flex-fill d-flex align-items-baseline">
                             <h4 class="font-weight-bold mb-0 ">Listado</h4>
                         </div>
@@ -439,14 +382,7 @@
                             </div>
                         </div>
                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
-                            <div class="mr-2">
-                                <button type="button" class="btn btn-outline-success btn-sm" onclick="excelDownload()">
-                                    <i class="fas fa-file-excel"></i> Excel</button>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="pdfDownload()">
-                                    <i class="fas fa-file-pdf"></i> PDF</button>
-                            </div>
+                            
                             <div id="pagination">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination">
@@ -457,6 +393,14 @@
                                       <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
                                     </ul>
                                 </nav>
+                            </div>
+                            <div class="mx-2">
+                                <button type="button" class="btn btn-light-success btn-sm" onclick="excelDownload()">
+                                    <i class="fas fa-file-excel"></i> Excel</button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-light-danger btn-sm" onclick="pdfDownload()">
+                                    <i class="fas fa-file-pdf"></i> PDF</button>
                             </div>
                         </div>
                     </div>

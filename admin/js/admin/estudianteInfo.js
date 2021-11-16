@@ -4,6 +4,9 @@ function loaded(event) {
 }
 function events(event) {
     cargar_estudiante();
+    changeProfilePhoto();
+    fotoonChange();
+    onOpenCameraModalApp();
 }
 
 var g_estudiante = {};
@@ -198,7 +201,7 @@ function cambiarMorosidadEst(checkbox){
         if(response.affectedRows > 0){
             $("#textoAlertSuccessUp").html("La <b>Morosidad</b> se actualizó correctamente.")
             $("#morosoEstudianteText").html(`<i class="fas fa-circle text-${checkbox.checked ? "warning" : "light"}"></i>`);
-            $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
+            // $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
         }
     });
 }
@@ -224,7 +227,7 @@ function cambiarEstadoEst(checkbox){
             $("#estadoEstudianteText").html(`
             <small class="text-muted">${checkbox.checked ? "Activo" : "Inactivo"}</small>
             <i class="fas fa-circle ${checkbox.checked ? "text-success" : "text-danger"}"></i>`);
-            $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
+            // $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
         }
     });
 }
@@ -270,6 +273,237 @@ function actualizarDatosEstudiante(){
             $("#textoAlertSuccessUp").html("Los <b>Datos Personales</b> se actualizaron correctamente.")
             $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
         }
+    });
+}
+function pdfDownload() {
+    let est = g_estudiante.data;
+    let titulo = `Reporte de Estudiante ${est.nombre}`;
+    var doc = new jsPDF('p', 'pt', 'letter');  
+    var htmlstring = '';  
+    var tempVarToCheckPageHeight = 0;  
+    var pageHeight = 0;  
+    pageHeight = doc.internal.pageSize.height;  
+    specialElementHandlers = {  
+        '#bypassme': function(element, renderer) {  
+            return true  
+        }  
+    };  
+    margins = {  
+        top: 150,  
+        bottom: 60,  
+        left: 40,  
+        right: 40,  
+        width: 600  
+    };  
+    var y = 20;  
+    doc.setLineWidth(2);
+    var img = new Image()
+    img.src = '/img/logo-vive-promocion-transparency.png'
+    doc.addImage(img, 'png',  15, 15, 50, 50)
+    doc.text(80, 40 ,'Sistema de Administracion de la Piscina del');
+    doc.text(80, 58 ,'Departamento de Promocion Estudiantil');
+
+    let fecha = new Date();
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(525, 30, fecha.toLocaleDateString());
+
+    doc.setFontSize(11);
+    doc.text(40, y = y + 65, "Reporte Estudiante en el sistema SIAP.");
+
+    doc.setDrawColor(183, 183, 183);
+    doc.setLineWidth(0.5);
+    doc.line(40, y + 20, 570, y += 20); 
+
+    var img = new Image()
+    img.src = `/public/uploads/${est.foto}`
+    let type = est.foto.split('.')[1];
+    doc.addImage(img, type, 40, y + 10, 100, 100)
+
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(16);
+    doc.text(150, y = y + 45, `${est.nombre} ${est.apellido}`);
+
+    doc.setTextColor(50,50,50);
+    doc.setFontSize(11);
+    doc.text(150, y = y + 13, `Cedula: ${est.cedula}`);
+    doc.text(150, y = y + 13, `Correo: ${est.correo}`);
+    y = y + 50;
+
+    doc.setFillColor(237, 240, 255);
+    doc.roundedRect(40, y += 5, 530, 20, 5,5, 'F');
+
+    doc.setFontSize(12);
+    doc.setFontType('bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text(45, y += 14, 'Datos');
+    // ! --------------------------------------------------
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(11);
+    doc.setFontType('bold');
+    doc.text(40, y = y + 35, `Nombre de usuario`);
+    doc.setFontType('normal');
+    doc.text(40, y + 13, `${est.usuario}`);
+
+    doc.setFontType('bold');
+    doc.text(300, y , `Celular`);
+    doc.setFontType('normal');
+    doc.text(300, y = y + 13, `${est.celular}`);
+    // ! --------------------------------------------------
+    doc.setFontType('bold');
+    doc.text(40, y = y + 20, `Telefono`);
+    doc.setFontType('normal');
+    doc.text(40, y + 13, `${est.telefono}`);
+
+    doc.setFontType('bold');
+    doc.text(300, y , `Fecha de Nacimiento`);
+    doc.setFontType('normal');
+    doc.text(300, y = y +13, `${est.nacimiento}`);
+    // ! --------------------------------------------------
+    doc.setFontType('bold');
+    doc.text(40, y = y + 20, `Carrera o Departamento`);
+    doc.setFontType('normal');
+    doc.text(40, y + 13, `${est.carrera_departamento}`);
+
+    doc.setFontType('bold');
+    doc.text(300, y , `Direccion`);
+    doc.setFontType('normal');
+    doc.text(300, y = y + 13, `${est.direccion}`);
+    // ! --------------------------------------------------
+    doc.setFontType('bold');
+    doc.text(40, y = y + 20, `Sexo`);
+    doc.setFontType('normal');
+    doc.text(40, y + 13, `${est.sexo}`);
+
+
+    // doc.autoTable({
+    //     headStyles: { fillColor: [70, 89, 228] },
+    //     head: [['Cedula', 'Nombre', 'Correo','Celular','Sexo','Tipo']],
+    //     body: data,
+    //     startY: y = y + 30,  
+    //     theme: 'grid'
+    // })
+
+    titulo = titulo.split(" ").join("_");
+    doc.save(titulo+'.pdf');
+}
+function onOpenCameraModalApp(){
+    $('#modalTakePic').on('hidden.bs.modal', function (event) {
+        if(f_videoRecording){
+            var videoEl = document.getElementById('theVideo');
+            stream = videoEl.srcObject;
+            tracks = stream.getTracks();
+            tracks.forEach(function(track) {
+                track.stop();
+            });
+            videoEl.srcObject = null;
+        }
+    })
+}
+function openModalCameras() {
+    setTimeout(() => {
+        $('#modalTakePic').modal('show');
+    }, 1000);
+}
+function changeProfilePhoto() {
+    $("#profileImageChange").click(function(e) {
+        $("#fileFoto").click();
+    });
+}
+function openImageModal() {
+    var cedula = g_estudiante.data.cedula;
+    var foto = `/public/uploads/${g_estudiante.data.foto}`;
+    $('#modalImage').modal('show');
+    $('#cedulaHiddenCambiarFotoModal').val(cedula);
+
+    $('.avatar-bg').css({
+        'background':'url('+foto+')',
+        'background-size':'cover',
+        'background-position': '50% 50%'
+    });
+    $('#contentImageModal').attr('src',foto);
+}
+
+function readURL(input) { 
+    if (input.files && input.files[0]) {
+        var reader = new FileReader(); 
+        reader.onload = function (e) {
+            $('.avatar-bg').css({
+                'background':'url('+e.target.result+')',
+                'background-size':'cover',
+                'background-position': '50% 50%'
+            });
+        }; 
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function fotoonChange() {
+    $("#fileFoto").change(function(event){
+        let fileInput = event.currentTarget;
+        let archivos = fileInput.files;
+        let nombre = archivos[0].name;
+        let tipo = nombre.split('.')[archivos.length];
+        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+            readURL(this);
+            $('#sendFileFoto').html('')
+            $('#sendFileFoto').html(
+                '<button class="btn btn-primary btn-sm d-block mx-auto mb-3" '+
+                'id="btn_cambiar_foto" type="submit" '+
+                'style="display: none;">Cambiar foto</button>'
+            );
+            $('#formatoImagenInvalido').hide();
+        }else{
+            $('#formatoImagenInvalido').show();
+        }
+                    
+    });
+}
+var f_videoRecording = false;
+function openModalToTakePhoto(){
+    $('#theVideo').show();
+    f_videoRecording = true;
+    var videoWidth = 500;
+    var videoHeight = 500;
+    var videoTag = document.getElementById('theVideo');
+    var canvasTag = document.getElementById('theCanvas');
+    var btnCapture = document.getElementById("btnCapture");
+    var btnDownloadImage = document.getElementById("btnDownloadImage");
+    videoTag.setAttribute('width', videoWidth);
+    videoTag.setAttribute('height', videoHeight);
+    canvasTag.setAttribute('width', videoWidth);
+    canvasTag.setAttribute('height', videoHeight);
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: videoWidth,
+            height: videoHeight
+        }
+    }).then(stream => {
+        videoTag.srcObject = stream;
+        
+    }).catch(e => {
+        document.getElementById('errorTxt').innerHTML = 'ERROR: ' + e.toString();
+    });
+    var canvasContext = canvasTag.getContext('2d');
+    btnCapture.addEventListener("click", () => {
+        canvasContext.drawImage(videoTag, 0, 0, videoWidth, videoHeight);
+        var videoEl = document.getElementById('theVideo');
+        stream = videoEl.srcObject;
+        tracks = stream.getTracks();
+        tracks.forEach(function(track) {
+            track.stop();
+        });
+        videoEl.srcObject = null;
+        f_videoRecording = false;
+        setTimeout(() => {
+            $('#theVideo').hide();
+        }, 1500);
+    });
+    btnDownloadImage.addEventListener("click", () => {
+        var link = document.createElement('a');
+        link.download = 'capturedImage.png';
+        link.href = canvasTag.toDataURL();
+        link.click();
     });
 }
 
