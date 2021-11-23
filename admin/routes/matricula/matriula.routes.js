@@ -80,14 +80,23 @@ router.post('/admin/matricula/cambiarEstado/matricula',ensureToken,(req,res)=>{
 });
 
 router.post('/admin/matricula/desmatricular',ensureToken,(req,res)=>{
-    con.query("call prc_eliminar_matricula(?)",
-        [req.body.curso_id], (err,result,fields)=>{
+    con.query("SELECT cupo_actual FROM t_grupo where id = ?",
+        [req.body.idGrupo], (err,result,fields)=>{
         if(err){
             console.log(err);
             res.status(501).send('error'); 
         }else{
-            logSistema(req.session.value.cedula, `${"DESMATRICULAR | "+req.body.estudiante}`, DDL.UPDATE, TABLE.MATRICULA);
-            res.send('ok');
+            let cupo = result[0].cupo_actual - 1;
+            con.query("call prc_eliminar_matricula(?,?)",
+            [req.body.matriculaid,cupo], (err,result,fields)=>{
+                if(err){
+                    console.log(err);
+                    res.status(501).send('error'); 
+                }else{
+                    logSistema(req.session.value.cedula, `${"DESMATRICULAR | "+req.body.estudiante}`, DDL.UPDATE, TABLE.MATRICULA);
+                    res.send('ok');
+                }
+            });
         }
     });
 });

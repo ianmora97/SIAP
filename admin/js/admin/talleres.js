@@ -17,6 +17,15 @@ var g_mapHorarios = new Map();
 var g_mapGrupos = new Map();
 var g_mapProfesores = new Map();
 
+moment.lang('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  }
+);
+
 function loaded(event){
     events(event);
 }
@@ -133,7 +142,13 @@ function openModal(){
         $('#idHorarioModal').html(id)
 
         $('#diaeditarHorarioModal').val(horario.dia);
-        $('#horaeditarHorarioModal').val(horario.hora);
+        $('#horaeditarHorarioModal_horaInicio').val(horario.hora.split(':')[0]);
+        $('#horaeditarHorarioModal_minutosInicio').val(horario.hora.split(':')[1].slice(0,2));
+        $('#horaeditarHorarioModal_ampmInicio').val(horario.hora.split(':')[1].slice(2,4));
+
+        $('#horaeditarHorarioModal_horaFinal').val(horario.hora_final.split(':')[0]);
+        $('#horaeditarHorarioModal_minutosFinal').val(horario.hora_final.split(':')[1].slice(0,2));
+        $('#horaeditarHorarioModal_ampmFinal').val(horario.hora_final.split(':')[1].slice(2,4));
     })
     $('#actualizarGrupo').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -182,18 +197,23 @@ var g_modalFechaCalendario = "";
 
 function agregarHorario() {
     let dia = $('#diaAgregarHorarioModal').val();
-    let hora = parseInt($('#horaAgregarHorarioModal').val());
+    let horaInicio = $('#horaAgregarHorarioModal_horaInicio').val() + ":" + 
+    $('#horaAgregarHorarioModal_minutosInicio').val() + $("#horaAgregarHorarioModal_ampmInicio").val();
+    let horaFin = $('#horaAgregarHorarioModal_horaFinal').val() + ":" +
+    $('#horaAgregarHorarioModal_minutosFinal').val() + $("#horaAgregarHorarioModal_ampmFinal").val();
     let bearer = 'Bearer '+g_token;
-    if(dia && hora){
+    console.log(horaInicio, horaFin)
+    if(dia && horaInicio && horaFin){
         $.ajax({
             type: "GET",
             url: "/admin/talleres/ingresarHorario", 
-            data:{dia,hora},
+            data:{dia,horaInicio,horaFin},
             contentType: "appication/json",
             headers:{
                 'Authorization':bearer
             }
         }).then((response) => {
+            console.log(response)
             if(response.fb == "good"){
                 location.href = "/admin/talleres";
             }else{
@@ -228,13 +248,16 @@ function agregarHorario() {
 function actualizarDatosHorario() {
     let id = $('#idHorarioModal').html();
     let dia = $('#diaeditarHorarioModal').val();
-    let hora = parseInt($('#horaeditarHorarioModal').val());
+    let horaInicio = $('#horaeditarHorarioModal_horaInicio').val() + ":" + 
+    $('#horaeditarHorarioModal_minutosInicio').val() + $("#horaeditarHorarioModal_ampmInicio").val();
+    let horaFin = $('#horaeditarHorarioModal_horaFinal').val() + ":" +
+    $('#horaeditarHorarioModal_minutosFinal').val() + $("#horaeditarHorarioModal_ampmFinal").val();
     let bearer = 'Bearer '+g_token;
-    if(dia && hora){
+    if(dia && horaInicio && horaFin){
         $.ajax({
             type: "GET",
             url: "/admin/talleres/actualizarHorario", 
-            data:{id,dia,hora},
+            data:{id,dia,horaInicio,horaFin},
             contentType: "appication/json",
             headers:{
                 'Authorization':bearer
@@ -288,18 +311,30 @@ function eliminarHorario() {
 }
 
 // ? ------------------------------------- Taller CRUD ------------------------------
+var g_tempColor = "info";
+function cambiarColor(color){
+    g_tempColor = color;
+    let colors = {
+        info: '#0c8df7',
+        success: '#28a745',
+        danger: '#dc3545',
+        warning: '#ffc107',
+    }
+    $('#colorEscogidoDrop').css('color', colors[color]);
+}
 function agregarTaller() {
     let codigo = $('#codigoTallerModalAgregar').val();
     let descripcion = $('#descripcionTallerModalAgregar').val();
     let nivel = parseInt($('#nivelTallerModalAgregar').val());
     let costoEst = parseInt($('#costoEstTallerModalAgregar').val());
     let costoFun = parseInt($('#costoFunTallerModalAgregar').val());
+    let color = g_tempColor;
     let bearer = 'Bearer '+g_token;
     if(codigo && descripcion && nivel && costoEst && costoFun){
         $.ajax({
             type: "GET",
             url: "/admin/talleres/ingresarTaller", 
-            data:{codigo,descripcion,nivel,costoEst,costoFun},
+            data:{codigo,descripcion,nivel,costoEst,costoFun,color},
             contentType: "appication/json",
             headers:{
                 'Authorization':bearer
@@ -399,19 +434,20 @@ function eliminarTaller() {
 }
 // ? ------------------------------------- Grupo CRUD ------------------------------
 function agregarGrupo() {
+
     let horario = parseInt($('#horarioSelectGrupo').val());
     let profesor = parseInt($('#profesoresSelectGrupo').val());
     let taller = parseInt($('#talleresSelectGrupo').val());
     let cupobase = parseInt($('#cupobaseAgregarModal').val());
     let cupoextra = parseInt($('#cupoExtraAgregarModal').val());
+    let periodoInicio = $('#periodoInicioAgregarModal').val();
     let periodo = $('#periodoAgregarModal').val();
-
     let bearer = 'Bearer '+g_token;
-    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+    if(horario && profesor && taller && cupobase && cupoextra && periodo && periodoInicio) {
         $.ajax({
             type: "GET",
             url: "/admin/talleres/ingresarGrupo", 
-            data:{horario,profesor,taller,cupobase,cupoextra,periodo},
+            data:{horario,profesor,taller,cupobase,cupoextra,periodo,periodoInicio},
             contentType: "appication/json",
             headers:{
                 'Authorization':bearer
@@ -530,6 +566,10 @@ function eliminarDefGrupo() {
 }
 
 // ! ---------------------------------------- CRUD ------------------------------
+var gVec_talleres = new Array();
+var gVec_horarios = new Array();
+var gVec_grupos = new Array();
+
 function loadFromDb() {
     let ajaxTime = new Date().getTime();
     let bearer = 'Bearer '+g_token;
@@ -553,6 +593,7 @@ function loadFromDb() {
             'Authorization':bearer
         }
     }).then((talleres) => {
+        gVec_talleres = talleres;
         $('#talleres_stats').html(talleres.length)
         showTalleres(talleres);
         selectTallerFromGrupo(talleres);
@@ -564,6 +605,7 @@ function loadFromDb() {
                 'Authorization':bearer
             }
         }).then((horarios) => {
+            gVec_horarios = horarios;
             $('#horarios_stats').html(horarios.length)
             showHorarios(horarios);
             selectHorarioFromGrupo(horarios);
@@ -575,6 +617,7 @@ function loadFromDb() {
                     'Authorization':bearer
                 }
             }).then((grupos) => {
+                gVec_grupos = grupos;
                 $('#grupos_stats').html(grupos.length)
                 let totalTime = new Date().getTime() - ajaxTime;
                 let a = Math.ceil(totalTime / 1000);
@@ -803,13 +846,22 @@ function showGrupos(data) {
     $('#grupos_table_length').find('label').find('select').removeClass('form-control form-control-sm')
     $('#grupos_table_length').find('label').find('select').appendTo('#lenghtTable_grupos');
     $('#grupos_table_length').html('');
+
+    if(typeof g_custom != 'undefined'){
+        $('#openCustom_'+g_custom.data).click();
+        $('#nav-grupos-tab').click();
+    }
 }
 function createRowTalleres(e) {
     $('#talleres_list').append(`
     <tr style="height:calc(52vh / 10);">
         <td>${e.id}</td>
         <td>${e.codigo}</td>
-        <td>${e.descripcion}</td>
+        <td>
+            <div class="d-flex align-items-center">
+            <i class="fas fa-circle text-${e.color} mr-2"></i> ${e.descripcion}
+            </div>
+        </td>
         <td>${e.nivel}</td>
         <td>${e.costo}</td>
         <td>${e.costo_funcionario}</td>
@@ -860,10 +912,15 @@ function createRowGrupos(e) {
                 <div><strong>${e.codigo_taller}</strong></div>
             </div>
         </td>
-        <td style="line-height: 1.5;">${e.cupo_actual}/${e.cupo_base}</td>
-        <td style="line-height: 1.5;">${e.cupo_extra}</td>
+        <td style="line-height: 1.5;">${e.cupo_actual}/${e.cupo_base} (${e.cupo_extra})</td>
+        <td style="line-height: 1.5;">
+            <div class="d-flex flex-column">
+                <span>${moment(e.periodo,"YYYY-MM-DD").format('LL')}</span>
+                <span>${moment(e.periodo_final,"YYYY-MM-DD").format('LL')}</span>
+            </div>
+        </td>
         <td class="text-center">
-          <span class="button-circle" role="button" data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo">
+          <span class="button-circle" role="button" id="openCustom_${e.id_grupo}" data-id="${e.id_grupo}" data-toggle="modal" data-target="#actualizarGrupo">
               <i class="fas fa-ellipsis-v"></i>
           </span>
         </td>
@@ -921,23 +978,22 @@ function fillCalendar(grupos) {
         let grupo = e.id_grupo;
         let codigo = e.codigo_taller;
         let descripcion = e.descripcion;
-        // let titulo = e.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
         let dia = e.dia;
-        let hora = e.hora > 12 ? e.hora - 12 + 'pm' : e.hora + 'am';
-        let horaF = e.hora > 12 ? e.hora - 12 +':00': e.hora +':00' ;
-        let horaFi = e.hora > 12 ? e.hora - 11 +':00': e.hora + 1 +':00' ;
+        let hora = e.hora;
+        let horaI = moment(e.hora, 'h:mmA').format('HH:mm');
+        let horaF = moment(e.hora_final, 'h:mmA').format('HH:mm');        
         let weekday = toWeekDay(dia.toUpperCase());
         
-        let todo = `Profesor: ${p} <br>${dia}: ${e.hora}`;
-        let horainicio = e.hora + ":00";
-        let horafinal = (e.hora + 1) + ":00";
+        let todo = `Profesor: ${p} <br>${dia}: ${e.hora} - ${e.hora_final}`;
 
         eventsArray.push({
             id: grupo,
             title: descripcion,
             hora: hora,
-            startTime: horainicio,
-            endTime: horafinal,
+            startTime: horaI,
+            endTime: horaF,
+            startRecur: e.periodo,
+            endRecur: e.periodo_final,
             daysOfWeek: [ weekday ], 
             display: 'block',
             backgroundColor: '#4659E4',
@@ -955,11 +1011,26 @@ function fillCalendar(grupos) {
         initialView: 'dayGridMonth',
         height: 750,
         nowIndicator: true,
+        aspectRatio:1,
         themeSystem: 'bootstrap',
         businessHours: {
             startTime: '7:00',
             endTime: '22:00',
             dow: [ 1, 2, 3, 4, 5 ],
+        },
+        views: {
+            dayGrid: {
+                titleFormat: { month: 'long', day: '2-digit' }
+            },
+            timeGrid: {
+              // options apply to timeGridWeek and timeGridDay views
+            },
+            week: {
+              // options apply to dayGridWeek and timeGridWeek views
+            },
+            day: {
+              // options apply to dayGridDay and timeGridDay views
+            }
         },
         customButtons: {
             doHorario: {
@@ -977,8 +1048,8 @@ function fillCalendar(grupos) {
             }
         },
         headerToolbar: {
-            start: '',
-            center: 'dayGridMonth,dayGridWeek,timeGridDay,listWeek',
+            start: 'today prev,next',
+            center: 'title dayGridMonth,dayGridWeek,timeGridDay,listWeek',
             end: 'doHorario doGrupo'
         },
         events: eventsArray,
@@ -1030,5 +1101,17 @@ function checkClickModalDateCalendar(){
             console.log(day,a)
         }
     })
+}
+function excelDownloadTalleres(){
+    const xls = new XlsExport(gVec_talleres, "Talleres");
+    xls.exportToXLS('Reporte_Talleres.xls')
+}
+function excelDownloadHorarios(){
+    const xls = new XlsExport(gVec_horarios, "Horarios");
+    xls.exportToXLS('Reporte_Horarios.xls')
+}
+function excelDownloadGrupos(){
+    const xls = new XlsExport(gVec_grupos, "Grupos");
+    xls.exportToXLS('Reporte_Grupos.xls')
 }
 document.addEventListener("DOMContentLoaded", loaded);

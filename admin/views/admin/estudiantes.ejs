@@ -9,7 +9,7 @@
     * Moises Fernandez Alfaro
  -->
 <!DOCTYPE html>
-<html lang="en" class="h-100">
+<html lang="es" class="h-100">
 
 <head>
     <meta charset="UTF-8">
@@ -303,40 +303,38 @@
             <%- include('headerDashboard') %>
 
             <div class="container-fluid mt-4">
-                <div class="card border-0 shadow-primary my-3 rounded-3">
-                    <div class="card-body py-2">
-                        <div class="row">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <h2 class="font-weight-bolder">Lista de Estudiantes</h2>
-                                <small class="text-muted">En esta seccion se muestra la lista de los
-                                    estudiantes que se registraron <br>
-                                    y estan aprovados por un <a
-                                        href="/admin/administradores">Administrador</a>.</small><br>
-                                <small>Información actualizada hace: <span class="text-success"
-                                        id="infoTiming-usuarios-estudiantes"></span></small>
+                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h2 class="font-weight-bolder">Lista de Estudiantes</h2>
+                            <small class="text-muted">En esta seccion se muestra la lista de los
+                                estudiantes que se registraron <br>
+                                y estan aprovados por un <a
+                                    href="/admin/administradores">Administrador</a>.</small><br>
+                            <small>Información actualizada hace: <span class="text-success"
+                                    id="infoTiming-usuarios-estudiantes"></span></small>
+                        </div>
+                        <div class="col-md-6 row mx-0">
+                            <div class="col border-right pl-0">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1"
+                                    id="estudiantes_matriculados_stats">0</h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes Matriculados">Matriculados &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
                             </div>
-                            <div class="col-md-6 row mx-0">
-                                <div class="col border-right pl-0">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1"
-                                        id="estudiantes_matriculados_stats">0</h1>
-                                    <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                    title="Cantidad Total de Estudiantes Matriculados">Matriculados &nbsp; <i
-                                            class="fas fa-align-center text-info"></i></small>
-                                </div>
-                                <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2"
-                                        id="estudiantes_inactivos_stats">0</h1>
-                                    <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                    title="Cantidad Total de Estudiantes inactivos">Inactivos &nbsp; <i
-                                            class="fas fa-align-center text-info"></i></small>
-                                </div>
-                                <div class="col pr-0">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3"
-                                        id="estudiantes_morosos_stats">0</h1>
-                                    <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                    title="Cantidad Total de Estudiantes Morosos">Morosos &nbsp; <i
-                                            class="fas fa-align-center text-info"></i></small>
-                                </div>
+                            <div class="col border-right">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2"
+                                    id="estudiantes_inactivos_stats">0</h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes inactivos">Inactivos &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col pr-0">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3"
+                                    id="estudiantes_morosos_stats">0</h1>
+                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                title="Cantidad Total de Estudiantes Morosos">Morosos &nbsp; <i
+                                        class="fas fa-align-center text-info"></i></small>
                             </div>
                         </div>
                     </div>

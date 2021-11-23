@@ -1,24 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100">
+<html lang="es" class="h-100">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Dashboard - Talleres</title>
-    <link rel="stylesheet" href="../../css/bootstrap.css">
-    <link rel="stylesheet" href="../../css/general.css">
-    <link rel="stylesheet" href="../../css/datatables.min.css">
-    <link rel="stylesheet" type="text/css" href="../../css/dashboard.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    <link rel="stylesheet" href="../../css/animate.css">
-    <script src="../../js/jq-bs-bundle.js"></script>
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+    <script src="/js/admin/xls-export.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 </head>
 
 <body class="page bg-light d-flex flex-column h-100">
@@ -69,7 +76,7 @@
         </div>
     </div>
     <div class="modal fade" id="agregarTaller" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="exampleModalLabel"><i class="fas fa-swimmer"></i> Agregar Taller</h5>
@@ -79,31 +86,54 @@
                 </div>
                 <div class="modal-body">
                     <div id="feedback"></div>
-                    <div class="form-group">
-                        <label for="codigoTallerModalAgregar">Codigo Taller</label>
-                        <input type="text" name="codigoTallerModalAgregar" pattern="NAT.+" id="codigoTallerModalAgregar" 
-                        onkeyup="this.value = this.value.toUpperCase();" class="form-control" placeholder="Codigo">
-                        <small class="text-muted">eg: NAT008</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcionTallerModalAgregar">Descripcion</label>
-                        <input type="text" name="descripcionTallerModalAgregar" id="descripcionTallerModalAgregar" class="form-control" placeholder="Descripcion">
-                        <small class="text-muted">Nombre del taller en la piscina</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="nivelTallerModalAgregar">Nivel</label>
-                        <input type="number" name="nivelTallerModalAgregar" id="nivelTallerModalAgregar" class="form-control" placeholder="Nivel">
-                        <small class="text-muted">Nivel del taller</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="costoEstTallerModalAgregar">Costo Estudiante</label>
-                        <input type="number" name="costoEstTallerModalAgregar" id="costoEstTallerModalAgregar" class="form-control" placeholder="Costo Estudiante">
-                        <small class="text-muted">Costo mensual de la piscina por estudiante</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="costoFunTallerModalAgregar">Costo Funcionario</label>
-                        <input type="number" name="costoFunTallerModalAgregar" id="costoFunTallerModalAgregar" class="form-control" placeholder="Costo Funcionarios">
-                        <small class="text-muted">Costo mensual de la piscina por funcionario</small>
+                    <div class="row mx-auto">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="codigoTallerModalAgregar">Codigo Taller</label>
+                                <input type="text" name="codigoTallerModalAgregar" pattern="NAT.+" id="codigoTallerModalAgregar" 
+                                onkeyup="this.value = this.value.toUpperCase();" class="form-control" placeholder="Codigo">
+                                <small class="text-muted">eg: NAT008</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcionTallerModalAgregar">Descripcion</label>
+                                <input type="text" name="descripcionTallerModalAgregar" id="descripcionTallerModalAgregar" class="form-control" placeholder="Descripcion">
+                                <small class="text-muted">Nombre del taller en la piscina</small>
+                            </div>
+                            <div class="d-flex justify-content-start border align-items-baseline p-2">
+                                <div class="dropdown">
+                                    <button class="btn btn-light dropdown-toggle btn-sm" type="button" 
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                        Color
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#" onclick="cambiarColor('info')"><i class="fas fa-circle text-info"></i></a>
+                                        <a class="dropdown-item" href="#" onclick="cambiarColor('success')"><i class="fas fa-circle text-success"></i></a>
+                                        <a class="dropdown-item" href="#" onclick="cambiarColor('danger')"><i class="fas fa-circle text-danger"></i></a>
+                                        <a class="dropdown-item" href="#" onclick="cambiarColor('warning')"><i class="fas fa-circle text-warning"></i></a>
+                                    </div>
+                                </div>
+                                <div class="ml-3">
+                                    <i class="fas fa-circle" id="colorEscogidoDrop" style="color:#0c8df7;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nivelTallerModalAgregar">Nivel</label>
+                                <input type="number" name="nivelTallerModalAgregar" id="nivelTallerModalAgregar" class="form-control" placeholder="Nivel">
+                                <small class="text-muted">Nivel del taller</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="costoEstTallerModalAgregar">Costo Estudiante</label>
+                                <input type="number" name="costoEstTallerModalAgregar" id="costoEstTallerModalAgregar" class="form-control" placeholder="Costo Estudiante">
+                                <small class="text-muted">Costo mensual de la piscina por estudiante</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="costoFunTallerModalAgregar">Costo Funcionario</label>
+                                <input type="number" name="costoFunTallerModalAgregar" id="costoFunTallerModalAgregar" class="form-control" placeholder="Costo Funcionarios">
+                                <small class="text-muted">Costo mensual de la piscina por funcionario</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer pt-0 border-0">
@@ -136,6 +166,7 @@
                         </select>
                         <small class="text-muted">Dia de la semana</small>
                     </div>
+                    <hr class="my-2">
                     <label for="horaAgregarHorarioModal_horaInicio" class="font-weight-bold">Hora Inicio</label>
                     <div class="d-flex justify-content-start align-items-center">
                         <div class="form-group mb-0" style="width: 80px;">
@@ -157,7 +188,7 @@
                         <h4 class="mx-2">:</h4>
                         <div class="form-group mb-0 mr-2" style="width: 100px;">
                             <select class="custom-select" id="horaAgregarHorarioModal_minutosInicio">
-                                <option value="0">00</option>
+                                <option value="00">00</option>
                                 <option value="15">15</option>
                                 <option value="30">30</option>
                                 <option value="45">45</option>
@@ -170,7 +201,7 @@
                             </select>
                         </div>
                     </div>
-                    <label for="horaAgregarHorarioModal_horaFinal" class="font-weight-bold">Hora Final</label>
+                    <label for="horaAgregarHorarioModal_horaFinal" class="font-weight-bold mt-2">Hora Final</label>
                     <div class="d-flex justify-content-start align-items-center">
                         <div class="form-group mb-0" style="width: 80px;">
                             <select class="custom-select" id="horaAgregarHorarioModal_horaFinal">
@@ -191,7 +222,7 @@
                         <h4 class="mx-2">:</h4>
                         <div class="form-group mb-0 mr-2" style="width: 100px;">
                             <select class="custom-select" id="horaAgregarHorarioModal_minutosFinal">
-                                <option value="0">00</option>
+                                <option value="00">00</option>
                                 <option value="15">15</option>
                                 <option value="30">30</option>
                                 <option value="45">45</option>
@@ -213,7 +244,7 @@
     </div>
     <div class="modal fade" id="modalEditHoraio" tabindex="-1" aria-labelledby="modalEditHoraioLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="modalEditHoraioLabel">Editar Horario</h5>
@@ -237,28 +268,74 @@
                         </select>
                         <small class="text-muted">Dia de la semana</small>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcionHorarioModaleditar">Hora</label>
-                        <select class="custom-select" id="horaeditarHorarioModal">
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                        </select>
-                        <small class="text-muted">5 - 21 horas</small>
+                    <hr class="my-3">
+                    <label for="horaeditarHorarioModal_horaInicio" class="font-weight-bold">Hora Inicio</label>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="form-group mb-0" style="width: 80px;">
+                            <select class="custom-select" id="horaeditarHorarioModal_horaInicio">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <h4 class="mx-2">:</h4>
+                        <div class="form-group mb-0 mr-2" style="width: 100px;">
+                            <select class="custom-select" id="horaeditarHorarioModal_minutosInicio">
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <select class="custom-select" id="horaeditarHorarioModal_ampmInicio">
+                                <option value="am">am</option>
+                                <option value="pm">pm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label for="horaeditarHorarioModal_horaFinal" class="font-weight-bold mt-2">Hora Final</label>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="form-group mb-0" style="width: 80px;">
+                            <select class="custom-select" id="horaeditarHorarioModal_horaFinal">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <h4 class="mx-2">:</h4>
+                        <div class="form-group mb-0 mr-2" style="width: 100px;">
+                            <select class="custom-select" id="horaeditarHorarioModal_minutosFinal">
+                                <option value="00">00</option>
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0 ">
+                            <select class="custom-select" id="horaeditarHorarioModal_ampmFinal">
+                                <option value="am">am</option>
+                                <option value="pm">pm</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer py-1 border-0">
@@ -269,7 +346,7 @@
         </div>
     </div>
     <div class="modal fade" id="agregarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-primary">
                     <h5 class="modal-title pl-3 text-white" id="exampleModalLabel"><i class="fas fa-users"></i> Agregar Grupo</h5>
@@ -279,42 +356,59 @@
                 </div>
                 <div class="modal-body">
                     <div id="feedbackAgregarGrupo"></div>
-                    <div class="form-group">
-                        <label for="codigoTallerModalAgregar">Horario</label>
-                        <select class="custom-select" id="horarioSelectGrupo">
+                    <div class="row mx-auto">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="codigoTallerModalAgregar">Horario</label>
+                                <select class="custom-select" id="horarioSelectGrupo">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcionTallerModalAgregar">Taller</label>
+                                <select class="custom-select" id="talleresSelectGrupo">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nivelTallerModalAgregar">Profesor</label>
+                                <select class="custom-select" id="profesoresSelectGrupo">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cupobaseAgregarModal">Cupos por grupo</label>
+                                <input type="number" name="cupobaseAgregarModal" id="cupobaseAgregarModal" class="form-control" placeholder="Cupo Base">
+                                <small class="text-muted">Cantidad de alumnos por grupo</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="cupoExtraAgregarModal">Cupo Extra</label>
+                                <input type="number" name="cupoExtraAgregarModal" id="cupoExtraAgregarModal" class="form-control" placeholder="Extras">
+                                <small class="text-muted">Cupos extra para reposicion</small>
+                            </div>
                             
-                        </select>
-                        <small class="text-muted">Seleccione la fecha en la que se impartira este grupo</small>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcionTallerModalAgregar">Taller</label>
-                        <select class="custom-select" id="talleresSelectGrupo">
-                            
-                        </select>
-                        <small class="text-muted">Seleccione el taller que imparte este grupo</small>
+                    <hr class="my-4">
+                    <div class="row mx-auto">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="periodoInicioAgregarModal">Fecha de inicio</label>
+                                <input type="date" name="periodoInicioAgregarModal" id="periodoInicioAgregarModal" class="form-control" >
+                                <small class="text-muted">Fecha en la que inicia el taller</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="periodoAgregarModal">Fecha de conclusion</label>
+                                <input type="date" name="periodoAgregarModal" id="periodoAgregarModal" class="form-control" >
+                                <small class="text-muted">Fecha en la que termina el taller</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="nivelTallerModalAgregar">Profesor</label>
-                        <select class="custom-select" id="profesoresSelectGrupo">
-                            
-                        </select>
-                        <small class="text-muted">Seleccione el profesor que impartira el grupo</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="cupobaseAgregarModal">Cupos por grupo</label>
-                        <input type="number" name="cupobaseAgregarModal" id="cupobaseAgregarModal" class="form-control" placeholder="Cupo Base">
-                        <small class="text-muted">Cantidad de alumnos por grupo</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="cupoExtraAgregarModal">Cupo Extra</label>
-                        <input type="number" name="cupoExtraAgregarModal" id="cupoExtraAgregarModal" class="form-control" placeholder="Extras">
-                        <small class="text-muted">Cupos extra para reposicion</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="periodoAgregarModal">Fecha de conclusion</label>
-                        <input type="date" name="periodoAgregarModal" id="periodoAgregarModal" class="form-control" placeholder="Periodo">
-                        <small class="text-muted">Fecha en la que termina el curso</small>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer py-0 border-0 mb-2">
                     <button type="button" class="btn btn-primary" onclick="agregarGrupo()"><i class="fas fa-plus"></i> Agregar</button>
@@ -381,35 +475,38 @@
             </div>
         </div>
     </div>
-     
+    <%if (typeof customView != "undefined"){%>
+        <script>
+            var g_custom = {type:'<%= customView.type%>',data:'<%= customView.data%>'};
+            console.log(g_custom)
+        </script>
+    <%}%>
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
                 <%- include('headerDashboard') %>
                 
                 <div class="container-fluid mt-4">
-                    <div class="card border-0 shadow-primary my-3 rounded-3">
-                        <div class="card-body py-2">
-                            <div class="row">
-                                <div class="col-md-6 mb-2">
-                                    <h2 class="font-weight-bolder">Lista de Talleres</h2>
-                                    <small class="text-muted">En esta seccion se muestra la lista de los talleres
-                                        de la piscina, donde podra gestionar todos los  <br>
-                                        horarios, y los grupos de la piscina.</small><br>
-                                    <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
-                                </div>
-                                <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="talleres_stats">0</h1>
-                                    <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                                </div>
-                                <div class="col border-right">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="horarios_stats">0</h1>
-                                    <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                                </div>
-                                <div class="col ">
-                                    <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="grupos_stats">0</h1>
-                                    <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                                </div>
+                    <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <h2 class="font-weight-bolder">Lista de Talleres</h2>
+                                <small class="text-muted">En esta seccion se muestra la lista de los talleres
+                                    de la piscina, donde podra gestionar todos los  <br>
+                                    horarios, y los grupos de la piscina.</small><br>
+                                <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming">0 segundos</span></small>
+                            </div>
+                            <div class="col border-right">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="talleres_stats">0</h1>
+                                <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col border-right">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="horarios_stats">0</h1>
+                                <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                            </div>
+                            <div class="col ">
+                                <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX" id="grupos_stats">0</h1>
+                                <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
                             </div>
                         </div>
                     </div>
@@ -429,6 +526,11 @@
                                 href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">
                                 <i class="fas fa-users text-primary"></i> Grupos</a>
                             </div>
+                            <script>
+                                $('#nav-calendario-tab').on('click',function(){
+                                    $('.fc-dayGridMonth-button').click();
+                                })
+                            </script>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-calendario" role="tabpanel" aria-labelledby="nav-calendario-tab">
@@ -496,10 +598,20 @@
                                                     </ul>
                                                 </nav>
                                             </div>
+                                            <div class="mx-3">
+                                                <button type="button" class="btn btn-light-success btn-sm" onclick="excelDownloadTalleres()" 
+                                                id="reporteExcelTalleres">
+                                                    <i class="fas fa-file-excel"></i> Excel</button>
+                                            </div>
+                                            <script>
+                                                tippy('#reporteExcelTalleres', {
+                                                    content: 'Reporte de Talleres',
+                                                });
+                                            </script>
                                         </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
+                                        <table class="table table-striped custom-table table-responsive-sm table-borderless text-center table-hover"
                                             id="talleres_table" >
                                             <thead class="table-light-header">
                                                 <tr>
@@ -509,7 +621,7 @@
                                                     <th class="" scope="col">Nivel</th>
                                                     <th class="" scope="col">Costo Estudiante</th>
                                                     <th class="" scope="col">Costo Funcionario</th>
-                                                    <th class="" scope="col">Edit</th>
+                                                    <th class="" scope="col">Editar</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="talleres_list">
@@ -574,10 +686,20 @@
                                                     </ul>
                                                 </nav>
                                             </div>
+                                            <div class="mx-3">
+                                                <button type="button" class="btn btn-light-success btn-sm" onclick="excelDownloadHorarios()" 
+                                                id="reporteExcelHorarios">
+                                                    <i class="fas fa-file-excel"></i> Excel</button>
+                                            </div>
+                                            <script>
+                                                tippy('#reporteExcelHorarios', {
+                                                    content: 'Reporte de Horarios',
+                                                });
+                                            </script>
                                         </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-xs table-borderless text-center table-hover"
+                                        <table class="table custom-table table-striped table-responsive-xs table-borderless text-center table-hover"
                                             id="horarios_table" data-order="[[ 1, &quot;asc&quot; ]]">
                                             <thead class="table-light-header">
                                                 <tr>
@@ -585,7 +707,7 @@
                                                     <th class="text-center" data-class-name="priority" >Dia</th>
                                                     <th class="text-center" >Hora de Inicio</th>
                                                     <th class="text-center" >Hora Final</th>
-                                                    <th class="text-center" style="width: 50px !important;" >Edit</th>
+                                                    <th class="text-center" style="width: 50px !important;" >Editar</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="horarios_list">
@@ -650,10 +772,20 @@
                                                     </ul>
                                                 </nav>
                                             </div>
+                                            <div class="mx-3">
+                                                <button type="button" class="btn btn-light-success btn-sm" onclick="excelDownloadGrupos()" 
+                                                id="reporteExcelGrupos">
+                                                    <i class="fas fa-file-excel"></i> Excel</button>
+                                            </div>
+                                            <script>
+                                                tippy('#reporteExcelGrupos', {
+                                                    content: 'Reporte de Grupos',
+                                                });
+                                            </script>
                                         </div>      
                                     </div>
                                     <div class="row w-100 mx-0" style="min-height: 750px; overflow-y: auto;">
-                                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
+                                        <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
                                             id="grupos_table" data-order="[[ 1, &quot;asc&quot; ]]">
                                             <thead class="table-light-header">
                                                 <tr>
@@ -661,9 +793,9 @@
                                                     <th class="" data-class-name="priority">Horario</th>
                                                     <th class="">Profesor</th>
                                                     <th class="">Taller</th>
-                                                    <th class="">Cupo</th>
-                                                    <th class="">Extra</th>
-                                                    <th class="">Edit</th>
+                                                    <th class="">Cupo (Extra)</th>
+                                                    <th class="">Periodo</th>
+                                                    <th class="">Editar</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="grupos_list">
@@ -708,7 +840,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
 
-    <script src="../../js/admin/talleres.js"></script>
+    <script src="/js/admin/talleres.js"></script>
 </body>
 
 </html>

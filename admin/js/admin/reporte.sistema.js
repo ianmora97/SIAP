@@ -5,25 +5,8 @@ function loaded(event) {
 function events(event) {
     cargar_registros();
     cargar_administradores();
-    toogleMenu();
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        //$('#sidebar-wrapper').css('position','relative');
-        $("#wrapper").toggleClass("toggled");
-        //$("#side-panel").css('margin-left','-12px');
-        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-        //$("#sidebar-wrapper").animate({left:'-200'},1000);
-    });
-  }
-  $(function () {
-    $('[data-toggle="popover"]').popover();
-  })
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+
 function searchonfind(barra) {
     var table = $('#table_reportes').DataTable();
     let val = $('#barraBuscar').val();           
@@ -115,24 +98,5 @@ function showReportesList(data) {
         </tr>
     `);
 }
-const animateCSS = (element, animation) =>
-    
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
-
-    node.classList.add(`${prefix}animated`, animationName);
-
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 
 document.addEventListener("DOMContentLoaded", loaded);

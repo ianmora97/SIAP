@@ -64,9 +64,9 @@ router.get('/admin/talleres/actualizarTaller',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/talleres/ingresarTaller',ensureToken,(req,res)=>{
-    con.query("call prc_insertar_taller(?,?,?,?,?)", 
+    con.query("call prc_insertar_taller(?,?,?,?,?,?)", 
         [req.query.codigo, req.query.descripcion, req.query.nivel, 
-            req.query.costoEst, req.query.costoFun],
+            req.query.costoEst, req.query.costoFun, req.query.color],
         (err,rows,fields)=>{
         if(!err){
             let r = rows;
@@ -92,12 +92,12 @@ router.get('/admin/talleres/getHorarios',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/talleres/actualizarHorario',ensureToken,(req,res)=>{
-    con.query("call prc_actualizar_horario(?,?,?)", 
-        [req.query.id, req.query.dia, req.query.hora],
+    con.query("call prc_actualizar_horario(?,?,?,?)", 
+        [req.query.id, req.query.dia, req.query.horaInicio, req.query.horaFin],
         (err,rows,fields)=>{
         if(!err){
             let r = rows;
-            logSistema(req.session.value.cedula, `${req.query.dia} ${req.query.hora}`, DDL.UPDATE, TABLE.HORARIO);
+            logSistema(req.session.value.cedula, `${req.query.dia} ${req.query.horaInicio}`, DDL.UPDATE, TABLE.HORARIO);
             res.send({fb:'good',rows:r});
         }else{
             let error = err;
@@ -123,8 +123,8 @@ router.get('/admin/talleres/eliminarHorario',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/talleres/ingresarHorario',ensureToken,(req,res)=>{
-    con.query("call prc_insertar_horario(?,?)", 
-        [req.query.dia, req.query.hora],
+    con.query("call prc_insertar_horario(?,?,?)", 
+        [req.query.dia, req.query.horaInicio, req.query.horaFin],
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
@@ -152,15 +152,17 @@ router.get('/admin/talleres/getGrupos',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/talleres/ingresarGrupo',ensureToken,(req,res)=>{
-    con.query("call prc_insertar_grupo(?,?,?,?,?,?)", 
+    con.query("call prc_insertar_grupo(?,?,?,?,?,?,?)", 
         [req.query.horario, req.query.profesor, req.query.taller, 
-            req.query.cupobase, req.query.cupoextra, req.query.periodo],
+            req.query.cupobase, req.query.cupoextra, req.query.periodoInicio, req.query.periodo],
          (err,rows,fields)=>{
         if(!err){
             let r = rows;
             logSistema(req.session.value.cedula, `${req.query.horario} ${req.query.profesor} ${req.query.taller}`, DDL.INSERT, TABLE.GRUPO);
             res.send({fb:'good',rows:r});
+            console.log(r);
         }else{
+            console.log(err);
             let error = err;
             res.send({err:'NotFound',fb:error});
         }
@@ -198,6 +200,24 @@ router.get('/admin/talleres/eliminarGrupo',ensureToken,(req,res)=>{
         }
     });
 });
+
+// ? ----------------------------- CUSTOM VIEW -----------------------------
+router.get('/admin/talleres/grupo/:grupo',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let customView = {type:'grupo',data:req.params.grupo};
+            let s = 'talleres';
+            res.render('admin/talleres', {usuario,s,token,customView});
+        }else{
+            res.render('index');
+        }
+    }else{
+        res.render('index');
+    }
+});
+
 
 // ? ----------------------------- PROFESORES -----------------------------
 

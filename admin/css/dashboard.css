@@ -77,7 +77,7 @@ body::-webkit-scrollbar-thumb {
   white-space: nowrap !important; }
 
 .custom-table tbody tr {
-  transition: all 1s ease-out; }
+  transition: all .3s ease-out; }
   .custom-table tbody tr:hover {
     background-color: #dce3ff; }
 
@@ -85,7 +85,7 @@ body::-webkit-scrollbar-thumb {
   line-height: 2.4;
   font-size: 1em;
   padding: 6px 10px !important;
-  color: #9d9d9d;
+  color: #363636;
   text-align: left;
   white-space: nowrap !important; }
 
@@ -415,7 +415,8 @@ h1.text-primary {
   border: 2px solid #df1616; }
 
 .table-light-header {
-  background: #edf0ff; }
+  background: #4659E4;
+  color: #fff !important; }
 
 select.form-control {
   box-shadow: none !important;
@@ -424,6 +425,13 @@ select.form-control {
 .custom-select {
   border: 1px solid #ebebeb !important;
   border-radius: 13px !important; }
+
+select.bs-custom-select {
+  border: 1px solid #ebebeb !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 4px 10px !important; }
 
 input, select {
   box-shadow: none !important; }

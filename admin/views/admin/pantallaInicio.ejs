@@ -1,0 +1,157 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+    * Proyecto de Ingenieria en Sistemas I-III
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Dashboard | SIAP - Pantalla Inicio</title>
+     <link rel="stylesheet" href="/css/bootstrap.css">
+     <link rel="stylesheet" href="/css/general.css">
+     <link rel="stylesheet" href="/css/datatables.min.css">
+     <link rel="stylesheet" href="/css/dashboard.css" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+     <link rel="stylesheet" href="/css/animate.css">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+     <script src="/js/jq-bs-bundle.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+ </head>
+ 
+ <body class="page bg-light d-flex flex-column h-100">
+    
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid my-2 position-relative">
+                <div class="bg-white rounded-3 shadow-primary p-3 mt-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h2 class="font-weight-bolder">Modulo de Configuracion del Inicio</h2>
+                            <small class="text-muted">Aqui un <a href="/admin/administradores">Administrador</a>
+                            podra configurar que secciones se van a mostrar en la pantalla de Inicio 
+                            del sistema, podra mostrar diferentes imagenes, fechas, incluso el calendario 
+                            de actividades que se van a realizar en la piscina.</small><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3 shadow-primary p-3 my-3">
+                    <div class="row mx-auto">
+                        <div class="col-md-7">
+                            <div class="d-flex justify-content-start align-items-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonAgregarModulo" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-plus"></i> Agregar Modulo
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonAgregarModulo">
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloCarousel()">Carousel</a>
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloTabla()">Tabla</a>
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloTitulo()">Titulo</a>
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloTexto()">Texto</a>
+                                    </div>
+                                </div>
+                                <div id="botonesPropModulo" class="d-flex justify-content-start align-items-center ml-3">
+
+                                </div>
+                            </div>
+                            <hr class="my-3">
+                            <div id="moduloConfig" class="p-2 border border-light" style="min-height: 300px;">
+
+                            </div>
+                        </div>
+                        <div class="col-md-5 border-left border-light">
+                            <div id="allPreview" style="min-height: 500px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+<style>
+    .switch-cus {
+        position: relative;
+        display: inline-block;
+        width: 55px;
+        height: 25px;
+        margin-top: 10px !important;
+    }
+    .switch-cus input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider-cus {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider-cus:before {
+        position: absolute;
+        content: "";
+        height: 30px;
+        width: 30px;
+        left: 0px;
+        bottom: -3px;
+        background-color: #4659e4;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider-cus {
+        background-color: #93a0ff;
+    }
+
+    input:focus + .slider-cus {
+        box-shadow: 0 0 1px #93a0ff;
+    }
+
+    input:checked + .slider-cus:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .slider-cus.round-cus {
+        border-radius: 34px;
+    }
+
+    .slider-cus.round-cus:before {
+        border-radius: 50%;
+    }
+</style>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/pantallaInicio.js"></script>
+</body>
+</html>

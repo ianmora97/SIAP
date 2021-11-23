@@ -88,6 +88,20 @@ router.get('/admin/dashboard', (req,res)=>{
         res.render('index');
     }
 });
+router.get('/admin/inicio', (req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'pi';
+            res.render('admin/pantallaInicio', {usuario,s,token});
+        }else{
+            res.render('index');
+        }
+    }else{
+        res.render('index');
+    }
+});
 
 // -------- #menu items-------------
 router.get('/admin/estudiantes',(req,res)=>{
@@ -140,10 +154,10 @@ router.get('/admin/talleres',(req,res)=>{
             let s = 'talleres';
             res.render('admin/talleres', {usuario,s,token});
         }else{
-            res.redirect('/index');
+            res.redirect('/');
         }
     }else{
-        res.redirect('/index');
+        res.redirect('/');
     }
 });
 router.get('/admin/reposiciones',(req,res)=>{
@@ -159,10 +173,10 @@ router.get('/admin/reposiciones',(req,res)=>{
                 res.render('admin/reposiciones', {usuario,s,token,newUI});
             }
         }else{
-            res.render('index');
+            res.render('/');
         }
     }else{
-        res.render('index');
+        res.render('/');
     }
 });
 router.get('/admin/matricula',(req,res)=>{
@@ -173,10 +187,10 @@ router.get('/admin/matricula',(req,res)=>{
             let s = 'matricula';
             res.render('admin/matricula', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('/');
         }
     }else{
-        res.render('index');
+        res.render('/');
     }
 });
 
@@ -203,10 +217,10 @@ router.get('/admin/comprobacion',(req,res)=>{
             let s = 'comprobacion';
             res.render('admin/comprobacionDatos', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('/');
         }
     }else{
-        res.render('index');
+        res.render('/');
     }
 });
 

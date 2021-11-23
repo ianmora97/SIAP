@@ -52,6 +52,7 @@ var g_MapEstudiantes = new Map();
 var g_MapTalleres = new Map();
 var g_VecTalleres = [];
 var g_VecEstudiantes = [];
+var g_mapMatriculas = new Map();
 
 function loadFromDb() {
     console.log("se pide")
@@ -136,9 +137,11 @@ function cambiarEstadoMatricula(est) {
 
 function desmatricular() {
     let bearer = 'Bearer '+g_token;
-    let curso_id = parseInt($('#idCursoDesmatricular').html());
+    let matriculaid = parseInt($('#idCursoDesmatricular').html());
     let estudiante = $('#exampleModalLabel').html();
-    let data = {curso_id: curso_id,estudiante: estudiante}
+    let idGrupo = g_mapMatriculas.get(matriculaid).id_grupo;
+    let data = {matriculaid: matriculaid,estudiante: estudiante, idGrupo: idGrupo}
+    console.log(data)
     $.ajax({
         type: "POST",
         url: "/admin/matricula/desmatricular",
@@ -233,6 +236,7 @@ function cargarEstudiantes(matricula) {
         matricula.forEach((m) => {
             if(m.activa) cont ++;
             llenarEstudiantes(m);
+            g_mapMatriculas.set(m.id_matricula,m);
         });
     }
     $('#est_activos_stats').text(cont);
@@ -299,15 +303,15 @@ function llenarEstudiantes(data) {
     let fecha = data.created_at.split(' ')[0];
     let cedul = data.cedula;
     let nomb = data.nombre.toUpperCase() + " " + data.apellido.toUpperCase();
-    let horario = data.dia.toUpperCase() + " " + data.hora + "-" + parseInt(data.hora + 1);
+    let horario = data.dia.toUpperCase() + " " + data.hora + "-" + data.hora_final;
     let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px">`;
     
     $("#lista_estudiantes").append(`
         <tr>
             <td>${id_matricula}</td>
-            <td>${foto}&nbsp;&nbsp; ${nomb}</td>
+            <td>${foto}&nbsp;&nbsp; <a href="/admin/estudiantes/getEstudiante/${cedul}">${nomb}</a></td>
             <td>${cedul}</td>
-            <td>${horario}</td>
+            <td><a href="/admin/talleres/grupo/${data.id_grupo}">${horario}</a></td>
             <td>${nivel}</td>
             <td>${nombre_pro.split(' ')[0]}</td>
             <td>${fecha}</td>
