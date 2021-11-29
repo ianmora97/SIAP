@@ -1,5 +1,14 @@
 var estudiantes = [];
 
+moment.locale('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  }
+);
+
 function loaded(event) {
     events(event);
 }
@@ -7,8 +16,7 @@ function loaded(event) {
 function events(event) {
     traer_estudiantes();
     get_today_date();
-    cambiarEstadoShow();
-    cambiarEstadoSend();
+    modalComprobante();
     filtrarX();
     filtrarTodos();
 }
@@ -84,8 +92,8 @@ function searchonfind() {
     var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
-
 }
+var g_mapEstudiantes = new Map();
 function traer_estudiantes() {
     let ajaxTime = new Date().getTime();
     $.ajax({
@@ -109,6 +117,7 @@ function mostrarUsuarios(usuarios) {
     $('#lista_usuarios_temporales').html(' ');
     usuarios.forEach(u => {
         llenarListaUsuarios(u);
+        g_mapEstudiantes.set(u.cedula, u);
     });
     $('#table').DataTable({
         "language": {
@@ -158,45 +167,45 @@ function mostrarUsuarios(usuarios) {
     $('#table_length').find('label').find('select').appendTo('#length');
     $('#table_length').html('');
 }
-function llenarListaUsuarios(u) {
-    let id = u.id;
-    let cedula = u.cedula;
-    let nombre = u.nombre;
-    let apellido = u.apellido;
-    let nacimiento = u.nacimiento;
-    let sexo = u.sexo;
-    let tipo = u.tipo_usuario;
-    let creado = moment(u.creado, "DD-MM-YYYY-h-mm").calendar();
+function llenarListaUsuarios({id,cedula,nombre,apellido,nacimiento,tipo_usuario,created_at,comprobante}) {
     $('#lista_usuarios_temporales').append(
         `<tr style="height:calc(55vh / 10);">
             <td>${cedula}</td>
             <td>${nombre} ${apellido}</td>
-            <td>${nacimiento}</td>
-            <td>${sexo}</td>
-            <td>${tipo}</td>
-            <td>${creado}</td>
+            <td>${moment(nacimiento, "YYYY-MM-DD").format('LL')}</td>
+            <td>${tipo_usuario}</td>
+            <td>${ moment(created_at, "YYYY-MM-DD").format('LL')}</td>
+            <td class="text-center">
+                <button class="btn btn-light btn-sm " data-pic="${comprobante == null ? "na": comprobante}" data-toggle="modal" data-target="#verComprobante">
+                <i class="far fa-image"></i> Ver Comprobante</button>
+            </td>
             <td>
-                <button type="button" class="btn btn-sm d-inline btn-danger" id="CambiarEstadoRechazarBoton">Rechazar</button>
-                <button type="button" class="btn btn-sm d-inline btn-primary" id="CambiarEstadoConfirmarBoton">Confirmar</button>
+                <button type="button" class="btn btn-sm d-inline btn-danger" onclick="cambiarEstadoSend('rechazar','${cedula}')"><i class="fas fa-times"></i> Rechazar</button>
+                <button type="button" class="btn btn-sm d-inline btn-primary" onclick="cambiarEstadoSend('confirmar','${cedula}')"><i class="fas fa-check"></i> Confirmar</button>
             </td>
         </tr>`
     );
 }
 
-function cambiarEstadoShow() {
-    $('#modalCambiarEstado').on('show.bs.modal', function (event) {
+function modalComprobante() {
+    $('#verComprobante').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        var cedula = button.data('cedula');
-        var nombre = button.data('nombre');
-        $('#nombreTarget').text(nombre);
-        $('#cedulaTarget').text(cedula);
+        var imagen = button.data('pic');
+        var modal = $(this);
+        if(imagen != "na"){
+            modal.find('.modal-body').html(`<img src="/public/uploads/${imagen}" class="img-fluid">`);
+        }else{
+            modal.find('.modal-body').html('<h3>No hay comprobante</h3>');
+        }
     });
 }
-function cambiarEstadoSend() {
-    $('#CambiarEstadoConfirmarBoton').on('click', function () {
-        let cedula = $('#cedulaTarget').text();
-        let email = 'ianmorar03@gmail.com';
-        let nombre = $('#nombreTarget').text();
+
+function cambiarEstadoSend(estado,p_cedula) {
+    if(estado == 'confirmar'){
+        let est = g_mapEstudiantes.get(p_cedula);
+        let cedula = p_cedula;
+        let email = est.correo;
+        let nombre = est.nombre + ' ' + est.apellido;
         let data = { cedula, email, nombre }
         $.ajax({
             type: "POST",
@@ -212,10 +221,8 @@ function cambiarEstadoSend() {
         }, (error) => {
             $('#alerta_error_estado').css('display', 'block');
         });
-    });
-    $('#CambiarEstadoRechazarBoton').on('click', function () {
-        let cedula = $('#cedulaTarget').text();
-        let data = { cedula }
+    }else{
+        let data = { p_cedula }
         $.ajax({
             type: "POST",
             url: "/admin/comprobacion/rechazarEstudiante",
@@ -230,7 +237,7 @@ function cambiarEstadoSend() {
         }, (error) => {
             $('#alerta_error_estado').css('display', 'block');
         });
-    });
+    }
 }
 
 var filtrarNuevos = (estudiantes) => {

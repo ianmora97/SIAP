@@ -310,6 +310,16 @@ body::-webkit-scrollbar-thumb {
   border-radius: 100%;
   box-shadow: 0 3px 5px 2px rgba(0, 0, 0, 0.05); }
 
+[contenteditable] {
+  outline: 0px solid transparent; }
+
+.module-preview {
+  transition: all .5s;
+  min-height: 65px; }
+  .module-preview:hover {
+    background-color: #ecefff;
+    transition: all .5s; }
+
 .shadow-primary {
   box-shadow: 0 5px 12px 0 rgba(106, 119, 221, 0.418) !important; }
 

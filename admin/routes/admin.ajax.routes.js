@@ -174,7 +174,7 @@ router.get('/admin/ajax/stats/getReportes',ensureToken,(req,res)=>{
 
 // TODO: para las notificaciones
 router.get('/admin/stats/usuariosNuevosTabla',ensureToken,(req,res)=>{ // ! tiene que ser eliminado -> para la tabla del dashboard
-    let script = "select * from vta_nuevos_usuarios";
+    let script = "select * from vta_usuario_temp";
     var query = con.query(script,
         (err,rows,fields)=>{
         if(rows != undefined){

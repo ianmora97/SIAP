@@ -296,7 +296,12 @@
             </div>
         </div>
     </div>
-     
+    <%if (typeof customView != "undefined"){%>
+        <script>
+            var g_custom = {type:'<%= customView.type%>',data:'<%= customView.data%>'};
+            $('#modalAgregarEstudiante').modal();
+        </script>
+    <%}%>
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">

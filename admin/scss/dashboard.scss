@@ -358,7 +358,17 @@ body::-webkit-scrollbar-thumb {
 }
 
 // ! ---------------------------------------- FOR NEW UI  --------------------------------------------------
-
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+.module-preview{
+  transition: all .5s;
+  min-height: 65px;
+  &:hover{
+    background-color: #ecefff;
+    transition: all .5s;
+  }
+}
 .shadow-primary{
   box-shadow: 0 5px 12px 0 rgba(106, 119, 221, 0.418) !important;
 }

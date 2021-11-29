@@ -56,22 +56,32 @@
                     </div>
                 </div>
                 <div class="bg-white rounded-3 shadow-primary p-3 my-3">
+                    <h5>Carousel</h5>
+                </div>
+                <div class="bg-white rounded-3 shadow-primary p-3 my-3">
                     <div class="row mx-auto">
                         <div class="col-md-7">
                             <div class="d-flex justify-content-start align-items-center">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonAgregarModulo" data-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButtonAgregarModulo" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-plus"></i> Agregar Modulo
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonAgregarModulo">
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloTitulo()">Titulo</a>
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloTexto()">Texto</a>
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloImagen()">Imagen</a>
                                       <a class="dropdown-item" href="#" onclick="agregarModuloCarousel()">Carousel</a>
                                       <a class="dropdown-item" href="#" onclick="agregarModuloTabla()">Tabla</a>
-                                      <a class="dropdown-item" href="#" onclick="agregarModuloTitulo()">Titulo</a>
-                                      <a class="dropdown-item" href="#" onclick="agregarModuloTexto()">Texto</a>
                                     </div>
                                 </div>
-                                <div id="botonesPropModulo" class="d-flex justify-content-start align-items-center ml-3">
-
+                                <div class="d-flex justify-content-between align-items-center flex-fill">
+                                    <div id="botonesPropModulo" class="d-flex justify-content-start align-items-center ml-3">
+    
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center ml-auto">
+                                        <button type="button" id="agregarModuloBtn" class="btn btn-sm btn-primary" onclick="agregarModulo()" disabled><i class="fas fa-plus"></i> Agregar</button>
+                                        <button type="button" id="eliminarModuloBtn" class="btn btn-sm btn-danger ml-2" onclick="eliminarModulo()" disabled><i class="fas fa-trash"></i> Eliminar</button>
+                                    </div>
                                 </div>
                             </div>
                             <hr class="my-3">

@@ -45,13 +45,13 @@ router.post('/admin/log',(req,res)=>{ //login
                     }); //json web token
                     
                 }else{
-                    res.render('index',{err:'No tiene permisos',id: 1});
+                    res.render('login',{err:'No tiene permisos',id: 1});
                 }
             }else{
-                res.render('index', {err:'No se encuentra Registrado',id: 2});
+                res.render('login', {err:'No se encuentra Registrado',id: 2});
             }
         }else{
-            res.render('index', {err:'Server Error',id: 3});
+            res.render('login', {err:'Server Error',id: 3});
         }
     });
 });
@@ -61,10 +61,10 @@ router.get('/admin/logout',(req,res)=>{ //logout
         let u = req.session.value.usuario;
         req.session.destroy((err) => {
             console.log('[',chalk.green('OK'),']',chalk.yellow(u),'Session Cerrada');
-            res.render('index');
+            res.render('login');
         })
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 
@@ -82,10 +82,10 @@ router.get('/admin/dashboard', (req,res)=>{
             let s = 'dash';
             res.render('admin/dashboard', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 router.get('/admin/inicio', (req,res)=>{
@@ -96,10 +96,10 @@ router.get('/admin/inicio', (req,res)=>{
             let s = 'pi';
             res.render('admin/pantallaInicio', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 
@@ -112,10 +112,25 @@ router.get('/admin/estudiantes',(req,res)=>{
             let s = 'estudiantes';
             res.render('admin/estudiantes', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
+    }
+});
+router.get('/admin/estudiantes/add',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'estudiantes';
+            let customView = {type:'add',data:'new'};
+            res.render('admin/estudiantes', {usuario,s,token,customView});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
     }
 });
 router.get('/admin/administradores',(req,res)=>{
@@ -126,10 +141,10 @@ router.get('/admin/administradores',(req,res)=>{
             let s = 'administradores';
             res.render('admin/administradores', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 router.get('/admin/profesores',(req,res)=>{
@@ -140,10 +155,10 @@ router.get('/admin/profesores',(req,res)=>{
             let s = 'profesores';
             res.render('admin/profesores', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 router.get('/admin/talleres',(req,res)=>{
@@ -154,10 +169,10 @@ router.get('/admin/talleres',(req,res)=>{
             let s = 'talleres';
             res.render('admin/talleres', {usuario,s,token});
         }else{
-            res.redirect('/');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/');
+        res.redirect('login');
     }
 });
 router.get('/admin/reposiciones',(req,res)=>{
@@ -173,10 +188,10 @@ router.get('/admin/reposiciones',(req,res)=>{
                 res.render('admin/reposiciones', {usuario,s,token,newUI});
             }
         }else{
-            res.render('/');
+            res.render('login');
         }
     }else{
-        res.render('/');
+        res.render('login');
     }
 });
 router.get('/admin/matricula',(req,res)=>{
@@ -187,10 +202,10 @@ router.get('/admin/matricula',(req,res)=>{
             let s = 'matricula';
             res.render('admin/matricula', {usuario,s,token});
         }else{
-            res.render('/');
+            res.render('login');
         }
     }else{
-        res.render('/');
+        res.render('login');
     }
 });
 
@@ -202,10 +217,10 @@ router.get('/admin/matricula/reportes',(req,res)=>{
             let s = 'reportes-matricula';
             res.render('admin/matriculaReporte', {usuario,s, token});
         }else{
-            res.redirect('/');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/');
+        res.redirect('login');
     }
 });
 
@@ -217,10 +232,10 @@ router.get('/admin/comprobacion',(req,res)=>{
             let s = 'comprobacion';
             res.render('admin/comprobacionDatos', {usuario,s,token});
         }else{
-            res.render('/');
+            res.render('login');
         }
     }else{
-        res.render('/');
+        res.render('login');
     }
 });
 
@@ -232,10 +247,10 @@ router.get('/admin/casilleros',(req,res)=>{
             let s = 'casilleros';
             res.render('admin/casilleros', {usuario,s,token});
         }else{
-            res.render('index');
+            res.render('login');
         }
     }else{
-        res.render('index');
+        res.render('login');
     }
 });
 
@@ -247,10 +262,10 @@ router.get('/admin/reportes/morosos',(req,res)=>{
             let s = 'reportes-morosos';
             res.render('admin/reportes/morosos', {usuario,s,token});
         }else{
-            res.redirect('/admin');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('login');
     }
 });
 
@@ -262,10 +277,10 @@ router.get('/admin/reportes/asistencia',(req,res)=>{
             let s = 'reportes-asistencia';
             res.render('admin/reportes/asistencia', {usuario,s,token});
         }else{
-            res.redirect('/admin');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/admin');
+        res.redirect('login');
     }
 });
 router.get('/admin/reportes/sistema',(req,res)=>{
@@ -276,10 +291,10 @@ router.get('/admin/reportes/sistema',(req,res)=>{
             let s = 'reportes-sistema';
             res.render('admin/reportes/sistema', {usuario,s, token});
         }else{
-            res.redirect('/index');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/index');
+        res.redirect('login');
     }
 });
 router.get('/admin/reportes/uso',(req,res)=>{
@@ -290,10 +305,10 @@ router.get('/admin/reportes/uso',(req,res)=>{
             let s = 'reportes-uso';
             res.render('admin/reportes/usodeinstalacion', {usuario,s, token});
         }else{
-            res.redirect('/index');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/index');
+        res.redirect('login');
     }
 });
 router.get('/admin/reportes/conducta',(req,res)=>{
@@ -304,10 +319,10 @@ router.get('/admin/reportes/conducta',(req,res)=>{
             let s = 'reportes-conducta';
             res.render('admin/reportes/conductas', {usuario,s, token});
         }else{
-            res.redirect('/index');
+            res.redirect('login');
         }
     }else{
-        res.redirect('/index');
+        res.redirect('login');
     }
 });
 // ! ----------------------------------- inside routes ------------------------------------

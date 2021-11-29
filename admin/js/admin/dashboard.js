@@ -125,7 +125,7 @@ function cargarTablaUsuariosNuevos(usuarios) {
                     <h4>No hay usuarios nuevos</h4>
                     <hr>
                     <p class="mb-0">Puede registrar a un usuario desde el <a href="/admin/estudiantes" class="alert-link">panel de administracion</a> 
-                    , o bien dirijase al <a href="${window.location.hostname}/registrarse" class="alert-link">sistema de registro</a></p>
+                    , o bien dirijase al <a href="/registrarse" target="_blank" class="alert-link">sistema de registro</a></p>
                 </div>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -138,18 +138,18 @@ function showTablaUsuariosNuevos(u) {
     $('#list-comprobacion').append(`
         <a href="/admin/comprobacion" class="list-group-item list-group-item-action p-1 border-0">
             <div class="d-flex w-100 justify-content-between">
-                <div class="row mx-0">
-                    <div class="col-2 pr-0 pl-2 d-flex align-items-center">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div class="pr-0 pl-2 d-flex align-items-center">
                         <span class="rounded-circle py-1 px-2 text-white mr-2" 
                         style="background:${getRandomColor()}; display:block; width:35px; height:35px;">${u.nombre[0] + u.apellido[0]}</span>
                     </div>
-                    <div class="col pl-3 pr-0">
+                    <div class="pl-3 pr-0">
                         <p class="mb-1 font-weight-bold">${u.nombre + ' ' + u.apellido}</p>
                         <small>${u.cedula}</small>
                     </div>
                 </div>
                 <div class="d-flex flex-column mb-auto justify-content-end pr-2">
-                    <small class="mb-2">${moment(u.registro, "DD-MM-YYYY-h-mm").fromNow()}</small>
+                    <small class="mb-2">${moment(u.created_at, "YYYY-MM-DD").format('ll')}</small>
                     <span class="badge badge-primary">${u.tipo ? 'Estudiante' : 'Funcionario'}</span>
                 </div>
             </div>
