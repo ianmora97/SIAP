@@ -9,14 +9,51 @@ function events(event) {
     openModalAdd();
     loadFromDb();
     llenarDatos();
-    checkModalNacionalidadAgregar();
+    onSubmitShowModal();
 }
-function checkModalNacionalidadAgregar() {
-    $('#nacionalidadModalSelect').on('change', function () {
-        let tipo = $(this).val();
-        // preguntar como es el tipo de cedula residente
+function onSubmitShowModal(){
+    $('#formAgregar').one('submit', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        let form = document.getElementById('formAgregar');
+        if (form.checkValidity() === false) {
+            form.classList.add('was-validated');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+            Toast.fire({
+                icon: 'error',
+                background: '#ffdcdc',
+                html: `<h5 class="font-weight-bold mb-0">Datos incompletos</h5>`,
+            })
+        }else{
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                willClose: () => {
+                    console.log('submit')
+                    $('#formAgregar').submit();
+                }
+            })
+            Toast.fire({
+                icon: 'success',
+                background: '#dcffe4',
+                text: `Estudiante agregado`,
+            })
+        }        
     });
 }
+
 function openModalCameras() {
     setTimeout(() => {
         $('#modalTakePic').modal('show');
@@ -257,17 +294,13 @@ function llenar_Estudiantes(data) {
     let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="40px" height="40px">`;
     $("#lista_estudiantes").append(`
         <tr style="height:calc(55vh / 10);" class="">
-            <td class="align-center">${foto}</td>
-            <td class="align-center descriptionRow">${data.nombre + " " + data.apellido}</td>
+            <td class="align-center"><a href="/admin/estudiantes/getEstudiante/${data.cedula}">${foto}</a></td>
+            <td class="align-center descriptionRow"><a href="/admin/estudiantes/getEstudiante/${data.cedula}">${data.nombre + " " + data.apellido}</a></td>
             <td class="descriptionRow">${data.cedula}</td>
             <td class="descriptionRow"><i class="fas fa-flag text-primary"></i>&nbsp;&nbsp; ${data.descripcion}</td>
             <td class="descriptionRow"><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
             <td class="descriptionRow">
-                <span class="sr-only">${data.moroso == 1 ? 'moroso':'limpio'}</span>
-                <label class="switch-cus" for="customSwitch_${data.id}">
-                    <input type="checkbox" id="customSwitch_${data.id}" ${data.moroso == 1 ? "checked" : ""} onclick="cambiarMorosidadEst(this,'${data.cedula}')">
-                    <span class="slider-cus round-cus"></span>
-                </label>
+                <a href="mailto:${data.correo}">${data.correo}</a>
             </td>
             <td class="text-center">
                 <a href="/admin/estudiantes/getEstudiante/${data.cedula}">

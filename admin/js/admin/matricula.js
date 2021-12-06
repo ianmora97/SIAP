@@ -1,3 +1,13 @@
+var calendar;
+var g_VecMatrestudiantes = [];
+var g_MapEstudiantes = new Map();
+var g_MapTalleres = new Map();
+var g_VecTalleres = [];
+var g_VecEstudiantes = [];
+var g_mapMatriculas = new Map();
+
+var seleccionados = new Map();
+var g_eventosArray = new Array();
 
 function loaded(event) {
     events(event);
@@ -7,13 +17,46 @@ function events(event) {
     loadFromDb();
     openModalShow();
     onChangeSelectsMatricula();
+    onModalOpen();
+    checkCustomView();
 }
-
+moment.locale('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  }
+);
+function onModalOpen(){
+    $('#gruposCalendario').on('shown.bs.modal', function (event) {
+        calendar.updateSize();
+        $(".fc-dayGridMonth-button").click();
+        console.log('abre');
+    })
+}
+function checkCustomView(){
+    
+}
 function onChangeSelectsMatricula() {
     $('#EstudiantesModalMatricular').on('change',function(event) {
         let dropdown = $(event.currentTarget);
         let card = $('#tiqueteMatricula');
-        card.find('.card-title').text(dropdown.find('option:selected').text());
+        if(dropdown.val() !== 'default'){
+            card.find('.card-title').text(dropdown.find('option:selected').text());
+            $('.texto-fecha').html('')
+            $('#btnSelecionarGrupos').attr('disabled',false);
+            seleccionados.clear();
+            let estudiante = g_MapEstudiantes.get(dropdown.val());
+            $('.texto-matricular').html(`${estudiante.descripcion}`);
+            let vecnew = g_eventosArray.filter(e => e.title === estudiante.descripcion);
+            calendar.removeAllEventSources();
+            calendar.addEventSource(vecnew);
+            calendar.render();
+        }else{
+            $('#btnSelecionarGrupos').attr('disabled',true);
+            card.find('.card-title').html('');
+        }
     });
     $('#GrupoModalMatricular').on('change',function(event) {
         let dropdown = $(event.currentTarget);
@@ -47,15 +90,9 @@ function openModalShow(){
        
     })
 }
-var g_VecMatrestudiantes = [];
-var g_MapEstudiantes = new Map();
-var g_MapTalleres = new Map();
-var g_VecTalleres = [];
-var g_VecEstudiantes = [];
-var g_mapMatriculas = new Map();
+
 
 function loadFromDb() {
-    console.log("se pide")
     let bearer = 'Bearer '+g_token;
     let ajaxTime = new Date().getTime();
     $.ajax({
@@ -79,19 +116,6 @@ function loadFromDb() {
     });
     $.ajax({
         type: "GET",
-        url: "/admin/estudiante/listaEstudiantes",
-        contentType: "appication/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((estudiantes) => {
-        g_VecEstudiantes = estudiantes;
-        fillSelected(estudiantes);
-    }, (error) => {
-    });
-    
-    $.ajax({
-        type: "GET",
         url: "/admin/talleres/getGrupos", 
         contentType: "appication/json",
         headers:{
@@ -100,6 +124,19 @@ function loadFromDb() {
     }).then((talleres) => {
         g_VecTalleres = talleres;
         fillSelectGrupo(talleres);
+        fillCalendar(talleres);
+        $.ajax({
+            type: "GET",
+            url: "/admin/estudiante/listaEstudiantes",
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((estudiantes) => {
+            g_VecEstudiantes = estudiantes;
+            fillSelected(estudiantes);
+        }, (error) => {
+        });
     }, (error) => {
     });
 }
@@ -201,28 +238,28 @@ function matricularCursos(){
 function fillSelected(data) {
     $('#EstudiantesModalMatricular').html('');
     $('#EstudiantesModalMatricular').append(`
-            <option>Seleccione un estudiante...</option>
+            <option value="default">Seleccione un estudiante...</option>
     `);
-    data.forEach(e => {
+    for (let i = 0; i < data.length; i++) {
+        var e = data[i];
         g_MapEstudiantes.set(e.cedula,e);
-        $('#EstudiantesModalMatricular').append(`
-            <option value="${e.id_estudiante}">${e.nombre + " " + e.apellido}</option>
-        `);
-    })
-}
-function fillSelectGrupo(data) {
-    $('#GrupoModalMatricular').html('');
-    $('#GrupoModalMatricular').append(`
-        <option>Seleccione un grupo...</option>
-    `);
-    let cont = 0;
-    data.forEach(e => {
-        if(e.cupo_actual < e.cupo_base ){
-            cont+= (e.cupo_base - e.cupo_actual);
-            $('#GrupoModalMatricular').append(`
-                <option value="${e.id_grupo}">${e.descripcion + " " + e.dia + " "+e.hora}</option>
+        if(e.estado === 1 && e.moroso === 0){
+            $('#EstudiantesModalMatricular').append(`
+                <option value="${e.cedula}">${e.nombre + " " + e.apellido}</option>
             `);
         }
+    }
+    if(g_customView !== ''){
+        $('#matricularModal').modal('show');
+        console.log(g_customView)
+        $('#EstudiantesModalMatricular').val(g_customView).trigger('change');
+    }
+
+}
+function fillSelectGrupo(data) {
+    let cont = 0;
+    data.forEach(e => {
+        if(e.cupo_actual < e.cupo_base ) cont+= (e.cupo_base - e.cupo_actual);
     })
     $('#cursos_stats').text(cont);
 }
@@ -318,11 +355,196 @@ function llenarEstudiantes(data) {
             <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.activa ? 'success' : 'danger'}"></i>&nbsp; ${data.activa ? 'Activo' : 'Inactivo'}</td>
             <td class="text-center">
                 <span class="button-circle" role="button" data-id="${cedul}" 
-                data-matricula="${id_matricula}" data-toggle="modal" data-target="#modalVerMatricula">
+                data-matricula="${cedul}" data-toggle="modal" data-target="#modalVerMatricula">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
             </td>
         </tr>
     `);
+}
+function toWeekDay(dia) {
+    switch (dia) {
+        case 'LUNES':
+            return 1;
+        case 'MARTES':
+            return 2;
+        case 'MIERCOLES':
+            return 3;
+        case 'JUEVES':
+            return 4;
+        case 'VIERNES':
+            return 5;
+        case 'SABADO':
+            return 6;
+        case 'SÁBADO':
+            return 6;
+        case 'DOMINGO':
+            return 7;
+        default:
+            break;
+    }
+}
+function toDayWeek(dia) {
+    switch (dia) {
+        case 1:
+            return 'LUNES';
+        case 2:
+            return 'MARTES';
+        case 3:
+            return 'MIERCOLES';
+        case 4:
+            return 'JUEVES';
+        case 5:
+            return 'VIERNES';
+        case 6:
+            return 'SABADO';
+        case 7:
+            return 'DOMINGO';
+        default:
+            return 'DOMINGO';
+    }
+}
+
+var contEvents = 0;
+function fillCalendar(grupos) {
+    for (let i = 0; i < grupos.length; i++) {
+        let e = grupos[i];
+        let p = e.nombre + " "+ e.apellido;
+        let id_matricula = e.id_matricula;
+        let grupo = e.id_grupo;
+        let codigo = e.codigo_taller;
+        let descripcion = e.descripcion;
+        let dia = e.dia;
+        let hora = e.hora;
+        let hora_final = e.hora_final;
+        let horaI = moment(e.hora, 'h:mmA').format('HH:mm');
+        let horaF = moment(e.hora_final, 'h:mmA').format('HH:mm');        
+        let weekday = toWeekDay(dia.toUpperCase());
+        let allp = e.dia+" "+e.hora+" "+e.hora_final;
+        let todo = `
+        <button type="button" class="btn btn-sm">
+        <i class="fa fa-swimmer"></i> ${descripcion} <span class="badge badge-light">${dia}: ${e.hora} - ${e.hora_final}</span>
+        </button>`;
+        let today = moment();
+        if(moment(e.periodo,'YYYY-MM-DD') < today < moment(e.periodo_final,'YYYY-MM-DD')){ // true si la fecha aplica -- a < b < c
+            let a_t = moment().add('8', 'days').format('YYYY-MM-DD');
+            let b_t = moment().add('1', 'days').format('YYYY-MM-DD');
+            g_eventosArray.push({
+                idGrupo: grupo,
+                idEvent: contEvents,
+                title: descripcion,
+                hora: hora,
+                hora_final: hora_final,
+                startTime: horaI,
+                endTime: horaF,
+                startRecur: b_t,
+                endRecur: a_t,
+                daysOfWeek: [ weekday ], 
+                display: 'block',
+                backgroundColor: '#4659E4',
+                borderColor: '#4659E4',
+                icon : "swimmer",
+                allp: allp,
+                codigo: codigo,
+                description: todo,
+            });
+            contEvents++;
+        }
+    }
+    var calendarEl = document.getElementById('calendar');
+    calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        initialView: 'dayGridMonth',
+        aspectRatio:1,
+        height: 750,
+        nowIndicator: true,
+        themeSystem: 'bootstrap',
+        businessHours: {
+            startTime: '7:00',
+            endTime: '22:00',
+            dow: [ 1, 2, 3, 4, 5 ],
+        },
+        validRange: function(nowDate) {
+            return {
+              start: nowDate,
+            };
+        },
+        views: {
+            dayGrid: {
+                titleFormat: { month: 'long', day: '2-digit' }
+            },
+        },
+        customButtons: {
+            doAgregar: {
+                text: 'Matricular Seleccionados',
+                click: function() {
+                    $('.texto-fecha').html('');
+                    seleccionados.forEach(e=>{
+                        $('.texto-fecha').append(`<h5><span class="badge badge-light mr-2">${e.info.allp}</span></h5>`);
+                    });
+                    $('#gruposCalendario').modal('hide');
+                    $('#matricularModal').modal('show');
+                }
+            },
+            doCancelar: {
+                text: 'Cancelar',
+                click: function() {
+                    $('#gruposCalendario').modal('hide');
+                    $('#matricularModal').modal('show');
+                }
+            },
+        },
+        headerToolbar: {
+            start: '',
+            center: 'title',
+            end: 'doAgregar doCancelar'
+        },
+        events: g_eventosArray,
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Dia',
+            list:     'Lista'
+        },
+        dateClick: function(info) {
+        },
+        eventClick: function(event) {
+            let info = event.event._def.extendedProps;
+            let id = info.idEvent;
+            let selected = moment(event.event.endStr).format('YYYY-MM-DD');
+            
+            if (seleccionados.has(id)) {
+                seleccionados.delete(id);
+                event.el.style.backgroundColor = '#4659E4';
+                event.el.style.borderColor = '#4659E4';
+                event.el.style.color = '#fff';
+            } else {
+                if(seleccionados.size < 3){
+                    seleccionados.set(id, {info,selected});
+                    event.el.style.backgroundColor = '#f0bc4d';
+                    event.el.style.borderColor = '#f0bc4d';
+                    event.el.style.color = '#4659E4';
+                }
+            }
+        },
+        eventContent: function (args, createElement) {
+            const hora = args.event._def.extendedProps.hora;
+            const icon = args.event._def.extendedProps.icon;
+            const text = `
+            <button type="button" class="btn text-white d-flex justify-content-between w-100 align-items-center">
+                <div><i class="fa fa-${icon}"></i> ${args.event._def.title} </div><span class="badge badge-light">${hora}</span>
+            </button>`;
+            return {
+              html: text
+            };
+        },
+        viewDidMount: function(info) {
+            $('.fc-doCancelar-button').removeClass('btn-primary').addClass('btn-danger');
+            $('.fc-doAgregar-button').html('<i class="fas fa-plus mr-2"></i>Matricular Seleccionados');
+            $('.fc-doCancelar-button').html('<i class="fas fa-times mr-2"></i>Cancelar');
+        },
+    });
+    calendar.render();
 }
 document.addEventListener("DOMContentLoaded", loaded);

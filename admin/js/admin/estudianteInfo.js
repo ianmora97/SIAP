@@ -53,19 +53,76 @@ function buildDataOnPage(data){
     buildAnotaciones(data.anotaciones);
     buildTalleresP(g_talleres);
 }
+function progresoPorcentaje(pinicio, pfin){
+    let inicio = moment(pinicio,'YYYY-MM-DD'); // matriculacion
+    let fin = moment(pfin,'YYYY-MM-DD'); // periodo final del curso
+    let hoy = moment();
+    let avanzado = hoy.diff(inicio, 'days');
+    return (avanzado * 100) / (fin.diff(inicio, 'days'));
+}
+function buildTalleres(data){
+    if(data.length > 0){
+        data.forEach(e => {
+            $("#talleresList").append(`
+                <div class="list-group-item  px-2">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <h5 class="mb-1 font-weight-bold"><i class="fas fa-swimmer pr-2 text-primary"></i>${e.descripcion}</h5>
+                        <small class="text-muted">${e.periodo}</small>
+                    </div>
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <p class="mb-1 text-muted">${e.dia} ${e.hora}-${e.hora_final}</p>
+                        <small class="">${e.activa ? "Activa" : "Inactiva" } <i class="fas fa-circle text-${e.activa ? "success" : "danger" }"></i></small>
+                    </div>
+                </div>
+                <div class="border-top border-light"></div>
+            `)
+        });
+    }else{
+        $("#talleresList").append(`
+            <div class="list-group-item  px-2">
+                <div class="w-100 text-center">
+                    <h6 class="mb-1 text-muted font-italic">No tiene talleres matriculados</h6>
+                    ${g_estudiante.data.estado === 1 && g_estudiante.data.moroso === 0 ? 
+                        `<a href="/admin/matricula/add/${g_estudiante.data.cedula}" class="text-secondary">Matricular</a>`
+                        :''}
+                </div>
+            </div>
+            <div class="border-top border-light"></div>
+        `)
+    }
+}
 function buildTalleresP(data){
     if(data.length > 0){
         data.forEach(e => {
+            let p = progresoPorcentaje(e.created_at,e.periodo_final);
             $("#talleresP").append(`
-            <h5>${e.descripcion}</h5>
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped" role="progressbar" id="tallerPro_${e.codigo}" 
-                style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <div class="border-top border-light"></div>
+                <h5>${e.descripcion}</h5>
+                <div class="progress">
+                    <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated" role="progressbar" id="tallerPro_${e.codigo_taller}" 
+                    style="width: 0%" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100" data-to="${p}"></div>
+                </div>
+                <div class="border-top border-light"></div>
             `);
+            $("#tallerPro_"+e.codigo_taller).animate({
+                width: p+"%"
+            }, 1000);
+            // add class progress-bar-animated
+            setTimeout(() => {
+                $("#tallerPro_"+e.codigo_taller).removeClass('progress-bar-animated');
+            }, 1500);
         });
     }else{
+        $("#talleresP").append(`
+            <div class="list-group-item  px-2">
+                <div class="w-100 text-center">
+                    <h6 class="mb-1 text-muted font-italic">No tiene talleres matriculados</h6>
+                    ${g_estudiante.data.estado === 1 && g_estudiante.data.moroso === 0 ? 
+                        `<a href="/admin/matricula/add/${g_estudiante.data.cedula}" class="text-secondary">Matricular</a>`
+                        :''}
+                </div>
+            </div>
+            <div class="border-top border-light"></div>
+        `);
     }
 }
 function buildAnotaciones(data){
@@ -90,7 +147,7 @@ function buildAnotaciones(data){
         $("#anotacionesList").append(`
             <div class="list-group-item  px-2">
                 <div class="d-flex w-100 justify-content-center align-items-center">
-                    <h5 class="mb-1 text-muted">No tiene anotaciones reportadas</h5>
+                    <h6 class="mb-1 text-muted font-italic">No tiene anotaciones reportadas</h6>
                 </div>
             </div>
             <div class="border-top border-light"></div>
@@ -118,8 +175,9 @@ function buildConductas(data){
     }else{
         $("#conductaList").append(`
             <div class="list-group-item  px-2">
-                <div class="d-flex w-100 justify-content-center align-items-center">
-                    <h5 class="mb-1 text-muted">No tiene conductas reportadas</h5>
+                <div class="w-100 text-center">
+                    <h6 class="mb-1 text-muted font-italic">No tiene conductas reportadas</h6>
+                    <a href="/admin/reportes/conducta/add" class="text-secondary">Reportar Conducta</a>
                 </div>
             </div>
             <div class="border-top border-light"></div>
@@ -127,34 +185,7 @@ function buildConductas(data){
         $("#strikesCounter").html("0");
     }
 }
-function buildTalleres(data){
-    if(data.length > 0){
-        data.forEach(e => {
-            $("#talleresList").append(`
-                <div class="list-group-item  px-2">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        <h5 class="mb-1 font-weight-bold"><i class="fas fa-swimmer pr-2 text-primary"></i>${e.descripcion}</h5>
-                        <small class="text-muted">${e.periodo}</small>
-                    </div>
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        <p class="mb-1 text-muted">${e.dia} ${e.hora}-${e.hora + 1}</p>
-                        <small class="">${e.activa ? "Activa" : "Inactiva" } <i class="fas fa-circle text-${e.activa ? "success" : "danger" }"></i></small>
-                    </div>
-                </div>
-                <div class="border-top border-light"></div>
-            `)
-        });
-    }else{
-        $("#talleresList").append(`
-            <div class="list-group-item  px-2">
-                <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h5 class="mb-1 font-weight-bold">No tiene talleres matriculados</h5>
-                </div>
-            </div>
-            <div class="border-top border-light"></div>
-        `)
-    }
-}
+
 function buildPrimaryInfo(data){
     $('#nombreEstudiante').html(`${data.nombre} ${data.apellido}`);
     $('#tipodeUsuario').html(data.tipo);

@@ -1,3 +1,12 @@
+moment.lang('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  }
+);
+
 function loaded(event){
     events(event);
 }
@@ -28,7 +37,6 @@ var g_vecAsistencias = [];
 var g_vecGrupos = [];
 var g_mapReposiciones = new Map();
 var g_mapEstudiantes = new Map();
-
 
 function obtenerReposiciones(){
     let bearer = 'Bearer '+g_token;
@@ -234,31 +242,21 @@ function listaReposiciones(reposiciones) {
     $('#table_length').find('label').find('select').appendTo('#length');
     $('#table_length').html('');
 }
-function showReposicion(r) {
-
-    let cedula = r.cedula;
-    let nombre = r.nombre + ' ' + r.apellido;
-    let g_orig = r.grupo_origen;
-    let g_repo = r.grupo_reposicion;
-    let nivel  = r.descripcion;
-    let fecha  = r.fecha_reposicion;
-    let compro = r.comprobante;
-    let observ = r.observacion;
-    let hora = r.hora_reposicion < 10 ? '0'+r.hora_reposicion : r.hora_reposicion;
-
-    $('#lista_reposiciones').append(
-        '<tr>'+
-        '<td class="text-center">'+cedula+'</td>'+
-        '<td>'+nombre+'</td>'+
-        `<td>${r.dia_reposicion} ${moment(`${hora}:00`,'HH:mm').format('LT')}</td>`+
-        '<td>'+nivel+'</td>'+
-        '<td>'+fecha+'</td>'+
-        `<td class="text-center">
-            <span class="button-circle" role="button" data-id="${r.id_reposicion}" data-toggle="modal" data-target="#modalComprobante">
-                <i class="fas fa-ellipsis-v"></i>
-            </span>
-        </td>`+
-        '</tr>'
+function showReposicion({id_reposicion,cedula, nombre, apellido, dia_reposicion, descripcion, fecha_reposicion, hora_reposicion}) {
+    $('#lista_reposiciones').append(`
+        <tr>
+        <td class="text-center">${cedula}</td>
+        <td><a href="/admin/estudiantes/getEstudiante/${cedula}">${nombre} ${apellido}</a></td>
+        <td>${dia_reposicion} ${hora_reposicion}</td>
+        <td>${descripcion}</td>
+        <td>${moment(fecha_reposicion.split(' ')[0],'YYYY-MM-DD').format('LL')}</td>
+        <td class="text-center">
+            <button class="btn btn-light w-100" role="button" data-id="${id_reposicion}" data-toggle="modal" data-target="#modalComprobante">
+                <i class="fas fa-file-image"></i> Comprobante
+            </button>
+        </td>
+        <td><button class="btn btn-light-danger"><i class="fas fa-trash-alt "></i></button></td>
+        </tr>`
     );
 }
 function openModal(modal) {
@@ -273,12 +271,11 @@ function openModalComprobante() {
         console.log(re)
         $('#bodyComprobante').html('');
 
-        $('#titleModalComprobante').text('Reposicion de '+re.nombre);
+        $('#titleModalComprobante').text('Comprobante '+re.nombre);
         if(re.comprobante.length != 0){
             let tipo = re.comprobante.split('.')[1];
             if(tipo == 'pdf'){
                 $('#bodyComprobante').append(
-                    '<h4>Comprobante:</h4>'+
                     '<embed src="/public/uploads/'+re.comprobante+'" type="application/pdf" class="d-block mx-auto w-100" />'+
                     '<div class="form-group">'+
                     '<label for="Observacion">Observacion</label>'+
@@ -287,7 +284,6 @@ function openModalComprobante() {
                 );
             }else{
                 $('#bodyComprobante').append(
-                    '<h4>Comprobante:</h4>'+
                     '<img src="/public/uploads/'+re.comprobante+'" class="d-block w-100 mx-auto">'+
                     '<div class="form-group">'+
                     '<label for="Observacion">Observacion</label>'+
@@ -371,108 +367,5 @@ function toDayWeek(dia) {
             return 'DOMINGO';
     }
 }
-var calendar;
-function fillCalendar(grupos) {
-    var eventsArray = [];
-    grupos.forEach(e => {
-        let p = e.nombre + " "+ e.apellido;
-        let id_matricula = e.id_matricula;
-        let grupo = e.id_grupo;
-        let codigo = e.codigo_taller;
-        let descripcion = e.descripcion;
-        // let titulo = e.nivel_taller == 1 ? 'Principiante' : 'Intermedio-Avanzado';
-        let dia = e.dia;
-        let hora = e.hora > 12 ? e.hora - 12 + 'pm' : e.hora + 'am';
-        let horaF = e.hora > 12 ? e.hora - 12 +':00': e.hora +':00' ;
-        let horaFi = e.hora > 12 ? e.hora - 11 +':00': e.hora + 1 +':00' ;
-        let weekday = toWeekDay(dia.toUpperCase());
-        
-        let todo = `Profesor: ${p} <br>${dia}: ${e.hora}`;
-        let horainicio = e.hora + ":00";
-        let horafinal = (e.hora + 1) + ":00";
 
-        eventsArray.push({
-            id: grupo,
-            title: descripcion,
-            hora: hora,
-            startTime: horainicio,
-            endTime: horafinal,
-            daysOfWeek: [ weekday ], 
-            display: 'block',
-            backgroundColor: '#4659E4',
-            borderColor: '#4659E4',
-            icon : "swimmer",
-            codigo: codigo,
-            description: todo,
-        });
-
-        
-    })
-    var calendarEl = document.getElementById('calendar');
-    calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'es',
-        initialView: 'dayGridMonth',
-        height: 750,
-        nowIndicator: true,
-        themeSystem: 'bootstrap',
-        businessHours: {
-            startTime: '7:00',
-            endTime: '22:00',
-            dow: [ 1, 2, 3, 4, 5 ],
-        },
-        customButtons: {
-            doHorario: {
-              text: 'Crear Horario',
-              click: function() {
-                $('#agregarHorario').modal();
-              }
-            },
-            doGrupo: {
-              text: 'Agregar Grupo',
-              click: function() {
-                g_modalFechaCalendario = undefined;
-                $('#agregarGrupo').modal();
-              }
-            }
-        },
-        headerToolbar: {
-            start: '',
-            center: '',
-            end: ''
-        },
-        events: eventsArray,
-
-        buttonText: {
-            today:    'Hoy',
-            month:    'Mes',
-            week:     'Semana',
-            day:      'Dia',
-            list:     'Lista'
-        },
-        dateClick: function(info) {
-            g_modalFechaCalendario = info.dateStr;
-            $('#agregarGrupo').modal();
-        },
-        eventClick: function(event) {
-            let info = event.event._def.extendedProps
-            console.log(event.event._def.extendedProps)
-            $('.event-icon').html("<i class='fa fa-"+info.icon+"'></i>");
-            $('.event-title').html(info.codigo);
-            $('.event-body').html(info.description);
-            $('#modal-view-event').modal();
-        },
-        eventContent: function (args, createElement) {
-            const hora = args.event._def.extendedProps.hora;
-            const icon = args.event._def.extendedProps.icon;
-            const text = `<i class="fa fa-${icon}"></i> <span class="font-weight-bold">${args.event._def.title}</span> <span class="badge badge-light">${hora}</span>`;
-            return {
-              html: text
-            };
-        }
-    });
-    calendar.render();
-    setTimeout(() => {
-        $(".fc-dayGridMonth-button").trigger("click");
-    }, 1000);
-}
 document.addEventListener("DOMContentLoaded", loaded);

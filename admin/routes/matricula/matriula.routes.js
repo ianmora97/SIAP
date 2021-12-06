@@ -64,8 +64,22 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
         }
     });
 });
-
-
+// 
+router.get('/admin/matricula/add/:cedula',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol){
+            let usuario = req.session.value;
+            let token = req.session.token;
+            let s = 'matricula';
+            let est = req.params.cedula;
+            res.render('admin/matricula', {usuario,s,token,'add':'true','est':est});
+        }else{
+            res.redirect('/admin/login');
+        }
+    }else{
+        res.redirect('/admin/login');
+    }
+});
 router.post('/admin/matricula/cambiarEstado/matricula',ensureToken,(req,res)=>{
     con.query("call prc_actualizar_matricula_estudiante(?,?)",
         [req.body.curso_id,req.body.estado], (err,result,fields)=>{

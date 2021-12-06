@@ -78,6 +78,7 @@ app.use(require('./routes/matricula/matriula.routes'));
 
 app.use(require('./routes/client/registro.routes'));
 
+
 const server = app.listen(app.get('port'), () =>{
     console.log('[',chalk.green('OK'),']' ,chalk.yellow('SERVER'),'Admin server running on','http://'+app.get('host')+':'+ app.get('port'));
 });

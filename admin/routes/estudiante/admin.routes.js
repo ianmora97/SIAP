@@ -55,10 +55,10 @@ router.get('/admin/estudiantes/getEstudiante/:cedula',(req,res)=>{
             let s = 'estudiantes';
             res.render('admin/estudianteInfo', {usuario,s,token,cedula});
         }else{
-            res.render('index');
+            res.redirect('/admin/login');
         }
     }else{
-        res.render('index');
+        res.redirect('/admin/login');
     }
 });
 
@@ -96,7 +96,7 @@ router.get('/api/admin/estudiantes/getEstudiante/full', (req,res)=>{
                                     (err4,rows4,fields4)=>{
                                     if(!err4){
                                         var anotaciones = rows4;
-                                        con.query('SELECT * FROM t_taller',
+                                        con.query('SELECT * FROM vta_matriculados_por_grupo where cedula = ?',
                                         [req.query.cedulaID],
                                             (err5,rows5,fields5)=>{
                                             if(!err5){

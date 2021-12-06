@@ -194,6 +194,20 @@ router.get('/admin/reposiciones',(req,res)=>{
         res.render('login');
     }
 });
+router.get('/admin/reposiciones/agregar',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reposiciones';
+            res.render('admin/crearReposicion', {usuario,s,token});
+        }else{
+            res.redirect('/admin/login');
+        }
+    }else{
+        res.redirect('/admin/login');
+    }
+});
 router.get('/admin/matricula',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){

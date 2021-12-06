@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
     let tab = 'inicio';
     res.render('index',{tab});
 });
+
 router.get('/registrarse', (req, res) => {
     let tab = 'registro';
     res.render('registrarse',{tab});
@@ -50,14 +51,8 @@ router.get('/login', (req, res) => {
 });
 async function getRegistroPersona(url) {
     try {
-        const $ = await request({
-            uri: url,
-            transform: body => cheerio.load(body)
-        });
-        
-        let json = $('body').html()
-        return json;
-        
+        const $ = await request({uri: url,transform: body => cheerio.load(body)});
+        return $('body').html();
     } catch (e) {
         console.log(e);
     }

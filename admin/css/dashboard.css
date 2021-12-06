@@ -5,7 +5,7 @@ body::-webkit-scrollbar {
   width: 10px !important; }
 
 body::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0) !important; }
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0) !important; }
 
 body::-webkit-scrollbar-thumb {
   border-radius: 10px !important;
@@ -48,9 +48,10 @@ body::-webkit-scrollbar-thumb {
   margin-left: 0; }
 
 #page-content-wrapper {
+  display: flex;
+  flex-direction: column;
   min-width: 100vw;
-  position: relative;
-  background-color: #edf0ff; }
+  position: relative; }
 
 @media (min-width: 770px) {
   #sidebar-wrapper {
@@ -88,6 +89,12 @@ body::-webkit-scrollbar-thumb {
   color: #363636;
   text-align: left;
   white-space: nowrap !important; }
+
+.custom-table thead th:nth-child(1) {
+  border-top-left-radius: 15px !important; }
+
+.custom-table thead th:last-child {
+  border-top-right-radius: 15px !important; }
 
 .custom-table tbody td:nth-child(1),
 .custom-table thead th:nth-child(1) {
@@ -186,7 +193,7 @@ body::-webkit-scrollbar-thumb {
 .cards-dash {
   border-radius: 15px !important;
   margin-top: 1rem !important;
-  box-shadow: 0 10px 15px 2px rgba(0, 0, 0, 0.075) !important;
+  box-shadow: 0 10px 15px 2px rgba(180, 180, 180, 0.267) !important;
   background-color: #fff !important; }
 
 .card-border-footer {
@@ -259,7 +266,9 @@ body::-webkit-scrollbar-thumb {
 
 .modal-header {
   padding: 0.25rem !important;
-  z-index: 99999999; }
+  z-index: 99999999;
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important; }
 
 .input-container-date input {
   position: relative;
@@ -313,6 +322,12 @@ body::-webkit-scrollbar-thumb {
 [contenteditable] {
   outline: 0px solid transparent; }
 
+label, .label {
+  font-weight: bold !important; }
+
+.shadow-cus-lg {
+  box-shadow: 0 0 20px 8px rgba(173, 173, 173, 0.3) !important; }
+
 .module-preview {
   transition: all .5s;
   min-height: 65px; }
@@ -365,8 +380,20 @@ h1.text-primary {
 .dropdown-divider {
   border-top: 1px solid #c4c4c4 !important; }
 
+.badge {
+  display: inline !important; }
+
 .btn-primary {
   box-shadow: 0 5px 12px 0 rgba(70, 88, 228, 0.5) !important; }
+
+.btn-primary-noshadow {
+  color: #ffffff;
+  background-color: #4659E4;
+  box-shadow: none !important; }
+  .btn-primary-noshadow:hover {
+    color: #ffffff;
+    background-color: #4659E4;
+    box-shadow: 0 5px 12px 0 rgba(70, 88, 228, 0.5) !important; }
 
 .btn-secondary {
   box-shadow: 0 5px 12px 0 rgba(236, 216, 31, 0.5) !important;
@@ -533,6 +560,9 @@ input, select {
 
 .animate_delay_t4 {
   animation-delay: 1.7s; }
+
+.modal-xxl {
+  max-width: 90vw !important; }
 
 .modal-fullscreen {
   max-width: 100% !important;

@@ -1,0 +1,127 @@
+<!-- 
+    ! Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="mobile-web-app-capable" content="yes">
+     <title>Dashboard | Reposiciones</title>
+     <link rel="stylesheet" href="/css/bootstrap.css">
+     <link rel="stylesheet" href="/css/general.css">
+     <link rel="stylesheet" href="/css/datatables.min.css">
+     <link rel="stylesheet" type="text/css" href="/css/dashboard.css" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+     <link rel="stylesheet" href="/css/animate.css">
+     <script src="/js/jq-bs-bundle.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/es.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+     <div class="modal fade" id="modalAdd" data-keyboard="false" tabindex="-1" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered modal-xxl">
+             <div class="modal-content">
+                 <div class="modal-header pl-3 border-0 bg-primary text-white">
+                     <h5 class="modal-title ml-3" id="staticBackdropLabel">Solicitar una Reposicion</h5>
+                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body" id="modalbodyAdd">
+                    <div id="calendar"></div>
+                    <style>
+                        #calendar {
+                            width:100%;
+                            max-width: 100%;
+                        }
+                    </style>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div class="d-flex" id="wrapper">
+         <%- include('menuDashboard') %>
+         <div id="page-content-wrapper">
+             <%- include('headerDashboard') %>
+ 
+             <div class="container-fluid mt-2">
+                 <div class="bg-white shadow-primary p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                     <h2 class="font-weight-bolder m-0">Solicitar reposicion</h2>
+                 </div>
+                 
+                <div class="bg-white p-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
+                    <form action="/admin/taller/reposicion/crearReposicion" method="POST" enctype="multipart/form-data" id="agregarRepo">
+                        <div class="row mx-auto">
+                            <div class="col-lg border-right">
+                                <div class="form-group">
+                                    <label for="estudiantesAddSelect">Estudiante</label>
+                                    <select class="custom-select" id="estudiantesAddSelect" name="id_estudiante" required>
+                                        
+                                    </select>
+                                </div>
+                                <p class="font-weight-bold">Asistencias Perdidas</p>
+                                <div class="list-group border w-100" 
+                                style="height:400px; overflow-y: auto;" 
+                                id="ausenciasAgregarReposicion">
+                                </div>
+                            </div>
+                            <div class="col-lg-6" style="display: none;" id="escogerReposicion">
+                                <div class="form-group">
+                                    <label for="grupoAddSelect">Fecha de reposicion</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modalAdd">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </button>
+                                        </div>
+                                        <select class="custom-select" id="grupoAddSelect" name="grupo_reposicion" required>
+                                        </select>
+                                        <input class="form-control" type="date" id="fechareposicion" name="fecha_reposicion" required>
+                                    </div>
+                                    <div id="grupoescogido" style="height: 34px;" class="mt-1"></div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="border border-light p-2" style="max-width: 200px; max-height: 200px;" id="fotoContainer">
+
+                                    </div>
+                                    <div class="form-group flex-fill pl-3">
+                                        <label for="fileFoto">Comprobante</label>
+                                        <div class="custom-file">
+                                            <input class="custom-file-input"  type="file" id="fileFoto" name="image" required>
+                                            <label class="custom-file-label" for="fileFoto" id="labelfileFoto">Escoger Archivo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="observacionTexto">Observacion</label>
+                                    <textarea class="form-control" id="observacionTexto" name="observacionTexto" rows="4" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mx-auto px-3 my-3 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" form="agregarRepo" id="agregarReposicionBtn">Agregar Reposicion</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="/js/admin/crearReposicion.js"></script>
+</body>
+</html>

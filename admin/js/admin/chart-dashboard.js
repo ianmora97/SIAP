@@ -1,3 +1,4 @@
+// Chart.defaults.global.legend.display = false;
 var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
@@ -141,10 +142,17 @@ var casillerosChartVar = new Chart(casillerosChart, {
         ],
     },
     options:{
+        events: ['click'],
         plugins: {
-            legend: {
-                display: false
-            },
+            legend: false,
+            title: {
+                display: true,
+                text: 'Custom Chart Title',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
+            }
         },
         aspectRatio: 1.3,
         cutout: 65,
@@ -180,9 +188,7 @@ var morosidadChartVar = new Chart(morosidadChart, {
     },
     options:{
         plugins: {
-            legend: {
-                display: false
-            },
+            legend: false
         },
         aspectRatio: 1.3,
         cutout: 65,
@@ -218,9 +224,7 @@ var cuposDisponiblesChartVar = new Chart(cuposDisponiblesChart, {
     },
     options:{
         plugins: {
-            legend: {
-                display: false
-            },
+            legend: false
         },
         aspectRatio: 1.3,
         cutout: 65,
@@ -256,9 +260,7 @@ var reposicionesChartVar = new Chart(reposicionesChart, {
     },
     options:{
         plugins: {
-            legend: {
-                display: false
-            },
+            legend: false
         },
         aspectRatio: 1.3,
         cutout: 65,
