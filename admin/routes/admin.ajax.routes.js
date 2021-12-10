@@ -135,14 +135,24 @@ router.get('/admin/ajax/stats/getReposiciones',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/ajax/getUrls',ensureToken,(req,res)=>{
-    con.query('SELECT * FROM t_urls', 
-    (err, rows, fields) => {
-        if(!err){
-            res.send(rows);
-        }else{
-            res.send({err:'ServerError'});
-        }
-    });
+    var rows = [];
+    rows.push(
+        {'url':'/admin/estudiantes','descripcion':'Lista de clientes,estudiantes,usuarios de la piscina','name':'Cliente', 'icon':'<i class="fa fa-users"></i>', 'variation':'usuarios,cliente,estudiante,estudiantes'},
+        {'url':'/admin/profesores','name':'Profesor', 'icon':'fa-user-graduate', 'variation':'usuarios,profesor,profesores,instructor,instructores'},
+        {'url':'/admin/administradores','name':'Administrativo', 'icon':'fa-user-tie', 'variation':'usuarios,administrativo,administrativos,oficina'},
+        {'url':'/admin/talleres','name':'Talleres', 'icon':'fa-chalkboard-teacher', 'variation':'talleres,cursos,curso,horarios,grupos,calendario'},
+        {'url':'/admin/reposiciones','name':'Reposiciones', 'icon':'fa-exchange-alt', 'variation':'reposiciones,solicitud'},
+        {'url':'/admin/matricula','name':'Matricula', 'icon':'fa-user-graduate', 'variation':'matricula,matriculas,matriculacion,matriculaciones'},
+        {'url':'/admin/matricula/reportes','name':'Reportes', 'icon':'fa-file-pdf', 'variation':'reportes de matricula,reportes,reporte,informes,informe,informacion,informaciones'},
+        {'url':'/admin/comprobacion','name':'Comprobacion', 'icon':'fa-check-circle', 'variation':'comprobacion,comprobaciones,registro,estudiantes,usuarios,nuevos'},
+        {'url':'/admin/reportes/asistencia','name':'Asistencia', 'icon':'fa-check-circle', 'variation':'asistencia,asistencias,reportes'},
+        {'url':'/admin/reportes/conducta','name':'Conducta', 'icon':'fa-check-circle', 'variation':'conducta,conductas,reportes'},
+        {'url':'/admin/reportes/mororosos','name':'Morosos', 'icon':'fa-check-circle', 'variation':'morosos,reportes'},
+        {'url':'/admin/reportes/uso','name':'Uso', 'icon':'fa-check-circle', 'variation':'uso,usos,reportes'},
+        {'url':'/admin/reportes/sistema','name':'Sistema', 'icon':'fa-check-circle', 'variation':'sistema,sistemas,reportes'},
+        {'url':'/admin/casilleros','name':'Casilleros', 'icon':'fa-check-circle', 'variation':'casilleros'},
+    );
+    res.send(rows);
 });
 
 router.get('/admin/ajax/stats/getReportes',ensureToken,(req,res)=>{

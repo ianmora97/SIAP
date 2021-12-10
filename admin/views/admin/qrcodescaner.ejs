@@ -1,0 +1,21 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+<script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<link rel="stylesheet" href="/node_modules/@sweetalert2/themes/bootstrap-4/bootstrap-4.css">
+<script src="/node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<div class="QRContainer" style="display: none;">
+    <div>
+        <button class="btn btn-primary btn-circle" onclick="closeQRModal()" 
+        style="position: absolute;top: 30px;right: 30px;">
+            <i class="fa fa-times"></i>
+        </button>
+        <h1 class="font-weight-bold">Coloque el Código QR en la Cámara</h1>
+        <div id="codescanned" style="height: 100px;"></div>
+        <div class="d-flex justify-content-center" id="loaderQRCamera">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <video id="previewCameraQR" autoplay></video>
+    </div>
+</div>
+<script src="/js/admin/qrcodescan.js"></script>

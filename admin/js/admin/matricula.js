@@ -32,12 +32,12 @@ function onModalOpen(){
     $('#gruposCalendario').on('shown.bs.modal', function (event) {
         calendar.updateSize();
         $(".fc-dayGridMonth-button").click();
-        console.log('abre');
     })
 }
 function checkCustomView(){
     
 }
+
 function onChangeSelectsMatricula() {
     $('#EstudiantesModalMatricular').on('change',function(event) {
         let dropdown = $(event.currentTarget);
@@ -50,8 +50,29 @@ function onChangeSelectsMatricula() {
             let estudiante = g_MapEstudiantes.get(dropdown.val());
             $('.texto-matricular').html(`${estudiante.descripcion}`);
             let vecnew = g_eventosArray.filter(e => e.title === estudiante.descripcion);
+            console.log('vecnew',vecnew)
+            let vecnewMap = new Map();
+            vecnew.forEach((e) => {
+                vecnewMap.set(e.idGrupo,e);
+            });
+            let vecMatriDisponibles = new Map(); // los cursos que puede matricular
+            let matriculasDelEstudiante = g_VecMatrestudiantes.filter(e => e.cedula === estudiante.cedula);
+            // ! saca los cursos que ya estan matriculados por el estudiante
+            let vecMa = new Array();
+            matriculasDelEstudiante.forEach(e => {
+                vecMa.push(e.id_grupo);
+            });
+            console.log('vecMa',vecMa);
+            let last =  new Array();
+            vecMa.forEach((e) => {
+                vecnewMap.delete(e);
+            });
+            vecnewMap.forEach((e) => {
+                last.push(e);
+            });
+
             calendar.removeAllEventSources();
-            calendar.addEventSource(vecnew);
+            calendar.addEventSource(last);
             calendar.render();
         }else{
             $('#btnSelecionarGrupos').attr('disabled',true);
@@ -77,12 +98,18 @@ function searchonfind() {
 }
 function openModalShow(){
     $('#modalVerMatricula').on('show.bs.modal', function (event) {
-        
+        $('#cambiarEstadoActivar').show();
+        $('#cambiarEstadoDesactivar').show();
         var button = $(event.relatedTarget)
         var recipient = button.data('id')+"";
-        var id_matricula = button.data('matricula');
+        var id_matricula = button.data('idma');
         let estudiante = g_MapEstudiantes.get(recipient);
-
+        let matri = g_mapMatriculas.get(parseInt(id_matricula));
+        if(matri.activa === 1){
+            $('#cambiarEstadoActivar').hide();
+        }else{
+            $('#cambiarEstadoDesactivar').hide();
+        }
         var modal = $(this)
         modal.find('.modal-title').text(estudiante.nombre + " " + estudiante.apellido)
         $('#cedulaTarget').html(estudiante.cedula);
@@ -202,21 +229,23 @@ function desmatricular() {
 }
 function matricularCursos(){
     let bearer = 'Bearer '+g_token;
-    let estudiante = parseInt($('#EstudiantesModalMatricular').val());
-    let grupo = parseInt($('#GrupoModalMatricular').val());
-
-    let dropdown = $('#GrupoModalMatricular');
-    
-    let curso = dropdown.find('option:selected').text().split(' ')[0];
-    let fecha = dropdown.find('option:selected').text().split(' ')[1];
-    let hora = dropdown.find('option:selected').text().split(' ')[2];
-    // ! falta enviar el correo como parametro
+    let estudiante = $('#EstudiantesModalMatricular').val();
+    let correo = g_MapEstudiantes.get(estudiante).correo;
+    let id_estudiante = g_MapEstudiantes.get(estudiante).id_estudiante;
+    let nombreEst = g_MapEstudiantes.get(estudiante).nombre + " " + g_MapEstudiantes.get(estudiante).apellido;
+    let grupos = [];
+    let gruposAll = [];
+    seleccionados.forEach((grupo) => {
+        grupos.push(grupo.info.idGrupo);
+        gruposAll.push(grupo.info);
+    });
+    console.log(gruposAll,estudiante,correo)
     let data = {
+        estudianteId: id_estudiante,
         estudiante: estudiante,
-        grupo: grupo,
-        curso: curso,
-        fecha: fecha,
-        hora: hora
+        grupos: grupos,
+        correo: correo,
+        gruposAll: gruposAll
     }
     $.ajax({
         type: "POST",
@@ -243,10 +272,12 @@ function fillSelected(data) {
     for (let i = 0; i < data.length; i++) {
         var e = data[i];
         g_MapEstudiantes.set(e.cedula,e);
-        if(e.estado === 1 && e.moroso === 0){
-            $('#EstudiantesModalMatricular').append(`
-                <option value="${e.cedula}">${e.nombre + " " + e.apellido}</option>
-            `);
+        if(check3Matriculas(e)){
+            if(e.estado === 1 && e.moroso === 0){
+                $('#EstudiantesModalMatricular').append(`
+                    <option value="${e.cedula}">${e.nombre + " " + e.apellido}</option>
+                `);
+            }
         }
     }
     if(g_customView !== ''){
@@ -255,6 +286,21 @@ function fillSelected(data) {
         $('#EstudiantesModalMatricular').val(g_customView).trigger('change');
     }
 
+}
+function check3Matriculas(estudiante){
+    let matriculas = g_VecMatrestudiantes.filter(e => e.cedula === estudiante.cedula);
+    let count = 0;
+    matriculas.forEach((matricula) => {
+        console.log('MATRICULA:',matricula)
+        if(matricula.activa === 1){
+            count++;
+        }
+    });
+    if(count < 3){
+        return true;
+    }else{
+        return false;
+    }
 }
 function fillSelectGrupo(data) {
     let cont = 0;
@@ -352,10 +398,12 @@ function llenarEstudiantes(data) {
             <td>${nivel}</td>
             <td>${nombre_pro.split(' ')[0]}</td>
             <td>${fecha}</td>
-            <td><i style="font-size:0.7rem;" class="fas fa-circle text-${data.activa ? 'success' : 'danger'}"></i>&nbsp; ${data.activa ? 'Activo' : 'Inactivo'}</td>
+            <td>
+                <button style="width:90%; display:block;margin:0 auto;" class="btn btn-${data.activa ? 'success' : 'danger'}">${data.activa ? 'Activo' : 'Inactivo'}</button>
+            </td>
             <td class="text-center">
                 <span class="button-circle" role="button" data-id="${cedul}" 
-                data-matricula="${cedul}" data-toggle="modal" data-target="#modalVerMatricula">
+                data-matricula="${cedul}" data-idma="${id_matricula}" data-toggle="modal" data-target="#modalVerMatricula">
                     <i class="fas fa-ellipsis-v"></i>
                 </span>
             </td>
@@ -447,6 +495,7 @@ function fillCalendar(grupos) {
                 allp: allp,
                 codigo: codigo,
                 description: todo,
+                nivel: descripcion,
             });
             contEvents++;
         }

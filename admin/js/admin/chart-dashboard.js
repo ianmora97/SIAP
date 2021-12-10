@@ -3,6 +3,7 @@ var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
 gradienteColores.addColorStop(0, "#4659E4");
+gradienteColores.addColorStop(0.7, "#4659E4");
 gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 var tallerCh = new Chart(talleresChart, {
@@ -13,14 +14,21 @@ var tallerCh = new Chart(talleresChart, {
             {
                 backgroundColor: gradienteColores,
                 borderColor: '#4659E4',
-                borderWidth: 2,
+                borderWidth: 3,
+                tension: 0.5
             },
         ],
     },
     options: {
         plugins: {
-            legend: {
-              display: false
+            legend: false,
+            title: {
+                display: true,
+                text: 'Custom Chart Title',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
             }
         },
         tooltips: {
@@ -43,6 +51,8 @@ var tallerCh = new Chart(talleresChart, {
             y: {
                 beginAtZero: true,
                 ticks: {
+                    
+                    stepSize: 1,
                     suggestedMin: 0,
                     beginAtZero: true   // minimum value will be 0.
                 },
@@ -62,8 +72,9 @@ var usuariocanva =  document.getElementById("usuariosChart");
 
 var gradienteColores_usuarios = usuariosChart.createLinearGradient(0,0, 0, 600);
 
-gradienteColores_usuarios.addColorStop(0, "#f23a3a"); //B81616
-gradienteColores_usuarios.addColorStop(0.8, "rgba(100%, 100%, 100%, 0.4)");
+gradienteColores_usuarios.addColorStop(0, "#4659E4"); //B81616
+gradienteColores_usuarios.addColorStop(0.7, "#4659E4"); //B81616
+gradienteColores_usuarios.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 
 usuariosChart.height = 600;
@@ -74,7 +85,7 @@ var usuarioCharVar = new Chart(usuariosChart, {
             {
                 fill: true,
                 backgroundColor: gradienteColores_usuarios,
-                borderColor: '#B81616 ',
+                borderColor: '#4659E4 ',
                 borderWidth: 3,
                 tension: 0.5
             },
@@ -82,10 +93,16 @@ var usuarioCharVar = new Chart(usuariosChart, {
     },
     options: {
         plugins: {
-            legend: {
-              display: false
+            legend: false,
+            title: {
+                display: true,
+                text: 'Custom Chart Title',
+                padding: {
+                    top: 10,
+                    bottom: 30
+                }
             }
-          },
+        },
         tooltips: {
             callbacks: {
                label: function(tooltipItem) {
@@ -105,6 +122,7 @@ var usuarioCharVar = new Chart(usuariosChart, {
             y: {
                 beginAtZero: true,
                 ticks: {
+                    stepSize: 2,
                     suggestedMin: 0,
                     beginAtZero: true   // minimum value will be 0.
                 },
@@ -274,14 +292,14 @@ var grad1 = pieDonutChart.createLinearGradient(0, 0, 0, 600);
 var grad2 = pieDonutChart.createLinearGradient(0, 0, 0, 600);
 var grad3 = pieDonutChart.createLinearGradient(0, 0, 0, 600);
 
-grad1.addColorStop(0, "#11d63b");
-grad1.addColorStop(1, "#31f78a");
+grad1.addColorStop(0, "#02CA80");
+grad1.addColorStop(1, "#02CA80");
 
-grad2.addColorStop(0, "#328ff2");
-grad2.addColorStop(1, "#16d0ff");
+grad2.addColorStop(0, "#dc3545");
+grad2.addColorStop(1, "#dc3545");
 
-grad3.addColorStop(0, "#ffc416");
-grad3.addColorStop(1, "#ffe716");
+grad3.addColorStop(0, "#4659E4");
+grad3.addColorStop(1, "#4659E4");
 
 var pieDonutChartVar = new Chart(pieDonutChart, {
     type: "doughnut",

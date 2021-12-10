@@ -4,6 +4,7 @@ require('dotenv').config();
 
 var config = {
     host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
@@ -14,7 +15,7 @@ var con = mysql.createPool(config);
 
 con.getConnection(function(err) {
     if (err){
-        console.log(process.env.DB_HOST);
+        console.log(config)
         console.log(err);
         return;
     }else{

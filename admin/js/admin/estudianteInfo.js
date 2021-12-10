@@ -53,13 +53,7 @@ function buildDataOnPage(data){
     buildAnotaciones(data.anotaciones);
     buildTalleresP(g_talleres);
 }
-function progresoPorcentaje(pinicio, pfin){
-    let inicio = moment(pinicio,'YYYY-MM-DD'); // matriculacion
-    let fin = moment(pfin,'YYYY-MM-DD'); // periodo final del curso
-    let hoy = moment();
-    let avanzado = hoy.diff(inicio, 'days');
-    return (avanzado * 100) / (fin.diff(inicio, 'days'));
-}
+
 function buildTalleres(data){
     if(data.length > 0){
         data.forEach(e => {
@@ -91,9 +85,20 @@ function buildTalleres(data){
         `)
     }
 }
+function progresoPorcentaje(pinicio, pfin){
+    let inicio = moment(pinicio,'YYYY-MM-DD'); // matriculacion
+    let fin = moment(pfin,'YYYY-MM-DD'); // periodo final del curso
+    let hoy = moment();
+    let avanzado = hoy.diff(inicio, 'days');
+    return (avanzado * 100) / (fin.diff(inicio, 'days'));
+}
 function buildTalleresP(data){
-    if(data.length > 0){
-        data.forEach(e => {
+    let newM = new Map();
+    data.forEach(e => {
+        newM.set(e.codigo_taller, e);
+    });
+    if(newM.size > 0){
+        newM.forEach(e => {
             let p = progresoPorcentaje(e.created_at,e.periodo_final);
             $("#talleresP").append(`
                 <h5>${e.descripcion}</h5>

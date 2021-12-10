@@ -146,47 +146,47 @@
          <div id="page-content-wrapper">
              <%- include('headerDashboard') %>
 
-             <div class="container-fluid mt-4">
-                 <div class="card border-0 shadow-sm my-3 shadow-primary rounded-3">
-                     <div class="card-body py-2">
-                         <div class="row">
-                             <div class="col-md-6 ">
-                                 <h2 class="font-weight-bolder">Lista de Administradores</h2>
-                                 <small class="text-muted">En esta seccion se muestra la lista de los administradores del sistema <br>
-                                    solo un administrador puede agregar a un administrador</small><br>
-                                 <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
-                             </div>
-                             <div class="col border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" id="administradores_total_stats">0</h1>
-                                 <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                 title="Cantidad Total de Administradores">Total de Administradores&nbsp; <i class="fas fa-align-center text-info"></i></small>
-                             </div>
-                             <div class="col ">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" id="superusuarios_stats">0</h1>
-                                 <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                 title="Cantidad Total de Administradores Super Usuarios">Super Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                             </div>
-
-                         </div>
-                     </div>
-                 </div>
-                 <div class="card border-0 shadow-primary rounded-3 mt-4 animate__animated animate__zoomIn">
-                    <nav>
-                        <div class="nav bg-white" id="nav-tab" role="tablist">
-                            <a class="nav-link-casilleros active" id="nav-lista-tab" data-toggle="tab" 
-                            href="#nav-lista" role="tab" aria-controls="nav-lista" aria-selected="true"><i class="fas fa-list-ul text-primary"></i> Lista</a>
-                            <a class="nav-link-casilleros" id="nav-subirarchivos-tab" data-toggle="tab" 
-                            href="#nav-subirarchivos" role="tab" aria-controls="nav-subirarchivos" aria-selected="true">
-                            <i class="fas fa-file-upload text-primary"></i> Archivos</a>
-                            <% if(usuario.rol == 5){ %>
-                            <a class="nav-link-casilleros" id="nav-querys-tab" data-toggle="tab" 
-                            href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false"><i class="ri-terminal-line text-primary"></i> Panel de administracion</a>
-                            <%}%>
-                        </div>
-                    </nav>
+             <div class="container-fluid mt-0">
+                <nav>
+                    <div class="nav nav-pills" id="nav-tab" role="tablist">
+                        <a class="nav-item-pill-cus active" id="nav-lista-tab" data-toggle="tab" 
+                        href="#nav-lista" role="tab" aria-controls="nav-lista" aria-selected="true"><i class="fas fa-list-ul"></i> Lista</a>
+                        <a class="nav-item-pill-cus" id="nav-subirarchivos-tab" data-toggle="tab" 
+                        href="#nav-subirarchivos" role="tab" aria-controls="nav-subirarchivos" aria-selected="true">
+                        <i class="fas fa-file-upload"></i> Archivos</a>
+                        <% if(usuario.rol == 5){ %>
+                        <a class="nav-item-pill-cus" id="nav-querys-tab" data-toggle="tab" 
+                        href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false"><i class="ri-terminal-line"></i> Panel de administracion</a>
+                        <%}%>
+                    </div>
+                </nav>
+                 
+                
+                
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-lista" role="tabpanel" aria-labelledby="nav-lista-tab">
-                            <div class="card-body px-0 py-2">
+                            <div class="bg-white shadow-sm my-3 shadow-primary rounded-3 p-4">
+                                <div class="row ">
+                                    <div class="col-md-6 ">
+                                        <h1 class="font-weight-bolder">Lista de Administradores</h1>
+                                        <small class="text-muted">En esta seccion se muestra la lista de los administradores del sistema <br>
+                                        solo un administrador puede agregar a un administrador</small><br>
+                                        <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                                    </div>
+                                    <div class="col border-right">
+                                        <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" id="administradores_total_stats">0</h1>
+                                        <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                        title="Cantidad Total de Administradores">Total de Administradores&nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                    </div>
+                                    <div class="col ">
+                                        <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" id="superusuarios_stats">0</h1>
+                                        <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
+                                        title="Cantidad Total de Administradores Super Usuarios">Super Usuarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                    </div>
+            
+                                </div>
+                            </div>
+                            <div class="bg-white py-2 shadow-primary rounded-3 animate__animated animate__zoomIn">
                                 <div class="row px-2 mx-auto rounded-lg justify-content-between py-1 mb-1">
                                     <div class="col-md-6 pl-1 pr-0">
                                         <div class="input-group flex-nowrap">
@@ -215,8 +215,11 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+            
+                            <div class="bg-white border-0 shadow-primary rounded-3 mt-4 animate__animated animate__fadeInUp">
                                 <div class="row w-100 mx-0 px-0" style="min-height: 600px; overflow-y: auto;">
-                                    <table class="table custom-table table-responsive-sm table-borderless text-center table-hover" 
+                                    <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover" 
                                     id="table" data-order="[[ 1, &quot;asc&quot; ]]">
                                         <thead class="table-light-header">
                                             <tr>
@@ -240,37 +243,55 @@
                         </div>
                         
                         <div class="tab-pane fade" id="nav-subirarchivos" role="tabpanel" aria-labelledby="nav-subirarchivos-tab">
-                            <div class="row px-3 py-2 mx-0" >
-                                <div class="col-md-6" style="height: 65vh; overflow-y: auto;">
-                                    <div class="form-group my-2">
-                                        <h5 class="font-weight-bold mb-3">Agregar Estudiantes desde un Archivo Excel</h5>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text bg-success" id="inputGroupFileAddon01">
-                                                    <i class="far fa-file-excel text-white"></i>
-                                                </span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="upload" 
-                                                name="files[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                <label class="custom-file-label" for="upload">Subir Excel</label>
+                            <div class="bg-white shadow-sm my-3 shadow-primary rounded-3 p-4">
+                                <div class="row ">
+                                    <div class="col-md-6 ">
+                                        <h1 class="font-weight-bolder">Carga de Archivos</h1>
+                                        <small class="text-muted">Cargue un documento de Excel</small><br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white border-0 shadow-primary rounded-3 mt-4 animate__animated animate__fadeInUp">
+                                <div class="row px-3 py-2 mx-0" >
+                                    <div class="col-md-6" style="height: 65vh; overflow-y: auto;">
+                                        <div class="form-group my-2">
+                                            <h5 class="font-weight-bold mb-3">Agregar Estudiantes desde un Archivo Excel</h5>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-success" id="inputGroupFileAddon01">
+                                                        <i class="far fa-file-excel text-white"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="upload" 
+                                                    name="files[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                                    <label class="custom-file-label" for="upload">Subir Excel</label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="mt-3" id="resultTableScript1"></div>
-                                    
-                                </div>
-                                <div class="col-md-6 border-left">
-                                    <div class=" bg-dark w-100 rounded-3 shadow p-3 text-white " style="height: 62vh;" 
-                                    id="feedbackAfterUpload">
+                                        <div class="mt-3" id="resultTableScript1"></div>
                                         
+                                    </div>
+                                    <div class="col-md-6 border-left">
+                                        <div class=" bg-dark w-100 rounded-3 shadow p-3 text-white " style="height: 62vh;" 
+                                        id="feedbackAfterUpload">
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <% if(usuario.rol == 5){ %>
                         <div class="tab-pane fade" id="nav-querys" role="tabpanel" aria-labelledby="nav-querys-tab">
-                            <div class="card-body px-2 py-2" style="height: 65vh; overflow-y: auto;">
+                            <div class="bg-white shadow-sm my-3 shadow-primary rounded-3 p-4">
+                                <div class="row ">
+                                    <div class="col-md-6 ">
+                                        <h1 class="font-weight-bolder">Base de Datos</h1>
+                                        <small class="text-muted">Revisar informacion de la base de datos</small><br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white border-0 shadow-primary rounded-3 mt-4 p-3 animate__animated animate__fadeInUp">
                                 <div class="row mx-0 pl-0">
                                     <div class="col-lg-5 pl-0" style="height: 60vh; overflow-y: auto;">
                                         <h4>Base de datos</h4>
@@ -325,9 +346,8 @@
                         </div>
                         <%}%>
                     </div>
-                 </div>
-             </div>
-             <%- include('footerDashboard') %>
+            </div>
+            <%- include('footerDashboard') %>
          </div>
              
          </div>

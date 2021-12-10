@@ -17,6 +17,8 @@ var g_mapHorarios = new Map();
 var g_mapGrupos = new Map();
 var g_mapProfesores = new Map();
 
+var calendar;
+
 moment.lang('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
     monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
@@ -35,8 +37,17 @@ function events(event){
     openModal();
     checkClickModalDateCalendar();
     checkInputsTaller();
+    changeTabs();
 }
-
+function changeTabs(){
+    $('#nav-tab-calendario').on('click', function (e) {
+        setTimeout(() => {
+            $(".fc-dayGridMonth-button").click();
+            calendar.updateSize();
+            $(".fc-dayGridMonth-button").trigger('click');
+        }, 500);
+    });
+}
 $(function () {
     $('[data-toggle="popover"]').popover();
     $('[data-toggle="tooltip"]').tooltip()
@@ -443,7 +454,7 @@ function agregarGrupo() {
     let periodoInicio = $('#periodoInicioAgregarModal').val();
     let periodo = $('#periodoAgregarModal').val();
     let bearer = 'Bearer '+g_token;
-    if(horario && profesor && taller && cupobase && cupoextra && periodo && periodoInicio) {
+    if(horario && profesor && taller && cupobase && periodo && periodoInicio) {
         $.ajax({
             type: "GET",
             url: "/admin/talleres/ingresarGrupo", 
@@ -493,7 +504,7 @@ function actualizarDatosGrupo() {
     let periodo = $('#periodoActualizarModal').val();
 
     let bearer = 'Bearer '+g_token;
-    if(horario && profesor && taller && cupobase && cupoextra && periodo) {
+    if(horario && profesor && taller && cupobase && periodo) {
         $.ajax({
             type: "GET",
             url: "/admin/talleres/actualizarGrupo", 
@@ -594,7 +605,7 @@ function loadFromDb() {
         }
     }).then((talleres) => {
         gVec_talleres = talleres;
-        $('#talleres_stats').html(talleres.length)
+        $('.talleres_stats').html(talleres.length)
         showTalleres(talleres);
         selectTallerFromGrupo(talleres);
         $.ajax({
@@ -606,7 +617,7 @@ function loadFromDb() {
             }
         }).then((horarios) => {
             gVec_horarios = horarios;
-            $('#horarios_stats').html(horarios.length)
+            $('.horarios_stats').html(horarios.length)
             showHorarios(horarios);
             selectHorarioFromGrupo(horarios);
             $.ajax({
@@ -618,11 +629,11 @@ function loadFromDb() {
                 }
             }).then((grupos) => {
                 gVec_grupos = grupos;
-                $('#grupos_stats').html(grupos.length)
+                $('.grupos_stats').html(grupos.length)
                 let totalTime = new Date().getTime() - ajaxTime;
                 let a = Math.ceil(totalTime / 1000);
                 let t = a == 1 ? a + ' segundo' : a + ' segundos';
-                $('#infoTiming').text(t);
+                $('.infoTiming').text(t);
                 showGrupos(grupos);
                 fillCalendar(grupos);
             }, (error) => {
@@ -969,7 +980,7 @@ function toDayWeek(dia) {
             return 'DOMINGO';
     }
 }
-var calendar;
+
 function fillCalendar(grupos) {
     var eventsArray = [];
     grupos.forEach(e => {

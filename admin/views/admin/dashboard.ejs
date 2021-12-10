@@ -13,19 +13,7 @@
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <div class="container-fluid mt-2 px-0">
-                <div class="row mx-3 p-3 cards-dash">
-                    <div class="col-md-5">
-                        <h4 class="font-weight-bold mt-1">Panel de administracion</h4>
-                    </div>
-                    <div class="col-md-7 d-flex justify-content-end">
-                        <% let usernameNombre1 = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
-                        <% let usernameApellido1 = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
-                        <h4>
-                            Bienvenido <%= usernameNombre1 %>&nbsp;<%= usernameApellido1 %> 
-                        </h4>
-                    </div>
-                </div>
+            <div class="container-fluid mt-2">
                 <div class="row mx-auto">
                     <div class="col-xl-4 order-xl-1 order-2">
                         <div class="cards-dash animate__animated animate__zoomIn" style="height: 400px;">
@@ -58,7 +46,7 @@
                     </div>
                     <div class="col-xl-8 order-xl-2 order-1">
                         <div class="row mx-0">
-                            <div class="col-xl-6 order-xl-1 order-2 pl-xl-2 px-0 pl-xl-0">
+                            <div class="col-xl-6 order-xl-1 order-2 px-sm-0 px-0">
                                 <div class="chart-container cards-dash animate__animated animate__zoomIn " id="talleres_chart">
                                     <div class="row px-2 mx-0 pt-2  card-border-header">
                                         <div class="w-100 d-flex justify-content-between align-items-baseline">
@@ -66,7 +54,7 @@
                                             <h6 class="text-muted d-block mb-0" id="talleres-stats"></h6>
                                         </div>
                                     </div>
-                                    <div class="row py-2 px-3" style="height:237px;">
+                                    <div class="row py-2 px-3" style="min-height:237px;">
                                         <canvas id="talleresChart"></canvas>
                                     </div>
                                 </div>
@@ -77,14 +65,14 @@
                                             <small class="text-muted d-block"></small>
                                         </div>
                                     </div>
-                                    <div class="row py-2 px-3" style="height:237px;">
+                                    <div class="row py-2 px-3" style="min-height:237px;">
                                         <canvas id="usuariosChart"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-6 order-xl-2 order-1 pl-xl-0 px-0 pl-xl-3">
+                            <div class="col-xl-6 order-xl-2 order-1 px-0">
                                 <div class="row mx-auto align-items-stretch">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 px-0 pl-md-2">
                                         <div class="cards-dash mb-0 pb-0 d-flex flex-column animate__animated animate__flipInX animate_delay_t1" 
                                         id="casilleros_chart" style="min-height: 272px;">
                                             <div class="row px-2 mx-0 pt-2  card-border-header">
@@ -103,7 +91,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 px-0 pl-md-2">
                                         <div class="cards-dash mb-0 pb-0 d-flex flex-column animate__animated animate__flipInX animate_delay_t2" 
                                         id="morosidad_chart" style="min-height: 272px;">
                                             <div class="row px-2 mx-0 pt-2  card-border-header">
@@ -124,7 +112,7 @@
                                     </div>
                                 </div>
                                 <div class="row mx-auto align-items-stretch">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 px-0 pl-md-2">
                                         <div class="cards-dash mb-0 pb-0 d-flex flex-column animate__animated animate__flipInX animate_delay_t3" 
                                         id="cupos_chart" style="min-height: 272px;">
                                             <div class="row px-2 mx-0 pt-2  card-border-header">
@@ -143,7 +131,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 px-0 pl-md-2">
                                         <div class="cards-dash mb-0 pb-0 d-flex flex-column animate__animated animate__flipInX animate_delay_t4" 
                                         id="reposiciones_chart" style="min-height: 272px;">
                                             <div class="row px-2 mx-0 pt-2  card-border-header">

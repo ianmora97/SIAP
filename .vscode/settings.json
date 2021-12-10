@@ -9,25 +9,12 @@
                 "authProtocol": "default"
             },
             "previewLimit": 50,
-            "server": "52.171.213.23",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "siap",
-            "database": "siapd",
-            "username": "proyecto",
-            "password": "proyecto"
-        },
-        {
-            "mysqlOptions": {
-                "authProtocol": "default"
-            },
-            "previewLimit": 50,
-            "server": "100.26.185.48",
+            "server": "3.16.169.84",
             "port": 3306,
             "driver": "MySQL",
             "database": "siap",
-            "username": "admin",
-            "password": "admin",
+            "username": "root",
+            "password": "root",
             "name": "SIAP NEW"
         }
     ]

@@ -193,7 +193,7 @@ function cargarDatos() {
             let grupos = response.grupos;
             // $('#talleres-stats').text(response.mxg.length);
             if(response.mxg.length > 0){
-                $('#talleres-stats').append(`<span class="badge badge-primary ml-1">${response.mxg.length} matriculados</span>`);
+                $('#talleres-stats').append(`<span class="badge badge-secondary ml-1">${response.mxg.length} matriculados</span>`);
                 for (var [key, value] of Object.entries(grupos)) {
                     addData(tallerCh,key, value);
                 }
@@ -297,7 +297,7 @@ function cargarDatos() {
         (reportes) => {
             let todos = reportes.Agregados + reportes.Eliminados + reportes.Actualizados;
             if(todos > 0){
-                $('.reportes-stats-aea').append(`<span class="badge badge-primary ml-1">${todos} reportes</span>`);
+                $('.reportes-stats-aea').append(`<span class="badge badge-secondary ml-1">${todos} reportes</span>`);
                 addData(pieDonutChartVar,'Agregados', reportes.Agregados);
                 addData(pieDonutChartVar,'Eliminados', reportes.Eliminados);
                 addData(pieDonutChartVar,'Actualizados', reportes.Actualizados);

@@ -32,9 +32,9 @@
                     <span class="sr-only" id="cedulaTarget"></span>
                     <span class="sr-only" id="idCursoDesmatricular"></span>
                 </div>
-                <div class="modal-footer py-3 border-0">
-                    <button type="button" class="btn btn-primary" onclick="cambiarEstadoMatricula(1)">Activar Matrícula</button>
-                    <button type="button" class="btn btn-warning" onclick="cambiarEstadoMatricula(0)">Desactivar Matrícula</button>
+                <div class="modal-footer py-3 border-0 d-flex justify-content-around">
+                    <button type="button" class="btn btn-primary" id="cambiarEstadoActivar" onclick="cambiarEstadoMatricula(1)">Activar Matrícula</button>
+                    <button type="button" class="btn btn-warning" id="cambiarEstadoDesactivar" onclick="cambiarEstadoMatricula(0)">Desactivar Matrícula</button>
                     <button type="button" class="btn btn-danger" onclick="desmatricular()">Desmatricular</button>
                 </div>
             </div>
@@ -134,39 +134,50 @@
                 </script>
             <%}%>
             <div class="container-fluid mt-2">
-                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                <div class="bg-white border-0 shadow-primary mb-3 rounded-3 p-4">
                     <div class="row">
                         <div class="col-md-6 mb-3 mb-md-0">
                             <h1 class="font-weight-bold">Estudiantes Matriculados</h1>
-                            <p class="mb-1">En esta sección se muestra la lista de los
+                            <small class="mb-1 text-muted">En esta sección se muestra la lista de los
                                 estudiantes que se matricularon en un grupo, a un estudiante matriculado se le puede rechazar la matrícula.
                                 Los administradores tambien pueden matricular a cualquier estudiante.
-                            </p>
+                            </small><br>
                             <small class="text-muted">Información actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                         </div>
                         <div class="col-md-6 row mx-0 justify-content-end">
-                            <div class="border-right px-5 d-flex flex-column align-items-end">
-                                <h1 class="m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t1"
-                                    id="est_activos_stats">0</h1>
-                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                title="Estudiantes Matriculados">Estudiantes Activos &nbsp; <i
+                            <div class="border-right px-5 d-flex flex-column align-items-end" id="est_activos_stats_cont">
+                                <h1 id="est_activos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t1">0</h1>
+                                <small class="text-muted">Estudiantes Activos &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
-                            <div class="border-right px-5 d-flex flex-column align-items-center">
-                                <h1 class="m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t2"
-                                    id="est_inactivos_stats">0</h1>
-                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                title="Estudiantes Inactivos pero no desmatriculados">Estudiantes Inactivos &nbsp; <i
+                            <div class="border-right px-5 d-flex flex-column align-items-center" id="est_inactivos_stats_cont">
+                                <h1 id="est_inactivos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t2">0</h1>
+                                <small class="text-muted">Estudiantes Inactivos &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
-                            <div class="px-5 d-flex flex-column align-items-center">
-                                <h1 class="m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t3"
-                                    id="cursos_stats">0</h1>
-                                <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                                title="Cantidad de cupos disponibles en todos los cursos">Cupos disponibles &nbsp; <i
+                            <div class="px-5 d-flex flex-column align-items-center" id="cursos_stats_cont">
+                                <h1 id="cursos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t3">0</h1>
+                                <small class="text-muted">Cupos disponibles &nbsp; <i
                                         class="fas fa-align-center text-info"></i></small>
                             </div>
                         </div>
+                        <script>
+                            tippy('#est_activos_stats_cont', {
+                                content: 'Estudiantes Matriculados',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#est_inactivos_stats_cont', {
+                                content: 'Estudiantes Inactivos pero no desmatriculados',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#cursos_stats_cont', {
+                                content: 'Cantidad de cupos disponibles en todos los cursos',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                        </script>
                     </div>
                 </div>
                 <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
@@ -185,21 +196,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                        <div class="col-md-3 d-flex justify-content-end align-items-baseline ">
                             <div class="w-100">
                                 <button type="button" class="btn btn-primary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
                                 onclick="openmodal('#matricularModal')"><i class="fas fa-plus"></i> Agregar</button>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="bg-white px-0 py-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
-                    <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
-                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
-                            <h4 class="font-weight-bold mb-0 ">Listado</h4>
-                        </div>
+                    <div class="row mx-0 rounded-3 justify-content-between pt-1 mt-3">
                         <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
-                            <h6 class="font-weight-bold">Mostrar</h6>
                             <div class="ml-2 w-100" id="length">
                                 <select class="custom-select">
                                     <option selected>All columns</option>
@@ -209,22 +214,19 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
-                            <div id="pagination">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
-                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
-                                    </ul>
-                                </nav>
-                            </div>
+                        <div class="col-sm-6 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light-success mr-2" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
+                            <button type="button" class="btn btn-light-danger mr-2" onclick="pdfDownload()">
+                                <i class="fas fa-file-pdf pr-2"></i>PDF
+                            </button>
                         </div>
                     </div>
-                    <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
-                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
+                </div>
+                <div class="bg-white px-0 pb-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
+                    <div class="row w-100 mx-0" style="min-height:600px;overflow-y: auto;">
+                        <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
                          id="table" data-order="[[ 1, &quot;asc&quot; ]]">
                             <thead class="table-light-header">
                                 <tr>
@@ -243,8 +245,26 @@
 
                             </tbody>
                         </table>
-                        <div class="d-flex align-items-center align-self-end border-info w-100">
-                            <small id="info" class="d-flex align-items-end ml-4"></small>
+                        <div class="d-flex justify-content-between align-items-center border-info w-100 mt-auto px-2 mb-1">
+                            <div>
+                                <small id="info" class="d-flex align-items-baseline ml-4"></small>
+                            </div>
+                            <div id="pagination">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                .pagination{
+                                    margin-bottom: 0 !important;
+                                }
+                            </style>
                         </div>
                     </div>
                 </div>

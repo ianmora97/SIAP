@@ -199,6 +199,7 @@ function loadFromDb() {
             'Authorization':bearer
         }
     }).then((solicitudes) => {
+        console.log(solicitudes)
         let totalTime = new Date().getTime() - ajaxTime;
         let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
@@ -207,6 +208,7 @@ function loadFromDb() {
         cargar_estudiante(solicitudes);
         load_stats(solicitudes);
     }, (error) => {
+        console.log(error)
     });
     
     $.ajax({
@@ -303,11 +305,7 @@ function llenar_Estudiantes(data) {
                 <a href="mailto:${data.correo}">${data.correo}</a>
             </td>
             <td class="text-center">
-                <a href="/admin/estudiantes/getEstudiante/${data.cedula}">
-                <span class="button-circle" role="button" data-id="${data.cedula}">
-                    <i class="fas fa-ellipsis-v"></i>
-                </span>
-                </a>
+                <button class="btn btn-danger" onclick="delete_estudiante(${data.cedula})"><i class="fas fa-trash-alt"></i></button>
             </td>
         </tr>
     S`);
@@ -322,26 +320,71 @@ function llenar_Estudiantes(data) {
     <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
     */
 }
+async function delete_estudiante(cedula){
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    let est = g_estudiantes_map.get(""+cedula);
+    swalWithBootstrapButtons.fire({
+        title: `Desea eliminar a ${est.nombre} ${est.apellido} de la lista?`,
+        text: "Esta acción no se puede revertir!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, eliminar',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarEstudiante(cedula).then(data => {
+                if(data.status == 200){
+                    swalWithBootstrapButtons.fire(
+                        'Eliminado!',
+                        `${est.nombre} ${est.apellido} ha sido eliminado`,
+                        'success'
+                    ).then(() => {
+                        location.reload();
+                    });
+                    // $('#table_estudiantes').DataTable().ajax.reload();
+                }else{
+                    swalWithBootstrapButtons.fire(
+                        'Error!',
+                        `${data.error}`,
+                        'error'
+                    )
+                }
+            })
+        }else if (result.dismiss === Swal.DismissReason.cancel) {
+            
+        }
+    })
+}
 function moverlabel(label_id, nivel){
     let valor = g_talleres.get(parseInt(nivel.value));
     $('#id_label_est_'+label_id+'').html(valor.descripcion);    
     $('#guardar_rango_'+label_id+'').removeClass('disabled');
     $('#guardar_rango_'+label_id+'').prop('disabled',false);
 }
-function eliminarEstudiante() {
-    let bearer = 'Bearer '+g_token;
-    let cedula = $('#cedulaEstudiante').html();
-    $.ajax({
-        type: "GET",
-        url: "/admin/estudiante/eliminar", 
-        data: {cedula},
-        contentType: "appication/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        location.href = '/admin/estudiantes';
-    }, (error) => {
+function eliminarEstudiante(cedula) {
+    return new Promise((resolve, reject) => {
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/estudiante/eliminar", 
+            data: {cedula},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            resolve(response);
+            //location.href = '/admin/estudiantes';
+        }, (error) => {
+            reject(error);
+        });
     });
 }
 function actualizarNivel() {

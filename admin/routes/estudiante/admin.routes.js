@@ -27,6 +27,7 @@ router.get('/admin/estudiante/listaEstudiantes',ensureToken,(req,res)=>{
         if(!err){
             res.send(rows);
         }else{
+            console.log(err)
             res.send(err);
         }
     });
@@ -235,9 +236,9 @@ router.get('/admin/estudiante/eliminar',ensureToken,(req,res)=>{
         (err,rows,fields)=>{
         if(!err){
             logSistema(req.session.value.cedula, `ELIMINAR USUARIO -> ${req.query.cedula}`, DDL.DELETE, TABLE.ESTUDIANTE);
-            res.send(rows);
+            res.send({rows:rows,status:200});
         }else{
-            res.send(err)
+            res.send({rows:err,status:500});
         }
     });
 });

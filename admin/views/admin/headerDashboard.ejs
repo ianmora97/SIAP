@@ -1,37 +1,57 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-white justify-content-between py-0 shadow-primary" id="menu-header">
+<nav class="navbar navbar-expand-lg navbar-dark justify-content-between py-2" id="menu-header">
     <button class="btn px-1" id="menu-toggle">
         <i class="fas fa-bars"></i>
     </button>
     <div class="p-0" id="navbarSupportedContent">
         <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0">
-
             <li class="d-inline buscarupbarra">
                 <div class="position-relative w-100">
-                    <input type="text" class="form-control " style="height: 35px; border-radius: 9px;" 
+                    <input type="text" class="form-control border-0 bg-light" style="height: 42px; border-radius: 9px;" 
                     placeholder="Buscar..." id="dashboardSearch">
                     <div class="bg-white finder">
                         
                     </div>
                 </div>
             </li>
-            <!-- <li class="d-inline px-3 dropdown">
-                <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
-                    <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
-                </a>
-            </li> -->
-            <li class="d-inline px-3 dropdown">
-                <div class="dropdown d-inline">
-                    <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
-                        <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
+            <li class="d-inline pl-3">
+                <div class="bg-light d-flex justify-content-start px-3 align-items-center" style="border-radius: 9px;">
+                    <div class="text-dark pr-3" id="nombreUsuario" style="width: 200px;">
+                        <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
+                        <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
+                        <h6 class="align-middle mb-0">
+                            <a class="text-decoration-none text-dark" href="/admin/perfil">
+                                <% if (!usuario.foto) { %>
+                                    <i class="fas fa-user-circle text-dark" style="font-size: 20px;"></i>
+                                <% } %>
+                                <%if (usuario.foto){%>
+                                    <div class="position-relative d-inline-block">
+                                        <img src="/public/uploads/<%= usuario.foto%>" class="rounded-circle" width="30px">
+                                        <div class="position-absolute" style="bottom: -5px;right: -2px;">
+                                            <i class="fas fa-circle text-success" style="font-size:10px;"></i>
+                                        </div>
+                                    </div>
+                                <%}%>
+                                <span class="mr-1"></span>
+                                <%= usernameNombre %>&nbsp;<%= usernameApellido %> 
+                            </a>
+                        </h6>
+                    </div>
+                    <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
+                        <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
                     </a>
-                    <div class="dropdownNotificaciones" id="notificacionesDrop">
-                        <strong class="px-2 py-3">Notificaciones</strong>
-                        <hr>
-                        <div class="container-fluid px-2" id="notifications">
-
+                    <div class="dropdown d-inline ml-4">
+                        <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
+                            <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
+                        </a>
+                        <div class="dropdownNotificaciones" id="notificacionesDrop">
+                            <strong class="px-2 py-3">Notificaciones</strong>
+                            <hr>
+                            <div class="container-fluid px-2" id="notifications">
+        
+                            </div>
+                            <hr>
+                            <a class="dropdown-item text-center mt-auto" href="#">...</a>
                         </div>
-                        <hr>
-                        <a class="dropdown-item text-center mt-auto" href="#">...</a>
                     </div>
                 </div>
             </li>
