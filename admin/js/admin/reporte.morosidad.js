@@ -1,105 +1,107 @@
-const animateCSS = (element, animation) =>
-  new Promise((resolve, reject) => {
-    let prefix = 'animate__';
-    const animationName = `${prefix}${animation}`;
-    const node = document.querySelector(element);
 
-    node.classList.add(`${prefix}animated`, animationName);
+var g_estudiantes = new Array();
 
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
 function loaded(event){
     events(event);
 }
 
 function events(event){
     bringData();
-    toogleMenu();
 }
-function toogleMenu() {
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        //$('#sidebar-wrapper').css('position','relative');
-        $("#wrapper").toggleClass("toggled");
-        //$("#side-panel").css('margin-left','-12px');
-        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-        //$("#sidebar-wrapper").animate({left:'-200'},1000);
-    });
-  }
-  $(function () {
-    $('[data-toggle="popover"]').popover();
-  })
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+
 function searchonfind() {
     var table = $('#morosos_Table').DataTable();
     let val = $('#barraBuscar').val();           
     let result = table.search( val ).draw();
-    
 }
 
 function bringData(){
+    let ajaxTime = new Date().getTime();
+    let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
         url: "/admin/reportes/morosos/estudiantesMorosos",
-        contentType: "application/json"
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
     }).then((response) => {
+        g_estudiantes = response;
+        let totalTime = new Date().getTime() - ajaxTime;
+        let a = Math.ceil(totalTime / 1000);
+        let t = a == 1 ? a + ' segundo' : a + ' segundos';
+        $('#infoTiming').html(t)
         fillListMorosos(response);
-        $('#cargarDatosSpinner').hide();
+        $('#estudiantes_morosos_stats').html(response.length)
     }, (error) => {
     });
 }
 function fillListMorosos(morosos) {
     $('#lista_morosos').html('');
+    let cont = 0;
     if(morosos.length){
         morosos.forEach((e)=>{
+            if(e.estado) cont++;
             showonListMorosos(e);
+            $('#estudiantes_inactivos_stats').html(cont)
         });
     }
-    $('#morosos_Table').DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron estudiantes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
-                "first":    '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-left"></i></button>',
-                "previous": '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-left"></i></button>',
-                "next":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-right"></i></button>',
-                "last":     '<button class="btn btn-sm btn-dark"><i class="fas fa-angle-double-right"></i></button>'
+                "first": '<i class="fas fa-angle-double-left"></i>',
+                "previous": '<i class="fas fa-angle-left"></i>',
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
-                    "first":    'Primera',
-                    "previous": 'Anterior',
-                    "next":     'Siguiente',
-                    "last":     'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [1], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#dataTables_length').css('display','none');
-    $('#morosos_Table_filter').css('display','none');
-    $('#morosos_Table_length').css('display','none');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
+    $('#table_wrapper').addClass('px-0')
 
-    $('#morosos_Table_info').appendTo('#informacionTable');
-    $('#morosos_Table_paginate').appendTo('#botonesCambiarTable');
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function showonListMorosos(u){
     let id = u.id;
     let cedula = u.cedula;
-    let nombre = u.nombre;
-    let apellido = u.apellido;
+    let nombre = u.nombre +' '+ u.apellido;
     let pago = u.pago;
     let sexo = u.sexo == 'Masculino' ? 'o' : u.sexo == 'Femenino' ? 'a' : '@';
     let estado = u.moroso == 1 ? 'Moroso' : 'Activo';
@@ -107,13 +109,28 @@ function showonListMorosos(u){
     let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#lista_morosos').append(`
         <tr>
+        <td>${id}</td>
         <td class="text-center">${foto}</td>
         <td>${cedula}</td>
-        <td>${nombre.toUpperCase()  + ' ' + apellido.toUpperCase() }</td>
-        <td>${pago}</td>
+        <td><a href="/admin/estudiantes/getEstudiante/${cedula}">${nombre}</a></td>
         <td class="text-center"><span class="badge badge-danger">Moros${sexo}</span></td>
-        <td class="text-center" data-toggle="modal" data-target="#editarFilaMorosoModal"><i class="fas fa-pen 2x"></i></td>
         </tr>
     `);
+}
+function excelDownload(){
+    let data = new Array();
+    for (let i = 0; i < g_estudiantes.length; i++) {
+        const e = g_estudiantes[i];
+        data.push({
+            id: e.id,
+            cedula: e.cedula,
+            nombre: e.nombre,
+            apellido: e.apellido,
+            correo: e.correo,
+            estado: `${e.estado == 1 ? 'Activo' :'Inactivo' }`
+        });
+    }
+    const xls = new XlsExport(data, "Estudiantes");
+    xls.exportToXLS('Reporte_Morosidad.xls')
 }
 document.addEventListener("DOMContentLoaded", loaded);

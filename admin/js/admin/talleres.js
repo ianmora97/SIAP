@@ -736,7 +736,7 @@ function showTalleres(data) {
     
     $('#talleres_table_paginate').appendTo('#pagination_talleres');
 
-    $('#talleres_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#talleres_table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
     $('#talleres_table_length').find('label').find('select').appendTo('#lenghtTable_talleres');
     $('#talleres_table_length').html('');
 }
@@ -795,7 +795,7 @@ function showHorarios(data) {
     
     $('#horarios_table_paginate').appendTo('#pagination_horarios');
 
-    $('#horarios_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#horarios_table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
     $('#horarios_table_length').find('label').find('select').appendTo('#lenghtTable_horarios');
     $('#horarios_table_length').html('');
 }
@@ -854,7 +854,7 @@ function showGrupos(data) {
     
     $('#grupos_table_paginate').appendTo('#pagination_grupos');
 
-    $('#grupos_table_length').find('label').find('select').removeClass('form-control form-control-sm')
+    $('#grupos_table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
     $('#grupos_table_length').find('label').find('select').appendTo('#lenghtTable_grupos');
     $('#grupos_table_length').html('');
 
@@ -1007,8 +1007,8 @@ function fillCalendar(grupos) {
             endRecur: e.periodo_final,
             daysOfWeek: [ weekday ], 
             display: 'block',
-            backgroundColor: '#4659E4',
-            borderColor: '#4659E4',
+            backgroundColor: 'rgba(70, 89, 228, 1)',
+            borderColor: 'rgba(70, 89, 228, 0.8)',
             icon : "swimmer",
             codigo: codigo,
             description: todo,
@@ -1020,18 +1020,14 @@ function fillCalendar(grupos) {
     calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'es',
         initialView: 'dayGridMonth',
-        height: 750,
+        height: 1000,
         nowIndicator: true,
         aspectRatio:1,
         themeSystem: 'bootstrap',
-        businessHours: {
-            startTime: '7:00',
-            endTime: '22:00',
-            dow: [ 1, 2, 3, 4, 5 ],
-        },
+
         views: {
             dayGrid: {
-                titleFormat: { month: 'long', day: '2-digit' }
+                titleFormat: { month: 'long' }
             },
             timeGrid: {
               // options apply to timeGridWeek and timeGridDay views
@@ -1059,9 +1055,9 @@ function fillCalendar(grupos) {
             }
         },
         headerToolbar: {
-            start: 'today prev,next',
-            center: 'title dayGridMonth,dayGridWeek,timeGridDay,listWeek',
-            end: 'doHorario doGrupo'
+            start: 'doHorario',
+            center: 'prev title next',
+            end: 'dayGridMonth listWeek'
         },
         events: eventsArray,
 
@@ -1091,7 +1087,13 @@ function fillCalendar(grupos) {
             return {
               html: text
             };
-        }
+        },
+        viewDidMount: function(info) {
+            $('.fc-dayGridMonth-button').removeClass('btn-primary').addClass('btn-secondary');
+            $('.fc-doHorario-button').removeClass('btn-primary').addClass('btn-secondary');
+            $('.fc-next-button').removeClass('btn-primary').addClass('');
+            $('.fc-prev-button').removeClass('btn-primary').addClass('');
+        },
     });
     calendar.render();
     setTimeout(() => {

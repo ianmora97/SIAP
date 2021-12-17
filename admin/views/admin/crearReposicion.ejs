@@ -58,14 +58,15 @@
          <div id="page-content-wrapper">
              <%- include('headerDashboard') %>
  
-             <div class="container-fluid mt-2">
-                 <div class="bg-white shadow-primary p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
-                     <h2 class="font-weight-bolder m-0">Solicitar reposicion</h2>
+             <div class="container-fluid mt-4">
+                 <div class="bg-white p-4 rounded-3 animate__animated animate__fadeIn animate__slow">
+                     <h1 class="font-weight-bolder display-5">Solicitar reposicion</h1>
+                     <p class="text-muted mb-0">Solocitar una reposicion o reponer una ausencia del un estudiante.</p>
                  </div>
                  
-                <div class="bg-white p-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn">
+                <div class="bg-white p-4 mt-4 rounded-3  animate__animated animate__zoomIn">
                     <form action="/admin/taller/reposicion/crearReposicion" method="POST" enctype="multipart/form-data" id="agregarRepo">
-                        <div class="row mx-auto">
+                        <div class="row mx-auto p-0">
                             <div class="col-lg border-right">
                                 <div class="form-group">
                                     <label for="estudiantesAddSelect">Estudiante</label>
@@ -95,10 +96,10 @@
                                     <div id="grupoescogido" style="height: 34px;" class="mt-1"></div>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <div class="border border-light p-2" style="max-width: 200px; max-height: 200px;" id="fotoContainer">
+                                    <div class="border border-light p-2 mr-3" style="max-width: 200px; max-height: 200px; display: none;" id="fotoContainer">
 
                                     </div>
-                                    <div class="form-group flex-fill pl-3">
+                                    <div class="form-group flex-fill">
                                         <label for="fileFoto">Comprobante</label>
                                         <div class="custom-file">
                                             <input class="custom-file-input"  type="file" id="fileFoto" name="image" required>

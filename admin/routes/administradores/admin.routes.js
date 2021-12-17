@@ -28,7 +28,6 @@ var email = nodemailer.createTransport({
 
 const con = require('../../database');
 
-
 router.get('/admin/administrador/agregarEstudiante',ensureToken,(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){

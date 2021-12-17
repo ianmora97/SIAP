@@ -169,10 +169,10 @@ router.get('/admin/talleres',(req,res)=>{
             let s = 'talleres';
             res.render('admin/talleres', {usuario,s,token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 router.get('/admin/reposiciones',(req,res)=>{
@@ -231,10 +231,10 @@ router.get('/admin/matricula/reportes',(req,res)=>{
             let s = 'reportes-matricula';
             res.render('admin/matriculaReporte', {usuario,s, token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 
@@ -276,10 +276,10 @@ router.get('/admin/reportes/morosos',(req,res)=>{
             let s = 'reportes-morosos';
             res.render('admin/reportes/morosos', {usuario,s,token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 
@@ -291,12 +291,29 @@ router.get('/admin/reportes/asistencia',(req,res)=>{
             let s = 'reportes-asistencia';
             res.render('admin/reportes/asistencia', {usuario,s,token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
+
+router.get('/admin/asistencia/grupo/:grupo',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-asistencia';
+            let grupo = req.params.grupo;
+            res.render('admin/reportes/asistenciaVer', {usuario,s,token,grupo});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
+    }
+});
+
 router.get('/admin/reportes/sistema',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
@@ -305,10 +322,10 @@ router.get('/admin/reportes/sistema',(req,res)=>{
             let s = 'reportes-sistema';
             res.render('admin/reportes/sistema', {usuario,s, token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 router.get('/admin/reportes/uso',(req,res)=>{
@@ -319,10 +336,10 @@ router.get('/admin/reportes/uso',(req,res)=>{
             let s = 'reportes-uso';
             res.render('admin/reportes/usodeinstalacion', {usuario,s, token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 router.get('/admin/reportes/conducta',(req,res)=>{
@@ -333,10 +350,10 @@ router.get('/admin/reportes/conducta',(req,res)=>{
             let s = 'reportes-conducta';
             res.render('admin/reportes/conductas', {usuario,s, token});
         }else{
-            res.redirect('login');
+            res.render('login');
         }
     }else{
-        res.redirect('login');
+        res.render('login');
     }
 });
 // ! ----------------------------------- inside routes ------------------------------------

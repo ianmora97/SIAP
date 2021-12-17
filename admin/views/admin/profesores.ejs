@@ -13,21 +13,8 @@
  <!DOCTYPE html>
  <html lang="es" class="h-100">
  <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
-     <meta name="apple-mobile-web-app-capable" content="yes">
-     <meta name="mobile-web-app-capable" content="yes">
      <title>Dashboard | Profesores</title>
-     <link rel="stylesheet" href="/css/bootstrap.css">
-     <link rel="stylesheet" href="/css/general.css">
-     <link rel="stylesheet" href="/css/datatables.min.css">
-     <link rel="stylesheet" type="text/css" href="/css/dashboard.css"/>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-     <link rel="stylesheet" href="/css/animate.css">
-     <script src="/js/jq-bs-bundle.js"></script> 
-     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
+     <%- include('headers')%>
  </head>
  <body class="page bg-light d-flex flex-column h-100">
     <div class="modal fade" id="modalTakePic" tabindex="-1" aria-labelledby="modalTakePic" aria-hidden="true">
@@ -185,7 +172,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalVerProfesor" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header py-1 pl-3 bg-primary text-white border-0">
                     <h5 class="modal-title ml-3" id="staticBackdropLabel">Profesor</h5>
@@ -197,27 +184,21 @@
                     <div id="feedbackVer"></div>
                     <span class="sr-only" id="idProfesor"></span>
                     <span class="sr-only" id="cedulaprofesor"></span>
-                    <div class="row mx-auto">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="correo_edit">Correo</label>
-                                <input type="text" class="form-control" id="correo_edit" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
-                            </div>
-                            
+                    <div class="container-fluid mx-auto">
+                        <div class="form-group">
+                            <label for="correo_edit">Correo</label>
+                            <input type="text" class="form-control" id="correo_edit" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="Usuario_edit">Usuario</label>
-                                <input type="text" class="form-control" id="Usuario_edit">
-                            </div>
+                        <div class="form-group">
+                            <label for="Usuario_edit">Usuario</label>
+                            <input type="text" class="form-control" id="Usuario_edit">
                         </div>
                     </div>
-                    
                 </div>
                 <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-light" data-dismiss="modal" onclick="cambiarClaveModal()">Cambiar Clave</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="cambiarClaveModal()"><i class="fas fa-key"></i> Cambiar Clave</button>
                     <button type="button" class="btn btn-danger" onclick="eliminarProfesor()"><i class="far fa-trash-alt"></i> Eliminar</button>
-                    <button type="button" class="btn btn-primary" onclick="actualizarProfesor()"><i class="fas fa-pencil-alt"></i> Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="actualizarProfesor()"><i class="fas fa-pencil-alt"></i> Guardar</button>
                 </div>
             </div>
         </div>
@@ -228,57 +209,60 @@
          <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
 
-            <div class="container-fluid mt-0">
-                <div class="bg-white shadow-primary rounded-3 my-3 p-4">
+            <div class="container-fluid my-4">
+                <div class="bg-white border-0 rounded-3 p-4">
                     <div class="row d-flex justify-content-between">
                         <div class="col-md-6 ">
-                            <h1 class="font-weight-bolder">Lista de Instructores</h1>
-                            <small class="text-muted">En esta seccion se muestra la lista de los profesores <br>
-                                que imparten los talleres de la piscina.</small><br>
-                            <small>Información actualizada hace: <span class="text-success"
-                                    id="infoTiming"></span></small>
+                            <h1 class="font-weight-bolder display-5">Lista de Instructores</h1>
+                            <p class="text-muted mb-0">En esta seccion se muestra la lista de los profesores 
+                                que imparten los talleres de la piscina.</p>
+                            <small>Información actualizada hace: <span class="text-success" id="infoTiming"></span></small>
                         </div>
-                        <div class="col-md-4 mt-3 mt-sm-0">
-                            <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1"
-                                id="profesores_stats">0</h1>
-                            <small class="text-muted" data-toggle="tooltip" data-placement="bottom" 
-                            title="Cantidad Total de profesores registrados">Profesores &nbsp; <i
-                                    class="fas fa-align-center text-info"></i></small>
+                        <div class="col-md-6 row mx-0 d-flex justify-content-end align-items-stretch">
+                            <div class="col d-flex justify-content-center align-items-center pl-0" id="profesores_stats_cont">
+                                <div>
+                                    <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t1"
+                                        id="profesores_stats">0</h1>
+                                    <small class="text-muted">Profesores <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__zoomIn">
-                    <div class="row mx-0 d-flex justify-content-between">
-                        <div class="col">
-                            <div class="input-group flex-nowrap">
-                                <div class="input-group-prepend">
-                                    <div class="btn bg-light" id="button_search">
-                                        <i class="fas fa-search"></i>
+                <script>
+                    tippy('#profesores_stats_cont', {
+                        content: 'Cantidad total de instructores de la piscina',
+                        placement: 'bottom',
+                        animation: 'shift-away-extreme',
+                    });
+                </script>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__zoomIn">
+                    <div class="row mx-0 d-flex justify-content-between align-items-start">
+                        <div class="col pl-sm-0">
+                            <div class="mb-1">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
                                     </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
                                 </div>
-                                <input type="text" class="form-control border-0 shadow-none bg-light"
-                                    onkeyup="searchonfind()" placeholder="Buscar..."
-                                    aria-label="Username" id="barraBuscar">
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex justify-content-end align-items-end mt-3 mt-sm-0">
+                        <div class="col-md-3 d-flex justify-content-end align-items-end pr-sm-0 mt-3 mt-sm-0">
                             <div class="w-100">
-                                <button type="button" class="btn btn-primary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
+                                <button type="button" class="btn btn-secondary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
                                 onclick="openModal('#modalAdd')"><i class="fas fa-plus"></i> Agregar</button>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-white px-0 py-2 shadow-primary rounded-3 mt-4 animate__animated animate__zoomIn">
-                    <div class="row mx-0 mx-auto rounded-3 justify-content-between pt-1">
-                        <div class="col-md-3 flex-fill d-flex align-items-baseline">
-                            <h4 class="font-weight-bold mb-0 ">Listado</h4>
-                        </div>
-                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
-                            <h6 class="font-weight-bold">Show</h6>
-                            <div class="ml-2 w-100" id="length">
+                    <hr class="my-3">
+                    <div class="row mx-0 mt-2 justify-content-between pt-1">
+                        <div class="col-sm-4 d-inline d-flex justify-content-end align-items-baseline px-0">
+                            <div class=" w-100" id="length">
                                 <select class="custom-select">
                                     <option selected>All columns</option>
                                     <option value="1">5</option>
@@ -287,22 +271,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
-                            <div id="pagination">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
-                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
-                                    </ul>
-                                </nav>
-                            </div>
+                        <div class="col-sm-8 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-2 mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light text-success" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
                         </div>
                     </div>
-                    <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
-                        <table class="table custom-table table-responsive-sm table-striped table-borderless text-center table-hover" id="table" data-order="[[ 0, &quot;asc&quot; ]]">
+                </div>
+
+                <div class="bg-white p-0 rounded-3 mt-4 animate__animated animate__zoomIn">
+                    <div class="row w-100 mx-0" style="height: 750px; overflow-y: auto;">
+                        <table class="table custom-table table-responsive-sm table-striped table-borderless text-center table-hover" 
+                        id="table" data-order="[[ 0, &quot;asc&quot; ]]">
                             <thead class="table-light-header">
                                 <tr>
                                     <th class="" scope="col">#</th> <!--ID-->
@@ -318,9 +298,24 @@
 
                             </tbody>
                         </table>
-                        <div class="d-flex align-items-center align-self-end border-info w-100">
-                            <small id="info" class="d-flex align-items-end ml-4"></small>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
                         </div>
+
                     </div>
                 </div>
                  

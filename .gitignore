@@ -6,3 +6,6 @@ admin/package-lock.json
 
 #env
 admin/.env
+admin/img/.DS_Store
+
+admin/public/uploads/

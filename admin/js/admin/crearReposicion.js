@@ -29,8 +29,8 @@ function onFileLoad(){
         let fileInput = event.currentTarget;
         let archivos = fileInput.files;
         let nombre = archivos[0].name;
-        let tipo = nombre.split('.')[archivos.length];
-        if(tipo == 'png' || tipo == 'jpg' || tipo == 'jpeg' || tipo == 'PNG' || tipo == 'JPG' || tipo == 'JPEG'){
+        let tipo = archivos[0].type;
+        if(tipo == 'image/jpeg' || tipo == 'image/png' || tipo == 'image/jpg' ){
             readFile(this);
             $('#labelfileFoto').text(nombre);
         }
@@ -38,6 +38,7 @@ function onFileLoad(){
 }
 function readFile(input){
     if (input.files && input.files[0]) {
+        $('#fotoContainer').show();
         var reader = new FileReader(); 
         reader.onload = function (e) {
             $('#fotoContainer').html('<img src="'+e.target.result+'" class="img-fluid" width="100%">');
@@ -201,9 +202,12 @@ function listaEstudiantes(data){
     `)
     data.forEach(e => {
         g_mapEstudiantes.set(e.id_estudiante,e);
-        $('#estudiantesAddSelect').append(`
-            <option value="${e.id_estudiante}">${e.cedula} - ${e.nombre + " " + e.apellido}</option>
-        `)
+        if(e.estado == "1" && e.moroso == "0"){
+            $('#estudiantesAddSelect').append(`
+                <option value="${e.id_estudiante}">${e.cedula} - ${e.nombre + " " + e.apellido}</option>
+            `)
+        }
+        
     })
 }
 function toWeekDay(dia) {

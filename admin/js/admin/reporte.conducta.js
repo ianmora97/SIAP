@@ -1,7 +1,7 @@
 
 
 var g_mapConductas = new Map();
-
+var g_conductas = new Array();
 function loaded(event){
     events(event);
 }
@@ -11,12 +11,6 @@ function events(event){
     openModalOn();
 }
 
-$(function () {
-    $('[data-toggle="popover"]').popover();
-})
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
 function openModalOn() {
     $('#verConductaModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
@@ -35,7 +29,7 @@ function openModalOn() {
 }
 
 function searchonfind() {
-    var table = $('#conductas_Table').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();           
     let result = table.search( val ).draw();
 }
@@ -90,6 +84,7 @@ function bringData(){
             'Authorization':bearer
         }
     }).then((response) => {
+        g_conductas = response;
         let totalTime = new Date().getTime() - ajaxTime;
         let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
@@ -127,45 +122,67 @@ function fillListConductas(conductas) {
     $('#inadecuadas_stats').html(conductas.length - cont);
     $('#eventualidades_stats').html(cont);
     $('#reportes_stats').html(conductas.length);
-
-    $('#conductas_Table').DataTable({
-        stateSave: true,
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron estudiantes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "Mostrar _MENU_ registros",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
-                "first":    '<i class="fas fa-angle-double-left"></i>',
+                "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
-                "next":     '<i class="fas fa-angle-right"></i>',
-                "last":     '<i class="fas fa-angle-double-right"></i>'
+                "next": '<i class="fas fa-angle-right"></i>',
+                "last": '<i class="fas fa-angle-double-right"></i>'
             },
             "aria": {
                 "paginate": {
-                    "first":    'Primera',
-                    "previous": 'Anterior',
-                    "next":     'Siguiente',
-                    "last":     'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
+        columnDefs: [
+            { targets: [0, 4], orderable: false,},
+            { targets: '_all', orderable: true }
+        ]
     });
-    $('#dataTables_length').css('display','none');
-    $('#conductas_Table_filter').css('display','none');
-    $('#conductas_Table_length').css('display','none');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
+    $('#table_wrapper').addClass('px-0')
 
-    $('#conductas_Table_info').appendTo('#informacionTable');
-    $('#conductas_Table_paginate').appendTo('#botonesCambiarTable');
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function showonListMorosos(u){
     let foto = '<img src="/public/uploads/'+u.foto+'" class="rounded-circle" width="30px" height="30px">';
     $('#lista_conductas').append(`
         <tr>
             <td class="text-center">${foto}</td>
-            <td>${u.cedula}</td>
-            <td>${u.nombre.toUpperCase()  + ' ' + u.apellido.toUpperCase() }</td>
+            <td>
+                <a href="/admin/estudiantes/getEstudiante/${u.cedula}">${u.nombre} ${u.apellido}</a>
+                <small class="sr-only">${u.cedula}</small>
+            </td>
             <td><a role="button" data-id="${u.id_conducta}" data-toggle="modal" data-target="#verConductaModal" 
             class="btn btn-sm btn-${u.tipo == 'Eventualidad' ? 'warning':'danger'} py-1 m-0">${u.tipo}</a></td>
             <td><i style="font-size:0.7rem;" class="fas fa-circle text-${u.estado == 0 ? 'danger' : 'success'}">
@@ -177,5 +194,17 @@ function showonListMorosos(u){
             </td>
         </tr>
     `);
+}
+function excelDownload(){
+    if(g_conductas.length){
+        const xls = new XlsExport(g_conductas, "Estudiantes");
+        xls.exportToXLS('Reporte_conductas.xls')
+    }else{
+        Swal.fire(
+            'Vacia',
+            'No hay conductas reportadas',
+            'warning'
+        )
+    }
 }
 document.addEventListener("DOMContentLoaded", loaded);

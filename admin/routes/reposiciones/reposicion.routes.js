@@ -62,11 +62,13 @@ router.post('/admin/taller/reposicion/crearReposicion', (req, res) => {
 });
 
 //Elimina una reposicion 
-router.delete('/reposicion/delete', (req, res) => {
+router.post('/admin/reposicion/delete', (req, res) => {
     var script = 'call prc_eliminar_reposicion( ? )';
     con.query(script, [req.body.id], (err, result, fields) => {
         if (!err) {
-            res.send(result);
+            res.send({result,status:200});
+        }else{
+            res.send({status:300,err});
         }
     });
 });

@@ -1,4 +1,4 @@
-moment.lang('es', {
+moment.locale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
     monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
     weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
@@ -28,13 +28,14 @@ $(function () {
 })
 
 function searchonfind() {
-    var table = $('#reposiciones_TableOrder').DataTable();
+    var table = $('#table').DataTable();
     let val = $('#barraBuscar').val();
     let result = table.search(val).draw();
 }
 
 var g_vecAsistencias = [];
 var g_vecGrupos = [];
+var g_vecReposiciones = new Array();
 var g_mapReposiciones = new Map();
 var g_mapEstudiantes = new Map();
 
@@ -49,6 +50,7 @@ function obtenerReposiciones(){
             'Authorization':bearer
         }
     }).then((reposiciones) => {
+        g_vecReposiciones = reposiciones;
         listaReposiciones(reposiciones);
         $.ajax({
             type: "GET",
@@ -76,7 +78,6 @@ function obtenerReposiciones(){
         }).then((grupos) => {
             g_vecGrupos = grupos;
             listaGrupos(grupos);
-            fillCalendar(grupos);
         }, (error) => {
         });
 
@@ -242,27 +243,86 @@ function listaReposiciones(reposiciones) {
     $('#table_length').find('label').find('select').appendTo('#length');
     $('#table_length').html('');
 }
-function showReposicion({id_reposicion,cedula, nombre, apellido, dia_reposicion, descripcion, fecha_reposicion, hora_reposicion}) {
+function showReposicion({id_reposicion,cedula, nombre, apellido, dia_reposicion, descripcion, fecha_reposicion, hora_reposicion, hora_reposicion_final}) {
     $('#lista_reposiciones').append(`
         <tr>
         <td class="text-center">${cedula}</td>
         <td><a href="/admin/estudiantes/getEstudiante/${cedula}">${nombre} ${apellido}</a></td>
-        <td>${dia_reposicion} ${hora_reposicion}</td>
+        <td>${dia_reposicion} ${hora_reposicion}-${hora_reposicion_final}</td>
         <td>${descripcion}</td>
         <td>${moment(fecha_reposicion.split(' ')[0],'YYYY-MM-DD').format('LL')}</td>
         <td class="text-center">
-            <button class="btn btn-light w-100" role="button" data-id="${id_reposicion}" data-toggle="modal" data-target="#modalComprobante">
+            <button class="btn btn-primary w-100" role="button" data-id="${id_reposicion}" data-toggle="modal" data-target="#modalComprobante">
                 <i class="fas fa-file-image"></i> Comprobante
             </button>
         </td>
-        <td><button class="btn btn-light-danger"><i class="fas fa-trash-alt "></i></button></td>
+        <td><button class="btn btn-danger" onclick="eliminarReposicion('${id_reposicion}')"><i class="fas fa-trash-alt "></i></button></td>
         </tr>`
     );
 }
 function openModal(modal) {
     $(modal).modal('show');
 }
-
+async function eliminarReposicion(idreposicion) {
+    let reposicion = g_mapReposiciones.get(parseInt(idreposicion));
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: `Desea eliminar la reposicion de ${reposicion.nombre} ${reposicion.apellido}?`,
+        html: `<b>Fecha:</b> ${moment(reposicion.fecha_reposicion.split(' ')[0], 'YYYY-MM-DD').format('LL')} <br>
+        <b>Dia y Hora:</b> ${reposicion.dia_reposicion} ${reposicion.hora_reposicion}-${reposicion.hora_reposicion_final} <br>
+        <span class="my-3 text-danger d-block">Esta acción no se puede revertir!</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, eliminar',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarReposicionAjax(idreposicion).then(data => {
+                swalWithBootstrapButtons.fire(
+                    'Eliminado!',
+                    `La reposicion de ${reposicion.nombre} ${reposicion.apellido} se ha eliminado correctamente`,
+                    'success'
+                ).then(() => {
+                    location.reload();
+                });
+            }).catch(err => {
+                swalWithBootstrapButtons.fire(
+                    'Error!',
+                    `${err}`,
+                    'error'
+                );
+            })
+        }else if (result.dismiss === Swal.DismissReason.cancel) {
+            
+        }
+    })
+}
+function eliminarReposicionAjax(idreposicion) {
+    return new Promise((resolve, reject) => {
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            url: '/admin/reposicion/delete',
+            type: 'POST',
+            data: {
+                id: idreposicion
+            },
+            headers: {
+                'Authorization': bearer
+            },
+        }).then((res) => {
+            resolve(res);
+        }, (error) => {
+            reject(error);
+        });
+    });
+}
 function openModalComprobante() {
     $('#modalComprobante').on('show.bs.modal', event => {
         var button = $(event.relatedTarget);
@@ -304,27 +364,7 @@ function openModalComprobante() {
        $("#ausenciasAgregarReposicion").html('');
     })
 }
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("agregarRepo").addEventListener('submit', validarFormulario); 
-});
 
-function validarFormulario(evento) {
-    evento.preventDefault();
-    var grupoAdd = document.getElementById('grupoAddSelect').options[document.getElementById('grupoAddSelect').selectedIndex].value;
-    if(grupoAdd == "null") {
-        $("#modalbodyAddFeedback").html(
-            `<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <img src="/img/emoji/no-entry.png" class="emoji" width="20px">
-                <strong>Grupo incorrento!</strong> Debe seleccionar un grupo.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>`
-        );
-        return;
-    }
-    this.submit();
-}
 function toWeekDay(dia) {
     switch (dia) {
         case 'LUNES':
@@ -367,5 +407,8 @@ function toDayWeek(dia) {
             return 'DOMINGO';
     }
 }
-
+function excelDownload(){
+    const xls = new XlsExport(g_vecReposiciones, "Reposiciones");
+    xls.exportToXLS('Reporte_reposiciones.xls')
+}
 document.addEventListener("DOMContentLoaded", loaded);

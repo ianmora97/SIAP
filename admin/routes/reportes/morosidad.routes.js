@@ -18,9 +18,8 @@ const router = express.Router();
 
 const con = require('../../database');
 
-router.get('/admin/reportes/morosos/estudiantesMorosos',(req,res)=>{
-    //SELECT * FROM siapd.vta_estudiante_moroso;
-    let script = "SELECT * FROM siapd.vta_estudiante_moroso";
+router.get('/admin/reportes/morosos/estudiantesMorosos',ensureToken,(req,res)=>{
+    let script = "SELECT * FROM vta_estudiante_moroso";
     var query = con.query(script, (err,rows,fields)=>{
         if(!err){
             res.send(rows)
@@ -29,7 +28,31 @@ router.get('/admin/reportes/morosos/estudiantesMorosos',(req,res)=>{
         }
     });
 });
+// ! ----------------------------------- security ------------------------------------
+function ensureToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if (bearerHeader === undefined) {
+        res.redirect('/api/not_allowed');
+    }else{
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+}
+router.get('/api/not_allowed',(req,res)=>{ //logout
+    res.render('notAllowedAdmin');
+});
 
+function logSistema(usuario, descripcion, ddl, tabla) {
+    con.query("CALL prc_insertar_actividad(?,?,?,?)", [usuario, descripcion, ddl, tabla], (err,result,fields)=>{
+        if(!err){
+            console.log(`[ ${chalk.green('OK')} ] ${chalk.yellow('ACTIVITY')} (${usuario}) @ ${descripcion} | ${ddl} ON ${tabla}`);
+        }else{
+            console.log(err);
+        }
+    });
+}
 module.exports = router;
 
 

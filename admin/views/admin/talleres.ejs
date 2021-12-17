@@ -485,22 +485,22 @@
         <%- include('menuDashboard') %>
             <div id="page-content-wrapper">
                 <%- include('headerDashboard') %>
-                <div class="container-fluid mt-0 mb-4">
+                <div class="container-fluid my-4">
                     <nav>
-                        <div class="nav nav-pills" id="nav-tab" role="tablist">
-                            <a class="nav-item-pill-cus active" id="nav-tab-calendario" data-tab="calendario" data-toggle="tab" 
+                        <div class="nav " id="nav-tab" role="tablist">
+                            <a class="nav-item-line-cus active" id="nav-tab-calendario" data-tab="calendario" data-toggle="tab" 
                             href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="true">
                             <i class="fas fa-calendar-day"></i> Calendario</a>
 
-                            <a class="nav-item-pill-cus " id="nav-tab-talleres" data-tab="talleres" data-toggle="tab" 
+                            <a class="nav-item-line-cus " id="nav-tab-talleres" data-tab="talleres" data-toggle="tab" 
                             href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="fasle">
                             <i class="fas fa-swimmer"></i> Talleres</a>
 
-                            <a class="nav-item-pill-cus" id="nav-tab-horarios" data-tab="horarios" data-toggle="tab" 
+                            <a class="nav-item-line-cus" id="nav-tab-horarios" data-tab="horarios" data-toggle="tab" 
                             href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">
                             <i class="fas fa-clock"></i> Horarios</a>
 
-                            <a class="nav-item-pill-cus" id="nav-tab-grupos" data-tab="grupos" data-toggle="tab" 
+                            <a class="nav-item-line-cus" id="nav-tab-grupos" data-tab="grupos" data-toggle="tab" 
                             href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">
                             <i class="fas fa-users"></i> Grupos</a>
                         </div>
@@ -513,10 +513,10 @@
                     <div class="">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-calendario" role="tabpanel" aria-labelledby="nav-tab-calendario">
-                                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                                <div class="bg-white border-0 my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
-                                            <h1 class="font-weight-bolder">Calendario</h1>
+                                            <h1 class="font-weight-bolder display-5">Calendario</h1>
                                             <small class="text-muted">En esta seccion se muestra el calendario de los talleres
                                                 de la piscina, donde podra visualizar todos los  <br>
                                                 horarios, y los grupos de la piscina.</small><br>
@@ -525,25 +525,25 @@
                                         <div class="col border-right d-flex justify-content-center align-items-center">
                                             <div class="talleres_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1 talleres_stats">0</h1>
-                                                <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                         <div class="col border-right d-flex justify-content-center align-items-center">
                                             <div class="horarios_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2 horarios_stats">0</h1>
-                                                <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                         <div class="col d-flex justify-content-center align-items-center">
                                             <div class="grupos_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3 grupos_stats">0</h1>
-                                                <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                         
                                     </div>
                                 </div>
-                                <div class="mx-0 w-100 mt-4 bg-white p-3 rounded-3 shadow-primary">
+                                <div class="mx-0 w-100 mt-4 bg-white p-3 rounded-3 ">
                                     <div id="calendar"></div>
                                     
                                       <style>
@@ -553,31 +553,35 @@
                                           
                                           .fc-daygrid-event{
                                               white-space: normal !important;
-                                              padding: 5px;
+                                              padding: 10px 15px;
+                                              border-radius: 10px;
+                                          }
+                                          .fc-daygrid-event-harness{
+                                              margin-bottom: 4px;
                                           }
                                       </style>
 
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-talleres" role="tabpanel" aria-labelledby="nav-tab-talleres">
-                                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                                <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
-                                            <h1 class="font-weight-bolder">Lista Talleres</h1>
-                                            <small class="text-muted">En esta sección podrá gestionar todos los talleres que se 
+                                            <h1 class="font-weight-bolder display-5">Lista Talleres</h1>
+                                            <p class="text-muted mb-0">En esta sección podrá gestionar todos los talleres que se 
                                                 imparten en la piscina, además de poder agregar, editar y eliminar.
-                                            </small><br>
+                                            </p>
                                             <small>Informacion Actualizada hace: <span class="text-success infoTiming">0 segundos</span></small>
                                         </div>
                                         <div class="col d-flex justify-content-end">
                                             <div class="mr-5 talleres_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX talleres_stats">0</h1>
-                                                <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Talleres &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-white rounded-3 shadow-primary px-0 py-3 animate__animated animate__zoomIn">
+                                <div class="bg-white rounded-3  px-0 py-3 animate__animated animate__zoomIn">
                                     <div class="row mx-0 d-flex justify-content-between mb-3">
                                         <div class="col">
                                             <div class="mb-1">
@@ -596,12 +600,13 @@
                                         <div class="col-md-3 d-flex justify-content-end align-items-baseline ">
                                             <div class="w-100">
                                                 <button type="button" name="agregarTaller" id="agregarTaller" 
-                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                class="btn btn-secondary rounded-4 d-block w-100" 
                                                 data-toggle="modal" data-target="#agregarTaller">
                                                 <i class="fas fa-plus"></i> Agregar</button>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr class="m-3">
                                     <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
                                         <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
                                             <div id="lenghtTable_talleres" class="px-1 m-0 w-100">
@@ -609,8 +614,8 @@
                                         </div>
                                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
                                             
-                                            <div class="mx-3">
-                                                <button type="button" class="btn btn-light-success" onclick="excelDownloadTalleres()" 
+                                            <div class="">
+                                                <button type="button" class="btn btn-light text-success" onclick="excelDownloadTalleres()" 
                                                 id="reporteExcelTalleres">
                                                     <i class="fas fa-file-excel"></i> Excel</button>
                                             </div>
@@ -622,7 +627,7 @@
                                         </div>      
                                     </div>
                                 </div>
-                                <div class="bg-white rounded-3 shadow-primary px-0 mt-4 animate__animated animate__fadeInUp">
+                                <div class="bg-white rounded-3  px-0 mt-4 animate__animated animate__fadeInUp">
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
                                         <table class="table table-striped custom-table table-responsive-sm table-borderless text-center table-hover"
                                             id="talleres_table" >
@@ -641,49 +646,45 @@
         
                                             </tbody>
                                         </table>
-                                        <div class="d-flex align-items-center align-self-end border-info w-100">
-                                            <div class="row w-100 ml-0 mb-3">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-4">
-                                                    <small id="infoTable_talleres" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end">
-                                                    <div id="pagination_talleres">
-                                                        <nav>
-                                                            <ul class="pagination mb-0">
-                                                              <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
-                                                </div>
-                                                <style>
-                                                    .pagination{
-                                                        margin-bottom: 0px !important;
-                                                    }
-                                                </style>
+                                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                                            <div><small id="infoTable_talleres" class="d-flex align-items-end ml-4"></small></div>
+                                            <div id="pagination_talleres" class="mr-3">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
                                             </div>
+                                            <style>
+                                                ul.pagination{
+                                                    margin-bottom: 0px !important;
+                                                }
+                                            </style>
                                         </div>
                                     </div>
         
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-horarios" role="tabpanel" aria-labelledby="nav-tab-horarios">
-                                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                                <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
-                                            <h1 class="font-weight-bolder">Lista de Horarios</h1>
-                                            <small class="text-muted">En esta seccion podrá gestionar todos los horarios 
-                                                que existen en la piscina, además de poder agregar, editar y eliminar</small> <br>
+                                            <h1 class="font-weight-bolder display-5">Lista de Horarios</h1>
+                                            <p class="text-muted mb-0">En esta seccion podrá gestionar todos los horarios 
+                                                que existen en la piscina, además de poder agregar, editar y eliminar</p>
                                             <small>Informacion Actualizada hace: <span class="text-success infoTiming">0 segundos</span></small>
                                         </div>
                                         <div class="col d-flex justify-content-end">
                                             <div class="mr-5 horarios_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX horarios_stats">0</h1>
-                                                <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Horarios &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-white px-0 py-3 shadow-primary rounded-3 animate__animated animate__zoomIn">
+                                <div class="bg-white px-0 py-3  rounded-3 animate__animated animate__zoomIn">
                                     <div class="row mx-0 d-flex justify-content-between mb-3">
                                         <div class="col">
                                             <div class="mb-1">
@@ -702,13 +703,13 @@
                                         <div class="col-md-3 d-flex justify-content-end align-items-baseline ">
                                             <div class="w-100">
                                                 <button type="button" name="agregarHorario" id="agregarHorario" 
-                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                class="btn btn-secondary rounded-4 d-block w-100" 
                                                 data-toggle="modal" data-target="#agregarHorario">
                                                 <i class="fas fa-plus"></i> Agregar</button>
                                             </div>
                                         </div>
                                     </div>
-                                
+                                    <hr class="m-3">
                                     <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
                                         <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
                                             <div id="lenghtTable_horarios" class="px-1 m-0 w-100">
@@ -716,7 +717,7 @@
                                         </div>
                                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
                                             <div class="mx-3">
-                                                <button type="button" class="btn btn-light-success" onclick="excelDownloadHorarios()" 
+                                                <button type="button" class="btn btn-light text-success" onclick="excelDownloadHorarios()" 
                                                 id="reporteExcelHorarios">
                                                     <i class="fas fa-file-excel"></i> Excel</button>
                                             </div>
@@ -728,7 +729,7 @@
                                         </div>      
                                     </div>
                                 </div>
-                                <div class="bg-white px-0 mt-4 shadow-primary rounded-3 animate__animated animate__fadeInUp">
+                                <div class="bg-white px-0 mt-4  rounded-3 animate__animated animate__fadeInUp">
                                     <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
                                         <table class="table custom-table table-striped table-responsive-xs table-borderless text-center table-hover"
                                             id="horarios_table" data-order="[[ 1, &quot;asc&quot; ]]">
@@ -745,50 +746,47 @@
         
                                             </tbody>
                                         </table>
-                                        <div class="d-flex align-items-center align-self-end border-info w-100">
-                                            <div class="row w-100 ml-0">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-2">
-                                                    <small id="infoTable_horarios" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end">
-                                                    <div id="pagination_horarios">
-                                                        <nav aria-label="Page navigation example">
-                                                            <ul class="pagination">
-                                                              <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
-                                                </div>
+                                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                                            <div><small id="infoTable_horarios" class="d-flex align-items-end ml-4"></small></div>
+                                            <div id="pagination_horarios" class="mr-3">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
                                             </div>
+                                            <style>
+                                                ul.pagination{
+                                                    margin-bottom: 0px !important;
+                                                }
+                                            </style>
                                         </div>
                                     </div>
         
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="nav-grupos" role="tabpanel" aria-labelledby="nav-tab-grupos">
-                                <div class="bg-white border-0 shadow-primary my-3 rounded-3 p-4">
+                                <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
-                                            <h1 class="font-weight-bolder">Lista de Grupos</h1>
-                                            <small class="text-muted">En esta sección podrá gestionar todos los grupos 
+                                            <h1 class="font-weight-bolder display-5">Lista de Grupos</h1>
+                                            <p class="text-muted mb-0">En esta sección podrá gestionar todos los grupos 
                                                 que se existen en la piscina, además de poder agregar, editar y eliminar. 
                                                 Debe de existir un horario y un taller antes de crear un grupo.
-                                            </small><br>
+                                            </p>
                                             <small>Informacion Actualizada hace: <span class="text-success infoTiming">0 segundos</span></small>
                                         </div>
                                         <div class="col d-flex justify-content-end">
                                             <div class="mr-5 grupos_stats_container">
                                                 <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX grupos_stats">0</h1>
-                                                <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-info"></i></small>
+                                                <small class="text-muted">Grupos &nbsp; <i class="fas fa-align-center text-secondary"></i></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-white px-0 py-3 shadow-primary rounded-3 animate__animated animate__zoomIn">
+                                <div class="bg-white px-0 py-3  rounded-3 animate__animated animate__zoomIn">
                                     <div class="row mx-0 d-flex justify-content-between mb-3">
                                         <div class="col">
                                             <div class="mb-1">
@@ -807,12 +805,13 @@
                                         <div class="col-md-3 d-flex justify-content-end align-items-baseline">
                                             <div class="w-100">
                                                 <button type="button" name="agregarGrupo" id="agregarGrupo" 
-                                                class="btn btn-primary rounded-4 d-block w-100" 
+                                                class="btn btn-secondary rounded-4 d-block w-100" 
                                                 data-toggle="modal" data-target="#agregarGrupo">
                                                 <i class="fas fa-plus"></i> Agregar</button>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr class="m-3">
                                     <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
                                         <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
                                             <div id="lenghtTable_grupos" class="px-1 m-0 w-100">
@@ -821,7 +820,7 @@
                                         <div class="col-sm-3 col d-flex justify-content-md-end justify-content-center align-items-baseline mt-2 mt-sm-0" style="height:35px;">
                                             
                                             <div class="mx-3">
-                                                <button type="button" class="btn btn-light-success" onclick="excelDownloadGrupos()" 
+                                                <button type="button" class="btn btn-light text-success" onclick="excelDownloadGrupos()" 
                                                 id="reporteExcelGrupos">
                                                     <i class="fas fa-file-excel"></i> Excel</button>
                                             </div>
@@ -833,7 +832,7 @@
                                         </div>      
                                     </div>
                                 </div>
-                                <div class="bg-white px-0 mt-4 shadow-primary rounded-3 animate__animated animate__fadeInUp">
+                                <div class="bg-white px-0 mt-4  rounded-3 animate__animated animate__fadeInUp">
                                     <div class="row w-100 mx-0" style="min-height: 750px; overflow-y: auto;">
                                         <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
                                             id="grupos_table" data-order="[[ 1, &quot;asc&quot; ]]">
@@ -852,25 +851,22 @@
         
                                             </tbody>
                                         </table>
-                                        <div class="d-flex align-items-center align-self-end border-info w-100">
-                                            <div class="row w-100 ml-0 mb-3">
-                                                <div class="col-md-6 d-flex justify-content-start text-muted pl-2">
-                                                    <small id="infoTable_grupos" class="d-flex align-items-end"></small>
-                                                </div>
-                                                <div class="col-md-6 d-flex justify-content-end">
-                                                    <div id="pagination_grupos">
-                                                        <nav aria-label="Page navigation example">
-                                                            <ul class="pagination">
-                                                              <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                              <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
-                                                </div>
+                                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                                            <div><small id="infoTable_grupos" class="d-flex align-items-end ml-4"></small></div>
+                                            <div id="pagination_grupos" class="mr-3">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                                    </ul>
+                                                </nav>
                                             </div>
+                                            <style>
+                                                ul.pagination{
+                                                    margin-bottom: 0px !important;
+                                                }
+                                            </style>
                                         </div>
                                     </div>
                                 </div>

@@ -410,6 +410,31 @@ function llenarEstudiantes(data) {
         </tr>
     `);
 }
+function excelDownload(){
+    let data = new Array();
+    for (let i = 0; i < g_VecMatrestudiantes.length; i++) {
+        const e = g_VecMatrestudiantes[i];
+        data.push({
+            id_matricula: e.id_matricula,
+            cedula: e.cedula,
+            nombre: e.nombre,
+            apellido: e.apellido,
+            correoEstudiante: e.correo,
+            nombre_profesor: e.nombre_profesor,
+            descripcion: e.descripcion,
+            nivel: e.nivel,
+            codigo_taller: e.codigo_taller,
+            dia: e.dia,
+            hora: e.hora,
+            hora_final: e.hora_final,
+            periodo: e.periodo,
+            periodo_final: e.periodo_final,
+            fechaMatricula: e.created_at
+        });
+    }
+    const xls = new XlsExport(data, "Estudiantes");
+    xls.exportToXLS('Reporte_Estudiantes.xls')
+}
 function toWeekDay(dia) {
     switch (dia) {
         case 'LUNES':

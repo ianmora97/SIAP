@@ -22,7 +22,7 @@ function onFilterDate() {
         console.log(val);
         g_filtrado = registro.filter(e => e.created_at.match(val));
         console.log(g_filtrado)
-        let result1 = table.search( val ).draw();
+        let result1 = table.search(val).draw();
     });
 }
 
@@ -116,14 +116,17 @@ function reportesList(data) {
     $('#table_length').html('');
 }
 function showReportesList(data) {
-    let badge = data.accion.match('ELIMINADA') ? '<h5><span class="badge badge-red-light">Desmatricula</span></h5>' : '<h5><span class="badge badge-green-light">Matriculado</span></h5>';
+    let badge = data.accion.match('ELIMINADA') ? '<button class="btn btn-danger w-75">Desmatricula</button>' : '<button class="btn btn-success w-75">Matricula</button>';
     $("#lista_reportes").append(`
         <tr>
             <td class="text-center">${data.id}</td>
             <td>${data.grupo}</td>
             <td>${data.estudiante}</td>
+            <td>
+            <span class="sr-only">${data.created_at.split(' ')[0]}</span>
+            ${moment(data.created_at.split(' ')[0], 'YYYY-MM-DD').format('LL')}
+            </td>
             <td>${badge}</td>
-            <td>${data.created_at.split(' ')[0]}</td>
         </tr>
     `);
 }
