@@ -28,14 +28,20 @@ function events(event){
     loadFromDb();
     openModalAdd();
     readCasilleroModalOpen();
-
+    onChangeTipoCasillero();
     agregarCasilleros();
 }
 
 $(function () {
     $('[data-toggle="popover"]').popover();
 })
-
+function onChangeTipoCasillero(){
+    $('#tipoCasilleroAgregar').on('change',function(){
+        let tipo = $(this).val();
+        $('#codigoCasilleroTipo').html(`C${tipo}`);
+        $('#addCasilleroInputModal').attr('disabled',false);
+    })
+}
 function openModalAdd(){
     $('#modalButtonAgregarEstudiante').on('click',function(){
         $('#modalAgregarEstudiante').modal('show')
@@ -55,7 +61,7 @@ function agregarCasilleros() {
     $('#addCasilleroInputModal').on('keyup', function (){
         let val = $('#addCasilleroInputModal').val();
         let res = listaCasilleros.find(i => i.codigo == 'CA'+val);
-        if(res != undefined){
+        if(res){
             console.log('existe');
             $('.formgroup-casillero').addClass('ya-existe');
             $('#feedbackInputCasilleroModal').html('Ya existe este casillero');
@@ -67,11 +73,13 @@ function agregarCasilleros() {
         }
     });
     $('#agregarCasilleroButton').on('click',function (){
-        let codigo = 'CA'+$('#addCasilleroInputModal').val();
+        let tipo = $('#codigoCasilleroTipo').html();
+        let codigo = tipo+$('#addCasilleroInputModal').val();
+        let type = tipo[1]
         $.ajax({
             type: "GET",
             url: "/admin/casilleros/agregarCasillero",
-            data: {codigo},
+            data: {codigo,type},
             contentType: "application/json",
             headers:{
                 'Authorization':bearer
@@ -103,8 +111,8 @@ function agregarCasilleros() {
 var busquedaAnterior='';
 function searchonfind(params) {
     let codigo = $('#barraBuscar').val();
-    if(codigo.search('CA') != -1 || codigo.search('ca') != -1){
-   
+    if(/C[H|M]/.test(codigo)){
+        console.log('es casillero');
         $(`.casilleroFormat[data-codigo="${codigo}"]`).addClass('warningFind');
         
         if(busquedaAnterior != ''){
@@ -165,8 +173,11 @@ function loadFromDb() {
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
         g_cantidadCasilleros = response.length;
+        listaCasilleros = response;
+        
         $('#addCasilleroInputModal').val( response.length + 1);
-        cargarMatrizCasilleros(response)
+        cargarMatrizCasillerosHombres(response.filter(e => e.tipo == 'H'))
+        cargarMatrizCasillerosMujeres(response.filter(e => e.tipo == 'M'))
     }, (error) => {
 
     });
@@ -184,7 +195,48 @@ function loadFromDb() {
     });
     
 }
-
+function cargarMatrizCasillerosHombres(data) {
+    console.log('hombres',data)
+    $('#casillerosMatrix_hombres').html('');
+    $('#totalCasilleros_hombres').html(data.length);
+    data.forEach((e,i) => {
+        listaCasillerosMap.set(e.codigo,e);
+        $(`#casillerosMatrix_hombres`).append(
+            `<div class="col-4 animate__animated animate__backInUp" id="casillero_cod_${e.codigo}" style="animation-delay: ${i}00ms;">
+                <div class="casilleroFormat ${e.estado ? 'ocupado' :'libre'}" data-codigo="${e.codigo}" data-estado="${e.estado}" 
+                data-toggle="modal" data-target="#modalAsignarCasillero" role="button">
+                    <div>${e.codigo}</div>
+                    <div class="d-flex justify-content-between">
+                        <span id="nombreEstudianteCodigo-${e.codigo}"></span>
+                        <span class="text-white text-right">${e.estado ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-lock-open"></i>'}</span>
+                    </div>
+                </div>
+            </div>
+            `
+        );
+    });
+}
+function cargarMatrizCasillerosMujeres(data) {
+    console.log('mujeres',data)
+    $('#casillerosMatrix_mujeres').html('');
+    $('#totalCasilleros_mujeres').html(data.length);
+    data.forEach((e,i) => {
+        listaCasillerosMap.set(e.codigo,e);
+        $(`#casillerosMatrix_mujeres`).append(
+            `<div class="col-4 animate__animated animate__backInUp" id="casillero_cod_${e.codigo}" style="animation-delay: ${i}00ms;">
+                <div class="casilleroFormat ${e.estado ? 'ocupado' :'libre'}" data-codigo="${e.codigo}" data-estado="${e.estado}" 
+                data-toggle="modal" data-target="#modalAsignarCasillero" role="button">
+                    <div>${e.codigo}</div>
+                    <div class="d-flex justify-content-between">
+                        <span id="nombreEstudianteCodigo-${e.codigo}"></span>
+                        <span class="text-white text-right">${e.estado ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-lock-open"></i>'}</span>
+                    </div>
+                </div>
+            </div>
+            `
+        );
+    });
+}
 function cargarEstudiantes(estudiantes) {
     let bearer = 'Bearer '+g_token;
     estudiantes.forEach(u =>{
@@ -285,33 +337,7 @@ function cargarCasillerosEstudiantes(casillerosEstudiantes) {
         });
     }
 }
-function cargarMatrizCasilleros(data) {
-    let cont = 0;
-    $('#casillerosMatrix').html('');
-    $('#totalCasilleros_stats').html(data.length);
-    for (let i = 0; i < Math.ceil( data.length / 6); i++) {
-        $('#casillerosMatrix').append(`<div class="row w-100  mb-2" id="filaCasillero_${i}">`);
-        for (let j = 0; j < 6; j++) {
-            listaCasillerosMap.set(data[cont].codigo,data[cont]);
-            $(`#filaCasillero_${i}`).append(
-                `<div class="col-md" id="casillero_cod_${data[cont].codigo}">
-                    <div class="casilleroFormat ${data[cont].estado ? 'ocupado' :'libre'}" data-codigo="${data[cont].codigo}" data-estado="${data[cont].estado}" 
-                    data-toggle="modal" data-target="#modalAsignarCasillero" role="button">
-                        <div>${data[cont].codigo}</div>
-                        <div class="d-flex justify-content-between">
-                            <span id="nombreEstudianteCodigo-${data[cont].codigo}"></span>
-                            <span class="text-white text-right">${data[cont].estado ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-lock-open"></i>'}</span>
-                        </div>
-                    </div>
-                </div>
-                `
-            );
-            listaCasilleros.push(data[cont]);
-            cont++;
-        }
-        $('#casillerosMatrix').append(`</div>`);
-    }
-}
+
 function showMatrizCasilleros(c) {
     let cedula = c.id;
     let nombre = c.codigo;

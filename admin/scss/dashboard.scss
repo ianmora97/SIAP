@@ -772,19 +772,6 @@ input,select{
   min-height: 100%;
 }
 
-.modal-p-bottom {
-   .modal-dialog{
-    transform:translateY(100%) !important;
-  }
-  
-  &.show{
-    overflow: hidden;
-    .modal-dialog{
-      transform:translateY(0%) !important;
-    }
-    
-  }
-}
 .wrapperA {
   animation: scaleBack .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 }
@@ -832,29 +819,31 @@ input,select{
   border-radius: 20px;
 }
 // ! --------------------------------------------- MEDIA QUERYS FOR EMAIL ----------------------------------
-@media (max-width: 950px){ // menos que 950
-  .menu-correo-tab {
-      display: none !important;
+.form-control-email{
+  border:none;
+  outline: none !important;
+  box-shadow: nonw !important;
+  &:focus{
+    outline: none !important;
+    box-shadow: none !important;
   }
-  .correos-lista-tab {
-      display: none !important;
-  }
-  .boton-back-bp{
-    display:block;
-  }
-}
-@media (min-width: 950px){ // mas que 950
-  .boton-back-bp{
-    display:none;
-  }
-  .correos-lista-tab {
-    max-width:410px;
-  }
-}
-.titulos-correo-tab.hide{
-  display: none !important;
+  
 }
 
+.modal-p-bottom {
+  .modal-dialog{
+    max-width: 80% !important;
+   transform:translateY(100%) !important;
+ }
+ 
+ &.show{
+   overflow: hidden;
+   .modal-dialog{
+     transform:translateY(0%) !important;
+   }
+   
+ }
+}
 // !------------------ chat -----------------
 
 .chat-footer{

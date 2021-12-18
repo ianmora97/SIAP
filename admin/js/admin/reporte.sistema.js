@@ -53,13 +53,20 @@ function reportesList(data) {
             showReportesList(e); 
         });
     }
-    $('#table_reportes').DataTable({
+    $('#table').DataTable({
         "language": {
-            "zeroRecords": "No se encontraron reportes",
-            "infoEmpty": "No hay registros disponibles!",
-            "infoFiltered": "(filtrado de _MAX_ registros)",
-            "lengthMenu": "_MENU_ ",
-            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "decimal":        "",
+            "emptyTable":     "No hay datos en la tabla",
+            "info":           "Mostrando _END_ de _TOTAL_ registros",
+            "infoEmpty":      "Mostrando 0 hasta 0 de 0 registros",
+            "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu":     "_MENU_",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron registros similares",
             "paginate": {
                 "first": '<i class="fas fa-angle-double-left"></i>',
                 "previous": '<i class="fas fa-angle-left"></i>',
@@ -68,20 +75,31 @@ function reportesList(data) {
             },
             "aria": {
                 "paginate": {
-                    "first": 'Primera',
-                    "previous": 'Anterior',
-                    "next": 'Siguiente',
-                    "last": 'Última'
+                    "first": '<i class="fas fa-angle-double-left"></i>',
+                    "previous": '<i class="fas fa-angle-left"></i>',
+                    "next": '<i class="fas fa-angle-right"></i>',
+                    "last": '<i class="fas fa-angle-double-right"></i>'
                 }
             }
-        }
+        },
     });
-    $('#table_reportes_info').appendTo('#infoTable_reportes');
-    $('#table_reportes_paginate').appendTo('#botonesTable_reportes');
-    $('#table_reportes_length').find('select').removeClass('custom-select-sm');
-    $('#table_reportes_length').find('select').appendTo('#showlenghtentries');
-    $('#table_reportes_length').html('');
-    $('#table_reportes_filter').html('');
+    $('#info').html('');
+    $('#pagination').html('');
+    $('#length').html('');
+    $('#table_wrapper').addClass('px-0')
+
+    let a = $('#table_wrapper').find('.row')[1];
+    $(a).addClass('mx-0')
+    $(a).find('.col-sm-12').addClass('px-0');
+
+    $('#table_filter').css('display', 'none');
+    $('#table_info').appendTo('#info');
+
+    $('#table_paginate').appendTo('#pagination');
+
+    $('#table_length').find('label').find('select').removeClass('form-control form-control-sm custom-select-sm')
+    $('#table_length').find('label').find('select').appendTo('#length');
+    $('#table_length').html('');
 }
 function showReportesList(data) {
     let badge = data.ddl == 'ELIMINAR' ? 'danger' : 
@@ -94,9 +112,20 @@ function showReportesList(data) {
             <td><h5 class="m-0"><span class="badge badge-${badge}">${data.ddl}</span></h5></td>
             <td>${data.descripcion}</td>
             <td>${data.tabla}</td>
-            <td>${data.created_at}</td>
+            <td>${moment(data.created_at, 'YYYY-MM-DD hh:mm:ss').format('lll')}</td>
         </tr>
     `);
 }
-
+function excelDownload(){
+    if(registro.length){
+        const xls = new XlsExport(registro, "Estudiantes");
+        xls.exportToXLS('Reporte_Morosidad.xls')
+    }else{
+        Swal.fire(
+            'Vacia',
+            'No hay registros reportados',
+            'warning'
+        )
+    }
+}
 document.addEventListener("DOMContentLoaded", loaded);

@@ -108,8 +108,8 @@ router.get('/admin/casilleros/revocarCasillero',ensureToken,(req,res)=>{
 router.get('/admin/casilleros/agregarCasillero',ensureToken,(req,res)=>{
     if(req.session.value){
         let usuario = req.session.value;
-        var script = con.query('call prc_insertar_casillero(?)',
-        [req.query.codigo],
+        var script = con.query('call prc_insertar_casillero(?,?)',
+        [req.query.codigo,req.query.type],
         (err,result,fields)=>{
             if(!err){
                 logSistema(req.session.value.cedula, `AGREGAR CASILLERO -> ${req.query.codigo}`, DDL.INSERT, TABLE.CASILLERO);

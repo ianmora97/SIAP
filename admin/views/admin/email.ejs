@@ -1,118 +1,46 @@
 <div class="modal fade modal-p-bottom" id="inboxPanel" tabindex="-1" aria-labelledby="inboxPanelLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-bottom">
-        <div class="modal-content" style="border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important;height: 90vh;">
-            <div class="modal-body p-0 p-0 bg-gray position-relative" style="border-top-left-radius:15px;">
-                <!-- <div class="position-absolute" style="right: 50px; top: -10px;">
+    <div class="modal-dialog  modal-p-bottom">
+        <div class="modal-content" style="height: 90vh;">
+            <div class="modal-body p-0 rounded-3 bg-white position-relative">
+                <div class="d-flex justify-content-between py-2 px-3 align-items-end">
+                    <h3 class="font-weight-bold">Correo</h3>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div> -->
-                <div class="row p-0 m-0 d-flex align-items-stretch h-100 bg-gray" style="border-top-left-radius:15px;">
-                    <div class="col-1 bg-primary d-flex flex-column px-0 menu-correo-tab" id="menu-correo-tab-id" style="border-top-left-radius:15px; max-width: 80px !important;min-width:50px;">
-                        <div class="py-3 text-center">
-                            <i class="fas fa-inbox fa-2x text-white text-center"></i> &nbsp;
+                </div>
+                <hr class="my-2">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-start align-items-end border-bottom pb-2 mt-3">
+                        <div style="width:100px;">
+                            <p class="mb-0 text-muted">De:</p>
                         </div>
-                        <div class="nav flex-column nav-pills mt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link custom-nav-email active" id="correos-recibidos-tab" data-toggle="pill" 
-                            href="#correos-recibidos" role="tab" aria-controls="correos-recibidos" aria-selected="true">
-                                <i class="fas fa-envelope"></i> <br>
-                            </a>
-                            <a class="nav-link custom-nav-email" id="correos-enviados-tab" data-toggle="pill" 
-                            href="#correos-enviados" role="tab" aria-controls="correos-enviados" aria-selected="false">
-                                <i class="fas fa-paper-plane"></i>
-                            </a>
-                            <a class="nav-link custom-nav-email" id="correos-archivados-tab" data-toggle="pill" 
-                            href="#correos-archivados" role="tab" aria-controls="correos-archivados" aria-selected="false">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                        <input type="text" class="form-control-email w-100" id="email_From" value="siapde@gmail.com" disabled>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-end border-bottom pb-2 mt-3">
+                        <div style="width:100px;">
+                            <p class="mb-0 text-muted">Para:</p>
+                        </div>
+                        <div class="w-100">
+                            <div id="emailsList"></div>
+                            <input type="text" class="form-control-email w-100" id="email_To">
                         </div>
                     </div>
-                    <div class="col px-2 correos-lista-tab" id="correos-lista-tab-id" style="min-width: 410px !important;">
-                        <div class="tab-content bg-white rounded-3 mt-3" id="v-pills-tabContent" style="height: 86.5vh;max-height: 86.5vh;">
-                            <div class="tab-pane fade show active d-flex flex-column" id="correos-recibidos" 
-                            role="tabpanel" aria-labelledby="correos-recibidos-tab" style="height:100%;">
-                                <div class="d-flex justify-content-start mx-0 my-2 py-2" style="height:60px;">
-                                    <div class="h-100 pt-2 pl-3">
-                                        <span class="fa-stack align-middle ">
-                                            <i class="fas fa-circle fa-stack-2x" style="color:#d4ffddd0;"></i>
-                                            <i class="far fa-comment-dots fa-stack-1x" style="color:#6bf589;"></i>
-                                        </span>
-                                    </div>
-                                    <div class="pl-2">
-                                        <small class="text-muted font-weight-bold">Correos</small>
-                                        <h6 class="font-weight-bold">Recibidos</h6>
-                                    </div>
-                                </div>
-                                <div class="bg-gray rounded-3 mx-2 h-100 mb-2 border-top">
-                                    <div class="m-2 bg-primary py-2 rounded-3">
-                                        <div class="d-flex justify-content-around" id="opciones-tab" role="tablist">
-                                            <a href="#" class="badge badge-light">Todos</a>
-                                            <a href="#" class="badge badge-light">Favoritos</a>
-                                            <a href="#" class="badge badge-light">No Leidos</a>
-                                        </div>
-                                    </div>
-                                    <div class="list-group bg-gray mt-3">
-                                        <div class="media active py-2">
-                                            <img src="/public/uploads/default-avatar.png" class="rounded-circle px-1" width="50px">
-                                            <div class="media-body px-2 ">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <small class="font-weight-bold text-muted">John Doe</small>
-                                                    <small><i class="fas fa-paperclip"></i>&nbsp; 3 days ago</small>
-                                                </div>
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <div>
-                                                        <h6 class="mb-1 font-weight-bold">List group item heading</h6>
-                                                        <p class="text-muted mb-0">Will you do thutiful, be thegels are crying from up above. Yeah, you take me to utopia.</p>
-                                                    </div>
-                                                    <div class="align-self-end" role="button" id="star-fav-id">
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="correos-enviados" role="tabpanel" aria-labelledby="correos-enviados-tab" style="height:100%;">
-                                <div class="d-flex justify-content-start mx-0 my-2 py-2" style="height:60px;">
-                                    <div class="h-100 pt-2 pl-3">
-                                        <span class="fa-stack align-middle ">
-                                            <i class="fas fa-circle fa-stack-2x" style="color:#d8fde0;"></i>
-                                            <i class="far fa-comment-dots fa-stack-1x" style="color:#6bf589;"></i>
-                                        </span>
-                                    </div>
-                                    <div class="pl-2">
-                                        <small class="text-muted font-weight-bold">Correos</small>
-                                        <h6 class="font-weight-bold">Enviados</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="correos-archivados" role="tabpanel" aria-labelledby="correos-archivados-tab" style="height:100%;">
-                                <div class="d-flex justify-content-start mx-0 my-2 py-2" style="height:60px;">
-                                    <div class="h-100 pt-2 pl-3">
-                                        <span class="fa-stack align-middle ">
-                                            <i class="fas fa-circle fa-stack-2x" style="color:#d8fde0;"></i>
-                                            <i class="far fa-comment-dots fa-stack-1x" style="color:#6bf589;"></i>
-                                        </span>
-                                    </div>
-                                    <div class="pl-2">
-                                        <small class="text-muted font-weight-bold">Correos</small>
-                                        <h6 class="font-weight-bold">Archivados</h6>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-start align-items-end border-bottom pb-2 mt-3">
+                        <div style="width:100px;">
+                            <p class="mb-0 text-muted">Asunto:</p>
                         </div>
+                        <input type="text" class="form-control-email w-100" id="email_Subject">
                     </div>
-                    <div class="col bg-white rounded-3 my-3 mr-2 titulos-correo-tab" id="titulos-correo-tab-id">
-                        <div class="row mx-auto d-flex justify-content-start py-3">
-                            <span class="boton-back-bp px-1" role="button">
-                                <i class="fas fa-arrow-left"></i>
-                            </span>
-                            <div class="px-1">
-                                <h4 class="font-weight-bold">Titulo del Correo</h4>
-                            </div>
-                        </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="d-flex align-items-start mt-4 w-100">
+                        <div class="w-100" id="email_Message" contenteditable="true" style="min-height: 400px;"></div>
                     </div>
+                </div>
+            </div>
+            <div class="p-3">
+                <div class="d-flex justify-content-end px-3">
+                    <button type="button" class="btn btn-primary" id="sendEmail">Enviar</button>
                 </div>
             </div>
         </div>
@@ -121,9 +49,84 @@
 
 
 <script>
+    var g_email_estudents = new Array();
+    var g_email_map_estudents = new Map();
+    var g_email_senders = new Map();
     function emailEvents(event){
         inboxPanel(event);
         toggleBackArrow();
+        bringAllEstudentsEmail();
+        checkEmailExists();
+    }
+    function bringAllEstudentsEmail(){
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/estudiante/listaEstudiantes",
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            g_email_estudents = response;
+            g_email_estudents.forEach(function(estudiante){
+                g_email_map_estudents.set(estudiante.correo,estudiante);
+            });
+        }, (error) => {
+            console.log(error)
+        });
+    }
+    function checkEmailExists(){
+        $('#email_To').keyup(function(event){
+            if(event.keyCode == 13 ){
+                let email = $('#email_To').val();
+                if(email.length > 0){
+                    let email = $('#email_To').val();
+                    if(g_email_senders.get(email) == undefined){
+                        if(g_email_senders.get('todos') != undefined) return;
+                        if(g_email_map_estudents.has(email)){
+                            let estudiante = g_email_map_estudents.get(email);
+                            g_email_senders.set(email,email);
+                            $('#emailsList').append(`
+                                <div class="d-flex align-items-center border rounded-pill p-1 mb-1" id="pillEmailSender_${estudiante.cedula}">
+                                    <div class="mr-1">
+                                        <button class="btn btn-sm" onclick="deleteEmailSender('${estudiante.cedula}','${email}')"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="mr-2">
+                                        <img src="/public/uploads/${estudiante.foto}" class="rounded-circle" width="20" height="20">
+                                    </div>
+                                    <div class="w-100">
+                                        <small class="mb-0">${estudiante.nombre}</small>
+                                        <small class="mb-0 text-muted">${estudiante.correo}</small>
+                                    </div>
+                                </div>
+                            `);
+                        }else if(email == 'todos'){
+                            g_email_senders.set(email,{email:'todos'});
+                            $('#emailsList').append(`
+                            <div class="d-flex align-items-center border rounded-pill p-1 mb-1" id="pillEmailSender_${email}">
+                                <div class="mr-2">
+                                        <button class="btn btn-sm" onclick="deleteEmailSender('${email}','${email}')"><i class="fas fa-times"></i></button>
+                                    </div>
+                                <div class="mr-2">
+                                    <img src="/public/uploads/default-avatar.png" class="rounded-circle" width="20" height="20">
+                                </div>
+                                <div class="w-100">
+                                    <small class="mb-0">Todos los estudiantes</small>
+                                </div>
+                            </div>
+                            `);
+                        }
+                    }
+                }
+                $('#email_To').val('')
+            }
+        });
+        
+    }
+    function deleteEmailSender(id,email){
+        g_email_senders.delete(email);
+        $(`#pillEmailSender_${id}`).remove();
     }
     function inboxPanel(event){
         $('#inboxButton').on('click',function (e) {

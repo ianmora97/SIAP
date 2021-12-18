@@ -63,7 +63,7 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                 var mailOptions = {
                     name:'SIAP - Matricula',
                     from: 'siapduna2020@gmail.com',
-                    to:  req.body.correo, // ianmorar03@gmail.com',
+                    to:  'ianmorar03@gmail.com', // req.body.correo
                     subject: 'Confirmacion de Matricula',
                     html: `
                         <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">

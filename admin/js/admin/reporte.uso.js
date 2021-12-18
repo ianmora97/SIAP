@@ -86,6 +86,14 @@ var reporteHoraCh = new Chart(reportesHoraChart, {
         legend: {
             display: false
         },
+        scales:{
+            yAxes:[{
+                min: 0,
+                ticks: {
+                    stepSize: 1,
+                }
+            }]
+        },
         showLines: false,
         tooltips: {
             callbacks: {
@@ -101,6 +109,7 @@ var reporteHoraCh = new Chart(reportesHoraChart, {
         responsive: true,
         maintainAspectRatio: false,
     },
+    
 });
 
 var talleresChart = document.getElementById("talleresChart").getContext("2d");
@@ -124,6 +133,14 @@ var tallerCh = new Chart(talleresChart, {
     options: {
         legend: {
             display: false
+        },
+        scales:{
+            yAxes:[{
+                min: 0,
+                ticks: {
+                    stepSize: 1,
+                }
+            }]
         },
         tooltips: {
             callbacks: {
@@ -178,7 +195,7 @@ function loaded(event){
   })
 var g_MapMatriculados = new Map();
 var g_VecMatriculados = [];
-
+var g_gruposExistentes = {};
 function loadFromDb() {
     let ajaxTime = new Date().getTime();
     let bearer = 'Bearer '+g_token;
@@ -194,6 +211,7 @@ function loadFromDb() {
         let a = Math.ceil(totalTime / 1000);
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
+        $('#matriculas_stats').html(response.length);
         g_VecMatriculados = response;
         cargarMatriculados(response);
         cargarHorayDia(response);
@@ -202,13 +220,13 @@ function loadFromDb() {
     });
     $.ajax({
         type: "GET",
-        url: "/admin/casilleros/bringEstudiantes",
+        url: "/admin/estudiante/listaEstudiantes",
         contentType: "application/json",
         headers:{
             'Authorization':bearer
         }
     }).then((response) => {
-        
+        $('#estudiantes_stats').html(response.length);
     }, (error) => {
 
     });
@@ -220,16 +238,18 @@ function loadFromDb() {
             'Authorization':bearer
         }
     }).then((response) => {
+        $('#talleres_stats').html(response.length);
         let grupos = response.grupos;
+        g_gruposExistentes = grupos;
         for (var [key, value] of Object.entries(grupos)) {
             addData(tallerCh,key, value);
         }
+        $('#talleres_stats').html(Object.entries(g_gruposExistentes).length);
     },(error) => {
     }); 
 }
 
 function cargarMatriculados(data) {
-    console.log(data)
     let cnt_lunes = 0;
     let cnt_martes = 0;
     let cnt_miercoles = 0;
@@ -254,23 +274,23 @@ function cargarMatriculados(data) {
     addData(reporteCh,'Sabado',cnt_sabado);
     addData(reporteCh,'Domingo',cnt_domingo);
 
-    let cnt_5 = data.filter(e => e.hora == 5).length;
-    let cnt_6 = data.filter(e => e.hora == 6).length;
-    let cnt_7 = data.filter(e => e.hora == 7).length;
-    let cnt_8 = data.filter(e => e.hora == 8).length;
-    let cnt_9 = data.filter(e => e.hora == 9).length;
-    let cnt_10 = data.filter(e => e.hora == 10).length;
-    let cnt_11 = data.filter(e => e.hora == 11).length;
-    let cnt_12 = data.filter(e => e.hora == 12).length;
-    let cnt_13 = data.filter(e => e.hora == 13).length;
-    let cnt_14 = data.filter(e => e.hora == 14).length;
-    let cnt_15 = data.filter(e => e.hora == 15).length;
-    let cnt_16 = data.filter(e => e.hora == 16).length;
-    let cnt_17 = data.filter(e => e.hora == 17).length;
-    let cnt_18 = data.filter(e => e.hora == 18).length;
-    let cnt_19 = data.filter(e => e.hora == 19).length;
-    let cnt_20 = data.filter(e => e.hora == 20).length;
-    let cnt_21 = data.filter(e => e.hora == 21).length;
+    let cnt_5 = data.filter(e => convertTime12to24(e.hora) == 5).length;
+    let cnt_6 = data.filter(e => convertTime12to24(e.hora) == 6).length;
+    let cnt_7 = data.filter(e => convertTime12to24(e.hora) == 7).length;
+    let cnt_8 = data.filter(e => convertTime12to24(e.hora) == 8).length;
+    let cnt_9 = data.filter(e => convertTime12to24(e.hora) == 9).length;
+    let cnt_10 = data.filter(e => convertTime12to24(e.hora) == 10).length;
+    let cnt_11 = data.filter(e => convertTime12to24(e.hora) == 11).length;
+    let cnt_12 = data.filter(e => convertTime12to24(e.hora) == 12).length;
+    let cnt_13 = data.filter(e => convertTime12to24(e.hora) == 13).length;
+    let cnt_14 = data.filter(e => convertTime12to24(e.hora) == 14).length;
+    let cnt_15 = data.filter(e => convertTime12to24(e.hora) == 15).length;
+    let cnt_16 = data.filter(e => convertTime12to24(e.hora) == 16).length;
+    let cnt_17 = data.filter(e => convertTime12to24(e.hora) == 17).length;
+    let cnt_18 = data.filter(e => convertTime12to24(e.hora) == 18).length;
+    let cnt_19 = data.filter(e => convertTime12to24(e.hora) == 19).length;
+    let cnt_20 = data.filter(e => convertTime12to24(e.hora) == 20).length;
+    let cnt_21 = data.filter(e => convertTime12to24(e.hora) == 21).length;
 
     addData(reporteHoraCh,'5 am',cnt_5);
     addData(reporteHoraCh,'6 am',cnt_6);
@@ -290,26 +310,65 @@ function cargarMatriculados(data) {
     addData(reporteHoraCh,'8 pm',cnt_20);
     addData(reporteHoraCh,'9 pm',cnt_21);
 }
-
-
+const convertTime12to24 = (time12h) => {
+    const [time, modifier] = [time12h.substr(0,time12h.indexOf(':')+3),time12h.substr(time12h.indexOf(':')+3,2)];
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') hours = '00';
+    if (modifier === 'pm') hours = parseInt(hours, 10) + 12;
+    return hours;
+}
+function cambiarDiasHorasDropdown() {
+    
+    $('#diasReportes').on('change', function(e) {
+        let val = $('#diasReportes').val();
+        switch (val) {
+            case 'Lunes':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[0].labels, diasLabelsData[0].data,'Lunes',verdeGradiente,'#05d435')
+                break;
+            case 'Martes':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[1].labels, diasLabelsData[1].data,'Martes',rojoGradiente,'#B81616')
+                break;
+            case 'Miercoles':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[2].labels, diasLabelsData[2].data,'Miercoles',azulGradiente,'#007bff')
+                break;
+            case 'Jueves':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[3].labels, diasLabelsData[3].data,'Jueves',naranjaGradiente,'#fd7e14')
+                break;
+            case 'Viernes':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[4].labels, diasLabelsData[4].data,'Viernes',moradoGradiente,'#6610f2')
+                break;
+            case 'Sabado':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[5].labels, diasLabelsData[5].data,'Sabado',rojoGradiente,'#B81616')
+                break;
+            case 'Domingo':
+                addDataAlt(reporteHoraDiaCh,diasLabelsData[6].labels, diasLabelsData[6].data,'Domingo',naranjaGradiente,'#fd7e14')
+                break;
+             
+        }
+    });
+}
 function cargarHorayDia(data) {
     // ! ------------------------ lunes -------------------------
     let lunes = []; //todas las horas de los lunes 
     data.filter(e => e.dia == 'LUNES').forEach(e =>{
-        lunes.push(e.hora);
+        lunes.push(convertTime12to24(e.hora));
     })
     let i_lunes = new Array(24); // contar los cantidad de horas al dia
     i_lunes.fill(0);
     for (let i = 0; i < i_lunes.length; i++) {
         for (let j = 0; j < lunes.length; j++) {
-            if (i == lunes[j]) {
-            i_lunes[i] = i_lunes[i] + 1;
+            if (i == convertTime12to24(lunes[j])) {
+                i_lunes[i] = i_lunes[i] + 1;
             }
         }
     }
+    
     let set_lunes = new Set(lunes); //un set para eliminar los repetidos del vector original
     let label_lunes = []; // crear el vector resultante
-    
+
+    console.log('set_lunes',set_lunes);
+
+
     [...set_lunes].forEach(e => {
         label_lunes.push(i_lunes[e]);
     })
@@ -322,17 +381,18 @@ function cargarHorayDia(data) {
     todos_lunes.forEach(e => {
         labels_lunes.push(`${e} ${e > 11 ?'pm':'am'}`);
     })
+    console.log({labels: labels_lunes, data: label_lunes})
     diasLabelsData.push({labels: labels_lunes, data: label_lunes})
     // ! ------------------------ martes -------------------------
     let martes = [];
     data.filter(e => e.dia == 'MARTES').forEach(e =>{
-        martes.push(e.hora);
+        martes.push(convertTime12to24(e.hora));
     })
     let i_martes = new Array(24); // contar los cantidad de horas al dia
     i_martes.fill(0);
     for (let i = 0; i < i_martes.length; i++) {
         for (let j = 0; j < martes.length; j++) {
-            if (i == martes[j]) {
+            if (i == convertTime12to24(martes[j])) {
             i_martes[i] = i_martes[i] + 1;
             }
         }
@@ -355,13 +415,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ miercoles -------------------------
     let miercoles = [];
     data.filter(e => e.dia == 'MIERCOLES').forEach(e =>{
-        miercoles.push(e.hora);
+        miercoles.push(convertTime12to24(e.hora));
     })
     let i_miercoles = new Array(24); // contar los cantidad de horas al dia
     i_miercoles.fill(0);
     for (let i = 0; i < i_miercoles.length; i++) {
         for (let j = 0; j < miercoles.length; j++) {
-            if (i == miercoles[j]) {
+            if (i == convertTime12to24(miercoles[j])) {
             i_miercoles[i] = i_miercoles[i] + 1;
             }
         }
@@ -385,13 +445,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ jueves -------------------------
     let jueves = [];
     data.filter(e => e.dia == 'JUEVES').forEach(e =>{
-        jueves.push(e.hora);
+        jueves.push(convertTime12to24(e.hora));
     })
     let i_jueves = new Array(24); // contar los cantidad de horas al dia
     i_jueves.fill(0);
     for (let i = 0; i < i_jueves.length; i++) {
         for (let j = 0; j < jueves.length; j++) {
-            if (i == jueves[j]) {
+            if (i == convertTime12to24(jueves[j])) {
             i_jueves[i] = i_jueves[i] + 1;
             }
         }
@@ -414,13 +474,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ viernes -------------------------
     let viernes = [];
     data.filter(e => e.dia == 'VIERNES').forEach(e =>{
-        viernes.push(e.hora);
+        viernes.push(convertTime12to24(e.hora));
     })
     let i_viernes = new Array(24); // contar los cantidad de horas al dia
     i_viernes.fill(0);
     for (let i = 0; i < i_viernes.length; i++) {
         for (let j = 0; j < viernes.length; j++) {
-            if (i == viernes[j]) {
+            if (i == convertTime12to24(viernes[j])) {
             i_viernes[i] = i_viernes[i] + 1;
             }
         }
@@ -443,13 +503,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ sabado -------------------------
     let sabado = [];
     data.filter(e => e.dia == 'SABADO').forEach(e =>{
-        sabado.push(e.hora);
+        sabado.push(convertTime12to24(e.hora));
     })
     let i_sabado = new Array(24); // contar los cantidad de horas al dia
     i_sabado.fill(0);
     for (let i = 0; i < i_sabado.length; i++) {
         for (let j = 0; j < sabado.length; j++) {
-            if (i == sabado[j]) {
+            if (i == convertTime12to24(sabado[j])) {
             i_sabado[i] = i_sabado[i] + 1;
             }
         }
@@ -472,13 +532,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ domingo -------------------------
     let domingo = [];
     data.filter(e => e.dia == 'DOMINGO').forEach(e =>{
-        domingo.push(e.hora);
+        domingo.push(convertTime12to24(e.hora));
     })
     let i_domingo = new Array(24); // contar los cantidad de horas al dia
     i_domingo.fill(0);
     for (let i = 0; i < i_domingo.length; i++) {
         for (let j = 0; j < domingo.length; j++) {
-            if (i == domingo[j]) {
+            if (i == convertTime12to24(domingo[j])) {
             i_domingo[i] = i_domingo[i] + 1;
             }
         }
@@ -511,15 +571,18 @@ function cargarHorayDia(data) {
                 backgroundColor: verdeGradiente,
                 data: label_lunes,
                 fill: true
-            }, 
-        ]
-        },
+            }
+        ]},
         options: {
             legend: { display: true },
-            //showLines: false, // disable for all datasets
             scales: {
-                xAxes: [{ gridLines: { drawBorder: true,},},],
-                yAxes: [{ticks: { suggestedMin: 0, beginAtZero: true }, gridLines: {drawBorder: true,},},],
+                xAxes: [{ 
+                    gridLines: { 
+                        drawBorder: false
+                    },
+                }],
+                yAxes: [{
+                    ticks: { suggestedMin: 0, suggestedMax: 8, beginAtZero: true, stepSize: 1 }, gridLines: {drawBorder: false,},},],
             },
             tooltips: {
                 callbacks: {
@@ -534,36 +597,7 @@ function cargarHorayDia(data) {
         },
     });
 }
-function cambiarDiasHorasDropdown() {
-    
-    $('#diasReportes').on('change', function(e) {
-        let val = $('#diasReportes').val();
-        switch (val) {
-            case 'Lunes':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[0].labels, diasLabelsData[0].data,'Lunes',verdeGradiente,'#05d435')
-                break;
-            case 'Martes':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[1].labels, diasLabelsData[1].data,'Martes',rojoGradiente,'#B81616')
-                break;
-            case 'Miercoles':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[2].labels, diasLabelsData[2].data,'Miercoles',azulGradiente,'#007bff')
-                break;
-            case 'Jueves':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[3].labels, diasLabelsData[3].data,'Jueves',naranjaGradiente,'#fd7e14')
-                break;
-            case 'Viernes':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[4].labels, diasLabelsData[4].data,'Viernes',moradoGradiente,'#6610f2')
-                break;
-            case 'Sabado':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[5].labels, diasLabelsData[5].data,'Sabado')
-                break;
-            case 'Domingo':
-                addDataAlt(reporteHoraDiaCh,diasLabelsData[6].labels, diasLabelsData[6].data,'Domingo')
-                break;
-             
-        }
-    });
-}
+
 function addDataAlt(chart, label, data, nombre, background, border) {
     chart.data.labels = label;
     chart.data.datasets[0].label = nombre;

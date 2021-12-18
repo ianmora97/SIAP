@@ -118,19 +118,27 @@ function showonListMorosos(u){
     `);
 }
 function excelDownload(){
-    let data = new Array();
-    for (let i = 0; i < g_estudiantes.length; i++) {
-        const e = g_estudiantes[i];
-        data.push({
-            id: e.id,
-            cedula: e.cedula,
-            nombre: e.nombre,
-            apellido: e.apellido,
-            correo: e.correo,
-            estado: `${e.estado == 1 ? 'Activo' :'Inactivo' }`
-        });
+    if(g_estudiantes.length){
+        let data = new Array();
+        for (let i = 0; i < g_estudiantes.length; i++) {
+            const e = g_estudiantes[i];
+            data.push({
+                id: e.id,
+                cedula: e.cedula,
+                nombre: e.nombre,
+                apellido: e.apellido,
+                correo: e.correo,
+                estado: `${e.estado == 1 ? 'Activo' :'Inactivo' }`
+            });
+        }
+        const xls = new XlsExport(data, "Estudiantes");
+        xls.exportToXLS('Reporte_sistema.xls')
+    }else{
+        Swal.fire(
+            'Vacia',
+            'No hay registros reportados',
+            'warning'
+        )
     }
-    const xls = new XlsExport(data, "Estudiantes");
-    xls.exportToXLS('Reporte_Morosidad.xls')
 }
 document.addEventListener("DOMContentLoaded", loaded);

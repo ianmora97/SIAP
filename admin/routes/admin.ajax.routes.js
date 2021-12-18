@@ -31,6 +31,7 @@ router.get('/admin/ajax/stats/getTalleres',ensureToken,(req,res)=>{
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
             rows[0].forEach((row)=>{
+                console.log(row);
                 name_groups[row.descripcion]=0;
             });
             script = "select * from vta_matriculados_por_grupo";

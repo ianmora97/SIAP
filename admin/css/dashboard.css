@@ -681,14 +681,6 @@ input, select {
   align-items: flex-end;
   min-height: 100%; }
 
-.modal-p-bottom .modal-dialog {
-  transform: translateY(100%) !important; }
-
-.modal-p-bottom.show {
-  overflow: hidden; }
-  .modal-p-bottom.show .modal-dialog {
-    transform: translateY(0%) !important; }
-
 .wrapperA {
   animation: scaleBack 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
 
@@ -732,22 +724,22 @@ input, select {
 .rounded-circle-2 {
   border-radius: 20px; }
 
-@media (max-width: 950px) {
-  .menu-correo-tab {
-    display: none !important; }
-  .correos-lista-tab {
-    display: none !important; }
-  .boton-back-bp {
-    display: block; } }
+.form-control-email {
+  border: none;
+  outline: none !important;
+  box-shadow: nonw !important; }
+  .form-control-email:focus {
+    outline: none !important;
+    box-shadow: none !important; }
 
-@media (min-width: 950px) {
-  .boton-back-bp {
-    display: none; }
-  .correos-lista-tab {
-    max-width: 410px; } }
+.modal-p-bottom .modal-dialog {
+  max-width: 80% !important;
+  transform: translateY(100%) !important; }
 
-.titulos-correo-tab.hide {
-  display: none !important; }
+.modal-p-bottom.show {
+  overflow: hidden; }
+  .modal-p-bottom.show .modal-dialog {
+    transform: translateY(0%) !important; }
 
 .chat-footer {
   position: fixed;

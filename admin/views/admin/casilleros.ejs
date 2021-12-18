@@ -12,46 +12,34 @@
 
     * Vista de Casilleros
  -->
- <!DOCTYPE html>
- <html lang="es" class="h-100">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
-     <meta name="apple-mobile-web-app-capable" content="yes">
-     <meta name="mobile-web-app-capable" content="yes">
-     <title>Dashboard | Casilleros</title>
-     <link rel="stylesheet" href="/css/bootstrap.css">
-     <link rel="stylesheet" href="/css/general.css">
-     <link rel="stylesheet" href="/css/datatables.min.css">
-     <link rel="stylesheet" href="/css/dashboard.css"/>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
-     <link rel="stylesheet" href="/css/animate.css">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"/>
-     <script src="/js/jq-bs-bundle.js"></script> 
-     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
- </head>
- <body class="page bg-light d-flex flex-column h-100">
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <title>Dashboard | Casilleros</title>
+    <%- include('headers')%>
+</head>
+<body class="page bg-light d-flex flex-column h-100">
     <div class="modal fade" id="modalAgregarCasillero" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarCasillero" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header px-3 bg-primary text-white">
-                    <h6 class="modal-title font-weight-bold pl-3">Agregar un Casillero</h6>
+                    <h5 class="modal-title font-weight-bold pl-3">Agregar un Casillero</h5>
                     <button type="button" class="close text-white"  data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="text-white">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body py-2">
                     <div>
-                        <strong>Digite el codigo del casillero</strong>
+                        <select class="form-control" id="tipoCasilleroAgregar">
+                            <option selected>Tipo de Casillero</option>
+                            <option value="H">Hombres</option>
+                            <option value="M">Mujeres</option>
+                        </select>
                     </div>
                     <div class="casilleroFormat libre agregar mt-2">
                         <div class="formgroup-casillero" data-toggle="tooltip" data-placement="right" data-html="true" title="Codigo">
-                            <span>CA</span>
-                            <input type="number" class="input-casillero form-control-sm" placeholder="##" id="addCasilleroInputModal" autofocus>
+                            <span id="codigoCasilleroTipo">CA</span>
+                            <input type="number" class="input-casillero form-control-sm" placeholder="##" id="addCasilleroInputModal" disabled>
                             <style>
                                 input::-webkit-outer-spin-button,
                                 input::-webkit-inner-spin-button {
@@ -70,10 +58,9 @@
                             <span class="text-white text-right"><i class="fas fa-lock-open"></i></span>
                         </div>
                     </div>
-                    <small>El formato para los casilleros es <i>CA</i>+<i>numero</i> e.g: CA90</small>
                 </div>
-                <div class="modal-footer py-1">
-                    <button type="button" class="btn btn-primary " id="agregarCasilleroButton">
+                <div class="modal-footer py-1 border-0">
+                    <button type="button" class="btn btn-primary " id="agregarCasilleroButton" disabled>
                         Agregar
                     </button>
                 </div>
@@ -121,41 +108,61 @@
         </div>
     </div>
     <div class="d-flex" id="wrapper">
-         <%- include('menuDashboard') %>
-         <div id="page-content-wrapper">
-             <%- include('headerDashboard') %>
-
-             <div class="container-fluid mt-4">
-                 <div class="card border-0 shadow-primary my-3 rounded-3">
-                     <div class="card-body py-4">
-                         <div class="row">
-                             <div class="col-md-6 pt-2">
-                                 <h2 class="font-weight-bolder">Administracion de Casilleros</h2>
-                                 <small class="text-muted">En esta seccion se muestra los casilleros que estan disponibles <br>
-                                    para su uso.</small><br>
-                                 <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
-                             </div>
-                             <div class="col pt-2 border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" 
-                                 id="totalCasilleros_stats">0</h1>
-                                 <small class="text-muted">Total de casilleros &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                             </div>
-                             <div class="col pt-2 border-right">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" 
-                                 id="casilleros_disponibles_stats">0</h1>
-                                 <small class="text-muted">Casilleros Disponibles &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                             </div>
-                             <div class="col pt-2">
-                                 <h1 class="m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3" 
-                                 id="casilleros_en_uso_stats">0</h1>
-                                 <small class="text-muted">Casilleros en uso &nbsp; <i class="fas fa-align-center text-info"></i></small>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="bg-white shadow-primary p-3 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
-                    <div class="row mx-0 d-flex justify-content-between">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid my-4">
+                <div class="bg-white rounded-3 p-4">
+                    <div class="row">
+                        <div class="col-md-6 pt-2">
+                            <h1 class="display-5 font-weight-bolder">Casilleros</h1>
+                            <p class="text-muted mb-0">En esta sección se muestra los casilleros que estan disponibles 
+                            para su uso.</p>
+                            <small>Información Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col border-right">
+                            <div class="text-center" id="casilleros_disponibles_stats_cont">
+                                <h1 class="m-0 display-3 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" 
+                                id="casilleros_disponibles_stats">0</h1>
+                                <small class="text-muted">Casilleros Disponibles <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                        <div class="col border-right">
+                            <div class="text-center" id="totalCasilleros_hombres_cont">
+                                <h1 class="m-0 display-3 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t2" 
+                                id="totalCasilleros_hombres">0</h1>
+                                <small class="text-muted">Casilleros Hombres <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
                         <div class="col">
+                            <div class="text-center" id="totalCasilleros_mujeres_cont">
+                                <h1 class="m-0 display-3 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3" 
+                                id="totalCasilleros_mujeres">0</h1>
+                                <small class="text-muted">Casilleros Mujeres <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        tippy('#casilleros_disponibles_stats_cont', {
+                            content: 'Total de casilleros disponibles',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                        tippy('#totalCasilleros_hombres_cont', {
+                            content: 'Total de casilleros en el baño de hombres',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                        tippy('#totalCasilleros_mujeres_cont', {
+                            content: 'Total de casilleros en el baño de mujeres',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                    </script>
+                </div>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                    <div class="row mx-0 d-flex justify-content-between">
+                        <div class="col pl-0">
                             <div class="mb-1">
                                 <div class="input-group flex-nowrap">
                                     <div class="input-group-prepend">
@@ -169,28 +176,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                        <div class="col-md-3 d-flex justify-content-end align-items-end pr-0">
                             <div class="w-100 h-100">
-                                <button type="button" class="btn btn-primary w-100" 
+                                <button type="button" class="btn btn-secondary w-100" 
                                 data-toggle="modal" data-target="#modalAgregarCasillero"><i class="fas fa-plus"></i> Agregar Casillero</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                 <div class="bg-white px-0 py-2 shadow-primary mt-4 rounded-3  animate__animated animate__zoomIn" style="min-height: 650px;">
-                    <div class="card-body px-2 py-2">
-                        <div id="casillerosMatrix">
-
+                <div class="bg-white py-3 mt-4 rounded-3 animate__animated animate__fadeIn" style="min-height: 650px;">
+                    <div class="row mx-0 align-items-stretch" style="min-height: 620px;">
+                        <div class="col-md-6">
+                            <h4 class="font-weight-bold">Baños de Hombres</h4>
+                            <hr class="my-3">
+                            <div id="casillerosMatrix_hombres" class="row flex-wrap justify-content-start">
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-6 border-left">
+                            <h4 class="font-weight-bold">Baños de Mujeres</h4>
+                            <hr class="my-3">
+                            <div id="casillerosMatrix_mujeres" class="row flex-wrap justify-content-start">
+    
+                            </div>
                         </div>
                     </div>
-                 </div>
-             </div>
-             <%- include('footerDashboard') %>
-         </div>
-             
-         </div>
-     </div>
-     <script src="../../js/assets/datatables.min.js"></script>
-     <script src="../../js/admin/casilleros.js"></script>
- </body>
- </html>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script src="../../js/assets/datatables.min.js"></script>
+    <script src="../../js/admin/casilleros.js"></script>
+</body>
+</html>
