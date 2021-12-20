@@ -12,33 +12,12 @@
  <html lang="es" class="h-100">
  
  <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
-     <meta name="apple-mobile-web-app-capable" content="yes">
-     <meta name="mobile-web-app-capable" content="yes">
      <title>Dashboard | SIAP - Pantalla Inicio</title>
-     <link rel="stylesheet" href="/css/bootstrap.css">
-     <link rel="stylesheet" href="/css/general.css">
-     <link rel="stylesheet" href="/css/datatables.min.css">
-     <link rel="stylesheet" href="/css/dashboard.css" />
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-     <link rel="stylesheet" href="/css/animate.css">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
-     <script src="/js/jq-bs-bundle.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+     <%- include('headers') %>
  </head>
  
  <body class="page bg-light d-flex flex-column h-100">
-    
+    <%- include('email') %> 
     <div class="d-flex" id="wrapper">
         <%- include('menuDashboard') %>
         <div id="page-content-wrapper">

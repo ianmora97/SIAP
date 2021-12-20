@@ -1,9 +1,9 @@
 <div class="modal fade modal-p-bottom" id="inboxPanel" tabindex="-1" aria-labelledby="inboxPanelLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-p-bottom">
+    <div class="modal-dialog  modal-p-bottom modal-dialog-scrollable">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-body p-0 rounded-3 bg-white position-relative">
                 <div class="d-flex justify-content-between py-2 px-3 align-items-end">
-                    <h3 class="font-weight-bold">Correo</h3>
+                    <h2 class="font-weight-bold px-2 mt-2">Correo</h2>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -20,9 +20,18 @@
                         <div style="width:100px;">
                             <p class="mb-0 text-muted">Para:</p>
                         </div>
-                        <div class="w-100">
-                            <div id="emailsList"></div>
-                            <input type="text" class="form-control-email w-100" id="email_To">
+                        <div class="d-flex justify-content-between align-items-end w-100"> 
+                            <div class="flex-grow-1">
+                                <div id="emailsList" class="d-flex justify-content-start align-items-start"></div>
+                                <input type="text" class="form-control-email w-100" id="email_To" autofocus>
+                            </div>
+                            <div class="d-flex justify-content-end" style="width: 300px;">
+                                <select class="form-control form-control-sm w-100" id="formSelectEmailSenders">
+                                    <option value="null" selected>Destinatario</option>
+                                    <option value="todos">Todos</option>
+                                    <option value="todosMatri">Todos Matriculados</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-start align-items-end border-bottom pb-2 mt-3">
@@ -33,117 +42,64 @@
                     </div>
                 </div>
                 <div class="container-fluid">
-                    <div class="d-flex align-items-start mt-4 w-100">
-                        <div class="w-100" id="email_Message" contenteditable="true" style="min-height: 400px;"></div>
+                    <div class="d-flex justify-content-start align-items-center mt-2 flex-wrap">
+                        <select class="custom-select custom-select-sm" style="width:300px;" onchange="formatDocEmail('formatblock',this[this.selectedIndex].value);this.selectedIndex=0;">
+                            <option selected>Formato...</option>
+                            <option value="p">Parrafo</option>
+                            <option value="h1">Titulo 1</option>
+                            <option value="h2">Titulo 2</option>
+                            <option value="h3">Titulo 3</option>
+                            <option value="h4">Titulo 4</option>
+                            <option value="h5">Titulo 5</option>
+                            <option value="h6">Subtitulo</option>
+                        </select>
+                        <button class="btn btn-light btn-sm ml-1 text-danger" data-tippy-content="Borrar" onclick="oDoc.innerHTML=sDefTxt;" ><i class="fas fa-brush"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-secondary" data-tippy-content="Undo" onclick="formatDocEmail('undo');" ><i class="fas fa-undo"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-secondary" data-tippy-content="Redo" onclick="formatDocEmail('redo');" ><i class="fas fa-redo"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-info" data-tippy-content="Quitar Formato" onclick="formatDocEmail('removeFormat')"><i class="fas fa-remove-format"></i></button>
+                        <button class="btn btn-light btn-sm ml-1" data-tippy-content="Negrita" onclick="formatDocEmail('bold');" ><i class="fas fa-bold"></i></button>
+                        <button class="btn btn-light btn-sm ml-1" data-tippy-content="Italica" onclick="formatDocEmail('italic');" ><i class="fas fa-italic"></i></button>
+                        <button class="btn btn-light btn-sm ml-1" data-tippy-content="Subrayado" onclick="formatDocEmail('underline');" ><i class="fas fa-underline"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-primary" data-tippy-content="Alinear Izquierda" onclick="formatDocEmail('justifyleft');" ><i class="fas fa-align-left"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-primary" data-tippy-content="Alinear Centro" onclick="formatDocEmail('justifycenter');" ><i class="fas fa-align-center"></i></button>
+                        <button class="btn btn-light btn-sm ml-1 text-primary" data-tippy-content="Alinear Derecha" onclick="formatDocEmail('justifyright');" ><i class="fas fa-align-right"></i></button>
+                        <button class="btn btn-light btn-sm ml-1" data-tippy-content="Lista Numeros" onclick="formatDocEmail('insertorderedlist');" ><i class="fas fa-list-ol"></i></button>
+                        <button class="btn btn-light btn-sm ml-1" data-tippy-content="Lista Puntos" onclick="formatDocEmail('insertunorderedlist');" ><i class="fas fa-list-ul"></i></button>
+                        <!-- ! <button class="btn btn-light btn-sm ml-1" data-tippy-content="Crear Link" onclick="createLinkFormatEmail()"><i class="fas fa-link"></i></button>  No funciona -->
+                        <script>
+                            tippy('[data-tippy-content]');
+                        </script>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex align-items-start mt-4 w-100 flex-column">
+                        <div class="w-100" id="email_Message" contenteditable="false" style="min-height: 300px;"></div>
+                        <div id="footerEmailMessage" style="width: 100%;">
+                            <div style="width: 100%; background-color: #4659E4; margin-top: 50px;">
+                                <footer style="min-height: 50px; width: 90%; margin: 0 auto; color:#ffffff;">
+                                    <div style="display:flex; justify-content: flex-start; margin: 0 auto; padding: 1.5rem 0;">
+                                        <div>
+                                            <h4 style="color:#ffffff; display: inline;">SIAP</h4>
+                                            <div style="margin-top: 3px;">
+                                                <div contenteditable="true" id="nameContentEditableFooterEmail">Luis Rojas</div>
+                                                <a href="tel:2277-3784" style="color:#ffffff">2277-3784</a>
+                                            </div>
+                                        </div>
+                                        <div style="margin-left:auto;">
+                                            <img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" width="150" style="filter: brightness(0) invert(1);">
+                                        </div>
+                                    </div>
+                                </footer>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="p-3">
                 <div class="d-flex justify-content-end px-3">
-                    <button type="button" class="btn btn-primary" id="sendEmail">Enviar</button>
+                    <button type="button" class="btn btn-primary" id="sendEmail_btn"><i class="fas fa-paper-plane"></i> Enviar</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<script>
-    var g_email_estudents = new Array();
-    var g_email_map_estudents = new Map();
-    var g_email_senders = new Map();
-    function emailEvents(event){
-        inboxPanel(event);
-        toggleBackArrow();
-        bringAllEstudentsEmail();
-        checkEmailExists();
-    }
-    function bringAllEstudentsEmail(){
-        let bearer = 'Bearer '+g_token;
-        $.ajax({
-            type: "GET",
-            url: "/admin/estudiante/listaEstudiantes",
-            contentType: "appication/json",
-            headers:{
-                'Authorization':bearer
-            }
-        }).then((response) => {
-            g_email_estudents = response;
-            g_email_estudents.forEach(function(estudiante){
-                g_email_map_estudents.set(estudiante.correo,estudiante);
-            });
-        }, (error) => {
-            console.log(error)
-        });
-    }
-    function checkEmailExists(){
-        $('#email_To').keyup(function(event){
-            if(event.keyCode == 13 ){
-                let email = $('#email_To').val();
-                if(email.length > 0){
-                    let email = $('#email_To').val();
-                    if(g_email_senders.get(email) == undefined){
-                        if(g_email_senders.get('todos') != undefined) return;
-                        if(g_email_map_estudents.has(email)){
-                            let estudiante = g_email_map_estudents.get(email);
-                            g_email_senders.set(email,email);
-                            $('#emailsList').append(`
-                                <div class="d-flex align-items-center border rounded-pill p-1 mb-1" id="pillEmailSender_${estudiante.cedula}">
-                                    <div class="mr-1">
-                                        <button class="btn btn-sm" onclick="deleteEmailSender('${estudiante.cedula}','${email}')"><i class="fas fa-times"></i></button>
-                                    </div>
-                                    <div class="mr-2">
-                                        <img src="/public/uploads/${estudiante.foto}" class="rounded-circle" width="20" height="20">
-                                    </div>
-                                    <div class="w-100">
-                                        <small class="mb-0">${estudiante.nombre}</small>
-                                        <small class="mb-0 text-muted">${estudiante.correo}</small>
-                                    </div>
-                                </div>
-                            `);
-                        }else if(email == 'todos'){
-                            g_email_senders.set(email,{email:'todos'});
-                            $('#emailsList').append(`
-                            <div class="d-flex align-items-center border rounded-pill p-1 mb-1" id="pillEmailSender_${email}">
-                                <div class="mr-2">
-                                        <button class="btn btn-sm" onclick="deleteEmailSender('${email}','${email}')"><i class="fas fa-times"></i></button>
-                                    </div>
-                                <div class="mr-2">
-                                    <img src="/public/uploads/default-avatar.png" class="rounded-circle" width="20" height="20">
-                                </div>
-                                <div class="w-100">
-                                    <small class="mb-0">Todos los estudiantes</small>
-                                </div>
-                            </div>
-                            `);
-                        }
-                    }
-                }
-                $('#email_To').val('')
-            }
-        });
-        
-    }
-    function deleteEmailSender(id,email){
-        g_email_senders.delete(email);
-        $(`#pillEmailSender_${id}`).remove();
-    }
-    function inboxPanel(event){
-        $('#inboxButton').on('click',function (e) {
-            $('#inboxPanel').modal();
-            $('#wrapper').addClass('wrapperA rounded-3');
-        });
-        $('#inboxPanel').on('hide.bs.modal', function (e) {
-            $('#wrapper').removeClass('wrapperA rounded-3');
-        })
-    }
-    function toggleBackArrow(event) {
-        $('.boton-back-bp').on('click',function (e) {
-            $('#menu-correo-tab-id').removeClass('menu-correo-tab');
-            $('#correos-lista-tab-id').css('min-width','300px');
-            $('#correos-lista-tab-id').removeClass('correos-lista-tab');
-            $('#titulos-correo-tab-id').addClass('hide');
-        })
-    }
-    document.addEventListener("DOMContentLoaded", emailEvents);
-</script>
+<script src="/js/admin/email.js"></script>

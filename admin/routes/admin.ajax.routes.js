@@ -31,7 +31,6 @@ router.get('/admin/ajax/stats/getTalleres',ensureToken,(req,res)=>{
     var query = con.query(script, (err,rows,fields)=>{
         if(rows != undefined){
             rows[0].forEach((row)=>{
-                console.log(row);
                 name_groups[row.descripcion]=0;
             });
             script = "select * from vta_matriculados_por_grupo";
@@ -138,20 +137,20 @@ router.get('/admin/ajax/stats/getReposiciones',ensureToken,(req,res)=>{
 router.get('/admin/ajax/getUrls',ensureToken,(req,res)=>{
     var rows = [];
     rows.push(
-        {'url':'/admin/estudiantes','descripcion':'Lista de clientes,estudiantes,usuarios de la piscina','name':'Cliente', 'icon':'<i class="fa fa-users"></i>', 'variation':'usuarios,cliente,estudiante,estudiantes'},
-        {'url':'/admin/profesores','name':'Profesor', 'icon':'fa-user-graduate', 'variation':'usuarios,profesor,profesores,instructor,instructores'},
-        {'url':'/admin/administradores','name':'Administrativo', 'icon':'fa-user-tie', 'variation':'usuarios,administrativo,administrativos,oficina'},
-        {'url':'/admin/talleres','name':'Talleres', 'icon':'fa-chalkboard-teacher', 'variation':'talleres,cursos,curso,horarios,grupos,calendario'},
-        {'url':'/admin/reposiciones','name':'Reposiciones', 'icon':'fa-exchange-alt', 'variation':'reposiciones,solicitud'},
-        {'url':'/admin/matricula','name':'Matricula', 'icon':'fa-user-graduate', 'variation':'matricula,matriculas,matriculacion,matriculaciones'},
-        {'url':'/admin/matricula/reportes','name':'Reportes', 'icon':'fa-file-pdf', 'variation':'reportes de matricula,reportes,reporte,informes,informe,informacion,informaciones'},
-        {'url':'/admin/comprobacion','name':'Comprobacion', 'icon':'fa-check-circle', 'variation':'comprobacion,comprobaciones,registro,estudiantes,usuarios,nuevos'},
-        {'url':'/admin/reportes/asistencia','name':'Asistencia', 'icon':'fa-check-circle', 'variation':'asistencia,asistencias,reportes'},
-        {'url':'/admin/reportes/conducta','name':'Conducta', 'icon':'fa-check-circle', 'variation':'conducta,conductas,reportes'},
-        {'url':'/admin/reportes/mororosos','name':'Morosos', 'icon':'fa-check-circle', 'variation':'morosos,reportes'},
-        {'url':'/admin/reportes/uso','name':'Uso', 'icon':'fa-check-circle', 'variation':'uso,usos,reportes'},
-        {'url':'/admin/reportes/sistema','name':'Sistema', 'icon':'fa-check-circle', 'variation':'sistema,sistemas,reportes'},
-        {'url':'/admin/casilleros','name':'Casilleros', 'icon':'fa-check-circle', 'variation':'casilleros'},
+        {'url':'/admin/estudiantes','description':'Lista de clientes, estudiantes, usuarios de la piscina','name':'Cliente', 'icon':'<i class="fa fa-users"></i>', 'variation':'usuarios,cliente,estudiante,estudiantes'},
+        {'url':'/admin/profesores','description':'Lista de instructores, profesores de la piscina','name':'Profesor', 'icon':'<i class="fas fa-user-graduate"></i>', 'variation':'usuarios,profesor,profesores,instructor,instructores'},
+        {'url':'/admin/administradores','description':'Lista de administradores del sistema','name':'Administrativo', 'icon':'<i class="fas fa-user-tie"></i>', 'variation':'usuarios,administrativo,administrativos,oficina'},
+        {'url':'/admin/talleres','description':'Lista de talleres, horarios, grupos que se imparten en la piscina','name':'Talleres', 'icon':'<i class="fas fa-chalkboard-teacher"></i>', 'variation':'talleres,cursos,curso,horarios,grupos,calendario'},
+        {'url':'/admin/reposiciones','description':'Lista de reposiciones solicitadas','name':'Reposiciones', 'icon':'<i class="fas fa-exchange-alt"></i>', 'variation':'reposiciones,solicitud'},
+        {'url':'/admin/matricula','description':'Lista de estudiantes matriculados en la piscina','name':'Matricula', 'icon':'<i class="fas fa-user-graduate"></i>', 'variation':'matricula,matriculas,matriculacion,matriculaciones'},
+        {'url':'/admin/matricula/reportes','description':'Reportes de matricula y desmatricula','name':'Reportes', 'icon':'<i class="fas fa-file-pdf"></i>', 'variation':'reportes de matricula,reportes,reporte,informes,informe,informacion,informaciones'},
+        {'url':'/admin/comprobacion','description':'Comprobacion de Datos de usuarios registradas','name':'Comprobacion', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'comprobacion,comprobaciones,registro,estudiantes,usuarios,nuevos'},
+        {'url':'/admin/reportes/asistencia','description':'Reportes de asistencia por grupo','name':'Asistencia', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'asistencia,asistencias,reportes'},
+        {'url':'/admin/reportes/conducta','description':'Reportes de conducta generados por un administrativo','name':'Conducta', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'conducta,conductas,reportes'},
+        {'url':'/admin/reportes/mororosos','description':'Reportes de Morosidad, lista de personas morosas','name':'Morosos', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'morosos,reportes'},
+        {'url':'/admin/reportes/uso','description':'Reportes de Uso en la piscina','name':'Uso', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'uso,usos,reportes'},
+        {'url':'/admin/reportes/sistema','description':'Reportes de uso del sistema','name':'Sistema', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'sistema,sistemas,reportes'},
+        {'url':'/admin/casilleros','description':'Lista de casilleros en la piscina','name':'Casilleros', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'casilleros'},
     );
     res.send(rows);
 });

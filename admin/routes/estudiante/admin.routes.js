@@ -247,7 +247,6 @@ router.post('/admin/estudiantes/agregarEstudiantes',(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
             let d = req.body;
-            console.log(d)
             con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
             [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
             (err,rows,fields)=>{

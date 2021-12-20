@@ -11,9 +11,9 @@
         <a href="/admin/dashboard" class="menu-items-var list-group-item <%if(s == "dash"){%> menu-active <%}%> pl-2" role="button">
             <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
         </a>
-        <a href="/admin/inicio" class="menu-items-var list-group-item <%if(s == "pi"){%> menu-active <%}%> pl-2" role="button">
+        <!-- <a href="/admin/inicio" class="menu-items-var list-group-item <%if(s == "pi"){%> menu-active <%}%> pl-2" role="button">
             <i class="fas fa-photo-video mr-2"></i>Pantallas
-        </a>
+        </a> -->
         <a class="menu-items-var list-group-item pl-2 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
         data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
             <i class="fas fa-users mr-2"></i>Usuarios  <i class="fas fa-angle-down float-right"></i>
@@ -47,15 +47,9 @@
                 <i class="fas fa-clipboard-list mr-2 px-1"></i>Reportes
             </a>
         </div>
-        <a class="menu-items-var list-group-item pl-2"
-        data-toggle="collapse" href="#collapseRegistro" role="button" aria-expanded="false" aria-controls="collapseRegistro">
-        <i class="fas fa-clipboard-check mr-2"></i>Comprobación <i class="fas fa-angle-down float-right"></i>
+        <a href="/admin/comprobacion" class="menu-items-var list-group-item  <%if(s == "comprobacion"){%> menu-active <%}%>" title="Comprobacion de datos">
+            <i class="fas fa-user-check mr-2"></i>Comprobación
         </a>
-        <div class="collapse <%if(s == 'comprobacion'){%> show <%}%>" id="collapseRegistro" data-parent="#accordion-menu-lateral">
-            <a href="/admin/comprobacion" class="menu-items-var list-group-item in-menu <%if(s == "comprobacion"){%> menu-active <%}%>" title="Comprobacion de datos">
-                <i class="fas fa-user-check mr-2"></i>Registro
-            </a>
-        </div>
         <a class="menu-items-var list-group-item pl-2"
         data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
             <i class="fas fa-clipboard-list mr-2"></i>Reportes <i class="fas fa-angle-down float-right"></i>

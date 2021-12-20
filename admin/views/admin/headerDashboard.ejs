@@ -3,8 +3,8 @@
         <i class="fas fa-bars"></i>
     </button>
     <div class="p-0" id="navbarSupportedContent">
-        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0">
-            <li class="d-inline buscarupbarra">
+        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0 flex-wrap list-unstyled">
+            <li class="buscarupbarra flex-fill">
                 <div class="position-relative w-100">
                     <input type="text" class="form-control border-0 bg-light" style="height: 42px; border-radius: 9px;" 
                     placeholder="Buscar..." id="dashboardSearch">
@@ -13,8 +13,8 @@
                     </div>
                 </div>
             </li>
-            <li class="d-inline pl-3">
-                <div class="bg-light d-flex justify-content-start px-3 align-items-center" style="border-radius: 9px;">
+            <li class="pl-0 pl-lg-3 mt-2 mt-md-0 flex-fill">
+                <div class="bg-light d-flex justify-content-between px-3 align-items-center" style="border-radius: 9px;">
                     <div class="text-dark pr-3" id="nombreUsuario" style="width: 200px;">
                         <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
                         <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
@@ -36,21 +36,23 @@
                             </a>
                         </h6>
                     </div>
-                    <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
-                        <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
-                    </a>
-                    <div class="dropdown d-inline ml-4">
-                        <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
-                            <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
+                    <div class="d-flex justify-content-end align-items-baseline">
+                        <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
+                            <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
                         </a>
-                        <div class="dropdownNotificaciones" id="notificacionesDrop">
-                            <strong class="px-2 py-3">Notificaciones</strong>
-                            <hr>
-                            <div class="container-fluid px-2" id="notifications">
-        
+                        <div class="dropdown d-inline ml-4">
+                            <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
+                                <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
+                            </a>
+                            <div class="dropdownNotificaciones" id="notificacionesDrop">
+                                <strong class="px-2 py-3">Notificaciones</strong>
+                                <hr>
+                                <div class="container-fluid px-2" id="notifications">
+            
+                                </div>
+                                <hr>
+                                <a class="dropdown-item text-center mt-auto" href="#">...</a>
                             </div>
-                            <hr>
-                            <a class="dropdown-item text-center mt-auto" href="#">...</a>
                         </div>
                     </div>
                 </div>

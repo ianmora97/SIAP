@@ -20,13 +20,7 @@ const qr = require("qrcode");
 const path = require('path');
 const fs = require('fs');
 
-var email = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'siapduna2020@gmail.com',
-    pass: 'Perroloco123!'
-  }
-});
+var email = require('../../email');
 
 const {logSistema, DDL, TABLE} = require('../../systemLogs');
 
@@ -50,7 +44,6 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
             (err,result,fields)=>{
             if(!err){
                 logSistema(req.session.value.cedula, `${req.body.estudiante + " | MATRICULAR " + grupo}`, DDL.INSERT, TABLE.MATRICULA);
-                console.log('matricula insertada');
             }else{
                 console.log(err);
                 // res.send(err);
@@ -62,14 +55,14 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
             .then(url => {
                 var mailOptions = {
                     name:'SIAP - Matricula',
-                    from: 'siapduna2020@gmail.com',
+                    from: 'SIAP UNA <siapduna2020@gmail.com>',
                     to:  'ianmorar03@gmail.com', // req.body.correo
                     subject: 'Confirmacion de Matricula',
                     html: `
                         <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
                             <div style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
                                 <div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">
-                                    <h1 style="#ffffff">SIAP</h1>
+                                    <h1 style="color:#ffffff">Sistema de Administración de la Piscina</h1>
                                 </div>
                                 <img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">
                                 <h1>${req.body.estudiante}</h1>
@@ -88,7 +81,6 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                     if (error) {
                         console.log(error);
                     } else {
-                        console.log('send')
                         fs.unlinkSync(path.join(__dirname,`../../public/QRcodes/${imagePathname}`));
                         res.send({result: "success"});
                         console.log('Email sent: ' + info.response);
@@ -101,6 +93,30 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
         }
         
     }
+});
+router.get('/admin/inbox/enviarCorreo',ensureToken,(req,res)=>{
+    var mailOptions = {
+        name:'SIAP',
+        from: 'SIAP UNA <siapduna2020@gmail.com>',
+        to:  req.query.correos, // req.body.correo
+        subject: req.query.asunto,
+        html: `
+            <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
+                <h1>Sistema de Administración de la Piscina</h1>
+                <div style="margin:30px 0;">
+                    ${req.query.mensaje}
+                </div>
+            </body>
+        `
+    };
+    email.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            res.send({result: "success"});
+            console.log('Email sent: ' + info.response);
+        }
+    });
 });
 router.get('/admin/matricula/qr/check',(req,res)=>{
     con.query("SELECT * FROM vta_matriculados_por_grupo WHERE id_grupo = ? AND cedula = ?",
@@ -129,7 +145,6 @@ router.get('/admin/matricula/add/:cedula',(req,res)=>{
     }
 });
 router.post('/admin/matricula/cambiarEstado/matricula',ensureToken,(req,res)=>{
-    console.log(req.body);
     con.query("call prc_actualizar_matricula_estudiante(?,?)",
         [req.body.curso_id,req.body.estado], (err,result,fields)=>{
         if(err){

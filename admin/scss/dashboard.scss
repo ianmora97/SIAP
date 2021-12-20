@@ -305,6 +305,11 @@ body::-webkit-scrollbar-thumb {
   .buscarupbarra{
     width: 500px;
   }
+  .modal-p-bottom{
+    .modal-dialog{
+      width: 90% !important;
+    }
+  }
 }
 #imgFilter{
   background-image: url('../img/icons8-clear-filters-240.png');
@@ -753,12 +758,7 @@ input,select{
   animation-delay:1.7s;
 }
 
-// @media (min-width: 426px){
-//   .modal-dialog {
-//       max-width: 80%;
-//       margin: 1.75rem auto;
-//   }
-// }
+
 .modal-xxl {
   max-width: 90vw !important;
 }
@@ -832,7 +832,7 @@ input,select{
 
 .modal-p-bottom {
   .modal-dialog{
-    max-width: 80% !important;
+    max-width: 100% !important;
    transform:translateY(100%) !important;
  }
  
