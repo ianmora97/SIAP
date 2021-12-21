@@ -1,0 +1,318 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+    * Proyecto de Ingenieria en Sistemas I-III
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+    <title>Dashboard - Estudiantes</title>
+    <%- include('headers')%>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+    
+    <div class="modal fade" id="modalAgregarEstudiante" tabindex="-1" data-keyboard="false"
+        aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header px-3 bg-primary text-white" style="color: #dcffe4;">
+                    <h5 class="modal-title pl-3 font-weight-bold"><i class="fas fa-plus"></i>&nbsp; Agregar Estudiante</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div class="container-fluid">
+                        <form action="/admin/estudiantes/agregarEstudiantes" method="post" id="formAgregar" class="needs-validation" novalidate>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label>Cedula</label>
+                                        <input class="form-control" type="text" name="cedula_add" id="cedula_add" required autocomplete="off" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre</label>
+                                        <input class="form-control" type="text" name="nombre_add" id="nombre_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apellido">Apellido</label>
+                                        <input class="form-control" type="text" name="apellido_add" id="apellido_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fecha">Fecha de Nacimiento</label>
+                                        <input class="form-control" type="date" name="fechaNacimiento_add" required autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="correo">Correo</label>
+                                        <input class="form-control" type="email" name="correo_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombreusuario">Nombre de Usuario</label>
+                                        <input class="form-control" type="text" name="username_add" required autocomplete="off">
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label>Sexo</label>
+                                        <select class="form-control" name="sexo">
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenino">Femenino</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group w-100">
+                                        <label>Perfil</label>
+                                        <select class="form-control" name="perfil">
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="Estudiante">Estudiante</option>
+                                            <option value="Funcionario">Funcionario</option>
+                                        </select>
+                                        <small class="text-muted">Perfil que desempeña</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer py-0 pb-2">
+                    <button type="submit" class="btn btn-primary" form="formAgregar" id="submitBtnAgregar"><i class="fas fa-plus"></i>&nbsp; Agregar</button>
+                </div>
+            </div>
+            <div class="bg-white" style="width: 400px; height: 250px; display: none;">
+                <!--Aqui es para verificar que sea un administrador-->
+            </div>
+        </div>
+    </div>
+    <%if (typeof customView != "undefined"){%>
+        <script>
+            var g_custom = {type:'<%= customView.type%>',data:'<%= customView.data%>'};
+            $('#modalAgregarEstudiante').modal();
+        </script>
+    <%}%>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+
+            <div class="container-fluid mt-3 mb-4">
+                <div class="bg-white border-0 my-2 rounded-3 p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h1 class=" font-weight-bolder display-5">Lista de Clientes</h1>
+                            <p class="text-muted mb-0">En esta sección se muestra la lista de los
+                                estudiantes que se registraron y estan aprobados por un 
+                                <a href="/admin/administradores">administrador</a>. Además de poder
+                            agregar, eliminar y modificar los clientes.</p>
+                            <small>Información actualizada hace: <span class="text-success"
+                                    id="infoTiming-usuarios-estudiantes"></span></small>
+                        </div>
+                        <div class="col-md-6 row mx-0 d-flex justify-content-end align-items-stretch">
+                            <div class="col d-flex justify-content-center align-items-center border-right pl-0" id="estudiantes_matriculados_stats_cont">
+                                <div>
+                                    <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t1"
+                                        id="estudiantes_matriculados_stats">0</h1>
+                                    <small class="text-muted">Matriculados <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center align-items-center border-right" id="estudiantes_inactivos_stats_cont">
+                                <div>
+                                    <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t2"
+                                        id="estudiantes_inactivos_stats">0</h1>
+                                    <small class="text-muted">Inactivos <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center align-items-center pr-0" id="estudiantes_morosos_stats_cont">
+                                <div>   
+                                    <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t3"
+                                        id="estudiantes_morosos_stats">0</h1>
+                                    <small class="text-muted">Morosos <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            tippy('#estudiantes_matriculados_stats_cont', {
+                                content: 'Cantidad Total de Estudiantes Matriculados',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#estudiantes_inactivos_stats_cont', {
+                                content: 'Cantidad Total de Estudiantes inactivos',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#estudiantes_morosos_stats_cont', {
+                                content: 'Cantidad Total de Estudiantes Morosos',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__zoomIn">
+                    <div class="row mx-0 d-flex justify-content-between align-items-start">
+                        <div class="col pl-sm-0">
+                            <div class="mb-1">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-end pr-sm-0 mt-sm-0 mt-2">
+                            <div class="w-100">
+                                <button type="button" class="btn btn-secondary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
+                                onclick="openModal('#modalAgregarEstudiante')"><i class="fas fa-plus"></i> Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row mx-0 mx-auto rounded-3 justify-content-between align-items-center">
+                        <div class="col-sm-4 d-inline d-flex justify-content-end align-items-baseline px-0">
+                            <div class=" w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-8 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-2 mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light text-success mr-4" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
+                            <button type="button" class="btn btn-light text-danger" onclick="pdfDownload()">
+                                <i class="fas fa-file-pdf pr-2"></i>PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white px-0 pb-2 mt-4 rounded-3  animate__animated animate__fadeInUp">
+                    <div class="row w-100 mx-0" style="min-height:750px; overflow-y: auto;">
+                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover table-striped mt-0"
+                         id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th style="width:50px;" scope="col">&nbsp;</th>
+                                    <th class="" scope="col">Nombre</th>
+                                    <th class="" scope="col">Cédula</th>
+                                    <th class="" scope="col">Nivel</th>
+                                    <th class="" scope="col">Estado</th>
+                                    <th class="" scope="col">Correo</th>
+                                    <th class="" scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_estudiantes">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                    <style>
+                        .switch-cus {
+                            position: relative;
+                            display: inline-block;
+                            width: 55px;
+                            height: 25px;
+                            margin-top: 10px !important;
+                        }
+                        .switch-cus input { 
+                            opacity: 0;
+                            width: 0;
+                            height: 0;
+                        }
+
+                        .slider-cus {
+                            position: absolute;
+                            cursor: pointer;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background-color: #ccc;
+                            -webkit-transition: .4s;
+                            transition: .4s;
+                        }
+
+                        .slider-cus:before {
+                            position: absolute;
+                            content: "";
+                            height: 30px;
+                            width: 30px;
+                            left: 0px;
+                            bottom: -3px;
+                            background-color: #4659e4;
+                            -webkit-transition: .4s;
+                            transition: .4s;
+                        }
+
+                        input:checked + .slider-cus {
+                            background-color: #93a0ff;
+                        }
+
+                        input:focus + .slider-cus {
+                            box-shadow: 0 0 1px #93a0ff;
+                        }
+
+                        input:checked + .slider-cus:before {
+                            -webkit-transform: translateX(26px);
+                            -ms-transform: translateX(26px);
+                            transform: translateX(26px);
+                        }
+
+                        .slider-cus.round-cus {
+                            border-radius: 34px;
+                        }
+
+                        .slider-cus.round-cus:before {
+                            border-radius: 50%;
+                        }
+                    </style>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/estudiantes.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+</head>
+<!-- style="background: url('/img/IMG_12.png'); background-size: cover; " -->
+<style>
+    .bg-linearGradient{
+        background: rgb(58,77,180);
+        background: linear-gradient(323deg, rgba(249,249,249,1) 35%, rgba(217,217,217,1) 50%, rgba(241,241,241,1) 64%);
+    }
+    .wave1{
+        border-bottom-left-radius: 15px;
+    }
+</style>
+<body class="d-flex flex-column h-100 bg-light bg-linearGradient pt-5" >
+    <div class="container my-auto">
+        <div class="w-100 m-auto bg-white shadow rounded-3 animate__animated animate__zoomIn">
+            <div class="row mx-0">
+                <div class="col-md-6 bg-primary rounded-3-s pt-3 d-none d-md-flex px-0 flex-column">
+                    <div class="px-5 mb-auto">
+                        <img class="mx-auto  d-block" src="../img/logo-vive-promocion-transparency.png" alt="" width="30%">
+                        <h4 class="text-white mt-4 font-weight-bold">Bienvenido al SIAP</h4>
+                        <p class="text-white">
+                            Sistema de Administracion de la Piscina del departamento de promocion estudiantil 
+                            de la Universidad Nacional de Costa Rica.
+                        </p>
+                    </div>
+                    <svg width="100%" height="50px" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave1">
+                        <defs>
+                            <linearGradient id="gradient1" x1="0" x2="0" y1="0" y2="1">
+                                <stop offset="0%" stop-color="#ffffff"  />
+                                <stop offset="100%" stop-color="#3c8eec"  />
+                            </linearGradient>
+                        </defs>
+                        <path id="feel-the-wave" d=""/>
+                    </svg>
+                </div>
+                <div class="col-md px-0 d-flex flex-column">
+                    <div class="p-md-5 p-3 mb-auto">
+                        <%if(typeof err != "undefined"){%>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Login Failed!</strong> <%= err%>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <%}%>
+                        <h1 class="font-weight-bold mt-3 display-5 text-center">Iniciar Sesión</h1>
+                        <span class="d-block text-muted text-center">Usuario</span>
+                        <form action="/admin/log" method="post" class="my-5">
+                            <label for="cedula">Cedula</label>
+                            <input type="text" id="cedula" name="cedula" class="form-control mb-3" placeholder="Cedula..." required="">
+                            
+                            <label for="clave">Clave</label>
+                            <input type="password" id="clave" name="clave" class="form-control" placeholder="Clave..." required="">
+                            
+                            <button class="btn btn-lg btn-primary d-block mx-auto w-100 mt-4" type="submit" id="inciarSesion">Entrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-2 py-3 justify-content-center">
+        <p class="mb-1 text-center text-dark">© 2020-2022 Universidad Nacional de Costa Rica</p>
+   </footer>
+   <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
+    <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var wave1 = $('#feel-the-wave').wavify({
+                height: 1,
+                bones: 6,
+                amplitude: 20,
+                color: '#fff',
+                speed: .35
+            });
+            var wave2 = $('#feel-the-wave2').wavify({
+                height: 1,
+                bones: 6,
+                amplitude: 20,
+                color: '#4659E4',
+                speed: .35
+            });
+        });
+    </script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

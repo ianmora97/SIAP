@@ -1,0 +1,146 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+    * Proyecto de Ingenieria en Sistemas I-III
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+ 
+ <head>
+     <title>Dashboard | SIAP - Pantalla Inicio</title>
+     <%- include('headers') %>
+ </head>
+ 
+ <body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid my-2 position-relative">
+                <div class="bg-white rounded-3 shadow-primary p-3 mt-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h2 class="font-weight-bolder">Modulo de Configuracion del Inicio</h2>
+                            <small class="text-muted">Aqui un <a href="/admin/administradores">Administrador</a>
+                            podra configurar que secciones se van a mostrar en la pantalla de Inicio 
+                            del sistema, podra mostrar diferentes imagenes, fechas, incluso el calendario 
+                            de actividades que se van a realizar en la piscina.</small><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3 shadow-primary p-3 my-3">
+                    <h5>Carousel</h5>
+                </div>
+                <div class="bg-white rounded-3 shadow-primary p-3 my-3">
+                    <div class="row mx-auto">
+                        <div class="col-md-7">
+                            <div class="d-flex justify-content-start align-items-center">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButtonAgregarModulo" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-plus"></i> Agregar Modulo
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonAgregarModulo">
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloTitulo()">Titulo</a>
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloTexto()">Texto</a>
+                                        <a class="dropdown-item" href="#" onclick="agregarModuloImagen()">Imagen</a>
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloCarousel()">Carousel</a>
+                                      <a class="dropdown-item" href="#" onclick="agregarModuloTabla()">Tabla</a>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center flex-fill">
+                                    <div id="botonesPropModulo" class="d-flex justify-content-start align-items-center ml-3">
+    
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center ml-auto">
+                                        <button type="button" id="agregarModuloBtn" class="btn btn-sm btn-primary" onclick="agregarModulo()" disabled><i class="fas fa-plus"></i> Agregar</button>
+                                        <button type="button" id="eliminarModuloBtn" class="btn btn-sm btn-danger ml-2" onclick="eliminarModulo()" disabled><i class="fas fa-trash"></i> Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-3">
+                            <div id="moduloConfig" class="p-2 border border-light" style="min-height: 300px;">
+
+                            </div>
+                        </div>
+                        <div class="col-md-5 border-left border-light">
+                            <div id="allPreview" style="min-height: 500px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+<style>
+    .switch-cus {
+        position: relative;
+        display: inline-block;
+        width: 55px;
+        height: 25px;
+        margin-top: 10px !important;
+    }
+    .switch-cus input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider-cus {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider-cus:before {
+        position: absolute;
+        content: "";
+        height: 30px;
+        width: 30px;
+        left: 0px;
+        bottom: -3px;
+        background-color: #4659e4;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider-cus {
+        background-color: #93a0ff;
+    }
+
+    input:focus + .slider-cus {
+        box-shadow: 0 0 1px #93a0ff;
+    }
+
+    input:checked + .slider-cus:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .slider-cus.round-cus {
+        border-radius: 34px;
+    }
+
+    .slider-cus.round-cus:before {
+        border-radius: 50%;
+    }
+</style>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/pantallaInicio.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <title>Dashboard | Reportes - Conducta</title>
+    <%- include('../headers')%>
+</head>
+<body class="page bg-light d-flex flex-column h-100">
+    <%- include('../email') %> 
+    <div class="modal fade" id="agregarModal" tabindex="-1" data-backdrop="static" data-keyboard="false" 
+    aria-labelledby="agregarModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 bg-primary p-2 text-white">
+                    <h5 class="modal-title pl-3">Reportar Conducta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div class="container">
+                        <div class="form-group">
+                            <label for="estudianteModal">Estudiante</label>
+                            <select id="estudianteModal" class="form-control" name="estudianteModal">
+                                
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipoModal">Tipo</label>
+                            <select id="tipoModal" class="form-control" name="tipoModal">
+                                <option value="Eventualidad">Eventualidad</option>
+                                <option value="Inadecuada">Inadecuada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notamodal">Nota</label>
+                            <textarea class="form-control" id="notamodal" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-0 pb-2 border-0">
+                    <button type="button" class="btn btn-primary" onclick="agregarNota()">Agregar</button>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="modal fade" id="verConductaModal" tabindex="-1" data-backdrop="static" data-keyboard="false" 
+    aria-labelledby="verConductaModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 bg-primary p-2 text-white">
+                    <h5 class="modal-title pl-3">Estudiante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <span class="sr-only" id="idEstudiante"></span>
+                    <span class="sr-only" id="cedulaEstudiante"></span>
+                    <div class="container">
+                        <div class="row mx-0 w-100 border-bottom mb-2 pb-2">
+                            <div class="w-100">
+                                <h4 class="d-block">Nota:</h4>
+                            </div>
+                            <cite id="conductaTextModal" class="bg-gray p-2 border border-dark w-100 d-block rounded">
+        
+                            </cite>
+                        </div>
+                        <div class="row mx-0 w-100">
+                            <div class="form-group">
+                                <label for="estadoModalactualizar">Estado</label>
+                                <div class="input-group ">
+                                    <div class="input-group-append flex-grow-1">
+                                        <select id="estadoModalactualizar" class="form-control rounded-0 w-100" name="estadoModalactualizar">
+                                            <option value="1">Activo</option>
+                                            <option value="0">Inactivo</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm py-1" onclick="cambiarEstadoEstudiante()"><i class="far fa-save"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-0 pb-2 border-0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('../menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('../headerDashboard') %>
+            <div class="container-fluid my-4">
+                <div class="bg-white rounded-3 p-4"> 
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <h1 class="font-weight-bolder display-5">Reportes de Conducta</h1>
+                            <p class="text-muted mb-0">En esta sección se muestra la lista de los estudiantes que presentan 
+                            conductas <span class="text-danger">inadecuadas</span> o <span class="text-warning">eventualidades</span></p>
+                            <small>Información Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col text-center border-right">
+                            <div id="inadecuadas_stats_cont">
+                                <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="inadecuadas_stats">0</h1>
+                                <small class="text-muted" style="font-size: 10px;">Conductas Inadecuadas <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <div id="eventualidades_stats_cont">
+                                <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate__delay-2s" id="eventualidades_stats">0</h1>
+                                <small class="text-muted" style="font-size: 10px;">Eventualidades <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        tippy('#inadecuadas_stats_cont', {
+                            content: 'Estudiantes con conductas inadecuadas',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                        tippy('#eventualidades_stats_cont', {
+                            content: 'Estudiantes con eventualidades',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                    </script>
+                </div>
+                <div class="bg-white rounded-3 p-4 mt-4">
+                    <div class="row mx-0 justify-content-between align-items-start">
+                        <div class="col pl-0">
+                            <div class="input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <button class="btn bg-light" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                </div>
+                                <input type="search" class="form-control border-0 shadow-none bg-light" 
+                                onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-around pr-0 align-items-start">
+                            <button type="button" name="agregarTaller" id="modalButtonAgregarEstudiante"
+                                    onclick="openmodal('#agregarModal')" class="btn btn-secondary w-100"><i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row mx-0 justify-content-between px-0">
+                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline pl-0">
+                            <div class="w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light text-success" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3 mt-4">
+                    <div class="row w-100 mx-0" style="min-height:750px;overflow-y: auto;">
+                        <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
+                         id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th style="width: 50px;" scope="col">&nbsp;</th> <!--Aqui va la foto-->
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Reporte</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">&nbsp;</th> <!--Aqui va el edit-->
+                                </tr>
+                            </thead>
+                            <tbody id="lista_conductas">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('../footerDashboard') %>
+         </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/reporte.conducta.js"></script>
+</body>
+</html>

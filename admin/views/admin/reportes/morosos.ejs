@@ -1,0 +1,158 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+<head>
+    <title>Dashboard - Reportes - Morosidad</title> 
+    <%- include('../headers')%>
+</head>
+<body class="page bg-light d-flex flex-column h-100">
+    <%- include('../email') %> 
+    <div class="modal" id="modalAgregarEstudiante" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="modalAgregarEstudiante" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h6 class="modal-title text-white pl-2">Agregar Estudiante</h6>
+                <button type="button" class="close" id="closeModalAgregar" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+
+            </div>
+            <div class="modal-footer py-0 pb-2">
+                <button type="button" class="btn btn-primary">
+                    Agregar
+                </button>
+            </div>
+            </div>
+            <div class="bg-white" style="width: 400px; height: 250px; display: none;"> 
+                <!--Aqui es para verificar que sea un administrador-->
+            </div>
+        </div>        
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('../menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('../headerDashboard') %>
+            <div class="container-fluid my-4">
+                <div class="bg-white rounded-3 p-4"> 
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <h1 class="display-5 font-weight-bolder">Lista de Estudiantes Morosos</h1>
+                            <p class="text-muted mb-0">En esta sección se muestra la lista de los estudiantes que se encuentran 
+                            actualmente en un estado de <span class="text-danger">Morosidad</span></p>
+                            <small>Información Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col border-right">
+                            <div class="text-center" id="estudiantes_morosos_stats_cont">
+                                <h1 class="display-3 m-0 font-weight-bolder text-primary" id="estudiantes_morosos_stats">0</h1>
+                                <small class="text-muted" style="font-size:10px;">Morosos <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="text-center" id="estudiantes_inactivos_stats_cont">
+                                <h1 class="display-3 m-0 font-weight-bolder text-primary" id="estudiantes_inactivos_stats">0</h1>
+                                <small class="text-muted" style="font-size:10px;">Activos <i class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    tippy('#estudiantes_morosos_stats_cont', {
+                        content: 'Estudiantes que presentan morosidad',
+                        placement: 'bottom',
+                        animation: 'shift-away-extreme',
+                    });
+                    tippy('#estudiantes_inactivos_stats_cont', {
+                        content: 'Estudiantes morosos que estan activos',
+                        placement: 'bottom',
+                        animation: 'shift-away-extreme',
+                    });
+                </script>
+                <div class="bg-white rounded-3 p-4 mt-4">
+                    <div class="row mx-0 justify-content-between">
+                        <div class="col px-0">
+                            <div class="input-group flex-nowrap">
+                                <div class="input-group-prepend">
+                                    <button class="btn bg-light" type="button" id="button_search"><i class="fas fa-search"></i></button>
+                                </div>
+                                <input type="search" class="form-control border-0 shadow-none bg-light" 
+                                onkeyup="searchonfind()" placeholder="Buscar..." aria-label="Username" id="barraBuscar">
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row mx-0 justify-content-between px-0">
+                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline pl-0">
+                            <div class="w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light text-success" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3 mt-4">
+                    <div class="row w-100 mx-0" style="min-height:750px;overflow-y: auto;">
+                        <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
+                         id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th style="width: 50px;" scope="col">#</th>
+                                    <th style="width: 50px;" scope="col">&nbsp;</th> <!--Aqui va la foto-->
+                                    <th scope="col">Cedula</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_morosos">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('../footerDashboard') %>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/reporte.morosidad.js"></script>
+</body>
+</html>

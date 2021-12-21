@@ -1,0 +1,147 @@
+<header >
+    <!-- style="position: absolute; top: 0; left: 0; z-index: 99; height: 80px;" -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-white fixed-top shadow-sm w-100" style="height: 60px;">
+        <div class="container" style="width: 80% !important;">
+            <a class="navbar-brand" href="/">
+                <div class="d-flex align-items-center">
+                    <img src="/img/logo-vive-promocion-transparency.png" alt="UNA" loading="lazy" 
+                    class="d-inline mx-2 my-auto" height="30px">
+                    <h4 class="text-dark m-0">SIAP</h4>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <h6 class="mb-0"><a class="nav-link text-dark <%if(tab == "inicio"){%> menu-active <%}%>" href="/">Inicio</a></h6>
+                    </li>
+                    <li class="nav-item">
+                        <h6 class="mb-0"><a class="nav-link text-dark <%if(tab == "talleres"){%> menu-active <%}%>" href="/talleres">Talleres</a></h6>
+                    </li>
+                    <li class="nav-item">
+                        <h6 class="mb-0"><a class="nav-link text-dark <%if(tab == "info"){%> menu-active <%}%>" href="/informacion">Informacion</a></h6>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <h6 class="mb-0"><a class="nav-link text-primary" target="_blank" href="/login">Iniciar Sesión</a></h6>
+                    </li>
+                    <li class="nav-item">
+                        <h6 class="mb-0"><a class="nav-link text-primary <%if(tab == "registro"){%> menu-active <%}%>" href="/registrarse">Registrarse</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<script>
+
+    const animateCSS = (element, animation) =>
+        new Promise((resolve, reject) => {
+        let prefix = 'animate__';
+        const animationName = `${prefix}${animation}`;
+        const node = document.querySelector(element);
+
+        node.classList.add(`${prefix}animated`, animationName);
+
+        // When the animation ends, we clean the classes and resolve the Promise
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
+        }
+
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
+</script>
+<style>
+    table thead th, table tbody td {
+        white-space: nowrap !important;
+    }
+    .rounded-3{
+        border-radius: 15px;
+    }
+    .container-blur{
+        background: linear-gradient(90deg, rgba(5, 0, 29, 0.6) 0%, rgba(2, 2, 49, 0.3) 40%, rgba(255,255,255,0) 100%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 42rem;
+        z-index: 2;
+    }
+    .carousel-control-prev{
+        background-color:transparent;
+        border: none !important;
+    }
+    .carousel-control-next{
+        background-color:transparent;
+        border: none !important;
+    }
+    .carousel {
+        margin-bottom: 4rem;
+    }
+    .carousel-caption {
+        top: 25% !important;
+        left: 6% !important;
+        z-index: 10;
+    }
+    .carousel-item {
+        height: 42rem;
+    }
+    .carousel-item>img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 100%;
+        height: 42rem;
+        /* cover image*/
+        
+    }
+    .marketing .col-lg-4 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .marketing h2 {
+        font-weight: 400;
+    }
+    .marketing .col-lg-4 p {
+        margin-right: .75rem;
+        margin-left: .75rem;
+    }
+    .featurette-divider {
+        margin: 5rem 0;
+    }
+    .featurette-heading {
+        font-weight: 300;
+        line-height: 1;
+        letter-spacing: -.05rem;
+    }
+    @media (min-width: 40em) {
+        .carousel-caption p {
+            margin-bottom: 1.25rem;
+            font-size: 1.25rem;
+            line-height: 1.4;
+        }
+        .featurette-heading {
+            font-size: 50px;
+        }
+    }
+
+    .custom-image-car{
+        object-fit: cover;
+        
+    }
+    .bg-dark-fade{
+        background: linear-gradient(180deg, rgba(0,0,0,0.9) 15%, rgba(0,0,0,0.7) 60%, rgba(42,42,42,0) 100%);
+    }
+    .text-white-75{
+        color: rgba(255,255,255,0.75);
+    }
+    .menu-active{
+        font-weight: bold;
+    }
+</style>

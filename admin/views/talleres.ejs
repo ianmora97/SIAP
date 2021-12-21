@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Talleres | SIAP</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/animate.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/datatables.min.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+</head>
+<body>
+    <%
+        moment.locale('es', {
+            months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+            monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+            weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+            weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+        });
+    %>
+	<%- include('menu') %>
+	<main role="main" class="w-100" style="margin-top: 75px;">
+        <div class="container pt-3">
+            <h2 class="featurette-heading mt-3" id="horarios">Horarios</h2>
+            <p class="lead">Los horarios que se muestran a continuacion estan sujetos a los cupos disponibles,
+                y a la cantidad de personas que se admiten en la piscina.
+            </p>
+            <div class="table-responsive">
+                <div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
+                    <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+                        <h6 class="font-weight-bold">Mostrar</h6>
+                        <div id="lenghtTable" class="px-1 m-0 w-100">
+                        </div> 
+                    </div>
+                         
+                </div>
+                <table class="table table-hover table-striped table-borderless" id="tabla">
+                    <thead class="bg-primary text-white">
+                      <tr>
+                        <th scope="col">Horario</th>
+                        <th scope="col">Taller</th>
+                        <th scope="col">Cupos Disponibles</th>
+                        <th scope="col">Periodo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- for grupos -->
+                        <% grupos.forEach((e) => { %>
+                            <tr>
+                                <td style="line-height: 1.5;">
+                                    <div class="d-flex flex-column">
+                                        <div><strong>Dia: </strong><%= e.dia %></div>
+                                        <div><strong>Hora: </strong><%= e.hora %> - <%= e.hora_final %></div>
+                                    </div>
+                                </td>
+                                <td><%= e.descripcion %></td>
+                                <td><%= e.cupo_base - e.cupo_actual %></td>
+                                <td style="line-height: 1.5;">
+                                    <div class="d-flex flex-column">
+                                        <span><%= moment(e.periodo,"YYYY-MM-DD").format('LL') %></span>
+                                        <span><%= moment(e.periodo_final,"YYYY-MM-DD").format('LL') %></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        <script>
+                            $(document).ready(function() {
+                                $('#tabla').DataTable({
+                                    "language": {
+                                        "decimal":        "",
+                                        "emptyTable":     "No hay talleres disponibles",
+                                        "info":           "Mostrando _END_ de _TOTAL_ talleres",
+                                        "infoEmpty":      "Mostrando 0 hasta 0 de 0 talleres",
+                                        "infoFiltered":   "(Filtrado de _MAX_ talleres totales)",
+                                        "infoPostFix":    "",
+                                        "thousands":      ",",
+                                        "lengthMenu":     "_MENU_",
+                                        "loadingRecords": "Cargando...",
+                                        "processing":     "Procesando...",
+                                        "search":         "Buscar:",
+                                        "zeroRecords":    "No se encontraron talleres similares",
+                                        "paginate": {
+                                            "first": '<i class="fas fa-angle-double-left"></i>',
+                                            "previous": '<i class="fas fa-angle-left"></i>',
+                                            "next": '<i class="fas fa-angle-right"></i>',
+                                            "last": '<i class="fas fa-angle-double-right"></i>'
+                                        },
+                                        "aria": {
+                                            "paginate": {
+                                                "first": '<i class="fas fa-angle-double-left"></i>',
+                                                "previous": '<i class="fas fa-angle-left"></i>',
+                                                "next": '<i class="fas fa-angle-right"></i>',
+                                                "last": '<i class="fas fa-angle-double-right"></i>'
+                                            }
+                                        }
+                                    },
+                                });
+                                $('#infoTable').html('');
+                                $('#pagination').html('');
+                                $('#lenghtTable').html('');
+
+                                $('#tabla_wrapper').addClass('px-0')
+                                let a = $('#tabla_wrapper').find('.row')[1];
+                                $(a).addClass('mx-0')
+                                $(a).find('.col-sm-12').addClass('px-0');
+
+                                $('#tabla_filter').css('display', 'none');
+                                $('#tabla_info').appendTo('#infoTable');
+                                
+                                $('#tabla_paginate').appendTo('#pagination');
+
+                                $('#tabla_length').find('label').find('select').removeClass('form-control form-control-sm')
+                                $('#tabla_length').find('label').find('select').appendTo('#lenghtTable');
+                                $('#tabla_length').html('');
+                            });
+                        </script>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between text-muted pl-2">
+                    <div><small id="infoTable" class="d-flex align-items-end"></small></div>
+                    <div class="d-flex justify-content-end align-items-baseline mt-2 mt-sm-0">
+                        <div id="pagination"></div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
+        <div class="container">
+            <h2 class="featurette-heading mt-3" id="matricula">Matricula</h2>
+            <p class="lead">La matrícula se realizará vía telefónica, al número <a href="tel:22773784">22773784</a> y al 
+                correo electrónico <a href="mailto:piscinadpe@una.cr">piscinadpe@una.cr</a>, o bien desde el sistema de 
+                matricula del SIAP. Para poder matricularse desde el sistema necesita <a href="/est/login">iniciar sesion</a> o bien <a href="/registrarse">registrarse aqui</a>.</p>
+        </div>
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
+        <div class="container">
+            <h2 class="featurette-heading mt-3" id="precios">Precios</h2>
+            <p class="lead">Cada usuario podrá matricular un máximo de 3 talleres semanales, los costos mensuales son los siguientes:</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Precio por Estudiante</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">1 vez/semana</p>
+                                <p class="card-text tooltip-colones">₡7.000</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">2 veces/semana</p>
+                                <p class="card-text tooltip-colones">₡8.000</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">3 veces/semana</p>
+                                <p class="card-text tooltip-colones">₡9.000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Precio por Funcionario</h5>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">1 vez/semana</p>
+                                <p class="card-text tooltip-colones">₡12.000</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">2 veces/semana</p>
+                                <p class="card-text tooltip-colones">₡14.000</p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text font-weight-bold">3 veces/semana</p>
+                                <p class="card-text tooltip-colones">₡16.000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                tippy('.tooltip-colones', {
+                    content: 'Colones',
+                });
+            </script>
+        </div>
+        <div class="container">
+            <hr class="featurette-divider">
+        </div>
+        <div class="container">
+            <p class="text-muted">
+                *La mensualidad debe cancelarse en la caja de FUNDAUNA a nombre de Talleres de Natación del DPE, 
+                ubicada en el segundo piso del Centro Comercial Plaza Heredia, en horarios de lunes a 
+                jueves de 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. a 4:40 p.m.; 
+                y viernes de 8:00 a.m. a 12 m.d y de 1:00 p.m. a 3:40 p.m. <b>No se aceptarán pagos vía electrónica.</b> 
+                Los usuarios que tengamos algún pendiente de talleres, y se encuentren respectivamente en el registro, 
+                deberán realizar la matrícula normalmente y en el momento se detallarán la cantidad de talleres pendientes.
+            </p>
+        </div>
+		<%- include('footer') %>
+	</main>
+</body>
+</html>

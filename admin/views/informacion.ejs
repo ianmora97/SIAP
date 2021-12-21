@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Talleres | SIAP</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/animate.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="/js/jq-bs-bundle.js"></script> 
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body>
+	<%- include('menu') %>
+	<main role="main" class="w-100" style="margin-top: 75px;">
+        <div class="container pt-3">
+            <span id="normativa" class="sr-only">(normativa-anchor)</span>
+            <h2 class="featurette-heading mt-3"><a class="text-dark" href="#normativa">Normativa General</a></h2>
+            <p class="lead">
+                <ol>
+                    <li class="lead">Por taller se atenderá un máximo de 8 personas.</li>
+                    <li class="lead">Cada usuario tiene la responsabilidad de leer y acatar el Protocolo de ingreso a la Piscina del DPE <a class="text-danger" href="https://drive.google.com/file/d/1TzryKT6q4LqcWGUx-vMfFymotSfKei0y/view?fbclid=IwAR1YMg6njFk37CohfDZV2RqJrLBQ-YRXJ4YcetncYOC32H3eVNANKn-OTvY">Descargar protocolo</a>.</li>
+                    <li class="lead">Una vez realizada la matrícula los usuarios deberán presentar el comprobante de pago, junto con el comprobante de matrícula en caso de ser estudiante y carné de funcionarios en caso de ser funcionario.</li>
+                    <li class="lead">Es responsabilidad del usuario apersonarse a la oficina de la piscina a realizar la respectiva toma de temperatura y demás trámites (solamente se permite la presencia de un usuario a la vez dentro de la oficina).</li>
+                    <li class="lead">Al ingreso a las instalaciones de la piscina, por favor cambiarse rápidamente en el vestuario, ducharse solamente en las duchas contiguo a la piscina, y al final de la clase se permitirá una ducha rápida para quitarse el agua clorada y alistarse para abandonar las instalaciones, no se permite una estancia mayor a 10 minutos una vez terminado el taller.</li>
+                </ol>
+            </p>
+
+            <hr class="featurette-divider">
+            <span id="autofinaciamiento" class="sr-only">(autofinaciamiento-anchor)</span>
+            <h2 class="featurette-heading mt-3"><a class="text-dark" href="#autofinaciamiento">Proyecto Autofinanciado</a></h2>
+            <p class="lead">
+                Dada la crisis fiscal que afecta a las universidades y particularmente el límite de contratación administrativa en la Universidad Nacional, según actuario realizado en el año 2017 por parte de la Universidad de Costa Rica, obras como la piscina financiada su construcción por parte del Banco Mundial, debe de buscar una forma de autofinanciación a mediano y largo plazo. De lo contrario sería llevarla al colapso en muy poco tiempo.
+                Las conversaciones con la actual administración de la UNA 2016-2020 ha sido brindar los soportes laborales, de materiales y químicos para el mantenimiento de la piscina, por los primeros dos años y con los aportes por las cuotas de talleres provenientes de los tres estamentos de usuarios, se va creando un capital semilla que brinde la estabilidad financiera, por medio de un plan de negocios que se estará elaborando por parte de expertos de Financiero, Fundauna, Asesoría Jurídica y Recursos Humanos, por supuesto con la presencia de funcionarios del Departamento de Promoción Estudiantil y de las  Vicerrectorías de Vida Estudiantil y Administración.
+                La idea paralela del proyecto es cobrar cuotas mínimas a los estudiantes de la UNA y cuotas diferenciadas para funcionarios, que puedan subsidiar el costo del estudiante, el cual es equivalente a lo que pagaba dicho estudiante por derecho de piscina en las instalaciones del Palacio de los Deportes. Expresado de otra manera, ya esta práctica de cobro a estudiantes se tiene internalizada. No es nada nuevo en la presente propuesta.
+                En lo concreto, el uso de instalaciones óptimas para la práctica de natación, más el contar con un instructor capacitado en RCP y salvamento acuático, es un valor no cobrado al estudiante. De igual forma el estudiante tiene tres opciones de uso de piscina, a saber:  1 vez a la semana, dos y tres veces por semana.
+                Todos los usuarios hacen uso de la piscina siempre por medio de talleres, salvo el Equipo de Natación que lo hace por horas de entrenamiento.
+                Dentro de las ventajas comparativas de que la UNA cuente con piscina propia, se encuentran la protección de seguro INS para nuestros usuarios, de igual forma el servicio de Emergencias Médicas. Aparte de ello, que nuestra piscina es techada, lo que facilita el cuido de la misma por protección contra el polvo y hojas de los árboles y que apacigüe el frío provocado por el viento que corre de norte a sur en la UNA. Los estudiantes y demás usuarios no se tienen que desplazar hasta el Palacio de los Deportes, sino que en su mismo lugar de clases se encuentra la instalación.  En cuanto a la UNA, ya los estudiantes no incurren en un gasto, sino que contribuyen a la inversión en infraestructura y servicios co-curriculares que tienen la UNA.
+            </p>
+
+            <hr class="featurette-divider">
+            <span id="nosotros" class="sr-only">(nosotros-anchor)</span>
+            <h2 class="featurette-heading mt-3"><a class="text-dark" href="#nosotros">Nosotros</a></h2>
+            <p class="lead">
+                Desde hace más de 12 años, el Departamento de Promoción Estudiantil brinda la opción de talleres de natación dirigidos a los estudiantes de las diferentes carreras universitarias que cuentan en su malla curricular con giras de campo en áreas disciplinarias como Biología, Forestales, Agrarias, Geografía y Topografía; así como a todos los demás estudiantes universitarios que desean aprender uno de los deportes más importantes relacionados con una excelencia en la calidad de la salud.
+                Las negociaciones de uso de piscina se han realizado en estos años con el Palacio de los Deportes, fundación que nos ha brindado la posibilidad de ofrecer la piscina y la entrada del instructor y evaluador de forma gratuita. Los estudiantes tenían que pagar derecho de piscina por ¢1.500 colones por clase.
+                Dentro de los inconvenientes que se encontraron, estaban la suspensión de talleres por actividades propias del Palacio de los Deportes, por ser una piscina al aire libre, cuando llovía y hacía rayería se suspendían los talleres. Igualmente, cuando se presentaban días fríos, dado que las piscinas no cuentan con cerramiento que tapara el viento que se traslada de norte a sur y de este a oeste.
+                Ante esos inconvenientes, no nos quedaba más que acatar las disposiciones de la administración del Palacio de los Deportes, por razones obvias “que estábamos en piscina ajena”.
+                Por tal razón, el Departamento de Promoción Estudiantil inició el proyecto a partir del 24 de setiembre del 2018, según oficio UNA-DPE-OFIC-0813-2018.
+            </p>
+            <hr class="featurette-divider">
+            
+            <span id="reconocimiento" class="sr-only">(reconocimiento-anchor)</span>
+            <h2 class="featurette-heading mt-3"><a class="text-dark" href="#reconocimiento">Reconocimiento</a></h2>
+            <p class="lead">
+                Los talleres de natación están contemplados en la opción co-curricular que brinda la Vicerrectoría de Vida Estudiantil. Al final del taller al estudiante se le consigna en el historial académico.
+            </p>
+            <hr class="featurette-divider">
+        </div>
+		<%- include('footer') %>
+	</main>
+</body>
+</html>

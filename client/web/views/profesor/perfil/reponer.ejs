@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <title>Reposiciones</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="../js/jq-bs-bundle.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.all.min.js"></script>
+</head>
+<body style="overflow-x:hidden ;">
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
+    <%- include('perfilHeader') %>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <div class="container mt-3" style="min-height: 600px; margin-bottom: 100px;">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-link-profesores active" id="nav-ver-tab" data-toggle="tab" href="#nav-ver" role="tab" aria-controls="nav-ver" aria-selected="true">Reposiciones</a>
+                <a class="nav-link-profesores" id="nav-crear-tab" data-toggle="tab" href="#nav-crear" role="tab" aria-controls="nav-crear" aria-selected="false">Solicitar Reposicion</a>
+            </div>
+            
+          </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-ver" role="tabpanel" aria-labelledby="nav-ver-tab">
+                <div class="row" id="clasesLista">
+                
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-crear" role="tabpanel" aria-labelledby="nav-crear-tab">
+                <h4>Solicitud de Remplazo por dia</h4>
+                <div class="form-group">
+                    <label for="nombreProfesor">Nombre</label>
+                    <input type="text" class="form-control" id="nombreProfesor" 
+                    aria-describedby="textHelp" value="<%= usuario.nombre + ' ' + usuario.apellido%>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="grupoText">Grupo</label>
+                    <select class="form-control" id="selectDropdownGrupos">
+                        
+                    </select>
+                    <small class="form-text text-muted">Grupo al cual va a solicitar reponer la clase</small>
+                </div>
+                <div class="form-group">
+                    <label for="nombreProfesorDestino">Profesor a reponer</label>
+                    <select class="form-control" id="selectDropdownProfesores">
+                        
+                    </select>
+                    <small class="form-text text-muted">Seleccione el profesor que va a reponer la clase</small>
+                </div>
+                <div class="w-100">
+                    <div id="calendar"></div>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="enviarSolicitud()">Enviar Solicitud</button>
+            </div>
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script src="../js/profesor/reponer.js"></script>
+    <script src="../js/profesor/reposiciones.js"></script>
+</body>
+</html>

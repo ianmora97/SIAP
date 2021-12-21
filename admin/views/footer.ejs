@@ -1,0 +1,90 @@
+<div class="w-100">
+    <svg width="100%" height="130px" version="1.1" xmlns="http://www.w3.org/2000/svg" class="wave">
+        <defs>
+            <linearGradient id="gradient1" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"  />
+                <stop offset="100%" stop-color="#3c8eec"  />
+            </linearGradient>
+        </defs>
+        <path id="feel-the-wave3" d=""/>
+        <path id="feel-the-wave2" d=""/>
+    </svg>
+    <div class="w-100 bg-primary">
+        <footer class="mx-auto px-2 text-white" style="min-height: 50px; width: 80%;">
+            <div class="row mx-auto py-3">
+                <div class="col-md-4 d-flex flex-column mt-4">
+                    <div class="d-flex align-items-center mt-2">
+                        <img src="/img/UNA-VVE-logo-3.png" width="200" style="filter: brightness(0) invert(1);">
+                        <img src="/img/logo-vive-promocion-transparency.png" alt="UNA" loading="lazy" 
+                        class="d-inline mx-2 my-auto" height="40px" style="filter: brightness(0) invert(1);">
+                        <h4 class="text-white m-0">SIAP</h4>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row mx-auto">
+                        <div class="col-md-6 p-0 pl-sm-2">
+                            <div class="d-flex flex-column mt-4">
+                                <h4 class="text-white font-weight-bold">Talleres</h4>
+                                <a href="/talleres#horarios" class="text-light">Horarios</a>
+                                <a href="/talleres#matricula" class="text-light">Matricula</a>
+                                <a href="/talleres#precios" class="text-light">Precios</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6 p-0 pl-sm-2">
+                            <div class="d-flex flex-column mt-4">
+                                <h4 class="text-white font-weight-bold">Informacion</h4>
+                                <a href="/talleres#normativa" class="text-light">Normativa General</a>
+                                <a href="/talleres#autofinaciamiento" class="text-light">Proyecto Autofinanciado</a>
+                                <a href="/talleres#nosotros" class="text-light">Nosotros</a>
+                                <a href="/talleres#reconocimiento" class="text-light">Reconocimiento</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex flex-column mt-4">
+                        <h4 class="text-white mb-3 font-weight-bold">Contacto</h4>
+                        <p class="text-light mb-2 d-flex align-items-center">
+                            <i class="mr-2 fas fa-phone-alt"></i>
+                            <a href="tel:2277-3784" class="text-light">2277-3784</a>
+                        </p>
+                        <p class="text-light mb-2 d-flex align-items-center">
+                            <i class="mr-2 fas fa-envelope"></i>
+                            <a href="mailto:piscinadpe@una.cr" class="text-light">piscinadpe@una.cr</a>
+                        </p>
+                        <p class="text-light mb-2 d-flex align-items-center">
+                            <i class="mr-2 fab fa-facebook"></i>
+                            <a href="https://www.facebook.com/PiscinaUNA/" target="_blank" class="text-light">PiscinaUNA</a>
+                        </p>
+                    </div>	
+                </div>
+            </div>
+            <hr class="my-3 border-light">
+            <div class="py-4 mb-2">
+                <p class="float-right"><a class="text-white" href="#">Back to top</a></p>
+                <p >&copy; 2019-2022 &middot; <a class="text-white" href="#">Terminos y Condiciones</a></p>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
+<script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var wave2 = $('#feel-the-wave2').wavify({
+            height: 90,
+            bones: 4,
+            amplitude: 20,
+            color: '#4659E4',
+            speed: .25
+        });
+        var wave3 = $('#feel-the-wave3').wavify({
+            height: 70,
+            bones: 3,
+            amplitude: 40,
+            color: 'rgba(126, 142, 247,0.8)',//#8997f4
+            speed: .15
+        });
+    });
+</script>

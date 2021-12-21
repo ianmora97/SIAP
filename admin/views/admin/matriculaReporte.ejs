@@ -1,0 +1,184 @@
+<!-- 
+    * Universidad Nacional de Costa Rica
+    * 2020-2021
+
+    * Proyecto de Ingenieria en Sistemas I-III
+
+    * Estudiantes:
+    * Edso Cruz Viquez
+    * Ian Mora Rodriguez
+    * Marlon Freer Acevedo
+    * Moises Fernandez Alfaro
+ -->
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+ 
+ <head>
+     <title>Dashboard | Reportes de Matricula</title>
+     <%- include('headers')%>
+
+</head> 
+ <body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+     <div class="modal fade" id="descargarPdf" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header bg-primary text-white py-3">
+                     <h5 class="modal-title pl-3 font-weight-bold">Descargar Reporte</h5>
+                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                             <span aria-hidden="true">&times;</span>
+                         </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="form-group">
+                       <label for="">Nombre del PDF</label>
+                       <input type="text" class="form-control form-control-sm" id="tituloPdf">
+                       <small id="helpId" class="text-muted">Reportes de Abril</small>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                     <button type="button" class="btn btn-primary" onclick="pdfDownload()">
+                        <i class="fas fa-download animate__animated animate__pulse animate__infinite"></i> Descargar</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+            <div id="page-content-wrapper">
+                <%- include('headerDashboard') %>
+
+                <div class="container-fluid my-4">
+                    <div class="bg-white rounded-3 p-4">
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <h1 class="font-weight-bold display-5">Reportes de Matrícula</h1>
+                                <p class="text-muted mb-0">En esta sección se muestra la lista de matrículas 
+                                    ingresadas y/o eliminadas. 
+                                    Los reportes de matrícula se pueden generar Mensualmente</p>
+                                <small>Información Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                            </div>
+                            <div class="col-md-6 row mx-0 d-flex justify-content-end align-items-stretch">
+                                <div class="col d-flex justify-content-center align-items-center border-right pl-0" id="cantidad_matriculados_cont">
+                                    <div>
+                                        <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t1"
+                                            id="cantidad_matriculados">0</h1>
+                                        <small class="text-muted">Matriculados <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                    </div>
+                                </div>
+                                <div class="col d-flex justify-content-center align-items-center" id="cantidad_desmatriculados_cont">
+                                    <div>
+                                        <h1 class="m-0 font-weight-bolder display-3 text-primary animate__animated animate__flipInX animate_delay_t2"
+                                            id="cantidad_desmatriculados">0</h1>
+                                        <small class="text-muted">Inactivos <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                tippy('#ecantidad_matriculados_cont', {
+                                    content: 'Cantidad total de Estudiantes Matriculados',
+                                    placement: 'bottom',
+                                    animation: 'shift-away-extreme',
+                                });
+                                tippy('#cantidad_desmatriculados_cont', {
+                                    content: 'Cantidad total de Estudiantes desmatriculados',
+                                    placement: 'bottom',
+                                    animation: 'shift-away-extreme',
+                                });
+                            </script>
+   
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                        <div class="row mx-0 d-flex justify-content-between">
+                            <div class="col pl-0">
+                                <div class="mb-1">
+                                    <div class="input-group flex-nowrap">
+                                        <div class="input-group-prepend">
+                                            <div class="btn bg-light" id="button_search">
+                                                <i class="fas fa-search"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control border-0 shadow-none bg-light"
+                                            onkeyup="searchonfind()" placeholder="Buscar..."
+                                            aria-label="Username" id="barraBuscar">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex justify-content-end align-items-end ">
+                                <div class="w-100 h-100">
+                                    <input type="month" class="form-control" id="filtrarDate">
+                                </div>
+                            </div>
+                            <div class="col-md-3 d-flex justify-content-end align-items-end pr-0">
+                                <div class="w-100 h-100">
+                                    <button onclick="openModal('#descargarPdf')"
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="Descargar Reporte" class="btn btn-secondary w-100 mr-2"
+                                        ><i class="far fa-file-pdf"></i> Descargar Reporte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <div class="row mx-0 mx-auto rounded-3 justify-content-between p-0">
+                            <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline pl-0">
+                                <div class="w-100" id="length">
+                                    <select class="custom-select">
+                                        <option selected>All columns</option>
+                                        <option value="1">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white px-0 mt-4 rounded-3  animate__animated animate__zoomIn">
+                        <div class="row w-100 mx-0" style="min-height: 630px; overflow-y: auto;">
+                            <table class="table custom-table table-responsive-sm table-striped table-borderless text-center table-hover"
+                             id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                                <thead class="table-light-header">
+                                    <tr>
+                                        <th style="width: 50px;"><strong>#</strong></th>
+                                        <th scope="col">Grupo</th>
+                                        <th scope="col">Estudiante</th>
+                                        <th scope="col" >Fecha</th>
+                                        <th scope="col" style="width: 260px;">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista_reportes">
+    
+                                </tbody>
+                            </table>
+                            <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                                <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                                <div id="pagination" class="mr-3">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                          <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                          <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <style>
+                                    ul.pagination{
+                                        margin-bottom: 0px !important;
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <%- include('footerDashboard') %>
+            </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/matriculaReporte.js"></script>
+ </body>
+</html>
