@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+    <title>Dashboard | Matricula</title>
+    <%- include('headers')%>
+    <style>
+        .fc .fc-daygrid-day.fc-day-today {
+            background-color: #ffebb3 !important;
+        }
+    </style>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+    <div class="modal fade" id="modalVerMatricula" tabindex="-1" aria-labelledby="vermodalmatricula" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header px-3 border-bottom-0 bg-primary text-white">
+                <h5 class="modal-title pl-3 font-weight-bold" id="exampleModalLabel">Matrícula</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger alert-dismissible" style="display: none;" role="alert" id="alerta_error_estado">
+                        No se pudo cambiar el estado!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <span class="sr-only" id="cedulaTarget"></span>
+                    <span class="sr-only" id="idCursoDesmatricular"></span>
+                </div>
+                <div class="modal-footer py-3 border-0 d-flex justify-content-around">
+                    <button type="button" class="btn btn-primary" id="cambiarEstadoActivar" onclick="cambiarEstadoMatricula(1)">Activar Matrícula</button>
+                    <button type="button" class="btn btn-warning" id="cambiarEstadoDesactivar" onclick="cambiarEstadoMatricula(0)">Desactivar Matrícula</button>
+                    <button type="button" class="btn btn-danger" onclick="desmatricular()">Desmatricular</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="gruposCalendario" data-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xxl">
+            <div class="modal-content">
+                <div class="modal-header pl-3 border-0 bg-primary text-white">
+                    <h5 class="modal-title ml-3" id="staticBackdropLabel">Calendario de Grupos</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalbodyAdd">
+                    <h4 class="font-weight-bold">Seleccione los grupos que desea matricular</h4>
+                    <div id="calendar"></div>
+                    <style>
+                        #calendar {
+                            width:100%;
+                            max-width: 100%;
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="matricularModal" tabindex="-1" aria-labelledby="matricularModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header px-3 bg-primary text-white">
+                    <h5 class="modal-title pl-3 font-weight-bold" id="matricularModalLabel">Matricular Estudiante</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="form-group">
+                            <label for="EstudiantesModalMatricular">Estudiante</label>
+                            <select class="form-control" name="EstudiantesModalMatricular" id="EstudiantesModalMatricular">
+    
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnSelecionarGrupos" data-dismiss="modal" 
+                        data-toggle="modal" data-target="#gruposCalendario" disabled>Seleccionar Grupos</button>
+                        <hr class="my-3">
+                        <div class="row mx-0 py-5" style="overflow: hidden" >
+                            <div class="card mb-3 flex-fill border-0 shadow-cus-lg rounded-3 m-auto" style="max-width: 95%;" id="tiqueteMatricula">
+                                <div class="row mx-0 no-gutters" >
+                                    <div class="col-md-9">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <h2 class="card-title font-weight-bold mb-0"></h2>
+                                                <span id="fechaTiqueteAdd" class="h6 text-muted"></span>
+                                                <script>
+                                                    $('#fechaTiqueteAdd').text(moment().format('DD/MM/YYYY'));
+                                                </script>
+                                            </div>
+                                            <hr class="my-2">
+                                            <div class=" ">
+                                                <p><b>Nivel: </b><span class="texto-matricular text-primary"></span></p>
+                                            </div>
+                                            <div class="pr-2 mt-4">
+                                                <span class="mb-2 d-block"><b>Grupos: </b></span>
+                                                <div class="texto-fecha d-flex flex-column flex-sm-row flex-wrap">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-3" style="border-left: 5px dotted gray;">
+                                        <img src="https://latam.kaspersky.com/content/es-mx/images/repository/isc/2020/9910/a-guide-to-qr-codes-and-how-to-scan-qr-codes-2.png" 
+                                        alt="QR" width="100%" id="fotoQRChange">
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="matricularCursos()">Matricular Estudiante</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <%if (typeof add != "undefined"){%>
+                <script>
+                    var g_customView = '<%= est %>';
+                    // $('#matricularModal').modal('show');
+                </script>
+            <%}%>
+            <div class="container-fluid my-4">
+                <div class="bg-white border-0 mb-3 rounded-3 p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h1 class="font-weight-bold display-5">Estudiantes Matriculados</h1>
+                            <p class="mb-0 text-muted">En esta sección se muestra la lista de los
+                                estudiantes que se matricularon en un grupo, a un estudiante matriculado se le puede rechazar la matrícula.
+                                Los administradores tambien pueden matricular a cualquier estudiante.
+                            </p>
+                            <small class="text-muted">Información actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col-md-6 row mx-0 justify-content-end">
+                            <div class="border-right px-5 d-flex flex-column align-items-end" id="est_activos_stats_cont">
+                                <h1 id="est_activos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t1">0</h1>
+                                <small class="text-muted">Estudiantes Activos &nbsp; <i
+                                        class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                            <div class="border-right px-5 d-flex flex-column align-items-center" id="est_inactivos_stats_cont">
+                                <h1 id="est_inactivos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t2">0</h1>
+                                <small class="text-muted">Estudiantes Inactivos &nbsp; <i
+                                        class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                            <div class="px-5 d-flex flex-column align-items-center" id="cursos_stats_cont">
+                                <h1 id="cursos_stats" class="display-3 m-0 font-weight-bold text-primary animate__animated animate__flipInX animate_delay_t3">0</h1>
+                                <small class="text-muted">Cupos disponibles &nbsp; <i
+                                        class="fas fa-align-center text-secondary"></i></small>
+                            </div>
+                        </div>
+                        <script>
+                            tippy('#est_activos_stats_cont', {
+                                content: 'Estudiantes Matriculados',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#est_inactivos_stats_cont', {
+                                content: 'Estudiantes Inactivos pero no desmatriculados',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                            tippy('#cursos_stats_cont', {
+                                content: 'Cantidad de cupos disponibles en todos los cursos',
+                                placement: 'bottom',
+                                animation: 'shift-away-extreme',
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                    <div class="row mx-0 p-0">
+                        <div class="col pl-0">
+                            <div class="mb-1">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-baseline pr-0">
+                            <div class="w-100">
+                                <button type="button" class="btn btn-secondary rounded-4 d-block w-100" id="modalButtonAgregarEstudiante"
+                                onclick="openmodal('#matricularModal')"><i class="fas fa-plus"></i> Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row mx-0 justify-content-between px-0">
+                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline pl-0">
+                            <div class="w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-sm-end justify-content-around align-items-baseline mt-sm-0 px-0">
+                            <button type="button" class="btn btn-light text-success" onclick="excelDownload()">
+                                <i class="fas fa-file-excel pr-2"></i>Excel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white px-0 pb-2 mt-4 rounded-3  animate__animated animate__slideInUp">
+                    <div class="row w-100 mx-0" style="min-height:750px;overflow-y: auto;">
+                        <table class="table custom-table table-striped table-responsive-sm table-borderless text-center table-hover"
+                         id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th style="width: 55px;"><strong>#</strong></th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cédula</th>
+                                    <th scope="col">Horario</th>
+                                    <th scope="col">Nivel</th>
+                                    <th scope="col">Profesor</th>
+                                    <th scope="col">Fecha de matrícula</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_estudiantes">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/matricula.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+	<title>Registro | SIAP</title>
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/animate.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+	<link rel="stylesheet" href="/css/datatables.min.css">
+	<script src="/js/jq-bs-bundle.js"></script>
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+	<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+</head>
+
+<body class="bg-light">
+	<%- include('menu') %>
+		<div class="pt-5" style="margin-top: 75px;">
+			<div class="container shadow border rounded-3 bg-white ">
+				<div class="alert alert-success alert-dismissible mt-4 mb-0" role="alert" style="display: none;"
+					id="alertasuccess">
+					<h4 class="alert-heading">Registrado Correctamente!</h4>
+					<p>Usted ha sido registrado exitosamente en el sistema.</p>
+					<hr>
+					<p class="mb-0">Eventualmente se le avisara mediante el correo ingresado cuando tenga acceso al
+						sistema
+						y pueda matricular cursos una vez que un administrador de la piscina lo haya confirmado.</p>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="alert alert-danger alert-dismissible mt-4 mb-0" role="alert"
+					style="display: none; position: sticky; top: 0; z-index: 999;" id="alerta_error_registro">
+					<h4 class="alert-heading">Datos Incorrectos!</h4>
+					<hr>
+					<p class="mb-0" id="text_incorrect"></p>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="py-4 text-center">
+					<h2 class="featurette-heading my-4">Formulario de Registro</h2>
+					<p class="lead px-4">
+						Al completar la información de registro un funcionario de la Universidad Nacional de Costa Rica
+						le habilitará
+						el acceso a la plataforma una vez verificado su elegibilidad para matricular los talleres de la
+						piscina.
+						Tendra que proporsionar una seria de datos y adicionalmente un comprobante que matricula del
+						semestre actual.
+					</p>
+				</div>
+				<hr>
+				<form action="" autocomplete="off">
+					<div class="row px-3 py-2">
+						<div class="col-md-6">
+							<style>
+								input, input:hover, select, select:hover {
+									outline: none !important;
+									box-shadow: none !important;
+								}
+								/* Chrome, Safari, Edge, Opera */
+								input::-webkit-outer-spin-button,
+								input::-webkit-inner-spin-button {
+									-webkit-appearance: none;
+									margin: 0;
+								}
+
+								/* Firefox */
+								input[type=number] {
+									-moz-appearance: textfield;
+								}
+							</style>
+							<div class="form-group w-100">
+								<label for="tipoDeNacionalidad" class="mb-0"><strong class="text-dark mb-0">Tipo de Identificacion</strong></label>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-id-card"></i></span>
+									</div>
+									<select class="form-control" id="tipoDeNacionalidad">
+										<option value="0" selected>Seleccione...</option>
+										<option value="nacional">Nacional</option>
+										<option value="extranjera">Extranjera</option>
+									</select>
+								</div>
+								<small class="text-muted">Nacional 9 Digitos / Extranjera A9</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Número de cédula</strong><small class="text-danger">
+									*</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="cedula_inputGroup"><i
+												class="fa fa-id-card"></i></span>
+									</div>
+									<input type="number" id="id_registro" minlength="9" maxlength="12" min="9" max="12"
+										class="form-control" aria-label="Numero de cedula"
+										aria-describedby="cedula_inputGroup">
+								</div>
+								<small class="text-muted">Sin guiones ni barras(/) e.g: 123456789</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Nombre y Apellidos</strong><small class="text-danger">
+									*</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="nombreapellido_inputGroup"><i
+												class="fa fa-font"></i></span>
+									</div>
+									<input type="text" id="nombre_registro" class="form-control"
+										aria-label="Numero de cedula" aria-describedby="nombreapellido_inputGroup">
+									<input type="text" id="apellidos_registro" class="form-control"
+										aria-label="Numero de cedula" aria-describedby="nombreapellido_inputGroup">
+								</div>
+								<small class="text-muted">El mismo de su documento de identificacion</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Fecha de nacimiento</strong><small class="text-danger">
+									*</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="nacimiento_inputGroup"><i
+												class="fa fa-calendar-day"></i></span>
+									</div>
+									<input id="fecha_nacimiento_registro" type="date" minlength="9" maxlength="12"
+										min="9" max="12" class="form-control" aria-label="Numero de cedula"
+										aria-describedby="nacimiento_inputGroup">
+								</div>
+								<small class="text-muted">Mes/Dia/Año</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Correo electrónico</strong><small class="text-danger">
+									*</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="correo_inputGroup"><i
+												class="fa fa-at"></i></span>
+									</div>
+									<input type="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+										class="form-control" aria-label="Numero de cedula"
+										aria-describedby="correo_inputGroup">
+								</div>
+								<small class="text-muted">e.g: ejemplo@dominio.com</small>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Nombre de Usuario</strong><small class="text-danger">
+									*</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="usuario_inputGroup"><i
+												class="fa fa-user"></i></span>
+									</div>
+									<input type="text" name="fusuario" id="usuario_registro" autocomplete="off"
+										class="form-control" aria-label="Numero de cedula"
+										aria-describedby="usuario_inputGroup">
+								</div>
+								<small class="text-muted">ejemplo123</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Contraseña</strong><small class="text-danger"> *</small>
+								<div class="input-group input-group-sm">
+									<input type="password" minlength="8" maxlength="20" name="fcontra"
+										class="form-control" type="password" id="clave_registro"
+										aria-describedby="buttonClave" autocomplete="off">
+									<div class="input-group-append">
+										<span class="input-group-text" role="button" id="buttonClave"><i
+												class="fas fa-eye"></i></span>
+									</div>
+								</div>
+								<div class="input-group d-block">
+									<small class="text-muted d-inline">Min: 8 / Max: 20</small>
+									<div class="progress">
+										<div class="progress-bar bg-rojo" id="progreso_clave" role="progressbar"
+											aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+											<span class="text-white" id="cantidad_caracteres"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Sexo</strong><small class="text-danger"> *</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-venus-mars"></i></span>
+									</div>
+									<select class="form-control" id="sexo">
+										<option value="0" selected>Seleccione...</option>
+										<option value="Masculino">Masculino</option>
+										<option value="Femenino">Femenino</option>
+										<option value="Otro">Otro</option>
+									</select>
+								</div>
+								<small class="text-muted">Masculino / Femenino</small>
+							</div>
+							<div class="form-group w-100">
+								<strong class="text-dark mb-0">Perfil dentro de la universidad</strong><small
+									class="text-danger"> *</small>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-briefcase"></i></span>
+									</div>
+									<select class="form-control" id="perfil">
+										<option value="0" selected>Seleccione...</option>
+										<option value="Estudiante">Estudiante</option>
+										<option value="Funcionario">Funcionario</option>
+									</select>
+								</div>
+								<small class="text-muted">Ocupacion</small>
+							</div>
+							<!-- <div class="form-group w-100">
+								<strong class="text-dark mb-0">Subir comprobante</strong><small class="text-danger">
+									*</small><br>
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="input_arialabeled"><i
+												class="fa fa-upload"></i></span>
+									</div>
+									<div class="custom-file">
+										<input type="file" class="custom-file-input" id="input_file"
+											aria-describedby="input_arialabeled">
+										<label class="custom-file-label" for="input_file">Choose file</label>
+									</div>
+								</div>
+								<small class="text-muted">El comprobante de matricula del semestre actual</small>
+							</div> -->
+						</div>
+					</div>
+				</form>
+				<button goto="top" class="btn btn-primary d-block mx-auto mb-3" id="registrar" type="button">
+					<div class="spinner-border spinner-border-sm" id="spinnerWaiter" role="status"
+						style="display: none;">
+						<span class="sr-only">Loading...</span>
+					</div>
+					<i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Registrarme
+				</button>
+				<hr>
+			</div>
+		</div>
+		<%- include('footer') %>
+			<script type="module" src="/js/client/registro.js"></script>
+			<script src="/socket.io/socket.io.js" charset="utf-8"></script>
+</body>
+
+</html>

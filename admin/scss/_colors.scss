@@ -1,0 +1,33 @@
+$theme-colors: (
+    "primary":#4659E4,
+    "dark-primary":#3347e0,
+    "dark-primary-500":#0a0e2e,
+    "secondary":#02CA80,
+    "light":#edf0ff,
+    "light-alt":#f1f1f1,
+    "gray":#e0e2f0,
+    "dark":#212529,
+    "info":#0c8df7
+);
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 426px,
+    md: 768px,
+    lg: 1280px,
+    xl: 1400px,
+    xxl: 1900px
+);
+    
+
+
+$breadcrumb-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E");
+
+$modal-fade-transform: scaleY(.01) scaleX(0);
+
+body{
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+$enable-shadows:true;
+$enable-responsive-font-sizes:true;

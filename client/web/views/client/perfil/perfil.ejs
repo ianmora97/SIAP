@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/general.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../css/animate.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js"></script>
+    <script src="../js/jq-bs-bundle.js"></script>
+</head>
+
+<body>
+    <!-- Modal -->
+    <div class="modal fade" id="openConsentimientoModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-primary">Consentimiento Informado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <h5 class="text-center"><strong>
+                            Universidad Nacional <br>
+                            Vicerrectoría de Vida Estudiantil <br>
+                            Departamento de Promoción Estudiantil <br>
+                        </strong></h5>
+                        <h4 class="text-center">Consentimiento informado<br>Información para el usuario y/o sus encargados</h4>
+                        <p>
+                            La Piscina de la Universidad Nacional promociona los estilos de vida físicamente
+                             activos mediante la realización de actividad física en el medio acuático, 
+                             específicamente la natación. El usuario recibe la cantidad de sesiones que 
+                             considera apropiadas según su facilidad de horario y nivel físico, siempre 
+                             tomando en cuenta evitar el sobre entrenamiento, o el poner en riesgo su salud.
+                        </p>
+                        <p>
+                            <strong>Antes de iniciar la participación en el proyecto</strong>, el usuario debe completar 
+                            un expediente de datos personales, así como un cuestionario médico y de 
+                            estratificación del riesgo. De acuerdo con la cantidad de factores de 
+                            riesgo que el usuario presente, se le recomienda realizarse un análisis más 
+                            profundo con personal médico, por lo general una prueba de esfuerzo. 
+                            Para iniciar con las clases deberá presentar una copia de dicha prueba al 
+                            instructor a cargo. De no presentar factores de riesgo, el usuario iniciará 
+                            con las sesiones respectivas de natación. 
+                        </p>
+                        <p>
+                            <strong>Antes de entrar a su clase</strong>, debe anotarse en la lista de asistencia. Las sesiones 
+                            inician puntualmente cada hora a los cero minutos y finaliza a la hora con 
+                            cincuenta y cinco minutos, la sesión se divide en una fase de estiramiento, la 
+                            cual cada usuario realiza de manera obligatoria antes de iniciar cada clase, 
+                            tomando como guía de ejercicios el material facilitado por el proyecto. Una vez 
+                            completada esta fase de estiramiento, el usuario se ducha de manera obligatoria 
+                            e ingresa a la piscina siguiendo todas las indicaciones de los instructores, 
+                            así como el reglamento de uso de piscina.
+                        </p>
+                        <p>
+                            <strong>El usuario de la piscina de la UNA, al realizar las sesiones de natación podría gozar de algunos beneficios</strong> 
+                            tales como reducción del porcentaje de grasa, aumento de fuerza, mayor capacidad física 
+                            (nadar más rápido, más distancia y sentir menos cansancio a la hora de nadar), mayor flexibilidad 
+                            (se puede estirar más, se lesiona menos), reducción y control de los valores de presión arterial, 
+                            glucosa en sangre y colesterol. Además de beneficios emocionales tales como mejor estado de ánimo, 
+                            reducción de sentimientos de ansiedad, depresión, enojo, entre otros.
+                        </p>
+                        <p>
+                            <strong>Los riesgos que se podrían presentar durante la realización de actividad física y ejercicio físico
+                                en el medio acuático (natación) son:</strong> alergias al cloro y a químicos asociados, aparición de
+                              manchas en la piel, infección de oídos, sinusitis, lesiones músculo esqueléticas principalmente 
+                              en la articulación del hombro, ingreso de agua al organismo involuntariamente, irritación de ojos,
+                               caídas en las superficies alrededor de la piscina, algún tipo de golpe con las carrileras 
+                               (líneas divisorias dentro de la piscina) en brazos, piernas y cabeza, algún golpe involuntario
+                                ocasionado por otro usuario durante la práctica.
+                        </p>
+                        <p>
+                            <strong>Toda la información que se obtenga de su expediente y de las 
+                                evaluaciones realizadas,</strong> serán tratadas de forma confidencial y esta no será 
+                            revelada a personas ajenas a la organización. Sin embargo, dicha información podría ser
+                             utilizada para fines de investigación con la respectiva codificación y confidencialidad, 
+                             bajo ninguna circunstancia se estarían revelando datos de índole personal de los usuarios.
+                        </p>
+                        <p>
+                            <strong>En cuanto a la reposición de clases,</strong> para una posterior reposición se debe suministrar una 
+                            debida justificación, luego debe anotarse y firmar la lista con los horarios establecidos 
+                            con al menos 24 horas de antelación, ya que el cupo para reponer es limitado. Sólo se repondrá 
+                            en los horarios establecidos.  En caso de haber avisado previamente que no va a asistir a la clase 
+                            se aprueba automáticamente la reposición de esta, no obstante, si incurre en la inasistencia 
+                            a esta debe seguir el proceso de justificación.  No podrá reponer una vez que su <u>mensualidad se 
+                                haya vencido</u>. Así mismo, la clase de reposición está sujeta a cupo, por lo que no aseguremos su 
+                            disponibilidad en el horario. 
+                        </p>
+                        <p>
+                            <strong>En cuanto a los horarios de asistencia</strong>, el primer día de clases, el usuario elige los horarios a 
+                            conveniencia, una vez elegidos estos horarios deben de mantenerse para poder controlar el espacio 
+                            en las diferentes horas. Este horario se puede modificar comunicando a la administración del proyecto 
+                            vía correo electrónico y posteriormente contando con su visto bueno para realizar el cambio.
+                        </p>
+                        <p>
+                            <strong>En relación al pago</strong>, todos los pagos se realizarán en donde se indique en los medios 
+                            oficiales de la piscina, el mismo se debe de realizar según la fecha de ingreso al proyecto, 
+                            excepto por vacaciones o feriados en tal caso la administración del proyecto podrá variarla, 
+                            el usuario puede pagar con tarjeta de crédito o débito, o bien, por medio de transferencia o depósito, 
+                            en este caso debe entregar el comprobante de pago en físico al encargado de la oficina administrativa o 
+                            vía correo electrónico. El pago se puede realizar en efectivo en las instalaciones de FUNDAUNA. En el 
+                            caso de ser la <u>primera vez que asiste</u> debe presentar el comprobante de pago de manera física, así como su 
+                            detalle de horario.  Si usted desea asistir a una clase estando fuera de su fecha de pago o sin entregar el 
+                            recibo de manera impresa o digital <u>lamentablemente no podrá ingresar</u>. Los comprobantes de pago se deben 
+                            entregar en <strong>la oficina</strong> o al correo electrónico oficial: <strong>piscinadpe@una.cr</strong>.
+                        </p>
+                        <p>
+                            <strong>Perdida de cupo</strong>, en caso de tener vencido el pago por una semana perderá el cupo en las lecciones. 
+                            En caso de querer reincorporarse debe presentarse de manera personal a consultar el cupo en las lecciones.
+                        </p>
+                        <p>
+                            <strong>Para la seguridad de sus pertenencias</strong>, el proyecto NO se responsabiliza por la pérdida de pertenencias, 
+                            se recomienda no dejar ninguna pertenencia de valor en su vehículo ni en los vestidores, para 
+                            tales fines, el proyecto cuenta con casilleros con su respectivo candado, o bien un estante fuera 
+                            de los vestidores.  Para el uso de los casilleros debe solicitar las llaves en la oficina, en donde
+                             dejará el carnet o cédula, al finalizar la lección debe devolver las llaves, momento donde se le 
+                             devolverá su documento de identificación.
+                        </p>
+                        <p>
+                            Comprendo que los talleres que se ofrecen en la piscina pueden ser suspendidos por motivo de 
+                            fuerza mayor. Lo anterior, por razones de la naturaleza práctica del servicio, o bien, por 
+                            inconvenientes que puedan poner en riesgo su salud. Así mismo, comprendo y acepto que los instructores 
+                            de los talleres son estudiantes asistentes que poseen compromisos con la Universidad.
+                        </p>
+                        <p>
+                            Cualquier pregunta que usted tenga al respecto de los servicios ofrecidos por la Piscina de 
+                            la Universidad Nacional plasmados en este consentimiento es importante que lo haga saber 
+                            en este momento y con mucho gusto le daremos una explicación más amplia al respecto. 
+                        </p>
+                        <p>
+                            Con base en la información anterior, doy mi consentimiento de forma voluntaria para 
+                            participar en la Piscina de la UNA con el objetivo de mejorar mi salud. Yo entiendo, 
+                            que tengo la libertad de salirme del proyecto en el momento en que así lo desee. 
+                            Comprendo los beneficios y riesgos que conlleva la ejecución de las sesiones prácticas. 
+                            Por lo anterior exonero al personal y la institución de la responsabilidad, de las 
+                            complicaciones o lesiones que se puedan generar por la naturaleza de la actividad.
+                        </p>
+                        <p>
+                            He leído este informe de consentimiento y entiendo que participar en el Proyecto tiene sus, 
+                            beneficios, riesgos y consecuencias. Además, he leído el reglamento interno de uso de 
+                            instalaciones que se encuentra en la entrada de la piscina y estoy de acuerdo con cada uno de sus puntos.
+                        </p>
+                        <p>
+                            Conociendo estos beneficios, riesgos, consecuencias y teniendo la oportunidad de hacer preguntas 
+                            que se me han contestado a mi satisfacción, doy mi consentimiento a participar en este proyecto. 
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success">Ententiendo y acepto las condiciones</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('modalesPerfil') %>
+    
+    <%- include('perfilHeader') %>
+
+    <div class="container-fluid mt-3 w-90">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;"
+            id="alertasucess">
+            <strong>Cambios realizados!</strong> Sus datos han sido actualizados correctamente.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="alert alert-danger alert-dismissible my-4 mb-0" role="alert" style="display: none;"
+            id="alertadanger">
+            <h4 class="alert-heading">Datos erroneos!</h4>
+            <p>No puede dejar espacios en blanco, esto se debe a:</p>
+            <hr>
+            <p class="mb-0" id="erroresAlert"></p>
+            <button type="button" class="close" id="cerrarAlertaDanger" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-4 ">
+                <div class="card mb-3">
+                    <div class="card-body text-center shadow">
+                        <form action="/client/uploadImage" method="POST" enctype="multipart/form-data">
+                            <div class="alert alert-danger my-2" id="formatoImagenInvalido" role="alert" style="display: none;">
+                                <p class="m-0">Formato de Imagen invalida!</p>
+                            </div>
+                            <span class="sr-only" data-value="<%= usuario.foto%>" id="usuario_foto"></span>
+                            <label for="image" role="button" id="profileImageChange" class="d-block">
+                                <div class="avatar-bg center profile-pic mx-auto mt-4 ">
+                                    <span class="fas fa-camera"></span>
+                                    <span class="user-select-none">Change Image</span>
+                                </div>
+                            </label>
+                            <input type="text" name="cedula" value="<%= usuario.cedula%>" hidden>
+                            <input type="file" id="fileFoto" name="image" style="visibility: hidden;">
+                            <button class="btn btn-primary btn-sm" id="btn_cambiar_foto" type="submit"
+                                style="display: none;">Cambiar foto</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h3 class="text-center text-dark font-weight-bold m-0">Talleres</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 ">
+                <div class="row">
+                    <div class="col p-0">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-center text-dark m-0 font-weight-bold">Información
+                                    personal</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="cedula">
+                                                <strong>Identificación</strong>
+                                            </label>
+                                            <span class="sr-only" id="cedula_gu"><%= usuario.cedula %></span>
+                                            <input class="form-control" type="text" id="cedula_perfil" name="cedula"
+                                                placeholder="Cedula" value="<%= usuario.cedula %>" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group"><label for="nombre"><strong>Nombre</strong>
+                                            </label><input class="form-control" type="text" id="nombre_perfil"
+                                                name="nombre" placeholder="Nombre" value="<%= usuario.nombre %>"
+                                                disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="apellido"><strong>Apellido</strong></label>
+                                            <input class="form-control" type="text" id="apellido_perfil" name="apellido"
+                                                placeholder="Apellido" value="<%= usuario.apellido %>" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="correo">
+                                                <strong>Email</strong><br>
+                                            </label>
+                                            <input class="form-control" type="email" id="email_perfil"
+                                                placeholder="Correo" name="correo_perfil" value="<%= usuario.correo %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="sexo">
+                                            <strong>Sexo</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <select class="form-control" name="sexo" id="sexo_perfil" disabled>
+                                                <optgroup label="Seleccione uno">
+                                                    <option value="1"
+                                                        <%if(usuario.sexo == 'Masculino'){%>selected<%}%>>Masculino</option>
+                                                    <option value="2" <%if(usuario.sexo == 'Femenino'){%>selected<%}%>>Femenino</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="nacimiento">
+                                            <strong>Fecha de nacimiento</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <input class="form-control"
+                                                id="fecha_nacimiento_perfil" type="date" value="<%= usuario.nacimiento %>" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="celular">
+                                                <strong>Celular</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" id="celular_perfil"
+                                                placeholder="Celular" name="celular" value="<%= usuario.celular %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="telefono">
+                                                <strong>Teléfono</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" id="telefono_perfil"
+                                                placeholder="Telefono" name="telefono" value="<%= usuario.telefono %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="tel_emergencia">
+                                                <strong>Teléfono emergencia</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" placeholder="Telefono"
+                                                name="tel_emergencia" value="<%= usuario.telefono_emergencia %>"
+                                                id="telefono_emergencia">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="carrera">
+                                                <strong>Carrera / Departamento</strong><br>
+                                            </label>
+                                            <input class="form-control" type="tel" placeholder="Carrera departamento"
+                                                name="carrera" value="<%= usuario.carrera_departamento%>" id="carrera">
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="nivel">
+                                            <strong>Nivel</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="nivelActual"
+                                                data-values="<%= usuario.nivel%>"></span>
+                                            <input class="form-control" type="number" placeholder="Nivel" name="nivel"
+                                                value="<%= usuario.nivel%>" id="nivel" disabled>
+                                            <small class="text-muted">Carrera que cursa o departamento</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <label for="estado">
+                                            <strong>Estado</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <% var estado = usuario.estado == 1 ? 'Activo' : 'No activo' %>
+                                            <span class="sr-only" id="estadoEstudiante"
+                                                data-values="<%= usuario.estado%>"></span>
+                                            <input class="form-control" type="text" placeholder="Estado" name="estado"
+                                                value="<%- estado%>" id="estado" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md">
+                                        <label for="direccion">
+                                            <strong>Direccion Exacta</strong><br>
+                                        </label>
+                                        <div class="form-group">
+                                            <span class="sr-only" id="direccionText"
+                                                data-values="<%= usuario.direccion%>"></span>
+                                            <input class="form-control" type="text" placeholder="Direccion Exacta"
+                                                name="direccion" value="<%= usuario.direccion%>" id="direccion">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <div class="row d-flex justify-content-end">
+                                        <div class="col-md-4 mb-3">
+                                            <button class="btn btn-primary w-100" id="guardar_info"
+                                                type="submit">
+                                                <div class="spinner-border" id="spinnerWaiter" role="status" style="display: none;">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                Guardar
+                                            </button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn w-100 btn-secondary" data-toggle="modal" data-target="#openConsentimientoModal">
+                                                Ver Consentimiento Informado
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+
+        </div>
+    </div>
+    <%- include('perfilFooter') %>
+    <script type="module" src="../../../js/client/perfil/perfil.js"></script>
+</body>
+
+</html>

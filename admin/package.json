@@ -1,0 +1,61 @@
+{
+  "name": "webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "admin/js/admin/*"
+    ],
+    "delay": 0
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^6.0.0",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "@sweetalert2/themes": "^5.0.8",
+    "animate.css": "^4.1.1",
+    "bootstrap": "^4.5.2",
+    "browser-sync": "^2.26.12",
+    "chalk": "^4.1.1",
+    "chart.js": "^2.9.3",
+    "cheerio": "^1.0.0-rc.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "fs": "0.0.1-security",
+    "fullcalendar": "^5.7.0",
+    "imap": "^0.8.19",
+    "instascan": "^1.0.0",
+    "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.12.14",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.6.2",
+    "path": "^0.12.7",
+    "popper.js": "^1.16.1",
+    "qrcode": "^1.5.0",
+    "qrcode-svg": "^1.1.0",
+    "request-promise": "^4.2.6",
+    "socket.io": "^4.1.2",
+    "sweetalert2": "^11.2.1",
+    "uuid": "^8.3.2",
+    "xlsexport": "^1.5.2"
+  }
+}

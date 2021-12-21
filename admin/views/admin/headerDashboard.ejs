@@ -1,0 +1,192 @@
+<nav class="navbar navbar-expand-lg navbar-dark justify-content-between py-2" id="menu-header">
+    <button class="btn px-1" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="p-0" id="navbarSupportedContent">
+        <ul class="d-flex align-items-center ml-auto my-auto mt-lg-0 pl-0 flex-wrap list-unstyled">
+            <li class="buscarupbarra flex-fill">
+                <div class="position-relative w-100">
+                    <input type="text" class="form-control border-0 bg-light" style="height: 42px; border-radius: 9px;" 
+                    placeholder="Buscar..." id="dashboardSearch">
+                    <div class="bg-white finder">
+                        
+                    </div>
+                </div>
+            </li>
+            <li class="pl-0 pl-lg-3 mt-2 mt-md-0 flex-fill">
+                <div class="bg-light d-flex justify-content-between px-3 align-items-center" style="border-radius: 9px;">
+                    <div class="text-dark pr-3" id="nombreUsuario" style="width: 200px;">
+                        <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
+                        <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
+                        <h6 class="align-middle mb-0">
+                            <a class="text-decoration-none text-dark" href="/admin/perfil">
+                                <% if (!usuario.foto) { %>
+                                    <i class="fas fa-user-circle text-dark" style="font-size: 20px;"></i>
+                                <% } %>
+                                <%if (usuario.foto){%>
+                                    <div class="position-relative d-inline-block">
+                                        <img src="/public/uploads/<%= usuario.foto%>" class="rounded-circle" width="30px">
+                                        <div class="position-absolute" style="bottom: -5px;right: -2px;">
+                                            <i class="fas fa-circle text-success" style="font-size:10px;"></i>
+                                        </div>
+                                    </div>
+                                <%}%>
+                                <span class="mr-1"></span>
+                                <%= usernameNombre %>&nbsp;<%= usernameApellido %> 
+                            </a>
+                        </h6>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-baseline">
+                        <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
+                            <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
+                        </a>
+                        <div class="dropdown d-inline ml-4">
+                            <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
+                                <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
+                            </a>
+                            <div class="dropdownNotificaciones" id="notificacionesDrop">
+                                <strong class="px-2 py-3">Notificaciones</strong>
+                                <hr>
+                                <div class="container-fluid px-2" id="notifications">
+            
+                                </div>
+                                <hr>
+                                <a class="dropdown-item text-center mt-auto" href="#">...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    function loadFunctions(event) {
+        cargarNotificacionesDropdrown();
+        toogleMenu();
+        menuUserDropdowm();
+        loadURLSearch();
+        onfindBarUp();
+    }
+    function loadURLSearch() {
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/ajax/getUrls", 
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((urls) => {
+            g_links = urls;
+            getURLSearch(urls);
+        }, (error) => {
+        });
+    }
+    function getURLSearch(urls){
+        $('.finder').html('');
+        urls.forEach(u => {
+            $('.finder').append(`
+                <div class="row no-gutters mx-0 d-flex justify-content-between position-relative py-2 px-3 bg-white mb-2">
+                    <div class="col-lg-7 d-flex justify-content-start">
+                        <span class="d-block align-middle h-100 text-primary mt-3" style="font-size:30px; width:45px;">    
+                            ${u.icon}
+                        </span>
+                        <div class="d-flex flex-column pl-2">
+                            <h6 class="mt-0 font-weight-bold">${u.name}</h6>
+                            <p class="text-muted mb-0">${u.description}</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 d-flex justify-content-end align-items-center px-3" style="position:unset !important;">
+                        <a href="${u.url}" class="mt-2 stretched-link btn btn-sm btn-primary d-block w-100">
+                            <i class="fas fa-external-link-square-alt"></i> ${u.name}
+                        </a>
+                    </div>
+                </div>
+                <hr>
+            `);
+        })
+    }
+
+    function onfindBarUp(){
+        $('#dashboardSearch').on('keyup',function(event){
+            let word = $('#dashboardSearch').val();
+            let wordN = word;
+            $('.finder').show();
+            if(!word.length){
+                $('.finder').hide();
+            }
+            word = word != '' ? word[0].toUpperCase() + word.slice(1) : '';
+            let urls = g_links.filter(e => (
+                e.name.includes(word) ||  e.name.includes(wordN) || includesVariation(e,wordN)
+            ))
+            getURLSearch(urls);
+        })
+    }
+    function includesVariation(e,word){
+        let varations = e.variation.split(',')
+        let vec = varations.filter(v => 
+            v.includes(word)
+        );
+        console.log(vec.length)
+        return vec.length > 0;
+    }
+    function cargarNotificacionesDropdrown(event){
+        $('#notificaciones').on('click',function () {
+            $('#notificacionesDrop').toggle();
+        });
+    }
+    function menuUserDropdowm(event){
+        $('#userSettings').on('click',function () {
+            $('#userSettingsDrop').toggle();
+        });
+    }
+    function toogleMenu() {
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        //$('#sidebar-wrapper').css('position','relative');
+        $("#wrapper").toggleClass("toggled");
+        //$("#side-panel").css('margin-left','-12px');
+        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
+        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
+        //$("#sidebar-wrapper").animate({left:'-200'},1000);
+    });
+}
+    const animateCSS = (element, animation) =>
+        new Promise((resolve, reject) => {
+        let prefix = 'animate__';
+        const animationName = `${prefix}${animation}`;
+        const node = document.querySelector(element);
+
+        node.classList.add(`${prefix}animated`, animationName);
+
+        // When the animation ends, we clean the classes and resolve the Promise
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
+        }
+
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
+    
+
+    document.addEventListener("DOMContentLoaded", loadFunctions);
+</script>
+<script>
+    var g_token = '<%= token%>';
+    var g_myData = {
+        "id": "<%= usuario.id%>",
+        "cedula": "<%= usuario.cedula%>",
+        "nombre": "<%= usuario.nombre%>",
+        "apellido": "<%= usuario.apellido%>",
+        "foto": "<%= usuario.foto%>",
+        "correo": "<%= usuario.correo%>",
+        "usuario": "<%= usuario.usuario%>",
+        "sexo": "<%= usuario.sexo%>"
+    };
+</script>
+<!-- <div class="progress rounded-0" style="height: 10px;">
+    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div> -->

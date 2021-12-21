@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>SIAP | Sistema de Administracion de la Piscina del Departamento de Promocion Estudiantil</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/animate.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="/js/jq-bs-bundle.js"></script> 
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body>
+	<%- include('menu') %>
+	<main role="main">
+		<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+				<li data-target="#myCarousel" data-slide-to="2"></li>
+			</ol>
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+                    <div class="container-blur"></div>
+					<img src="/img/piscina2.jpg" class="d-block w-100 custom-image-car">
+					<div class="container">
+						<div class="carousel-caption text-left">
+							<h1 class="display-3 font-weight-bold">Inicio de Clases</h1>
+							<p>Inscripciones a partir del 22 de Enero</p>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<div class="container-blur"></div>
+					<img src="/img/piscina3.jpg" class="d-block w-100 custom-image-car">
+					<div class="container">
+						<div class="carousel-caption text-left">
+							<h1>Another example headline.</h1>
+							<p>Some representative placeholder content for the second slide of the carousel.</p>
+							<p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item">
+					<div class="container-blur"></div>
+					<img src="/img/piscina1.jpg" class="d-block w-100 custom-image-car">
+					<div class="container">
+						<div class="carousel-caption text-left">
+							<h1>One more for good measure.</h1>
+							<p>Some representative placeholder content for the third slide of this carousel.</p>
+							<p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="container marketing">
+			<div class="row featurette animate__slow" id="feature1">
+				<div class="col-md-7">
+					<h2 class="featurette-heading">Iniciacion.</h2>
+					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
+				</div>
+				<div class="col-md-5">
+					<img src="/img/square2.JPG" width="100%" style="filter: saturate(1.4);">
+				</div>
+			</div>
+
+			<hr class="featurette-divider">
+			<div class="row featurette animate__slow" id="feature2">
+				<div class="col-md-7 order-md-2">
+					<h2 class="featurette-heading">Perfeccionamiento.</h2>
+					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
+				</div>
+				<div class="col-md-5 order-md-1">
+					<img src="/img/square3.JPG" width="100%" style="filter: saturate(1.4);">
+				</div>
+			</div>
+
+			<hr class="featurette-divider">
+			<div class="row featurette animate__slow" id="feature3">
+				<div class="col-md-7">
+					<h2 class="featurette-heading">Entrenamiento Deportivo.</h2>
+					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
+				</div>
+				<div class="col-md-5">
+					<img src="/img/square1.JPG" width="100%" style="filter: saturate(1.4);">
+				</div>
+			</div>
+
+			<hr class="featurette-divider">
+		</div>
+		<%- include('footer') %>
+	</main>
+</body>
+</html>
