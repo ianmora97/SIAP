@@ -4,6 +4,7 @@
   "description": "SIADP",
   "main": "web/server.js",
   "scripts": {
+    "start": "node web/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon web/server.js"
   },
@@ -43,16 +44,12 @@
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
-    "mysql-ssh": "^1.0.6",
-    "mysql2": "^2.1.0",
     "node-sass": "^4.14.1",
-    "nodemailer": "^6.4.11",
+    "nodemailer": "^6.4.16",
     "popper.js": "^1.16.1",
     "request-promise": "^4.2.6",
-    "routes": "^2.1.0",
     "sass": "^1.26.10",
     "socket.io": "^2.3.0",
-    "ssh2": "^0.8.9",
     "uuid": "^8.3.0"
   }
 }
