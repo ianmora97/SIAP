@@ -8,31 +8,31 @@
     </div>
     
     <div class="list-group list-group-flush accordion mx-0 mb-auto bg-primary mt-2" id="accordion-menu-lateral">
-        <a href="/admin/dashboard" class="menu-items-var list-group-item <%if(s == "dash"){%> menu-active <%}%> pl-2" role="button">
+        <a href="/admin/dashboard" style="animation-delay:100ms" class="menu-items-var list-group-item  <%if(s == "dash"){%> menu-active <%}%> pl-2" role="button">
             <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
         </a>
         <!-- <a href="/admin/inicio" class="menu-items-var list-group-item <%if(s == "pi"){%> menu-active <%}%> pl-2" role="button">
             <i class="fas fa-photo-video mr-2"></i>Pantallas
         </a> -->
-        <a class="menu-items-var list-group-item pl-2 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
+        <a style="animation-delay:200ms" class="menu-items-var list-group-item   pl-2 <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> hover-menu-items-parent <%}%>" 
         data-toggle="collapse" href="#collapseUsuarios" role="button" aria-expanded="false" aria-controls="collapseUsuarios">
             <i class="fas fa-users mr-2"></i>Usuarios  <i class="fas fa-angle-down float-right"></i>
         </a>
             <div class="collapse <%if(s == 'estudiantes' || s == 'administradores' || s == 'profesores'){%> show <%}%>" id="collapseUsuarios" data-parent="#accordion-menu-lateral">
-                <a href="/admin/estudiantes" class="menu-items-var list-group-item in-menu <%if(s == "estudiantes"){%> menu-active <%}%>" title="Usuarios Estudiantes">
+                <a href="/admin/estudiantes" class="menu-items-var  list-group-item in-menu <%if(s == "estudiantes"){%> menu-active <%}%>" title="Usuarios Estudiantes">
                     <i class="fas fa-user mr-2"></i>Clientes
                 </a>
-                <a href="/admin/administradores" class="menu-items-var list-group-item in-menu <%if(s == "administradores"){%> menu-active <%}%>" title="Usuarios Administradores">
+                <a href="/admin/administradores" class="menu-items-var  list-group-item in-menu <%if(s == "administradores"){%> menu-active <%}%>" title="Usuarios Administradores">
                     <i class="fas fa-user-tie mr-2"></i>Administradores
                 </a>
-                <a href="/admin/profesores" class="menu-items-var list-group-item in-menu <%if(s == "profesores"){%> menu-active <%}%>" title="Usuarios Profesores">
+                <a href="/admin/profesores" class="menu-items-var  list-group-item in-menu <%if(s == "profesores"){%> menu-active <%}%>" title="Usuarios Profesores">
                     <i class="fas fa-chalkboard-teacher mr-2"></i>Instructores
                 </a>
             </div>
-        <a href="/admin/talleres" class="menu-items-var list-group-item  <%if(s == "talleres"){%> menu-active <%}%>" title="Talleres de la piscina">
+        <a href="/admin/talleres" style="animation-delay:300ms" class="menu-items-var list-group-item   <%if(s == "talleres"){%> menu-active <%}%>" title="Talleres de la piscina">
             <i class="fas fa-swimmer mr-2"></i>Talleres
         </a>
-        <a class="menu-items-var list-group-item pl-2"
+        <a style="animation-delay:400ms" class="menu-items-var list-group-item pl-2  "
         data-toggle="collapse" href="#collapseMatricula" role="button" aria-expanded="false" aria-controls="collapseMatricula">
             <i class="fas fa-table mr-2"></i>Matrícula <i class="fas fa-angle-down float-right"></i>
         </a>
@@ -47,10 +47,10 @@
                 <i class="fas fa-clipboard-list mr-2 px-1"></i>Reportes
             </a>
         </div>
-        <a href="/admin/comprobacion" class="menu-items-var list-group-item  <%if(s == "comprobacion"){%> menu-active <%}%>" title="Comprobacion de datos">
+        <a href="/admin/comprobacion" style="animation-delay:500ms" class="menu-items-var list-group-item   <%if(s == "comprobacion"){%> menu-active <%}%>" title="Comprobacion de datos">
             <i class="fas fa-user-check mr-2"></i>Comprobación
         </a>
-        <a class="menu-items-var list-group-item pl-2"
+        <a style="animation-delay:600ms" class="menu-items-var list-group-item pl-2  "
         data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
             <i class="fas fa-clipboard-list mr-2"></i>Reportes <i class="fas fa-angle-down float-right"></i>
         </a>
@@ -71,7 +71,7 @@
                     <i class="fas fa-clipboard-list mr-2"></i>Sistema
                 </a>
             </div>
-        <a href="/admin/casilleros" class="menu-items-var list-group-item <%if(s == "casilleros"){%> menu-active <%}%>" role="button" title="Administracion de Casilleros">
+        <a href="/admin/casilleros" style="animation-delay:700ms" class="menu-items-var list-group-item   <%if(s == "casilleros"){%> menu-active <%}%>" role="button" title="Administracion de Casilleros">
             <i class="fas fa-lock"></i>&nbsp; Casilleros
         </a>
     </div>

@@ -7,6 +7,20 @@ function events(event) {
     changeProfilePhoto();
     fotoonChange();
     onOpenCameraModalApp();
+    tipodedatosOnchange();
+}
+
+function tipodedatosOnchange(){
+    $('#tipodedatos').on('change',function(event){
+        let option = $(this).val();
+        if(option == 'secundario'){
+            $('#containerPrimario').slideUp();
+            $('#containerSecundario').slideDown();
+        }else{
+            $('#containerSecundario').slideUp();
+            $('#containerPrimario').slideDown();
+        }
+    })
 }
 
 var g_estudiante = {};
@@ -192,9 +206,21 @@ function buildConductas(data){
 }
 
 function buildPrimaryInfo(data){
+    $('#idEstudiante').html(data.id_estudiante)
     $('#nombreEstudiante').html(`${data.nombre} ${data.apellido}`);
     $('#tipodeUsuario').html(data.tipo);
     $("#fotoPerfil").attr("src","/public/uploads/"+data.foto);
+    //correo on correoUsuariosend
+    $("#correoUsuariosend").html(data.correo);
+    $("#correoUsuariosend").attr("href","mailto:"+data.correo);
+
+    let nomE = data.telefono_emergencia == null ? '':data.telefono_emergencia.split('&')[1];
+    let telE = data.telefono_emergencia == null ? '':data.telefono_emergencia.split('&')[0];
+
+
+    $('#v_telefonoEmergenciaNombre').val(nomE)
+    $('#v_telefonoEmergencia').val(telE)
+    $('#v_padecimientos').val(data.padecimientos)
 
     $("#v_nombre_usuario").val(data.usuario);
     $("#v_correo").val(data.correo);
@@ -311,8 +337,47 @@ function actualizarDatosEstudiante(){
         }
     });
 }
+function actualizarDatosEstudianteSecundario(){
+    let bearer = 'Bearer '+g_token;
+    let id = $('#idEstudiante').html();
+    let emergencia = `${$('#v_telefonoEmergencia').val()}&${$('#v_telefonoEmergenciaNombre').val()}`;
+    let padecimientos = $('#v_padecimientos').val();
+    let data = {
+        emergencia, padecimientos,id
+    }
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarDatosSecundarios",
+        data:data,
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        if(response.affectedRows > 0){
+            $("#textoAlertSuccessUp").html("Los <b>Datos Secundarios</b> se actualizaron correctamente.")
+            $("#feedback_alerta_success").fadeIn('slow').animate({opacity: 1.0}, 3000).fadeOut('slow');
+        }
+    });
+}
 function pdfDownload() {
     let est = g_estudiante.data;
+    let data = new Array();
+    for(let i = 0; i < g_estudiante.talleres.length; i++){
+        let el =  g_estudiante.talleres[i];
+        data.push([
+            el.descripcion,
+            el.dia,
+            el.hora + ' - ' + el.hora_final,
+            moment(el.created_at, 'YYYY-MM-DD').format('ll'),
+            moment(el.periodo, 'YYYY-MM-DD').format('ll') + ' - ' + moment(el.periodo_final, 'YYYY-MM-DD').format('ll')
+        ]);
+    }
+    let conductas = new Array();
+    for(let i = 0; i < g_estudiante.conducta.length; i++){
+        let el =  g_estudiante.conducta[i];
+        conductas.push([ el.texto,el.tipo,moment(el.created_at.split(' ')[0], 'YYYY-MM-DD').format('ll')]);
+    }
     let titulo = `Reporte de Estudiante ${est.nombre}`;
     var doc = new jsPDF('p', 'pt', 'letter');  
     var htmlstring = '';  
@@ -410,16 +475,54 @@ function pdfDownload() {
     doc.text(40, y = y + 20, `Sexo`);
     doc.setFontType('normal');
     doc.text(40, y + 13, `${est.sexo}`);
+    // ! -------------------------------------------------- tablas
+    y+=30;
+    doc.setFillColor(237, 240, 255);
+    doc.roundedRect(40, y += 5, 530, 20, 5,5, 'F');
 
+    doc.setFontSize(12);
+    doc.setFontType('bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text(45, y += 14, 'Talleres Matriculados');
+    if(g_estudiante.talleres.length){
+        doc.autoTable({
+            headStyles: { fillColor: [70, 89, 228] },
+            head: [['Taller', 'Fecha', 'Hora','Matricula','Periodo']],
+            body: data,
+            startY: y = y + 20,  
+            theme: 'grid'
+        })
+        y = y + (g_estudiante.talleres.length * 20); 
+    }else{
+        y+=20;
+        doc.setFontType('normal');
+        doc.setFontSize(11);
+        doc.text(45, y += 14, 'No tiene talleres matriculados');
+    }
+    // ! -------------------------------------------------- tablas
+    y+=30;
+    doc.setFillColor(237, 240, 255);
+    doc.roundedRect(40, y += 5, 530, 20, 5,5, 'F');
 
-    // doc.autoTable({
-    //     headStyles: { fillColor: [70, 89, 228] },
-    //     head: [['Cedula', 'Nombre', 'Correo','Celular','Sexo','Tipo']],
-    //     body: data,
-    //     startY: y = y + 30,  
-    //     theme: 'grid'
-    // })
-
+    doc.setFontSize(12);
+    doc.setFontType('bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text(45, y += 14, 'Reportes de Conducta');
+    if(g_estudiante.conducta.length){
+        doc.autoTable({
+            headStyles: { fillColor: [70, 89, 228] },
+            head: [['Descripcion', 'Tipo', 'Fecha']],
+            body: conductas,
+            startY: y = y + 20,  
+            theme: 'grid'
+        })
+        y = y + (g_estudiante.conducta.length * 20);
+    }else{
+        y+=20;
+        doc.setFontType('normal');
+        doc.setFontSize(11);
+        doc.text(45, y += 14, 'No hay reportes de conducta');
+    }
     titulo = titulo.split(" ").join("_");
     doc.save(titulo+'.pdf');
 }

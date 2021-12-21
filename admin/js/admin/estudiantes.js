@@ -309,17 +309,11 @@ function llenar_Estudiantes(data) {
             </td>
         </tr>
     S`);
-    /*
-    <button class="btn btn-sm btn-${data.estado == 0 ? 'dark' : 'success'} w-100 d-block" onclick="cambiarEstadoEstudiante('${data.id}')"></button>
-
-    <div class="d-flex justify-content-between">
-        <label id="id_label_est_${data.id}" for="customRange_nivel">${data.descripcion}</label>
-        <button type="button" class="btn btn-secondary btn-sm py-1 disabled" id="guardar_rango_${data.id}" 
-        disabled onclick="guardarEstadoRango('${data.id}','${data.cedula}')"><i class="far fa-save"></i></button>
-    </div>
-    <input type="range" class="custom-range" min="1" max="3" id="customRange_nivel" value="${data.nivel}" onchange="moverlabel(${data.id}, this)"></input>
-    */
 }
+/**
+ * 
+ * @param {string} cedula cedula del estudiante
+ */
 async function delete_estudiante(cedula){
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {

@@ -356,6 +356,21 @@ router.get('/admin/reportes/conducta',(req,res)=>{
         res.render('login');
     }
 });
+router.get('/admin/reportes/conducta/add',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-conducta';
+            let customView = {type:'add',data:'new'};
+            res.render('admin/reportes/conductas', {usuario,s, token,customView});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
+    }
+});
 // ! ----------------------------------- inside routes ------------------------------------
 // ? ----------------------------------- nav routes ------------------------------------
 // TODO: rutas del navbar del panel administrativo

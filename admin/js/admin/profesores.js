@@ -25,47 +25,72 @@ function openModalCameras() {
   }, 1000);
 }
 function modals() {
-  $('#modalTakePic').on('hidden.bs.modal', function (event) {
-      if(f_videoRecording){
-          var videoEl = document.getElementById('theVideo');
-          stream = videoEl.srcObject;
-          tracks = stream.getTracks();
-          tracks.forEach(function(track) {
-              track.stop();
-          });
-          videoEl.srcObject = null;
-      }
+  	$('#modalTakePic').on('hidden.bs.modal', function (event) {
+		if(f_videoRecording){
+			var videoEl = document.getElementById('theVideo');
+			stream = videoEl.srcObject;
+			tracks = stream.getTracks();
+			tracks.forEach(function(track) {
+				track.stop();
+			});
+			videoEl.srcObject = null;
+		}
     })
-    $('#modalVerProfesor').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      var recipient = ""+button.data('id')
-      let profesor = g_mapProfesores.get(parseInt(recipient))
+	$('#modalVerProfesor').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var recipient = ""+button.data('id')
+		let profesor = g_mapProfesores.get(parseInt(recipient))
 
-      var modal = $(this)
-      modal.find('.modal-title').text(profesor.nombre + " " + profesor.apellido)
+		var modal = $(this)
+		modal.find('.modal-title').text(profesor.nombre + " " + profesor.apellido)
 
-      $('#idProfesor').html(profesor.id_profesor)
-      $('#cedulaprofesor').html(profesor.cedula)
+		if(profesor.aso){
+			$('#eliminarProfesorBtn').text('Eliminar Asociado');
+			$('#cambiarClaveBTN').attr('disabled',true);
+			$('#actualizarProfesorBTN').attr('disabled',true);
+		}else{
+			$('#eliminarProfesorBtn').text('Eliminar');
+			$('#cambiarClaveBTN').attr('disabled',false);
+			$('#actualizarProfesorBTN').attr('disabled',false);
+		}
+		$('#idProfesor').html(profesor.id_profesor)
+		$('#cedulaprofesor').html(profesor.cedula)
 
-      $('#correo_edit').val(profesor.correo)
-      $('#Usuario_edit').val(profesor.usuario)
-  })
+		$('#correo_edit').val(profesor.correo)
+		$('#Usuario_edit').val(profesor.usuario)
+	})
 }
 function eliminarProfesor() {
-  let bearer = 'Bearer '+g_token;
-  let id = parseInt($('#idProfesor').html());
-  $.ajax({
-      type: "GET",
-      url: "/admin/profesor/eliminar", 
-      data: {id},
-      contentType: "appication/json",
-      headers:{
-          'Authorization':bearer
-      }
-  }).then((response) => {
-      location.href = '/admin/profesores';
-  }, (error) => {
-  });
+	let bearer = 'Bearer '+g_token;
+	let id = parseInt($('#idProfesor').html());
+	let profesor = g_mapProfesores.get(+id);
+	if(profesor.aso){
+		$.ajax({
+			type: "GET",
+			url: "/admin/profesor/eliminarAso", 
+			data: {id},
+			contentType: "appication/json",
+			headers:{
+				'Authorization':bearer
+			}
+		}).then((response) => {
+			location.href = '/admin/profesores';
+		}, (error) => {
+		});
+	}else{
+		$.ajax({
+			type: "GET",
+			url: "/admin/profesor/eliminar", 
+			data: {id},
+			contentType: "appication/json",
+			headers:{
+				'Authorization':bearer
+			}
+		}).then((response) => {
+			location.href = '/admin/profesores';
+		}, (error) => {
+		});
+	}
 }
 function agregarProfesor(){
   let bearer = 'Bearer '+g_token;
@@ -100,24 +125,57 @@ function cambiarClaveModal() {
   $('#cambiarclaveID').val(id);
 }
 function bringDB() {
-  let ajaxTime = new Date().getTime();
-  let bearer = 'Bearer '+g_token;
-  $.ajax({
-      type: "GET",
-      url: "/admin/profesores/getProfesores",
-      contentType: "appication/json",
-      headers:{
-          'Authorization':bearer
-      }
-    }).then((response) => {
-      let totalTime = new Date().getTime() - ajaxTime;
-      let a = Math.ceil(totalTime / 1000);
-      let t = a == 1 ? a + ' segundo' : a + ' segundos';
-      $('#infoTiming').text(t);
-      $('#profesores_stats').html(response.length);
-      showProfesorList(response);
-    }, (error) => {
-  });
+	let ajaxTime = new Date().getTime();
+	let bearer = 'Bearer '+g_token;
+	$.ajax({
+		type: "GET",
+		url: "/admin/profesores/getProfesores",
+		contentType: "appication/json",
+		headers:{
+			'Authorization':bearer
+		}
+		}).then((response) => {
+			let totalTime = new Date().getTime() - ajaxTime;
+			let a = Math.ceil(totalTime / 1000);
+			let t = a == 1 ? a + ' segundo' : a + ' segundos';
+			$('#infoTiming').text(t);
+			$('#profesores_stats').html(response.length);
+			showProfesorList(response);
+			$.ajax({
+				type: "GET",
+				url: "/admin/administrador/getAdministradores",
+				contentType: "appication/json",
+				headers:{
+					'Authorization':bearer
+				}
+				}).then((data) => {
+					llenarSelectAdmin(data);
+					console.log(data);
+				}, (error) => {
+				}
+			);
+		}, (error) => {
+		}
+	);
+}
+function llenarSelectAdmin(data){
+	// g_mapProfesores
+	// delete on data the items that are already in the map
+	let map = new Map();
+	for(let i = 0; i < data.length; i++){
+		map.set(data[i].id,data[i]);
+	}
+	let array = new Array(...g_mapProfesores.values());
+	for(let i = 0; i < array.length; i++){
+		let id = array[i].id_usuario;
+		if(map.has(id)){
+			map.delete(id);
+		}
+	}
+	map.forEach(function(a){
+		$('#listaSelectAdministradores').append(
+			`<option value="${a.id}">${a.nombre} ${a.apellido}</option>`);
+	});
 }
 function actualizarProfesor() {
   let cedula = $('#cedulaprofesor').html();
@@ -263,23 +321,32 @@ function showProfesorList(data){
 
 }
 function showRowProfesorList(data){
-  let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px"
-   role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
-  $('#lista_profesores').append(`
-    <tr>
-      <td class="text-center">${data.id_profesor}</td>
-      <td class="align-center">${foto}</td>
-      <td>${data.nombre.toUpperCase() + ' '+ data.apellido.toUpperCase()}</td>
-      <td>${data.cedula}</td>
-      <td>${data.correo}</td>
-      <td>${data.sexo}</td>
-      <td class="text-center">
-          <span class="button-circle" role="button" data-id="${data.id_profesor}" data-toggle="modal" data-target="#modalVerProfesor">
-              <i class="fas fa-ellipsis-v"></i>
-          </span>
-      </td>
-    </tr>
-  `)
+	let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="30px" height="30px"
+	role="button" onclick="openImageModal('/public/uploads/${data.foto}','${data.cedula}')">`; 
+	let aso = `
+	<span class="fa-stack ">
+		<i class="fas fa-circle fa-stack-2x text-danger"></i>
+		<i class="fas fa-flag fa-stack-1x fa-inverse text-white"></i>
+	</span>
+	`;
+	$('#lista_profesores').append(`
+		<tr>
+		<td class="text-center">${data.id_profesor}</td>
+		<td class="align-center">${foto}</td>
+		<td>
+		${data.nombre.toUpperCase() + ' '+ data.apellido.toUpperCase()} 
+		${data.aso == 1 ? aso : ''}
+		</td>
+		<td>${data.cedula}</td>
+		<td><a href="mailto:${data.correo}">${data.correo}</a></td>
+		<td>${data.sexo}</td>
+		<td class="text-center">
+			<span class="button-circle" role="button" data-id="${data.id_profesor}" data-toggle="modal" data-target="#modalVerProfesor">
+				<i class="fas fa-ellipsis-v"></i>
+			</span>
+		</td>
+		</tr>
+	`)
 }
 function openImageModal(foto,cedula) {
   $('#modalImage').modal('show');

@@ -54,9 +54,7 @@ router.get('/admin/administrador/getAdministradores',ensureToken,(req,res)=>{
     var query = con.query(script,
         (err,rows,fields)=>{
         if(!err){
-            if(rows != undefined){
-                res.send(rows);
-            }
+            res.send(rows);
         }
     });
 });

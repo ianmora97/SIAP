@@ -46,6 +46,18 @@ router.get('/admin/profesor/eliminar',ensureToken,(req,res)=>{
         }
     });
 });
+router.get('/admin/profesor/eliminarAso',ensureToken,(req,res)=>{
+    let script = "DELETE FROM t_profesor WHERE id = ?";
+    con.query(script,[req.query.id],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `DESASOCIAR ${req.query.id}`, DDL.DELETE, TABLE.PROFESOR);
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
 
 router.get('/admin/profesor/agregar',ensureToken,(req,res)=>{
     let script = "call prc_insertar_profesor_admin(?,?,?,?,?,?,?)";

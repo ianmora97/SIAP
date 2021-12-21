@@ -18,6 +18,25 @@
  </head>
  <body class="page bg-light d-flex flex-column h-100">
     <%- include('email') %> 
+    <div class="modal fade" id="asociarAdminModal" tabindex="-1" aria-labelledby="asociarAdminModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
+                    <h5 class="modal-title pl-3 font-weight-bold ">Asociar Administrativo</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="custom-select" id="listaSelectAdministradores">
+                            <option selected>Seleccione un administrador...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modalTakePic" tabindex="-1" aria-labelledby="modalTakePic" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -197,9 +216,9 @@
                     </div>
                 </div>
                 <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="cambiarClaveModal()"><i class="fas fa-key"></i> Cambiar Clave</button>
-                    <button type="button" class="btn btn-danger" onclick="eliminarProfesor()"><i class="far fa-trash-alt"></i> Eliminar</button>
-                    <button type="button" class="btn btn-secondary" onclick="actualizarProfesor()"><i class="fas fa-pencil-alt"></i> Guardar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="cambiarClaveModal()" id="cambiarClaveBTN"><i class="fas fa-key"></i> Cambiar Clave</button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarProfesor()" ><i class="far fa-trash-alt"></i> <span id="eliminarProfesorBtn">Eliminar</span></button>
+                    <button type="button" class="btn btn-secondary" onclick="actualizarProfesor()" id="actualizarProfesorBTN"><i class="fas fa-pencil-alt"></i> Guardar</button>
                 </div>
             </div>
         </div>
@@ -319,7 +338,20 @@
 
                     </div>
                 </div>
-                 
+                <div class="bg-white rounded-3 mt-2 p-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="fa-stack ">
+                                <i class="fas fa-circle fa-stack-2x text-danger"></i>
+                                <i class="fas fa-flag fa-stack-1x fa-inverse text-white"></i>
+                            </span> Administrador de la piscina con accesos de instructor.
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                             data-target="#asociarAdminModal"><i class="fas fa-sign-in-alt"></i> Asociar Administrador</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <%- include('footerDashboard') %>
          </div>

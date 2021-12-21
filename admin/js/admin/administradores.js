@@ -267,7 +267,7 @@ function showRowAdminList(data) {
       <td class="text-center">${foto}</td>
       <td>${data.nombre.toUpperCase() + " " + data.apellido.toUpperCase()}</td>
       <td>${data.cedula}</td>
-      <td>${data.correo}</td>
+      <td><a href="mailto:${data.correo}">${data.correo}</a></td>
       <td>${data.usuario}</td>
       <td>
       <button class="btn btn-danger" onclick="delete_administrador(${

@@ -3,13 +3,11 @@ var talleresChart = document.getElementById("talleresChart").getContext("2d");
 var gradienteColores = talleresChart.createLinearGradient(0, 0, 0, 600);
 
 gradienteColores.addColorStop(0, "#4659E4");
-gradienteColores.addColorStop(0.7, "#4659E4");
 gradienteColores.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 var tallerCh = new Chart(talleresChart, {
     type: "bar",
     data: {
-        //labels: ["Iniciación", "Reforzamiento deportivo", "dandole duro"],
         datasets: [
             {
                 backgroundColor: gradienteColores,
@@ -72,8 +70,7 @@ var usuariocanva =  document.getElementById("usuariosChart");
 
 var gradienteColores_usuarios = usuariosChart.createLinearGradient(0,0, 0, 600);
 
-gradienteColores_usuarios.addColorStop(0, "#4659E4"); //B81616
-gradienteColores_usuarios.addColorStop(0.7, "#4659E4"); //B81616
+gradienteColores_usuarios.addColorStop(0, "#f23a3a"); //B81616
 gradienteColores_usuarios.addColorStop(1, "rgba(100%, 100%, 100%, 0.4)");
 
 
@@ -85,7 +82,7 @@ var usuarioCharVar = new Chart(usuariosChart, {
             {
                 fill: true,
                 backgroundColor: gradienteColores_usuarios,
-                borderColor: '#4659E4 ',
+                borderColor: '#f23a3a ',
                 borderWidth: 3,
                 tension: 0.5
             },
@@ -96,7 +93,7 @@ var usuarioCharVar = new Chart(usuariosChart, {
             legend: false,
             title: {
                 display: true,
-                text: 'Custom Chart Title',
+                text: 'Usuarios',
                 padding: {
                     top: 10,
                     bottom: 30

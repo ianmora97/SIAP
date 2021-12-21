@@ -37,6 +37,32 @@
  
  <body class="page bg-light d-flex flex-column h-100">
     <%- include('email') %> 
+    <div class="modal fade" id="modalcambiarclave" tabindex="-1" aria-labelledby="modalcambiarclave" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 bg-primary text-white">
+                    <h5 class="modal-title pl-3 font-weight-bold"><i class="fas fa-ellipsis-h"></i>&nbsp; Cambio de clave - <span id="claveCedulaID"><%= cedula%></span></h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/estudiantes/cambiarClave" method="post">
+                        <div class="form-group mb-0">
+                            <label for="cambiarclaveinput">Clave</label>
+                            <input type="text" class="form-control" name="clave" id="cambiarclaveinput" value="1234">
+                            <input type="text" class="form-control" name="cedula" id="cambiarclaveID" hidden>
+                            <small class="text-muted">Debe cambiar la clave.</small>
+                        </div>
+                        <div class="modal-footer py-0 border-0">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-pen"></i>&nbsp; Cambiar Clave</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modalTakePic" tabindex="-1" aria-labelledby="modalTakePic" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -120,6 +146,9 @@
                         </script>
                     </div>
                     <div class="d-flex justify-content-end align-items-center">
+                        <div class="mr-3">
+                            <button type="button" class="btn btn-light-secondary" data-toggle="modal" data-target="#modalcambiarclave"><i class="fas fa-key"></i> Cambiar Clave</button>
+                        </div>
                         <div>
                             <button type="button" class="btn btn-light-danger m-0" onclick="pdfDownload()">
                                 <i class="fas fa-file-pdf"></i> Generar Reporte</button>
@@ -150,8 +179,9 @@
                                     <img src="/public/uploads/default-avatar.png" class="rounded-circle-2" role="button" width="70px" id="fotoPerfil" onclick="openImageModal()">
                                 </div>
                                 <div class="pl-3 py-3">
-                                    <h5 class="font-weight-bold mb-1" id="nombreEstudiante"></h5>
-                                    <h6 class="text-muted" id="tipodeUsuario"></h6>
+                                    <h5 class="font-weight-bold mb-0" id="nombreEstudiante"></h5>
+                                    <h6 class="text-muted mb-0" id="tipodeUsuario"></h6>
+                                    <a href="mailto:" id="correoUsuariosend"></a>
                                 </div>
                             </div>
                             <div class="col-md-6 d-flex justify-content-end align-items-start pt-2">
@@ -186,14 +216,20 @@
                 <div class="row mx-0 align-items-stretch">
                     <div class="col-md-5">
                         <div class="card h-100 card-custom animate__animated animate__zoomIn">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between">
                                 <h5 class="font-weight-bold mb-0">Datos Personales</h5>
+                                <div>
+                                    <select id="tipodedatos" class="custom-select custom-select-sm">
+                                        <option value="personal">Personales</option>
+                                        <option value="secundario">Secundarios</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="card-body">
-                                <div class="row mx-0 w-100">
+                                <span class="sr-only" id="idEstudiante"></span>
+                                <span class="sr-only" id="cedulaEstudiante"><%= cedula %></span>
+                                <div class="row mx-0 w-100" id="containerPrimario">
                                     <div class="col-md-6">
-                                        <span class="sr-only" id="idEstudiante"></span>
-                                        <span class="sr-only" id="cedulaEstudiante"></span>
                                         <div class="form-group">
                                             <label class="font-weight-bold" for="v_nombre_usuario">Nombre de usuario</label>
                                             <input type="text" class="form-control" id="v_nombre_usuario">
@@ -243,6 +279,28 @@
                                     <div class="w-100 mx-auto">
                                         <div class="col-md-12 d-flex justify-content-start">
                                             <button type="button" class="btn btn-primary" id="Guardar-datos-estudiante" onclick="actualizarDatosEstudiante()"><i class="fas fa-pencil-alt"></i> Guardar Datos</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mx-0 w-100" style="display: none;" id="containerSecundario">
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <input type="text" placeholder="Nombre" class="form-control" id="v_telefonoEmergenciaNombre">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="number" placeholder="Teléfono de Emergencia" class="form-control" id="v_telefonoEmergencia">
+                                        </div>
+                                    </div>
+                                    <hr class="my-2">
+                                    <div class="w-100 mx-0 flex-column">
+                                        <h5 class="font-weight-bold">Padecimientos</h5>
+                                        <div class="form-group">
+                                            <textarea class="form-control" id="v_padecimientos" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 mx-auto mt-3">
+                                        <div class="d-flex justify-content-start">
+                                            <button type="button" class="btn btn-primary" id="Guardar-datos-estudiante-secundario" onclick="actualizarDatosEstudianteSecundario()"><i class="fas fa-pencil-alt"></i> Guardar Datos</button>
                                         </div>
                                     </div>
                                 </div>

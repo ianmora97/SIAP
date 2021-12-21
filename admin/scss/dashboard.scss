@@ -582,6 +582,18 @@ label, .label{
     transition: all .4s ease-out;
   }
 }
+.btn-light-secondary{
+  background-color: #f0f0f0 !important;
+  color: #02CA80 !important;
+  box-shadow: 0 5px 10px -2px rgba(175, 175, 175, 0.5) !important;
+  transition: all .4s ease-out;
+  &:hover{
+    box-shadow: 0 5px 10px -2px rgba(109, 255, 141, 0.5) !important;
+    background-color: #02CA80 !important;
+    color: #ffffff !important;
+    transition: all .4s ease-out;
+  }
+}
 .badge-green-light{
   background-color: #89e489 !important;
   color: #fff !important;
@@ -756,6 +768,30 @@ input,select{
 
 .animate_delay_t4{
   animation-delay:1.7s;
+}
+
+.animate_delay_t5{
+  animation-delay:2.2s;
+}
+
+.animate_delay_t6{
+  animation-delay:2.7s;
+}
+
+.animate_delay_t7{
+  animation-delay:3.2s;
+}
+
+.animate_delay_t8{
+  animation-delay:3.7s;
+}
+
+.animate_delay_t9{
+  animation-delay:4.2s;
+}
+
+.animate_delay_t10{
+  animation-delay:4.7s;
 }
 
 

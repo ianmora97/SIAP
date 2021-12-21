@@ -230,6 +230,20 @@ router.get('/admin/estudiante/actualizarDatos',ensureToken,(req,res)=>{
     });
 });
 
+router.get('/admin/estudiante/actualizarDatosSecundarios',ensureToken,(req,res)=>{
+    let d = req.query;
+    con.query("UPDATE t_estudiante set telefono_emergencia = ?, padecimientos = ? where id = ?",
+    [d.emergencia, d.padecimientos, d.id], 
+        (err,fb,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `${req.query.id} ACTUALIZA DATOS`, DDL.UPDATE, TABLE.ESTUDIANTE);
+            res.send(fb);
+        }else{
+            res.send(err)
+        }
+    });
+});
+
 router.get('/admin/estudiante/eliminar',ensureToken,(req,res)=>{
     con.query("CALL prc_eliminar_usuario(?)",
     [req.query.cedula],

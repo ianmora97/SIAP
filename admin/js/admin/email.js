@@ -14,7 +14,10 @@ function emailEvents(event){
     checkEmailExists();
     sendEmail();
     onSelectChangeEmail();
+    preventDefaultAllMail();
 }
+
+
 function onSelectChangeEmail(){
     $('#formSelectEmailSenders').change(function(){
         var sender = $(this).val();
@@ -377,6 +380,20 @@ function deleteEmailSender(id,email){
     g_email_senders.delete(email);
     $(`#pillEmailSender_${id}`).remove();
 }
+function preventDefaultAllMail(){
+    $(document).on('click', 'a[href^="mailto:"]', function(e) {
+        e.preventDefault();
+        $('#inboxButton').click();
+        let correo = $(this).attr('href').replace('mailto:','');
+        if(correo != undefined){
+            $('#email_To').val(correo);
+            var ev = jQuery.Event("keyup");
+            ev.which = 13; // # Some key code value
+            ev.keyCode = 13;
+            $('#email_To').trigger(ev);
+        }
+    });
+}
 function inboxPanel(event){
     $('#inboxButton').on('click',function (e) {
         $('#inboxPanel').modal();
@@ -384,6 +401,7 @@ function inboxPanel(event){
         $('#wrapper').addClass('wrapperA rounded-3');
     });
     $('#inboxPanel').on('hide.bs.modal', function (e) {
+        cleanInputs()
         oDoc.contentEditable = false;
         $('#wrapper').removeClass('wrapperA rounded-3');
     })
