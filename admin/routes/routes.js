@@ -46,6 +46,9 @@ router.get('/informacion', (req, res) => {
 router.get('/admin/login', (req, res) => {
     res.render('login');
 });
+router.get('/teach/login', (req, res) => {
+    res.render('loginTeach');
+});
 router.get('/login', (req, res) => {
     res.render('loginCliente');
 });

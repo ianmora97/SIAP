@@ -6,7 +6,7 @@ var navCreateGroups = (item,i) =>{
     let c = item.cupo_actual;
     console.log(item)
     return `
-    <div class="col-3 mt-4">
+    <div class="col-12 mt-4">
         <div class="card-grupo animate__animated animate__backInUp" style="animation-delay: ${i}00ms; min-height:362px;" id="grupoid-${item.id_grupo}-tab" >
             <div class="d-flex justify-content-between align-items-start mb-3">
                 <div class="pl-2 rounded-circle bg-light-alt" style="width: 45px; height: 45px;">

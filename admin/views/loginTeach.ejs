@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
+</head>
+<!-- style="background: url('/img/IMG_12.png'); background-size: cover; " -->
+<style>
+    .bg-linearGradient{
+        background-image: linear-gradient(to top, #4658e4b3 0%, #e2ebf0 100%);
+
+
+    }
+    .wave1{
+        border-bottom-left-radius: 15px;
+    }
+</style>
+<body class="d-flex flex-column h-100 bg-linearGradient pt-5" >
+    <div class="my-auto mx-auto" style="width: 400px;">
+        <div class="w-100 m-auto bg-white shadow-lg rounded-3 animate__animated animate__zoomIn">
+            <div class="p-md-5 p-3 mb-auto">
+                <%if(typeof err != "undefined"){%>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Login Failed!</strong> <%= err%>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <%}%>
+                <h1 class="font-weight-bold mt-3 display-5 text-center">Inicio Sesión</h1>
+                <span class="d-block text-muted text-center">Profesor <i class="ml-2 fas fa-user-shield text-secondary" style="font-size: 1.6rem !important;"></i></span>
+                <form action="/teach/log" method="post" class="my-5">
+                    <label for="cedula">Cedula</label>
+                    <input type="text" id="cedula" name="cedula" class="form-control mb-3" placeholder="Cedula..." required="">
+                    
+                    <label for="clave">Clave</label>
+                    <input type="password" id="clave" name="clave" class="form-control" placeholder="Clave..." required="">
+                    
+                    <button class="btn btn-lg btn-primary d-block mx-auto w-100 mt-4" type="submit" id="inciarSesion">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-2 py-3 justify-content-center">
+        <p class="mb-1 text-center text-white">© 2020-2021 Universidad Nacional de Costa Rica</p>
+   </footer>
+   <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
+    <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var wave1 = $('#feel-the-wave').wavify({
+                height: 1,
+                bones: 6,
+                amplitude: 20,
+                color: '#fff',
+                speed: .35
+            });
+            var wave2 = $('#feel-the-wave2').wavify({
+                height: 1,
+                bones: 6,
+                amplitude: 20,
+                color: '#4659E4',
+                speed: .35
+            });
+        });
+    </script>
+</body>
+</html>
