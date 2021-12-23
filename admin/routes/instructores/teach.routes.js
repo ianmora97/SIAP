@@ -52,7 +52,7 @@ router.get('/teach/logout',(req,res)=>{
         res.render('loginTeach');
     }
 });
-// ? ---------------------- Routes ----------------------
+// ? ---------------------- Inicio - clases ----------------------
 
 router.get('/teach/inicio',(req,res)=>{
     if(req.session.value){
@@ -70,7 +70,6 @@ router.get('/teach/inicio',(req,res)=>{
 });
 router.get('/api/teach/inicio',ensureToken,(req,res)=>{
     let usuario = req.session.value;
-    console.log(usuario)
     con.query("SELECT * from vta_grupos where cedula = ?",[usuario.cedula],
     (err,rows,fields)=>{
         if(!err){
@@ -81,7 +80,98 @@ router.get('/api/teach/inicio',ensureToken,(req,res)=>{
     });
 });
 
+// ? ---------------------- grupos ----------------------
+router.get('/teach/grupo/:grupo',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol >= 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let grupo = req.params.grupo;
+            let selected = 'inicio';
+            res.render('teach/grupo',{usuario,selected,token,grupo});
+        }else{
+            res.render('loginTeach');
+        }
+    }else{
+        res.render('loginTeach');
+    }
+});
+router.get('/teach/asistencia/:grupo',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol >= 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let grupo = req.params.grupo;
+            let selected = 'inicio';
+            res.render('teach/asistencia',{usuario,selected,token,grupo});
+        }else{
+            res.render('loginTeach');
+        }
+    }else{
+        res.render('loginTeach');
+    }
+});
 
+router.get('/api/teach/grupo',ensureToken,(req,res)=>{
+    let usuario = req.session.value;
+    let grupo = req.query.grupo;
+    con.query("SELECT * FROM vta_grupos WHERE id_grupo = ?",
+    [grupo],(err,rows,fields)=>{
+        if(!err){
+            res.send(rows[0]);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
+
+router.get('/api/teach/grupoMatriculados',ensureToken,(req,res)=>{
+    let usuario = req.session.value;
+    let grupo = req.query.grupo;
+    con.query(`SELECT * FROM vta_matriculados_por_grupo WHERE cedula_profeosr = '${usuario.cedula}' AND id_grupo = ${grupo}`,
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
+// ? -------------------- verificar Matricula -------------
+router.get('/teach/matricula/qr/check',(req,res)=>{
+    con.query("SELECT * FROM vta_matriculados_por_grupo WHERE id_grupo = ? AND cedula = ?",
+    [req.query.grupo, req.query.cedula],
+        (err,result,fields)=>{
+        if(!err){
+            res.send(result);
+        }else{
+            res.send(err);
+        }
+    });
+});
+// ? ---------------------- asistencia ----------------------
+router.get('/api/teach/getAsistencia',ensureToken,(req,res)=>{ 
+    con.query("SELECT * FROM vta_asistencia_admin WHERE id_grupo = ?",
+    [req.query.id_grupo],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.status(501).send('error');
+        }
+    });
+});
+router.get('/teach/asistencia/enviar',ensureToken,(req,res)=>{ 
+    con.query("prc_insertar_asistencia(?,?,?,?)",
+    [req.query.estado,req.query.est,req.query.id_grupo,req.query.fecha],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.status(501).send('error');
+        }
+    });
+});
 
 // ! ---------------------- Security ----------------------
 function ensureToken(req,res,next) {

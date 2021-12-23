@@ -500,7 +500,7 @@ function fillCalendar(grupos) {
         </button>`;
         let today = moment();
         if(moment(e.periodo,'YYYY-MM-DD') < today < moment(e.periodo_final,'YYYY-MM-DD')){ // true si la fecha aplica -- a < b < c
-            let a_t = moment().add('8', 'days').format('YYYY-MM-DD');
+            let a_t = moment().add('9', 'days').format('YYYY-MM-DD');
             let b_t = moment().add('1', 'days').format('YYYY-MM-DD');
             g_eventosArray.push({
                 idGrupo: grupo,

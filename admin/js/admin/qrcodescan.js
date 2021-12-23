@@ -94,8 +94,6 @@ function openQRCamera(){
                 });
             }
         });
-        
-
     });
     Instascan.Camera.getCameras().then(function (cameras) {
         self.cameras = cameras;
