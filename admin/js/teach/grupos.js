@@ -39,7 +39,7 @@ function loadFromDB(){
                 });
                 showMatriculados(response);
             }else{
-                $('#contentLista').html('<h5 class="text-center text-muted mt-5">No tiene grupos asignados aun</h2>')
+                $('#contentLista').html('<h5 class="text-center text-muted mt-5 flex-fill">No tiene grupos asignados aun</h2>')
             }
         }, (error) => {
             

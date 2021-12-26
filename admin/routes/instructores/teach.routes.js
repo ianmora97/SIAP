@@ -112,6 +112,18 @@ router.get('/teach/asistencia/:grupo',(req,res)=>{
     }
 });
 
+router.get('/api/teach/grupos',ensureToken,(req,res)=>{
+    let usuario = req.session.value;
+    let grupo = req.query.grupo;
+    con.query("SELECT * FROM vta_grupos",
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
 router.get('/api/teach/grupo',ensureToken,(req,res)=>{
     let usuario = req.session.value;
     let grupo = req.query.grupo;
@@ -150,9 +162,22 @@ router.get('/teach/matricula/qr/check',(req,res)=>{
     });
 });
 // ? ---------------------- asistencia ----------------------
-router.get('/api/teach/getAsistencia',ensureToken,(req,res)=>{ 
-    con.query("SELECT * FROM vta_asistencia_admin WHERE id_grupo = ?",
-    [req.query.id_grupo],
+router.get('/teach/asistencias',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol >= 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let selected = 'asistencia';
+            res.render('teach/listaAsistencia',{usuario,selected,token});
+        }else{
+            res.render('loginTeach');
+        }
+    }else{
+        res.render('loginTeach');
+    }
+});
+router.get('/api/teach/getAsistencia',ensureToken,(req,res)=>{
+    con.query("SELECT * FROM vta_asistencia",
     (err,rows,fields)=>{
         if(!err){
             res.send(rows);
@@ -161,13 +186,26 @@ router.get('/api/teach/getAsistencia',ensureToken,(req,res)=>{
         }
     });
 });
-router.get('/teach/asistencia/enviar',ensureToken,(req,res)=>{ 
-    con.query("prc_insertar_asistencia(?,?,?,?)",
-    [req.query.estado,req.query.est,req.query.id_grupo,req.query.fecha],
+router.get('/api/teach/getAsistenciaByGroup',ensureToken,(req,res)=>{ 
+    con.query("SELECT * FROM vta_asistencia_admin WHERE id_grupo = ?",
+    [req.query.grupo],
     (err,rows,fields)=>{
         if(!err){
             res.send(rows);
         }else{
+            res.status(501).send('error');
+        }
+    });
+});
+router.get('/teach/enviarAsistencia',ensureToken,(req,res)=>{ 
+    con.query("call prc_insertar_asistencia(?,?,?,?)",
+    [req.query.estado,req.query.est,req.query.grupo,req.query.fecha],
+    (err,rows,fields)=>{
+        if(!err){
+            console.log(rows)
+            res.send(rows);
+        }else{
+            console.log(err)
             res.status(501).send('error');
         }
     });

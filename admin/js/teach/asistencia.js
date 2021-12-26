@@ -15,190 +15,203 @@ function loaded(event){
 function events(e){
     loadFromDB();
     enviarAsistencia();
+    abrirCamara();
 }
 function enviarAsistencia(){
     $('#btnEnviarAsistencia').on('click', function(e){
         e.preventDefault();
+        $('#btnCamara').css('display', 'block');
+        html5QrcodeScanner.clear();
         let data = new Array();
+        let id_grupo = g_grupo.id_grupo;
+        let f = new Date();
+        let fecha = `${f.getFullYear()}-${f.getMonth()+1}-${f.getDate()}`;
         g_Matriculados.forEach(e =>{
-            if(g_asistenciasVerify.includes(e)){
-                data.push({
-
-                });
+            if(e.activa){
+                if(g_mapAsistencias.get(e.cedula) == undefined){
+                    if(g_Map_asistenciasVerify.get(e.cedula) != undefined){ //paso y esta
+                        data.push({
+                            estado: 1,
+                            est: parseInt(e.id_estudiante),
+                            grupo: parseInt(id_grupo),
+                            fecha: fecha
+                        });
+                    }else{
+                        data.push({
+                            estado: 0,
+                            est: parseInt(e.id_estudiante),
+                            grupo: parseInt(id_grupo),
+                            fecha: fecha
+                        });
+                    }
+                }
             }
         });
-
-
-
-
-        let id_grupo = g_grupo.id_grupo
-        html5QrcodeScanner.clear();
         let bearer = 'Bearer '+g_token;
-        
-        g_asistenciasVerify.forEach(e =>{
+        data.forEach((e,i) =>{
+            console.log(e)
             $.ajax({
-                url: '/teach/asistencia/enviar',
                 type: 'GET',
-                data: data,
+                url: '/teach/enviarAsistencia',
+                data: e,
                 contentType: "application/json",
                 headers: {
                     'Authorization': bearer
                 },
             }).then((response) => {
+                console.log(response)
+            },(error) => {
+                
+            });
+            if(i == data.length-1){
                 Swal.fire({
                     icon: 'success',
                     title: 'Asistencia Enviada',
                     html: `<p>La asistencia se ha enviado correctamente</p>
-                    <p>${data.asistencias} asistencias</p>
                     `,
                     showDenyButton: true,
                     confirmButtonText: 'Cerrar',
-                    denyButtonText: `Cerrar`,
                     timer: 5000,
                     timerProgressBar: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "/teach/grupo/"+g_grupo.id_grupo;
+                        // window.location.reload()
                     }else if (result.isDenied) {
                     }
                 });
-            },(error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    html: `<p>${data.responseText}</p>
-                    `,
-                    showDenyButton: true,
-                    confirmButtonText: 'Cerrar',
-                    denyButtonText: `Cerrar`,
-                    timer: 5000,
-                    timerProgressBar: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/teach/grupo/"+g_grupo.id_grupo;
-                    }else if (result.isDenied) {
-                    }
-                });
-                
-            });
+            }
         })
     });
 }
+function abrirCamara(){
+    $('#btnCamara').on('click', function(e){
+        e.preventDefault();
+        $('#btnCamara').css('display', 'none');
+        openScanner();
+    });
+}
 var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 280, disableFlip: true });
-function openScanner(){
-    function onScanSuccess(decodedText, decodedResult) {
-        console.log(`Scan result:`, decodedText);
-        let cursos = decodedText.split('.');
-        cursos.pop();
-        let vec = cursos.filter(function (c){
-            return parseInt(c.split('-')[3]) == parseInt(g_grupo.id_grupo)
+function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Scan result:`, decodedText);
+    let cursos = decodedText.split('.');
+    cursos.pop();
+    let vec = cursos.filter(function (c){
+        return parseInt(c.split('-')[3]) == parseInt(g_grupo.id_grupo)
+    });
+    let cedula = vec[0].split('-')[0];
+    if(g_Map_asistenciasVerify.get(cedula) != undefined){
+        html5QrcodeScanner.clear();
+        Swal.fire({
+            icon: 'warning',
+            title: 'El estudiante ya fue verificado',
+            timer: 2000,
+        }).then((result) => {
+            html5QrcodeScanner.render(onScanSuccess, onScanError);
+            if(result.dismiss === Swal.DismissReason.timer) {
+            }
         });
-        let cedula = vec[0].split('-')[0];
-
-        // ! -------
-        // !revisar que funcione y verificar en el agregar
-        // ! -------
-
-
-        if(g_Map_asistenciasVerify.get(cedula) != undefined){
-            html5QrcodeScanner.clear();
-            Swal.fire({
-                icon: 'warning',
-                title: 'El estudiante ya fue verificado',
-                timer: 2000,
-            }).then((result) => {
-                if(result.dismiss === Swal.DismissReason.timer) {
-                    html5QrcodeScanner.render(onScanSuccess, onScanError);
-                }
-            });
-            return;
-        }
-
-        let est = g_mapMatriculados.get(cedula);
-        if(vec.length > 0 || est.id_grupo == g_grupo.id_grupo){
-            if(est){
-                if(est.activa == 1){
-                    let flag = true;
-                    html5QrcodeScanner.clear();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Matrícula Confirmada',
-                        html: `<p>La matricula se encuentra activa</p>
-                        <p><i class="fas fa-calendar-day text-primary"></i> ${est.dia} ${est.hora} ${est.hora_final}</p>
-                        `,
-                        showDenyButton: true,
-                        confirmButtonText: 'Pasar Asistencia',
-                        denyButtonText: `Cerrar`,
-                        timer: 5000,
-                        timerProgressBar: true,
-                    }).then((result) => {
-                        html5QrcodeScanner.render(onScanSuccess, onScanError);
-                        if (result.isConfirmed) {
-                            showVerify(est);
-                            // g_asistenciasVerify.push(est);
-                            g_Map_asistenciasVerify.set(est.cedula, est);
-                        }else if (result.isDenied) {
-                            console.log('no existe');
-                        }else if (result.dismiss === Swal.DismissReason.timer && flag) {
-                            showVerify(est);
-                            // g_asistenciasVerify.push(est);
-                            g_Map_asistenciasVerify.set(est.cedula, est);
-                        }
-                    });
-                }else{
-                    Swal.fire({
-                        icon: 'danger',
-                        title: 'El estudiante se encuentra inactivo',
-                        html: `La matricula se encuentra activa
-                        <br>
-                        <p>${decodedText}</p>
-                        `,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            html5QrcodeScanner.render(onScanSuccess, onScanError);
-                        }
-                    });
-                }
-            }else{
+        return;
+    }
+    if(g_mapAsistencias.get(cedula) != undefined){
+        html5QrcodeScanner.clear();
+        Swal.fire({
+            icon: 'warning',
+            title: 'El estudiante ya fue verificado',
+            timer: 2000,
+        }).then((result) => {
+            html5QrcodeScanner.render(onScanSuccess, onScanError);
+            if(result.dismiss === Swal.DismissReason.timer) {
+            }
+        });
+        return;
+    }
+    let est = g_mapMatriculados.get(cedula);
+    if(vec.length > 0 || est.id_grupo == g_grupo.id_grupo){
+        if(est){
+            if(est.activa == 1){
+                let flag = true;
+                html5QrcodeScanner.clear();
                 Swal.fire({
-                    icon: 'danger',
-                    title: 'El estudiante no se encuentra matriculado',
+                    icon: 'success',
+                    title: 'Matrícula Confirmada',
+                    html: `<p>La matricula se encuentra activa</p>
+                    <p><i class="fas fa-calendar-day text-primary"></i> ${est.dia} ${est.hora} ${est.hora_final}</p>
+                    `,
+                    showDenyButton: true,
+                    confirmButtonText: 'Pasar Asistencia',
+                    denyButtonText: `Cerrar`,
+                    timer: 5000,
+                    timerProgressBar: true,
+                }).then((result) => {
+                    html5QrcodeScanner.render(onScanSuccess, onScanError);
+                    if (result.isConfirmed) {
+                        showVerify(est);
+                        // g_asistenciasVerify.push(est);
+                        g_Map_asistenciasVerify.set(est.cedula, est);
+                    }else if (result.isDenied) {
+                        console.log('no existe');
+                    }else if (result.dismiss === Swal.DismissReason.timer && flag) {
+                        showVerify(est);
+                        // g_asistenciasVerify.push(est);
+                        g_Map_asistenciasVerify.set(est.cedula, est);
+                    }
+                });
+            }else{
+                html5QrcodeScanner.clear();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'El estudiante se encuentra inactivo',
+                    html: `La matricula se encuentra activa
+                    <br>
+                    <p>${decodedText}</p>
+                    `,
                 }).then((result) => {
                     if (result.isConfirmed) {
                         html5QrcodeScanner.render(onScanSuccess, onScanError);
                     }
                 });
             }
-        }else{ // ! el grupo no coincide
-            let al = "";
-            cursos.forEach(e =>{
-                al += `<i class="fas fa-exclamation-triangle text-warning"></i> `+e.split('-')[2]+'<br>';
-            })
+        }else{
             Swal.fire({
                 icon: 'danger',
-                title: 'El grupo no coincide',
-                html: `${al}`
+                title: 'El estudiante no se encuentra matriculado',
             }).then((result) => {
                 if (result.isConfirmed) {
                     html5QrcodeScanner.render(onScanSuccess, onScanError);
                 }
             });
         }
-    }
-    function onScanError(errorMessage) {
+    }else{ // ! el grupo no coincide
+        let al = "";
+        cursos.forEach(e =>{
+            al += `<i class="fas fa-exclamation-triangle text-warning"></i> `+e.split('-')[2]+'<br>';
+        })
         Swal.fire({
             icon: 'danger',
-            title: 'Matrícula Confirmada',
-            html: `La matricula se encuentra activa
-            <br>
-            <p>${decodedText}</p>
-            `,
+            title: 'El grupo no coincide',
+            html: `${al}`
         }).then((result) => {
             if (result.isConfirmed) {
                 html5QrcodeScanner.render(onScanSuccess, onScanError);
             }
         });
     }
+}
+function onScanError(errorMessage) {
+    Swal.fire({
+        icon: 'danger',
+        title: 'Matrícula Confirmada',
+        html: `La matricula se encuentra activa
+        <br>
+        <p>${decodedText}</p>
+        `,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            html5QrcodeScanner.render(onScanSuccess, onScanError);
+        }
+    });
+}
+function openScanner(){
     html5QrcodeScanner.render(onScanSuccess, onScanError);
 }
 function loadFromDB(){
@@ -231,11 +244,11 @@ function loadFromDB(){
                     g_mapMatriculados.set(g.cedula,g);
                 });
             }else{
-                $('#contentLista').html('<h5 class="text-center text-muted mt-5">No tiene grupos asignados aun</h2>')
+                $('#contentLista').html('<h5 class="text-center text-muted mt-5 flex-fill">No tiene grupos asignados aun</h2>')
             }
             $.ajax({
                 type: "GET",
-                url: "/api/teach/getAsistencia",
+                url: "/api/teach/getAsistenciaByGroup",
                 data: {grupo},
                 contentType: "application/json",
                 headers: {

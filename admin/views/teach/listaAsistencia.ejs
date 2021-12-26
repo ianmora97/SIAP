@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" style="overflow-x: hidden; height: 100%;">
+<head>
+    <title>Instructor | Lista Asistencia</title>
+    <%- include('headers') %>
+</head>
+<body style="overflow-x:hidden;" class="d-flex flex-column h-100">
+    <div class="modal fade" id="crearAnotacion" tabindex="-1" aria-labelledby="crearAnotacion" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary py-3 justify-content-center">
+                    <h5 class="modal-title text-white pl-3">Información</h5>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <%- include('menu') %>
+    <div id="wrapperTeach">
+        <%- include('header') %>
+        <div id="contentLista" class="container-fluid my-4">
+            <h4 class="font-weight-bold">Lista de Asistencia</h4>
+            <div class="d-flex justify-content-between mt-4">
+                <div class="dropdown position-relative">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuFilter" 
+                    data-toggle="dropdown" aria-expanded="false">
+                        Filtrar por
+                    </button>
+                    <div class="dropdown-menu p-0 border-0" aria-labelledby="dropdownMenuFilter" style="width: 350px;">
+                        <form class="p-3">
+                            <p class="text-muted font-weight-bold d-block">Grupo</p>
+                            <div id="gruposSelect" class="pl-2 my-3"></div>
+                            <p class="text-muted font-weight-bold d-block">Dia</p>
+                            <div id="diasSelect" class="pl-2 my-3"></div>
+                        </form>
+                    </div>
+                </div>
+                <div id="fechasSelect" class="pl-2">
+                    <input id="datepicker" width="180" placeholder="Fecha.."/>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div id="lista">
+                <div class="d-flex justify-content-center align-items-center" id="spinnerLoad">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <p class="mb-0 ml-2">Cargando...</p>
+                </div>
+            </div>
+        </div>
+        <%- include('footer') %>
+    </div>
+    <script src="/js/teach/listaAsistencia.js"></script>
+</body>
+</html>
