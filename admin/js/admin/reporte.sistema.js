@@ -42,6 +42,7 @@ function cargar_registros() {
         registro = reportes;
         $('#cantidad_registros').text(reportes.length);
         reportesList(reportes);
+        closeProgressBarLoader();
     },(error) => {
       
     });

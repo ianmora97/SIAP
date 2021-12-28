@@ -130,24 +130,7 @@
     <script>
         const svg = document.querySelector("#svg3");
         let moved = true;
-        window.addEventListener("mousemove", onMove);
-        gsap.ticker.add(update);
-        function update() {
-        
-            if (!moved) return;
-            moved = false;
-            
-            const { x, y } = mouse.matrixTransform(svg.getScreenCTM().inverse());
-            
-            gsap.to(circle, {
-                x, y, duration: 0.2
-            });
-        }
-        function onMove(event) {    
-            moved = true;
-            mouse.x = event.clientX;
-            mouse.y = event.clientY;
-        }
+
         var blob1 = createBlob({
             element: document.querySelector("#path1"),
             numPoints: 10,

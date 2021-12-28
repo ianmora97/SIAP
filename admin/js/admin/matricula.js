@@ -19,6 +19,7 @@ function events(event) {
     onChangeSelectsMatricula();
     onModalOpen();
     checkCustomView();
+    // socketNewMatricula();
 }
 moment.locale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -33,6 +34,17 @@ function onModalOpen(){
         calendar.updateSize();
         $(".fc-dayGridMonth-button").click();
     })
+}
+/**
+ * @param {Array} grupos
+ */
+function socketNewMatricula(){
+    socket.on('matricula:newMatricula',function (data) {
+        let grupos = data.grupos;
+        sendNotificationChrome('Nueva matricula',{
+            body: `${data.nombreEst} matriculado en ${grupos.join(', ')}`,
+        })
+    });
 }
 function checkCustomView(){
     
@@ -162,6 +174,7 @@ function loadFromDb() {
         }).then((estudiantes) => {
             g_VecEstudiantes = estudiantes;
             fillSelected(estudiantes);
+            closeProgressBarLoader();
         }, (error) => {
         });
     }, (error) => {
@@ -232,6 +245,7 @@ function matricularCursos(){
     let estudiante = $('#EstudiantesModalMatricular').val();
     let correo = g_MapEstudiantes.get(estudiante).correo;
     let id_estudiante = g_MapEstudiantes.get(estudiante).id_estudiante;
+    let cedula = g_MapEstudiantes.get(estudiante).cedula;
     let nombreEst = g_MapEstudiantes.get(estudiante).nombre + " " + g_MapEstudiantes.get(estudiante).apellido;
     let grupos = [];
     let gruposAll = [];
@@ -241,12 +255,15 @@ function matricularCursos(){
     });
     console.log(gruposAll,estudiante,correo)
     let data = {
+        cedula: cedula,
+        nombreEst: nombreEst,
         estudianteId: id_estudiante,
         estudiante: estudiante,
         grupos: grupos,
         correo: correo,
         gruposAll: gruposAll
     }
+    socket.emit('matricula:newMatricula',data);
     $.ajax({
         type: "POST",
         url: "/admin/matricula/matricularCursos",
@@ -258,6 +275,7 @@ function matricularCursos(){
     }).then((response) => {
         animateCSS('#tiqueteMatricula','backOutRight').then(e=>{
             $('#tiqueteMatricula').hide();
+            socket.emit('matricula:newMatricula',data);
             location.href = '/admin/matricula';
         });
     }, (error) => {
@@ -280,7 +298,7 @@ function fillSelected(data) {
             }
         }
     }
-    if(g_customView !== ''){
+    if(typeof g_customView == undefined && g_customView !== ''){
         $('#matricularModal').modal('show');
         console.log(g_customView)
         $('#EstudiantesModalMatricular').val(g_customView).trigger('change');
@@ -326,6 +344,7 @@ function cargarEstudiantes(matricula) {
     $('#est_inactivos_stats').text(matricula.length - cont);
 
     $('#table').DataTable({
+        responsive: true,
         "language": {
             "decimal":        "",
             "emptyTable":     "No hay datos en la tabla",

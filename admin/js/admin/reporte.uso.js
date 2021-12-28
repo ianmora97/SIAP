@@ -245,6 +245,7 @@ function loadFromDb() {
             addData(tallerCh,key, value);
         }
         $('#talleres_stats').html(Object.entries(g_gruposExistentes).length);
+        closeProgressBarLoader();
     },(error) => {
     }); 
 }

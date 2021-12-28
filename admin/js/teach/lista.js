@@ -1,6 +1,9 @@
 var g_grupos = new Array();
 var g_mapGrupos = new Map();
 
+var g_gruposReposicion = new Array();
+var g_mapGruposReposicion = new Map();
+
 function loaded(event){
     events(event);
 }
@@ -28,6 +31,24 @@ function loadFromDB(){
         }else{
             $('#contentLista').html('<h5 class="text-center text-muted mt-5">No tiene grupos asignados aun</h2>')
         }
+        $.ajax({
+            type: "GET",
+            url: "/api/teach/inicio",
+            contentType: "application/json",
+            headers: {
+                'Authorization': bearer
+            },
+        }).then((response) => {
+            g_gruposReposicion = response;
+            g_gruposReposicion.forEach(g => {
+                g_mapGruposReposicion.set(g.id_grupo,g);
+            });
+
+            showGruposReposicion(response)
+            $('#spinnerLoad').remove();
+        }, (error) => {
+            
+        });
     }, (error) => {
         
     });
@@ -74,6 +95,14 @@ function showGrupo(item,i){
             </script>
         </div>
     `);
+}
+function showGruposReposicion(data){
+    data.sort(function(a,b){
+        return weekDayToInt(b.dia)
+    })
+    .forEach((g,i)=>{
+        showGrupo(g,i)
+    })
 }
 function weekDayToInt(day){
     let d = ['DOMINGO','LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO'];

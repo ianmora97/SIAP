@@ -49,8 +49,8 @@ function cargar_registros() {
         let t = a == 1 ? a + ' segundo' : a + ' segundos';
         $('#infoTiming').text(t);
         registro = reportes;
-        
         reportesList(reportes);
+        closeProgressBarLoader();
     },(error) => {
       
     });

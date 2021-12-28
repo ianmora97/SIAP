@@ -30,9 +30,13 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <select class="custom-select" id="listaSelectAdministradores">
-                            <option selected>Seleccione un administrador...</option>
+                            <option value="null" selected>Seleccione un administrador...</option>
                         </select>
                     </div>
+                </div>
+                <div class="modal-footer border-top-0 bg-light">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="asociarAdmin()">Asociar</button>
                 </div>
             </div>
         </div>
@@ -180,7 +184,7 @@
                     </div>
                     
                 </div>
-                <div class="modal-footer py-0">
+                <div class="modal-footer border-top-0 bg-light">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="agregarProfesor()">
                         <div class="spinner-border spinner-border-sm" role="status" id="agregarBotonAdmin" style="display: none;">

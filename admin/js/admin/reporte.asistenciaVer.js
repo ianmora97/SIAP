@@ -28,7 +28,6 @@ function bringData(){
         }
     }).then((response) => {
         g_grupoInfo = response[0];
-        console.log(g_grupoInfo);
         $('#estudiantes_total_stats').html(g_grupoInfo.cupo_actual);
         $('#text_informacion').html(`
             <b>${g_grupoInfo.descripcion}</b> <br>
@@ -51,7 +50,7 @@ function bringData(){
             let t = a == 1 ? a + ' segundo' : a + ' segundos';
             $('#infoTiming').html(t)
             forEachGroups(response);
-            console.log(response);
+            closeProgressBarLoader();
         }, (error) => {
             console.log('error ajax')
         });
@@ -119,14 +118,14 @@ function forEachGroups(data){
 }
 function showRowsOntablesgroup(data,i) {
     let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px" height="30px">';
-    $(`#lista_asistencia_grupo${data.id_grupo}`).append(`
+    $(`#lista_asistencia_grupo`).append(`
         <tr class="align-middle">
             <td class="text-center">${foto}</td>
             <td class="align-middle">${data.cedula}</td>
-            <td class="align-middle">${data.nombre.toUpperCase()  + ' ' + data.apellido.toUpperCase() }</td>
-            <td class="align-middle">${data.fecha}</td>
-            <td class="align-middle"><button class="w-75 btn btn-sm btn-${data.estado == 'Presente'? 'success': data.estado == 'Ausente' ? 'danger' : 'warning'}">${data.estado}</button></td>
-            <td class="align-middle"><a href="/admin/reposiciones" class="btn btn-dark btn-sm"><i class="fas fa-edit"></i> Reponer Clase</a></td>
+            <td class="align-middle">${data.nombre + ' ' + data.apellido}</td>
+            <td class="align-middle">${moment(data.fecha,"YYYY-MM-DD").format('ll')}</td>
+            <td class="align-middle"><button class="w-75 btn btn-sm btn-${data.estado == '1'? 'success': 'danger'}">${data.estado == '1'? 'Presente':'Ausente'}</button></td>
+            <td class="align-middle"><a href="/admin/reposiciones" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Reponer Clase</a></td>
         </tr>
     `);
 }

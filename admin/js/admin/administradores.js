@@ -190,6 +190,7 @@ function bringDB() {
       $("#administradores_total_stats").html(response.length);
       $("#superusuarios_stats").html(su);
       showAdminList(response);
+      closeProgressBarLoader();
     },
     (error) => {}
   );

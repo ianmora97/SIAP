@@ -151,6 +151,7 @@ function bringDB() {
 				}).then((data) => {
 					llenarSelectAdmin(data);
 					console.log(data);
+                    closeProgressBarLoader();
 				}, (error) => {
 				}
 			);
@@ -176,6 +177,32 @@ function llenarSelectAdmin(data){
 		$('#listaSelectAdministradores').append(
 			`<option value="${a.id}">${a.nombre} ${a.apellido}</option>`);
 	});
+}
+function asociarAdmin(){
+    let id = $('#listaSelectAdministradores').val();
+    if(id != 'null'){
+        console.log(id)
+        let data = parseInt(id);
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/profesor/agregarAso", 
+            data: {data:data},
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response.affectedRows){
+                location.href = '/admin/profesores';
+            }else if(response.code){
+                
+            }
+        }, (error) => {
+        });
+    }else{
+
+    }
 }
 function actualizarProfesor() {
   let cedula = $('#cedulaprofesor').html();

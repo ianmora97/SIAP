@@ -636,6 +636,7 @@ function loadFromDb() {
                 $('.infoTiming').text(t);
                 showGrupos(grupos);
                 fillCalendar(grupos);
+                closeProgressBarLoader();
             }, (error) => {
             });
         }, (error) => {

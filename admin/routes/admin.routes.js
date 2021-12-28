@@ -61,10 +61,10 @@ router.get('/admin/logout',(req,res)=>{ //logout
         let u = req.session.value.usuario;
         req.session.destroy((err) => {
             console.log('[',chalk.green('OK'),']',chalk.yellow(u),'Session Cerrada');
-            res.render('login');
+            res.redirect('/admin/login');
         })
     }else{
-        res.render('login');
+        res.redirect('/admin/login');
     }
 });
 

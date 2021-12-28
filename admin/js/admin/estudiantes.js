@@ -226,6 +226,7 @@ function loadFromDb() {
                 <option value="${t.nivel}">${t.descripcion}</option>
             `);
         })
+        closeProgressBarLoader();
     }, (error) => {
     });
 }

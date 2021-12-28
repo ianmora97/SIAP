@@ -19,7 +19,7 @@ router.post('/teach/log',(req,res)=>{ //login
         (err,rows,fields)=>{
         if(!err){
             if(rows.length != 0){
-                if(rows[0].rol >= 2){
+                if(rows[0].rol == 2){
                     const userLogged = rows[0];
                     jwt.sign({userLogged},'secretKeyToken',(err,token)=>{
                         req.session.value = rows[0];
@@ -46,26 +46,26 @@ router.post('/teach/log',(req,res)=>{ //login
 router.get('/teach/logout',(req,res)=>{
     if(req.session.value){
         req.session.destroy((err) => {
-            res.render('loginTeach');
+            res.redirect('/teach/login');
         })
     }else{
-        res.render('loginTeach');
+        res.redirect('/teach/login');
     }
 });
 // ? ---------------------- Inicio - clases ----------------------
 
 router.get('/teach/inicio',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol >= 2){
+        if(req.session.value.rol == 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let selected = 'inicio';
             res.render('teach/inicio',{usuario,selected,token});
         }else{
-            res.render('loginTeach');
+            res.redirect('/');
         }
     }else{
-        res.render('loginTeach');
+        res.redirect('/teach/login');
     }
 });
 router.get('/api/teach/inicio',ensureToken,(req,res)=>{
@@ -83,32 +83,32 @@ router.get('/api/teach/inicio',ensureToken,(req,res)=>{
 // ? ---------------------- grupos ----------------------
 router.get('/teach/grupo/:grupo',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol >= 2){
+        if(req.session.value.rol == 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let grupo = req.params.grupo;
             let selected = 'inicio';
             res.render('teach/grupo',{usuario,selected,token,grupo});
         }else{
-            res.render('loginTeach');
+            res.redirect('/');
         }
     }else{
-        res.render('loginTeach');
+        res.redirect('/');
     }
 });
 router.get('/teach/asistencia/:grupo',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol >= 2){
+        if(req.session.value.rol == 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let grupo = req.params.grupo;
             let selected = 'inicio';
             res.render('teach/asistencia',{usuario,selected,token,grupo});
         }else{
-            res.render('loginTeach');
+            res.redirect('/');
         }
     }else{
-        res.render('loginTeach');
+        res.redirect('/');
     }
 });
 
@@ -164,16 +164,16 @@ router.get('/teach/matricula/qr/check',(req,res)=>{
 // ? ---------------------- asistencia ----------------------
 router.get('/teach/asistencias',(req,res)=>{
     if(req.session.value){
-        if(req.session.value.rol >= 2){
+        if(req.session.value.rol == 2){
             let token = req.session.token;
             let usuario = req.session.value;
             let selected = 'asistencia';
             res.render('teach/listaAsistencia',{usuario,selected,token});
         }else{
-            res.render('loginTeach');
+            res.redirect('/');
         }
     }else{
-        res.render('loginTeach');
+        res.redirect('/');
     }
 });
 router.get('/api/teach/getAsistencia',ensureToken,(req,res)=>{

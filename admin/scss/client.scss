@@ -1,0 +1,120 @@
+
+body{
+    overflow-x: hidden;
+    background-color: #f8f8ff;
+}
+// ? --------------- Components ---------------
+.headerBar{
+    background-color: #ffffff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.menuTabBar{
+    z-index: 9999;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: -5px 0px 20px -5px rgba(0,0,0,0.2);
+}
+a.nav-menu-item{
+    width: 70px;
+    height: 70px;
+    text-decoration: none !important;
+    color: #aaaaaa;
+    transition: all .5s;
+    border-radius: 50%;
+    border: 0px solid #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.active{
+        padding: 10px;
+        border: 8px solid #ffffff;
+        width: 70px;
+        height: 70px;
+        font-size: 25px;
+        background-color: #4659E4;
+        color:#ffffff;
+        transform: translate(0, -15px);
+        &>span>small{
+            display: none;
+        }
+    }
+    &>span>small{
+        font-size: 11px;
+    }
+}
+.nav-link-cus{
+    background-color: #ffffff;
+    color:#aaaaaa;
+    text-decoration: none !important;
+    display: block;
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
+    transition: all .2s;
+    font-weight: 600;
+    &.active{
+        color:#4659E4;
+        &>span{
+            border-bottom: 3px solid #4659E4;
+        }
+    }
+    &>span{
+        transition: all .5s;
+        padding-bottom: 5px;
+        border-bottom: 3px solid #ffffff;
+        display: block;
+        margin: 0 auto;
+        width: 80%;
+    }
+}
+.card-list{
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: all .5s;
+    border: 1px solid #ffffff;
+    &:focus, &:hover{
+        transform: scale(1.02);
+        border: 1px solid #4659E4;
+        box-shadow: 0px 0px 20px -10px rgba(0,0,0,0.2);
+    }
+}
+
+
+// ? ---------- UI -------
+h1.display-5{
+    font-size: 38px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.rounded-3{
+    border-radius: 15px !important;
+}
+.btn-primary{
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    &:hover, &:focus{
+        box-shadow: none !important;
+    }
+}
+.btn-secondary{
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    &:hover, &:focus{
+        box-shadow: none !important;
+    }
+}

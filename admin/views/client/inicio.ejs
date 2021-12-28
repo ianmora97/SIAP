@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Clases</title>
+    <%- include('headers') %>
+</head>
+
+<body>
+    <div id="modal-view-event" class="modal modal-top fade calendar-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <h4 class="modal-title bg-primary text-white px-3 py-1 rounded-3-top">
+                    <span class="event-icon"></span>
+                    <span class="event-title"></span>
+                </h4>
+                <div class="modal-body">
+                    <div class="event-body"></div>
+                </div>
+                <div class="modal-footer border-0 bg-light p-2">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('header',{titleHere: "Mis cursos"}) %>
+    <nav class="nav nav-pills nav-justified bg-white">
+        <a class="nav-link-cus active" id="cursos-tab" data-toggle="tab" href="#cursos" role="tab" 
+        aria-controls="cursos" aria-selected="false">
+            <span>Cursos</span>
+        </a>
+        <a class="nav-link-cus" id="calendario-tab" data-toggle="tab" href="#calendario" role="tab" 
+        aria-controls="calendario" aria-selected="false">
+            <span>Calendario</span>
+        </a>
+    </nav>
+    <div class="container-fluid mt-3" style="margin-bottom:100px;">
+        <div class="d-flex justify-content-center align-items-center pt-5 mt-5" id="spinnerLoad">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p class="mb-0 ml-2">Cargando...</p>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" id="cursos" role="tabpanel" aria-labelledby="cursos-tab">
+            </div>
+            <div class="tab-pane" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+                <div id="calendar" class=""></div>
+            </div>
+        </div>
+    </div>
+    <%- include('menu') %>
+    <script src="/js/client/inicio.js"></script>
+</body>
+</html>

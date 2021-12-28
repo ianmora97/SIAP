@@ -178,18 +178,19 @@ function loadFromDb() {
         $('#addCasilleroInputModal').val( response.length + 1);
         cargarMatrizCasillerosHombres(response.filter(e => e.tipo == 'H'))
         cargarMatrizCasillerosMujeres(response.filter(e => e.tipo == 'M'))
-    }, (error) => {
-
-    });
-    $.ajax({
-        type: "GET",
-        url: "/admin/casilleros/bringEstudiantes",
-        contentType: "application/json",
-        headers:{
-            'Authorization':bearer
-        }
-    }).then((response) => {
-        cargarEstudiantes(response);
+        $.ajax({
+            type: "GET",
+            url: "/admin/casilleros/bringEstudiantes",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            cargarEstudiantes(response);
+            closeProgressBarLoader();
+        }, (error) => {
+    
+        });
     }, (error) => {
 
     });

@@ -339,7 +339,7 @@ function cargarDatos() {
             addData(cuposDisponiblesChartVar,'Disponibles', 0);
             addData(cuposDisponiblesChartVar,'Matriculados', total);
         }
-        
+        closeProgressBarLoader();
     }, (error) => {
     });
 

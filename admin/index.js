@@ -77,6 +77,7 @@ app.use(require('./routes/reposiciones/reposicion.routes'));
 app.use(require('./routes/matricula/matriula.routes'));
 
 app.use(require('./routes/client/registro.routes'));
+app.use(require('./routes/client/client.routes'));
 
 app.use(require('./routes/instructores/teach.routes'));
 
@@ -90,6 +91,10 @@ const io = SocketIo(server);
 
 
 io.on('connection', (socket) =>{
+    socket.on('matricula:newMatricula', (data) => {
+        io.sockets.emit('matricula:newMatricula',data);
+    });
+    
     socket.on(' chat:nuevo_registro', (data) => {
         io.sockets.emit(' chat:nuevo_registro',data);
     });

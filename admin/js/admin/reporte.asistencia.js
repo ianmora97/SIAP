@@ -64,6 +64,7 @@ function bringData(){
         $('#infoTiming').text(t);
         g_grupos = response;
         fillNavTabs(response);
+        closeProgressBarLoader();
     }, (error) => {
     });
 }
@@ -82,7 +83,6 @@ function fillNavTabs(data) {
     $('#estudiantes_ausentes_stats').html(g_contAusentes);
     $('#estudiantes_media_stats').html(g_mediaEstudiantes+'<small>%</small>');
     $('#estudiantes_total_stats').html(g_cantidadEstudiantes);
-    bringDataAsistencia();
 }
 
 document.addEventListener("DOMContentLoaded", loaded);

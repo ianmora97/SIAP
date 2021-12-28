@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" style="overflow-x: hidden; height: 100%;">
+<html lang="es" style="overflow-x: hidden;min-height: 100%;">
 <head>
     <title>Instructor | Lista Asistencia</title>
     <%- include('headers') %>
 </head>
-<body style="overflow-x:hidden;" class="d-flex flex-column h-100">
+<body style="overflow-x:hidden; min-height: 650px;" class="d-flex flex-column">
     <div class="modal fade" id="crearAnotacion" tabindex="-1" aria-labelledby="crearAnotacion" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -28,9 +28,9 @@
         <%- include('header') %>
         <div id="contentLista" class="container-fluid my-4">
             <h4 class="font-weight-bold">Lista de Asistencia</h4>
-            <div class="d-flex justify-content-between mt-4">
+            <div class="d-flex justify-content-between mt-4 align-items-start">
                 <div class="dropdown position-relative">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuFilter" 
+                    <button class="btn btn-outline-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuFilter" 
                     data-toggle="dropdown" aria-expanded="false">
                         Filtrar por
                     </button>
@@ -43,8 +43,8 @@
                         </form>
                     </div>
                 </div>
-                <div id="fechasSelect" class="pl-2">
-                    <input id="datepicker" width="180" placeholder="Fecha.."/>
+                <div id="fechasSelect" class="d-flex justify-content-end align-items-start">
+                    <input id="datepicker" width="180" placeholder="Fecha.." class="form-control-sm"/>
                 </div>
             </div>
             <hr class="my-3">

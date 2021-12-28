@@ -10,7 +10,8 @@
   "nodemonConfig": {
     "ignore": [
       "admin/js/admin/*",
-      "admin/js/teach/*"
+      "admin/js/teach/*",
+      "admin/js/client/*"
     ],
     "delay": 0
   },

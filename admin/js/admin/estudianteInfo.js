@@ -54,6 +54,7 @@ function cargar_estudiante() {
             console.log(g_estudiante)
         }
         //$('#infoTiming-usuarios-estudiantes').text(t);
+        closeProgressBarLoader();
     }, (error) => {
 
     });

@@ -266,7 +266,7 @@ router.post('/admin/estudiantes/agregarEstudiantes',(req,res)=>{
             (err,rows,fields)=>{
                 if(!err){
                     logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
-                    res.redirect('/admin/estudiantes');
+                    res.redirect('/admin/estudiantes/getEstudiante/'+req.body.cedula_add);
                 }else{
                     console.log(err)
                     res.redirect('/admin/estudiantes');
