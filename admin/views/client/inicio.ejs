@@ -4,15 +4,16 @@
     <title>Clases</title>
     <%- include('headers') %>
 </head>
-
 <body>
     <div id="modal-view-event" class="modal modal-top fade calendar-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <h4 class="modal-title bg-primary text-white px-3 py-1 rounded-3-top">
-                    <span class="event-icon"></span>
-                    <span class="event-title"></span>
-                </h4>
+                <div class="modal-header bg-primary p-2">
+                    <h4 class="modal-title bg-primary text-white rounded-3-top">
+                        <span class="event-icon"></span>
+                        <span class="event-title"></span>
+                    </h4>
+                </div>
                 <div class="modal-body">
                     <div class="event-body"></div>
                 </div>
@@ -33,18 +34,18 @@
             <span>Calendario</span>
         </a>
     </nav>
-    <div class="container-fluid mt-3" style="margin-bottom:100px;">
-        <div class="d-flex justify-content-center align-items-center pt-5 mt-5" id="spinnerLoad">
+    <div class="mt-3">
+        <div class="d-flex justify-content-center align-items-center pt-5 mt-5 px-3" id="spinnerLoad">
             <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
             <p class="mb-0 ml-2">Cargando...</p>
         </div>
         <div class="tab-content">
-            <div class="tab-pane active" id="cursos" role="tabpanel" aria-labelledby="cursos-tab">
+            <div class="tab-pane active px-3" id="cursos" role="tabpanel" aria-labelledby="cursos-tab">
             </div>
-            <div class="tab-pane" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
-                <div id="calendar" class=""></div>
+            <div class="tab-pane fade" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+                <div id="calendar" class="bg-white p-3"></div>
             </div>
         </div>
     </div>

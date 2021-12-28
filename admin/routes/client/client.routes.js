@@ -28,6 +28,8 @@ router.post('/client/log',(req,res)=>{
         }
     });
 });
+
+// ? ----------------- Inicio -----------------
 router.get('/client/inicio',(req,res)=>{
     if(req.session.value){
         res.render('client/inicio',{
@@ -42,6 +44,30 @@ router.get('/client/inicio',(req,res)=>{
 router.get('/api/client/inicio',ensureToken,(req,res)=>{
     con.query("SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?",
     [req.session.value.cedula],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            console.log(err);
+        }
+    });
+});
+
+// ? ----------------- Matricula -----------------
+router.get('/client/matricula',(req,res)=>{
+    if(req.session.value){
+        res.render('client/matricula',{
+            title: 'matricula',
+            user: req.session.value,
+            token: req.session.token
+        });
+    }else{
+        res.redirect('/login');
+    }
+});
+router.get('/api/client/matricula',ensureToken,(req,res)=>{
+    con.query("SELECT * FROM vta_grupos WHERE nivel = ?",
+    [req.session.value.nivel],
     (err,rows,fields)=>{
         if(!err){
             res.send(rows);

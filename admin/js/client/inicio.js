@@ -66,12 +66,6 @@ function showCard({dia,hora,hora_final,descripcion,id_grupo,periodo_final,create
             </div>
         </div>
         <script>
-            tippy('#cursoId-${id_grupo}', {
-                content: '${nextDayOfClass(dia,periodo_final).nextDayComplete}',
-                allowHTML: true,
-                placement: 'top',
-                animation: 'shift-away-extreme',
-            });
             animateCSS('#cursoId-${id_grupo}', 'fadeInUp');
         </script>
     `);
@@ -114,7 +108,7 @@ function nextDayOfClass(dia,periodo_final){
     }
     let next = moment().add(diff, 'days');
     let di = end.diff(next, 'days');
-    let nextDay = di < 0 ? 'Finalizado' : next.format('LL');
+    let nextDay = di < 0 ? 'Finalizado <i class="fas fa-check-circle text-success"></i>' : next.format('LL');
     let nextDayComplete = di < 0 ? 'Finalizado' : `Proxima clase: <b>${next.format('dddd LL')}</b>`;
     return {nextDay,nextDayComplete};
 }
@@ -160,13 +154,18 @@ function loadCalendar(data){
     calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'es',
         initialView: 'dayGridMonth',
-        height: 500,
+        height: 550,
         aspectRatio:1,
         themeSystem: 'bootstrap',
         headerToolbar: {
-            start: 'prev,next',
+            start: 'title',
             center: '',
-            end: 'dayGridMonth,listWeek'
+            end: 'prev,dayGridMonth,next'
+        },
+        views: {
+            dayGrid: {
+                titleFormat: { month: 'long',year:'numeric'}
+            },
         },
         events: eventsArray,
         buttonText: {
@@ -194,10 +193,12 @@ function loadCalendar(data){
             };
         },
         viewDidMount: function(info) {
-            $('.fc-dayGridMonth-button').removeClass('btn-primary').addClass('btn-secondary btn-sm');
+            $('.fc-dayGridMonth-button').addClass('btn-sm');
             $('.fc-listWeek-button').addClass('btn-sm');
-            $('.fc-next-button').addClass('btn-sm').addClass('');
-            $('.fc-prev-button').addClass('btn-sm').addClass('');
+            $('.fc-prev-button').addClass('btn-sm');
+            $('.fc-next-button').addClass('btn-sm');
+            $('.fc-toolbar-title').addClass('display-6');
+            $('.fc-col-header-cell-cushion').css('text-transform','capitalize');
         },
     });
     calendar.render();
