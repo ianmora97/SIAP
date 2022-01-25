@@ -28,6 +28,18 @@ router.post('/client/log',(req,res)=>{
         }
     });
 });
+// ? ----------------- PERFIL -----------------
+router.get('/client/perfil',(req,res)=>{
+    if(req.session.value){
+        res.render('client/perfil',{
+            title: 'perfil',
+            user: req.session.value,
+            token: req.session.token
+        });
+    }else{
+        res.redirect('/login');
+    }
+});
 
 // ? ----------------- Inicio -----------------
 router.get('/client/inicio',(req,res)=>{
@@ -41,7 +53,7 @@ router.get('/client/inicio',(req,res)=>{
         res.redirect('/login');
     }
 });
-router.get('/api/client/inicio',ensureToken,(req,res)=>{
+router.get('/api/client/inicio',(req,res)=>{
     con.query("SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?",
     [req.session.value.cedula],
     (err,rows,fields)=>{
@@ -65,7 +77,7 @@ router.get('/client/matricula',(req,res)=>{
         res.redirect('/login');
     }
 });
-router.get('/api/client/matricula',ensureToken,(req,res)=>{
+router.get('/api/client/matricula',(req,res)=>{
     con.query("SELECT * FROM vta_grupos WHERE nivel = ?",
     [req.session.value.nivel],
     (err,rows,fields)=>{
@@ -75,6 +87,22 @@ router.get('/api/client/matricula',ensureToken,(req,res)=>{
             console.log(err);
         }
     });
+});
+router.post('/client/create/matricula',(req,res)=>{
+    // procedure para matricular con el comprobante
+    res.send('success');
+});
+router.get('/client/matricula/new/:grupos',(req,res)=>{
+    if(req.session.value){
+        res.render('client/matriculaNew',{
+            grupos: req.params.grupos,
+            title: 'matricula',
+            user: req.session.value,
+            token: req.session.token
+        });
+    }else{
+        res.redirect('/login');
+    }
 });
 
 // ! ----------------------------------- SECURITY ------------------------------------

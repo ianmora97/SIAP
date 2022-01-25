@@ -61,9 +61,6 @@ function showCard({dia,hora,hora_final,descripcion,id_grupo,periodo_final,create
                 <p class="mb-0"><i class="fas fa-calendar-day text-primary" style="font-size: 12px;"></i> ${dia}</p>
                 <small class="mb-0 text-muted"><i class="fas fa-clock text-primary" style="font-size: 12px;"></i> ${hora} - ${hora_final}</small>
             </div>
-            <div class="progress mt-2" style="height:10px;">
-                <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: ${progresoPorcentaje(created_at,periodo_final,dia)}%" aria-valuenow="${progresoPorcentaje(created_at,periodo_final)}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
         </div>
         <script>
             animateCSS('#cursoId-${id_grupo}', 'fadeInUp');

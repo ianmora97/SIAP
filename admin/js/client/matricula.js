@@ -13,6 +13,17 @@ var g_map_grupoSelected = new Map();
 function loaded(event){
     loadDB();
     onModalOpen();
+    onMatricular();
+}
+function onMatricular(){
+    $('#matricularBotonSelected').on('click', function (event) {
+        let grupos = "";
+        g_map_grupoSelected.forEach((e,i) => {
+            grupos += `${e.id_grupo},`;
+        });
+        grupos = grupos.substring(0,grupos.length-1);
+        window.location.href = '/client/matricula/new/'+grupos;
+    });
 }
 function onModalOpen(){
     $('#seleccionarModal').on('show.bs.modal', function (event) {
