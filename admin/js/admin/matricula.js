@@ -588,7 +588,7 @@ function fillCalendar(grupos) {
             },
         },
         headerToolbar: {
-            start: '',
+            start: 'prev,today,next',
             center: 'title',
             end: 'doAgregar doCancelar'
         },
@@ -634,8 +634,7 @@ function fillCalendar(grupos) {
         },
         viewDidMount: function(info) {
             $('.fc-doCancelar-button').removeClass('btn-primary').addClass('btn-danger');
-            $('.fc-doAgregar-button').html('<i class="fas fa-plus mr-2"></i>Matricular Seleccionados');
-            $('.fc-doCancelar-button').html('<i class="fas fa-times mr-2"></i>Cancelar');
+
         },
     });
     calendar.render();

@@ -170,10 +170,10 @@ router.get('/admin/talleres/ingresarGrupo',ensureToken,(req,res)=>{
 });
 
 router.get('/admin/talleres/actualizarGrupo',ensureToken,(req,res)=>{
-    let script = "call prc_actualizar_grupo(?,?,?,?,?,?,?)";
+    let script = "call prc_actualizar_grupo(?,?,?,?,?,?,?,?)";
     var query = con.query(script, 
         [req.query.id, req.query.horario, req.query.profesor,req.query.taller, 
-            req.query.cupobase, req.query.cupoextra, req.query.periodo],
+            req.query.cupobase, req.query.cupoextra, req.query.periodoInicio, req.query.periodo],
          (err,rows,fields)=>{
         if(!err){
             let r = rows;

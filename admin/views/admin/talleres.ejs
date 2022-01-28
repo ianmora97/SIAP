@@ -42,6 +42,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div id="feedbackEditTaller"></div>
                     <div class="container-fluid">
                         <div id="feedbackEditarTaller"></div>
                         <span class="sr-only" id="idTallerModal"></span>
@@ -69,7 +70,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer py-1 border-0">
+                <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminarTaller()"><i class="fas fa-trash"></i> Eliminar</button>
                     <button type="button" class="btn btn-primary btn-sm" id="actualizarTaller" onclick="actualizarDatosTaller()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
@@ -137,7 +138,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer pt-0 border-0">
+                <div class="modal-footer  border-0 bg-light">
                     <button type="button" class="btn btn-primary" onclick="agregarTaller()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
@@ -237,7 +238,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer pt-0 border-0">
+                <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-primary" onclick="agregarHorario()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
@@ -339,7 +340,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer py-1 border-0">
+                <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminarHorario()"><i class="fas fa-trash"></i> Eliminar</button>
                     <button type="button" class="btn btn-primary btn-sm" id="actualizarHorario" onclick="actualizarDatosHorario()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
@@ -411,14 +412,14 @@
                     </div>
                     
                 </div>
-                <div class="modal-footer py-0 border-0 mb-2">
+                <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-primary" onclick="agregarGrupo()"><i class="fas fa-plus"></i> Agregar</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal fade" id="actualizarGrupo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-primary text-white">
                     <h5 class="modal-title pl-3" id="modalEditGrupoLabel">Editar Grupo</h5>
@@ -427,51 +428,68 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                   
                     <span class="sr-only" id="idGrupoModal"></span>
                     <div id="toogleFormActualizar">
-                        <div class="form-group">
-                            <label for="horarioInputActualizar">Horario</label>
-                            <select class="custom-select" id="horarioInputActualizar">
-                                
-                            </select>
-                            <small class="text-muted">Seleccione la fecha en la que se impartira este grupo</small>
+                        <div class="row mx-auto">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="horarioInputActualizar">Horario</label>
+                                    <select class="custom-select" id="horarioInputActualizar">
+                                        
+                                    </select>
+                                    <small class="text-muted">Seleccione la fecha en la que se impartira este grupo</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="talleresSelectGrupoActualizar">Taller</label>
+                                    <select class="custom-select" id="talleresSelectGrupoActualizar">
+                                        
+                                    </select>
+                                    <small class="text-muted">Seleccione el taller que imparte este grupo</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profesoresSelectGrupoActualizar">Profesor</label>
+                                    <select class="custom-select" id="profesoresSelectGrupoActualizar">
+                                        
+                                    </select>
+                                    <small class="text-muted">Seleccione el profesor que impartira el grupo</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cupobaseActualizarModal">Cupos por grupo</label>
+                                    <input type="number" name="cupobaseActualizarModal" id="cupobaseActualizarModal" class="form-control" placeholder="Cupo Base">
+                                    <small class="text-muted">Cantidad de alumnos por grupo</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cupoExtraActualizarModal">Cupo Extra</label>
+                                    <input type="number" name="cupoExtraActualizarModal" id="cupoExtraActualizarModal" class="form-control" placeholder="Extras">
+                                    <small class="text-muted">Cupos extra para reposicion</small>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="talleresSelectGrupoActualizar">Taller</label>
-                            <select class="custom-select" id="talleresSelectGrupoActualizar">
-                                
-                            </select>
-                            <small class="text-muted">Seleccione el taller que imparte este grupo</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="profesoresSelectGrupoActualizar">Profesor</label>
-                            <select class="custom-select" id="profesoresSelectGrupoActualizar">
-                                
-                            </select>
-                            <small class="text-muted">Seleccione el profesor que impartira el grupo</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="cupobaseActualizarModal">Cupos por grupo</label>
-                            <input type="number" name="cupobaseActualizarModal" id="cupobaseActualizarModal" class="form-control" placeholder="Cupo Base">
-                            <small class="text-muted">Cantidad de alumnos por grupo</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="cupoExtraActualizarModal">Cupo Extra</label>
-                            <input type="number" name="cupoExtraActualizarModal" id="cupoExtraActualizarModal" class="form-control" placeholder="Extras">
-                            <small class="text-muted">Cupos extra para reposicion</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="periodoActualizarModal">Fecha de conclusion</label>
-                            <input type="date" name="periodoActualizarModal" id="periodoActualizarModal" class="form-control" placeholder="Periodo">
-                            <small class="text-muted">Fecha en la que termina el curso</small>
+                        <hr class="my-4">
+                        <div class="row mx-auto">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="periodoInicioEditModal">Fecha de inicio</label>
+                                    <input type="date" name="periodoInicioEditModal" id="periodoInicioEditModal" class="form-control" >
+                                    <small class="text-muted">Fecha en la que inicia el taller</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="periodoEditModal">Fecha de conclusion</label>
+                                    <input type="date" name="periodoEditModal" id="periodoEditModal" class="form-control" >
+                                    <small class="text-muted">Fecha en la que termina el taller</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer py-0 border-0 mb-2">
+                <div class="modal-footer bg-light border-0">
                     <div id="feedbackActualizarGrupo"></div>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarGrupo()"><i class="fas fa-trash"></i> Eliminar</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="actualizarTaller" onclick="actualizarDatosGrupo()"><i class="fas fa-sync"></i> Actualizar</button>
+                    <button type="button" class="btn btn-danger" onclick="eliminarGrupo()"><i class="fas fa-trash"></i> Eliminar</button>
+                    <button type="button" class="btn btn-primary" id="actualizarTaller" onclick="actualizarDatosGrupo()"><i class="fas fa-sync"></i> Actualizar</button>
                 </div>
             </div>
         </div>
@@ -488,19 +506,19 @@
                 <div class="container-fluid my-4">
                     <nav>
                         <div class="nav " id="nav-tab" role="tablist">
-                            <a class="nav-item-line-cus active" id="nav-tab-calendario" data-tab="calendario" data-toggle="tab" 
+                            <a class="nav-item-line-cus <% if(view == undefined) {%>active<% } %>" id="nav-tab-calendario" data-tab="calendario" data-toggle="tab" 
                             href="#nav-calendario" role="tab" aria-controls="nav-calendario" aria-selected="true">
                             <i class="fas fa-calendar-day"></i> Calendario</a>
 
-                            <a class="nav-item-line-cus " id="nav-tab-talleres" data-tab="talleres" data-toggle="tab" 
+                            <a class="nav-item-line-cus <% if(view == "taller") {%>active<% } %>" id="nav-tab-talleres" data-tab="talleres" data-toggle="tab" 
                             href="#nav-talleres" role="tab" aria-controls="nav-talleres" aria-selected="fasle">
                             <i class="fas fa-swimmer"></i> Talleres</a>
 
-                            <a class="nav-item-line-cus" id="nav-tab-horarios" data-tab="horarios" data-toggle="tab" 
+                            <a class="nav-item-line-cus <% if(view == "horario") {%>active<% } %>" id="nav-tab-horarios" data-tab="horarios" data-toggle="tab" 
                             href="#nav-horarios" role="tab" aria-controls="nav-horarios" aria-selected="false">
                             <i class="fas fa-clock"></i> Horarios</a>
 
-                            <a class="nav-item-line-cus" id="nav-tab-grupos" data-tab="grupos" data-toggle="tab" 
+                            <a class="nav-item-line-cus <% if(view == "grupo") {%>active<% } %>" id="nav-tab-grupos" data-tab="grupos" data-toggle="tab" 
                             href="#nav-grupos" role="tab" aria-controls="nav-grupos" aria-selected="false">
                             <i class="fas fa-users"></i> Grupos</a>
                         </div>
@@ -508,11 +526,12 @@
                             $('#nav-calendario-tab').on('click',function(){
                                 $('.fc-dayGridMonth-button').click();
                             })
+                             
                         </script>
                     </nav>
                     <div class="">
                         <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-calendario" role="tabpanel" aria-labelledby="nav-tab-calendario">
+                            <div class="tab-pane fade <% if(view == undefined) {%>show active<% } %>" id="nav-calendario" role="tabpanel" aria-labelledby="nav-tab-calendario">
                                 <div class="bg-white border-0 my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
@@ -563,7 +582,7 @@
 
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-talleres" role="tabpanel" aria-labelledby="nav-tab-talleres">
+                            <div class="tab-pane fade <% if(view == "taller") {%>show active<% } %>" id="nav-talleres" role="tabpanel" aria-labelledby="nav-tab-talleres">
                                 <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
@@ -628,7 +647,7 @@
                                     </div>
                                 </div>
                                 <div class="bg-white rounded-3  px-0 mt-4 animate__animated animate__fadeInUp">
-                                    <div class="row w-100 mx-0" style="min-height: 650px; overflow-y: auto;">
+                                    <div class="row w-100 mx-0" style="min-height: 250px; overflow-y: auto;">
                                         <table class="table table-striped custom-table table-responsive-sm table-borderless text-center table-hover"
                                             id="talleres_table" >
                                             <thead class="table-light-header">
@@ -667,7 +686,7 @@
         
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-horarios" role="tabpanel" aria-labelledby="nav-tab-horarios">
+                            <div class="tab-pane fade <% if(view == "horario") {%>show active<% } %>" id="nav-horarios" role="tabpanel" aria-labelledby="nav-tab-horarios">
                                 <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">
@@ -767,7 +786,7 @@
         
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="nav-grupos" role="tabpanel" aria-labelledby="nav-tab-grupos">
+                            <div class="tab-pane fade <% if(view == "grupo") {%>show active<% } %>" id="nav-grupos" role="tabpanel" aria-labelledby="nav-tab-grupos">
                                 <div class="bg-white border-0  my-3 rounded-3 p-4">
                                     <div class="row">
                                         <div class="col-md-6 mb-2">

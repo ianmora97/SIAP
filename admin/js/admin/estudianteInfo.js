@@ -25,6 +25,7 @@ function tipodedatosOnchange(){
 
 var g_estudiante = {};
 var g_talleres = new Array();
+var g_talleres_all = new Map();
 
 function cargar_estudiante() {
     let bearer = 'Bearer '+g_token;
@@ -39,9 +40,6 @@ function cargar_estudiante() {
             'Authorization':bearer
         }
     }).then((response) => {
-        let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime / 1000);
-        let t = a == 1 ? a + ' segundo' : a + ' segundos';
         if(response === "NO_DATA"){
             console.warn('NO DATA');
         }else{
@@ -53,13 +51,35 @@ function cargar_estudiante() {
             buildDataOnPage(g_estudiante);
             console.log(g_estudiante)
         }
-        //$('#infoTiming-usuarios-estudiantes').text(t);
         closeProgressBarLoader();
+        $.ajax({
+            type: "GET",
+            url: "/admin/talleres/getTalleres",
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((talleres) => {
+            g_talleres_all = new Map(talleres.map(e => [e.descripcion, e]));
+            showTalleres(talleres);
+        }, (error) => {
+    
+        });
     }, (error) => {
 
     });
 }
-
+function showTalleres(talleres){
+    $("#nivelEstudianteSelect").empty();
+    talleres.forEach(e => {
+        if(g_estudiante.data.descripcion === e.descripcion){
+            $("#nivelEstudianteText").html(`<i class="fas fa-layer-group text-${e.color}"></i>`);
+            $("#nivelEstudianteSelect").append(`<option value="${e.nivel}" selected>${e.descripcion}</option>`);
+        }else{
+            $("#nivelEstudianteSelect").append(`<option value="${e.nivel}">${e.descripcion}</option>`);
+        }
+    });
+}
 function buildDataOnPage(data){
     buildPrimaryInfo(data.data);
     buildSwitches(data.data);
@@ -243,6 +263,33 @@ function buildSwitches(data){
     $("#estadoEstudianteText").html(`
     <small class="text-muted">${(parseInt(data.estado)) !== 1 ? "Inactivo" : "Activo"}</small>
     <i class="fas fa-circle ${(parseInt(data.estado)) !== 1 ? "text-danger" : "text-success"}"></i>`)
+}
+function cambiarNivel(drop){
+    let bearer = 'Bearer '+g_token;
+    let cedulaID = $('#cedulaID').html();
+    let data = {
+        cedula: cedulaID,
+        nivel: drop.value
+    }
+    console.log(data);
+    $.ajax({
+        type: "GET",
+        url: "/admin/estudiante/actualizarNivel",
+        data:data,
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        if(response.affectedRows > 0){
+            $("#textoAlertSuccessUp").html("El <b>nivel</b> se actualizó correctamente.");
+            g_talleres_all.forEach(e => {
+                if(drop.value === e.descripcion){
+                    $("#nivelEstudianteText").html(`<i class="fas fa-layer-group text-${e.color}"></i>`);
+                }
+            });
+        }
+    });
 }
 function cambiarMorosidadEst(checkbox){
     let bearer = 'Bearer '+g_token;

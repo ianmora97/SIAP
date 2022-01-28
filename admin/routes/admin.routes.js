@@ -17,7 +17,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
-
+var moment = require('moment');
+var path = require('path');
+var fs = require('fs');
+var filePath = path.join(__dirname, '../logs/log.txt');
 const con = require('../database');
 
 // ? ----------------------------------- LOGIN LOGOUT ------------------------------------
@@ -40,6 +43,7 @@ router.post('/admin/log',(req,res)=>{ //login
                         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let dateTime = date+' '+time;
+                        logEvent(`${req.body.cedula}|${rows[0].nombre} Inicio Sesion`);
                         console.log('[',chalk.green('OK'),']',chalk.green('(ADMIN)'),chalk.magenta(dateTime) ,chalk.yellow(req.session.value.usuario),'Session Iniciada');
                         res.redirect('/admin/dashboard');
                     }); //json web token
@@ -167,7 +171,9 @@ router.get('/admin/talleres',(req,res)=>{
             let token = req.session.token;
             let usuario = req.session.value;
             let s = 'talleres';
-            res.render('admin/talleres', {usuario,s,token});
+            let view = req.query.view ? req.query.view : undefined;
+            console.log(req.query);
+            res.render('admin/talleres', {usuario,s,token,view});
         }else{
             res.render('login');
         }
@@ -435,6 +441,9 @@ function logSistema(usuario, descripcion, ddl, tabla) {
             console.log(err);
         }
     });
+}
+function logEvent(message){
+    fs.appendFile(filePath, `[${moment().format('YYYY-MM-DD HH:mm:ss')}] - ${message}\n`, (err) => {});
 }
 
 module.exports = router;
