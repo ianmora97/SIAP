@@ -93,12 +93,7 @@ function abrirCamara(){
 var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 280, disableFlip: true });
 function onScanSuccess(decodedText, decodedResult) {
     console.log(`Scan result:`, decodedText);
-    let cursos = decodedText.split('.');
-    cursos.pop();
-    let vec = cursos.filter(function (c){
-        return parseInt(c.split('-')[3]) == parseInt(g_grupo.id_grupo)
-    });
-    let cedula = vec[0].split('-')[0];
+    let cedula = decodedText;
     if(g_Map_asistenciasVerify.get(cedula) != undefined){
         html5QrcodeScanner.clear();
         Swal.fire({
@@ -126,7 +121,7 @@ function onScanSuccess(decodedText, decodedResult) {
         return;
     }
     let est = g_mapMatriculados.get(cedula);
-    if(vec.length > 0 || est.id_grupo == g_grupo.id_grupo){
+    if(est.id_grupo == g_grupo.id_grupo){
         if(est){
             if(est.activa == 1){
                 let flag = true;

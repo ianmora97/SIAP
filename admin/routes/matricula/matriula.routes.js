@@ -29,11 +29,10 @@ const con = require('../../database');
 
 router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
     let textCursos = "";
-    let text = "";
+    let text = `${req.body.cedula}`;
     for(let i = 0; i < req.body.grupos.length; i++){
         let grupo = req.body.grupos[i];
         let allG = req.body.gruposAll[i];
-        text += `${req.body.estudiante}-${allG.nivel}-${allG.allp}-${grupo}.`;
         textCursos += `<p style="background-color:#edf0ff;padding:5px 8px; color:black; border-radius:5px;">Nivel: ${allG.nivel} - Dias: ${allG.allp}</p>`;
     }
     for(let i = 0; i < req.body.grupos.length; i++){
@@ -64,7 +63,7 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                                 <div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">
                                     <h1 style="color:#ffffff">Sistema de Administración de la Piscina</h1>
                                 </div>
-                                <img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">
+                                <img src="https://siapdpe.com/img/logo-vive-promocion-transparency.png" style="background-color: white; margin:0; padding:0;">
                                 <h1>${req.body.estudiante}</h1>
                                 <p>Usted ha sido Matriculado en los siguientes cursos:</p><br>
                                 ${textCursos}
