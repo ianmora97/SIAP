@@ -269,6 +269,7 @@ function cargar_estudiante(data) {
                 }
             }
         },
+	"lengthMenu": [30, 50, 100, 500],
         columnDefs: [
             { targets: [0, 6], orderable: false,},
             { targets: '_all', orderable: true }

@@ -373,6 +373,7 @@ function cargarEstudiantes(matricula) {
                 }
             }
         },
+	"lengthMenu": [ 30, 50, 100, 500 ],
         columnDefs: [
             { targets: [8], orderable: false,},
             { targets: '_all', orderable: true }

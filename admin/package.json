@@ -41,6 +41,8 @@
     "express-session": "^1.17.2",
     "fs": "0.0.1-security",
     "fullcalendar": "^5.7.0",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
     "imap": "^0.8.19",
     "instascan": "^1.0.0",
     "jquery": "^3.5.1",

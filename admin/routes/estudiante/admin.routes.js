@@ -17,11 +17,119 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
-
+var email = require('../../email');
 const {logSistema, DDL, TABLE} = require('../../systemLogs')
 const con = require('../../database');
 
-router.get('/admin/estudiante/listaEstudiantes',ensureToken,(req,res)=>{
+router.post('/solicitud/cambioClave', (req, res) => {
+    con.query("SELECT * FROM vta_cliente_estudiante where cedula = ? and correo = ?",
+    [req.body.cedula, req.body.correo],
+    (err,rows,fields)=>{
+        if(!err){
+            if(rows[0] != undefined){
+                let user = {
+                    cedula : req.body.cedula,
+                    correo : req.body.correo
+                }
+                jwt.sign({user},'secretKeyToken',(err,token)=>{
+                    if(err){
+                        console.log(err)
+                    }else{
+                        req.session.solicitudClave = user;
+                        var mailOptions = {
+                            name:'SIAP - Registro',
+                            from: 'siapduna2020@gmail.com',
+                            to: req.body.correo,
+                            subject: 'Sistema de Administracion de la Piscina',
+                            html: '<body style="background:white;color:black;"><div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
+                                '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
+                                '</div>' +
+                                '<h1>Solicitud de cambio de clave</h1>' +
+                                `<p>Usted ha hecho una solicitud de cambio de clave, si no lo ha hecho omita este mensaje y consulte a un administrador, de lo contrario
+                                siga a este link a continuacion para proceder con el cambio de la contraseña.</p><br>
+                                <a href="https://siapdpe.com/solicitud/cambiar/clave?token=${token}">https://siapdpe.com/solicitud/cambiar/clave?token=${token}</a>
+                                <h4 style="color:red;">Este link es de unico acceso, expira en el momento que se ingresa.</h4>
+                                </body>
+                                `
+                        };
+                        email.sendMail(mailOptions, function(error, info){
+                            if (error) {
+                                console.log(error)
+                            } else {
+                                console.log('[Cambio Clave] Email sent: ' + info.response);
+                                let fb = {
+                                    text:'GOOD'
+                                }
+                                res.render('solicitudCambioClave',{fb});
+                            }
+                        });
+                    }
+                }); //json web token
+            }else{
+
+                let fb= {
+                    text:'ERROR',
+                    error:'No se encuentra Registrado'
+                }
+                res.render('solicitudCambioClave',{fb});
+            }
+                
+        }else{
+            let fb= {
+                text:'ERROR',
+                error:'Error en el sistema consulte a un administrador'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }
+    });
+    
+});
+router.get('/solicitud/cambiar/clave', (req, res) => {
+    let tokenQ = req.query.token;
+    jwt.verify(tokenQ, 'secretKeyToken', function(err, decoded) {
+        if(err){
+            let fb= {
+                text:'ERROR',
+                error:'Usted no ha solicitado ningun cambio o existe algun error en la solicitud consulte a un administrador'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }else{
+            if(decoded != undefined){
+                let user = decoded.user;
+                res.render('cambiarClave',{user});
+            }else{
+				console.log(decoded)
+                let fb= {
+                    text:'ERROR',
+                    error:'Usted no ha solicitado ningun cambio o existe algun error en la solicitud consulte a un administrador'
+                }
+                res.render('solicitudCambioClave',{fb});
+            }
+        }
+    });
+})
+
+router.post('/solicitud/cambiarClave', (req, res) => {
+    con.query("call prc_actualizar_clave_sha1_usuario(?, ?)",[req.body.cedula, req.body.clave],(err,rows,fields)=>{
+        if(err){
+	console.lo(err)
+            let fb= {
+                text: 'ERROR',
+                feed:'NO SE PUDO CAMBIAR LA CLAVE'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }else{
+let tab = 'inicio';
+            res.render('loginCliente',{tab});
+        }
+    });
+})
+
+router.get('/cambiarClave', (req, res) => {
+    res.render('solicitudCambioClave');
+});
+
+router.get('/admin/estudiante/listaEstudiantes',(req,res)=>{
     var script = 'select * from vta_admin_estudiante;';
     con.query(script,(err,rows,fields)=>{
         if(!err){

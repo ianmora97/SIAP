@@ -24,18 +24,11 @@ function loadDatePicker(){
             rightIcon: '<i class="fas fa-calendar-alt text-primary"></i>'
         }
     });
-    $('#datepicker + span').find('button').addClass('btn-sm');
-    $('#datepicker + span').after(`
-        <span class="input-group-append" role="clear-icon">
-            <button class="btn btn-outline-danger btn-sm" type="button" onclick="filterAsistenciaDeleteDate()">
-                <i class="fas fa-times"></i>
-            </button>
-        </span>
-    `)
     // on change
     $('#datepicker').on('change', function() {
         let fecha = $(this).val();
-        addDatatoFilter(fecha,'fecha');
+        console.log(fecha);
+        filterAsistencia(fecha,'fecha');
     });
 }
 function loadFromDB(){
@@ -127,36 +120,24 @@ function showGruposSelect(data){
     });
     taller.forEach((g) => {
         $('#gruposSelect').append(`
-        <button type="button" class="btn btn-toggle mb-2" data-toggle="button" onclick="addDatatoFilter('${g}','grupo')" 
+        <button type="button" class="btn btn-toggle mb-2" data-toggle="button" onclick="filterAsistencia('${g}')" 
         aria-pressed="false"><i class="fas fa-flag"></i> ${g}</button>
         `);
     });
     dia.forEach((g) => {
         $('#diasSelect').append(`
-        <button type="button" class="btn btn-toggle mb-2" data-toggle="button" onclick="addDatatoFilter('${g}','dia')" 
+        <button type="button" class="btn btn-toggle mb-2" data-toggle="button" onclick="filterAsistencia('${g}')" 
         aria-pressed="false"><i class="fas fa-calendar-day"></i> ${g}</button>
         `);
     });
 }
-function filterAsistenciaDeleteDate(){
-    g_filterby.delete('fecha');
-    $('#datepicker').val('')
-    filterAsistencia();
-}
-function addDatatoFilter(data,type){
-    if(type == 'fecha'){
-        g_filterby.set('fecha',data);
+function filterAsistencia(data,type){
+
+    if(g_filterby.has(data)){
+        g_filterby.delete(data);
     }else{
-        if(g_filterby.has(data)){
-            g_filterby.delete(data);
-        }else{
-            g_filterby.set(data,true);
-        }
+        g_filterby.set(data,true);
     }
-    console.log(g_filterby);
-    filterAsistencia()
-}
-function filterAsistencia(){
     if(g_filterby.size > 0){
         $('#lista').html('');
         g_asistencias.forEach((a,i) => {
@@ -164,16 +145,14 @@ function filterAsistencia(){
                 showAsistencia(a,i);
             }else if(g_filterby.has(a.dia)){
                 showAsistencia(a,i);
-            }else if(g_filterby.has('fecha')){ //si es fecha
-                let fecha = g_filterby.get('fecha');
-                if(fecha == a.fecha){
-                    showAsistencia(a,i);
-                }
+            }else if(g_filterby.has(a.fecha)){
+                showAsistencia(a,i);
             }
         });
     }else{
         showAsistencias(g_asistencias);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', loaded);
