@@ -118,8 +118,8 @@ router.get('/admin/inbox/enviarCorreo',ensureToken,(req,res)=>{
     });
 });
 router.get('/admin/matricula/qr/check',(req,res)=>{
-    con.query("SELECT * FROM vta_matriculados_por_grupo WHERE id_grupo = ? AND cedula = ?",
-    [req.query.grupo, req.query.cedula],
+    con.query("SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?",
+    [req.query.cedula],
         (err,result,fields)=>{
         if(!err){
             res.send(result);

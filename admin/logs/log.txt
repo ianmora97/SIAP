@@ -114,3 +114,5 @@
 [2022-03-13 07:55:32] - 116890118|IAN Inicio Sesion
 [2022-03-13 09:10:19] - 116890118|Ian Inicio Sesion
 [2022-03-13 10:23:11] - 116890118|Ian Inicio Sesion
+[2022-03-13 10:48:57] - 116890118|Ian Inicio Sesion
+[2022-03-13 10:54:01] - 116890118|Ian Inicio Sesion
