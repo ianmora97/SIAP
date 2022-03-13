@@ -6,6 +6,9 @@ const SocketIo = require('socket.io');
 const multer = require('multer');
 const uuid = require('uuid');
 var cors = require('cors')
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const router = express.Router();
 require('dotenv').config();
@@ -33,6 +36,12 @@ app.use(session({
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
+
+// redirect to https
+app.enable('trust proxy')
+    app.use((req, res, next) => {
+    req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+})
 
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'/public/uploads'),
@@ -81,10 +90,16 @@ app.use(require('./routes/client/client.routes'));
 
 app.use(require('./routes/instructores/teach.routes'));
 
+// CERT
+const certPath = '/etc/letsencrypt/live/siapdpe.com';
+var options = {
+    key: fs.readFileSync(`${certPath}/privkey.pem`),
+    cert: fs.readFileSync(`${certPath}/fullchain.pem`)
+};
 
-const server = app.listen(app.get('port'), () =>{
-    console.log('[',chalk.green('OK'),']' ,chalk.yellow('SERVER'),'Admin server running on','http://'+app.get('host')+':'+ app.get('port'));
-});
+// HTTPS server
+http.createServer(app).listen(80);
+var server = https.createServer(options, app).listen(443);
 
 const io = SocketIo(server);
 

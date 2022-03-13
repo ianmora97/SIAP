@@ -8,6 +8,7 @@ const router = express.Router();
 const con = require('../../database');
 
 router.post('/client/log',(req,res)=>{
+    console.log(req.body);
     con.query("SELECT * FROM vta_cliente_estudiante WHERE cedula = ? AND clave = sha1(?)",
     [req.body.cedula, req.body.clave],
     (err,rows,fields)=>{
@@ -20,6 +21,7 @@ router.post('/client/log',(req,res)=>{
                     res.redirect('/client/inicio');
                 }); 
             }else{
+                console.log(rows);
                 res.render('loginCliente', {err:'Correo o Clave incorrecta',id: 2});
             }
         }else{

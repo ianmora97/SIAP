@@ -235,6 +235,55 @@ router.get('/api/admin/estudiantes/getEstudiante/full', (req,res)=>{
         }
     });
 });
+router.get('/api/client/estudiantes/getEstudiante/full', (req,res)=>{
+    con.query('SELECT * FROM vta_admin_estudiante WHERE cedula = ?',
+    [req.query.cedulaID],(err1,rows1,fields1)=>{
+        if(!err1){
+            if(rows1.length > 0){
+                var estudiante = rows1[0];
+                con.query('SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?',
+                [req.query.cedulaID],(err2,rows2,fields2)=>{
+                    if(!err2){
+                        var talleres = rows2;
+                        con.query('SELECT * FROM vta_conductas WHERE cedula = ?',
+                        [req.query.cedulaID],(err3,rows3,fields3)=>{
+                            if(!err3){
+                                var conducta = rows3;
+                                con.query('SELECT * FROM vta_anotaciones WHERE cedula_estudiante = ?',
+                                    [req.query.cedulaID],
+                                    (err4,rows4,fields4)=>{
+                                    if(!err4){
+                                        var anotaciones = rows4;
+                                        con.query('SELECT * FROM vta_matriculados_por_grupo where cedula = ?',
+                                        [req.query.cedulaID],
+                                            (err5,rows5,fields5)=>{
+                                            if(!err5){
+                                                var talleres_p = rows5;
+                                                res.send({estudiante,talleres,anotaciones,conducta,talleres_p});
+                                            }else{
+                                                res.send(err5);
+                                            }
+                                        });
+                                    }else{
+                                        res.send(err4);
+                                    }
+                                });
+                            }else{
+                                res.send(err3);
+                            }
+                        });
+                    }else{
+                        res.send(err2);
+                    }
+                });
+            }else{
+                res.send('NO_DATA');
+            }
+        }else{
+            res.send(err1);
+        }
+    });
+});
 
 router.post('/admin/listEstudiantes/cambiarfotoperfil',(req,res)=>{
     if(req.session.value){
