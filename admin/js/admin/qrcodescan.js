@@ -2,8 +2,6 @@
 var cameraIsOpen = false;
 var self = this;
 
-
-
 function openQRModal(){
     animateCSS('.QRContainer', 'fadeInUp');
     $('.QRContainer').css('display', 'flex');
@@ -32,21 +30,58 @@ function openQRCamera(){
                 'Authorization': bearer
             },
         }).then((response) => {
-            console.log(response);
             if(response.length > 0){
                 if(response.filter(x => x.activa).length > 0){
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Matricula Verificada',
-                        html: 
-                        `<p>El estudiante tiene una matricula activa</p>
-                        <h5><b>Cedula:</b> ${content}</h5>
-                        <hr class="my-2">`
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            openQRCamera()
+                    if(typeof g_canScan != 'undefined'){ // ! si esta en Asistencias
+                        if(g_canScan == true){
+                            let est_m = g_mapMatriculados.get(content);
+                            let f = new Date();
+                            let fecha = `${f.getFullYear()}-${f.getMonth()+1}-${f.getDate()}`;
+                            let data = {
+                                estado: 1,
+                                est: parseInt(est_m.id_estudiante),
+                                grupo: parseInt(g_grupo),
+                                fecha: fecha
+                            };
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Matricula Verificada',
+                                html: 
+                                `<p>Presente</p>
+                                <h5><b>Cedula:</b> ${content}</h5>
+                                <hr class="my-2">`
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    let bearer = 'Bearer '+g_token;
+                                    $.ajax({
+                                        type: 'GET',
+                                        url: '/teach/enviarAsistencia',
+                                        data: data,
+                                        contentType: "application/json",
+                                        headers: {
+                                            'Authorization': bearer
+                                        },
+                                    }).then((response) => {
+                                        openQRCamera();
+                                    }, (error) => {
+                                    });
+                                }
+                            });
                         }
-                    });
+                    }else{
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Matricula Verificada',
+                            html: 
+                            `<p>El estudiante tiene una matricula activa</p>
+                            <h5><b>Cedula:</b> ${content}</h5>
+                            <hr class="my-2">`
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                openQRCamera()
+                            }
+                        });
+                    }
                 }else{
                     Swal.fire({
                         icon: 'error',

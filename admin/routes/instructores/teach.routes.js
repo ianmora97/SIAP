@@ -149,6 +149,18 @@ router.get('/api/teach/grupoMatriculados',ensureToken,(req,res)=>{
         }
     });
 });
+router.get('/api/admin/grupoMatriculados',ensureToken,(req,res)=>{
+    let usuario = req.query.profesor;
+    let grupo = req.query.grupo;
+    con.query(`SELECT * FROM vta_matriculados_por_grupo WHERE cedula_profeosr = '${usuario.cedula}' AND id_grupo = ${grupo}`,
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            res.send({err:'NotFound'});
+        }
+    });
+});
 // ? -------------------- verificar Matricula -------------
 router.get('/teach/matricula/qr/check',(req,res)=>{
     con.query("SELECT * FROM vta_matriculados_por_grupo WHERE id_grupo = ? AND cedula = ?",

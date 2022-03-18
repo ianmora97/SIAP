@@ -64,6 +64,17 @@ router.get('/admin/reportes/asistencia/getAsistencia',(req,res)=>{
         }
     });
 });
+
+router.get('/admin/reportes/asistencia/eliminar',(req,res)=>{
+    con.query("call prc_eliminar_asistencia(?)", [req.query.id],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows)
+        }else{
+            res.send(err);
+        }
+    });
+});
 // ! ----------------------------------- security ------------------------------------
 function ensureToken(req,res,next) {
     const bearerHeader = req.headers['authorization'];
