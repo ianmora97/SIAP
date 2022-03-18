@@ -5,60 +5,9 @@
     <%- include('headers') %>
 </head>
 <body>
-    <div class="modal fade" id="seleccionarModal" tabindex="-1" aria-labelledby="seleccionarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary p-2">
-                    <h5 class="modal-title text-white font-weight-bold" id="seleccionarModalLabel">Grupo</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Cerrar</button>
-                    <button type="button" class="btn btn-success" onclick="seleccionarGrupo()"><i class="fas fa-check"></i> Seleccionar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <%- include('header',{titleHere: "Matrícula"}) %>
-    <div class="px-3 py-2 bg-white w-100">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="text-muted m-0">Cursos Disponibles</h5>
-            <div class="dropdown position-relative">
-                <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuFilter" 
-                data-toggle="dropdown" aria-expanded="false">
-                    Filtrar por
-                </button>
-                <div class="dropdown-menu p-0 border-0 dropdown-menu-right" aria-labelledby="dropdownMenuFilter" style="width: 210px;">
-                    <form class="p-2">
-                        <p class="text-muted font-weight-bold d-block">Dia</p>
-                        <div id="diasSelect" class="pl-1 my-3"></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="my-2"></div>
-    <div class="container-fluid">
-        <div id="cursos">
-            <div class="d-flex justify-content-center align-items-center pt-5 mt-5" id="spinnerLoad">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p class="mb-0 ml-2">Cargando...</p>
-            </div>
-        </div>
-    </div>
-    <div class="fixed-bottom bg-white" style="bottom:53px; z-index: 99 !important;">
-        <div id="listSelected" class="shadow-down px-2 pb-4 pt-2 border-bottom" style="display: none;">
-            <div id="gruposSelected"></div>
-            <button type="button" class="btn btn-primary btn-sm w-100 my-2" id="matricularBotonSelected"><i class="fas fa-plus"></i> Matricular</button>
-        </div>
-    </div>
+    
     <%- include('menu') %>
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
     <script src="/js/client/sockets.js"></script>
