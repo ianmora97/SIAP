@@ -19,6 +19,7 @@ const nodemailer = require('nodemailer');
 const qr = require("qrcode");
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 
 var email = require('../../email');
 
@@ -55,7 +56,7 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                 var mailOptions = {
                     name:'SIAP - Matricula',
                     from: 'SIAP UNA <siapduna2020@gmail.com>',
-                    to: req.body.correo, //'ianmorar03@gmail.com', //req.body.correo,
+                    to: process.env.ENV != "dev" ? req.body.correo: "ianmorar03@gmail.com" ,
                     subject: 'Confirmacion de Matricula',
                     html: `
                         <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">

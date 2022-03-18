@@ -37,12 +37,7 @@ function enviarAsistencia(){
                             fecha: fecha
                         });
                     }else{
-                        data.push({
-                            estado: 0,
-                            est: parseInt(e.id_estudiante),
-                            grupo: parseInt(id_grupo),
-                            fecha: fecha
-                        });
+                        
                     }
                 }
             }
