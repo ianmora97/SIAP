@@ -3,6 +3,8 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const router = express.Router();
 
+const fetch = require("cross-fetch");
+
 const db = require('../database');
 
 router.get('/', (req, res) => {
@@ -64,6 +66,40 @@ router.get('/buscarUsuarioRegistro',(req,res)=>{
     let url = 'https://apis.gometa.org/cedulas/'+req.query.id+'&key=uLpply0Tn1tAwQo';
     getRegistroPersona(url).then((persona)=>{
         res.send(persona)
+    });
+});
+async function getQRCCSS(codigoQR){
+    try {
+        const text = await request("https://dencode.com/dencode", {
+            "headers": {
+              "accept": "application/json, text/javascript, */*; q=0.01",
+              "accept-language": "es,en;q=0.9,gl;q=0.8",
+              "content-type": "application/json",
+              "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Google Chrome\";v=\"99\"",
+              "sec-ch-ua-mobile": "?0",
+              "sec-ch-ua-platform": "\"macOS\"",
+              "sec-fetch-dest": "empty",
+              "sec-fetch-mode": "cors",
+              "sec-fetch-site": "same-origin",
+              "x-requested-with": "XMLHttpRequest",
+              "cookie": "oe=UTF-8; oex=ISO-8859-1; JSESSIONID=node01mppavhlo8jghg1sgyvaho5jf214.node0; nl=crlf; _ga=GA1.2.2011716091.1647639603; _gid=GA1.2.659953774.1647639603; __gads=ID=3977540603365af0-22781634db7b0022:T=1647639604:RT=1647639604:S=ALNI_MYnmz1f_xRrFvoDdVZzppwrUAhEeA; tz=Europe%2FMadrid; _gat=1",
+              "Referer": "https://dencode.com/string/base45",
+              "Referrer-Policy": "strict-origin-when-cross-origin"
+            },
+            "body": "{\"type\":\"string\",\"method\":\"string.base45\",\"value\":\""+codigoQR+"\",\"oe\":\"UTF-8\",\"nl\":\"crlf\",\"tz\":\"Europe/Madrid\",\"options\":{}}",
+            "method": "POST"
+          });
+        return JSON.parse(text);
+    } catch (e) {
+        console.log(e);
+    }
+}
+router.get('/leerqrcss',(req,res)=>{
+    let cod = req.query.codigo;
+    getQRCCSS(cod).then((qr)=>{
+        if(qr.statusCode == 200){
+            res.send(JSON.parse(qr.response.decStrBase45ZlibCoseCbor))
+        }
     });
 });
 router.get('/admin/bringmeAll', (req, res) => {
