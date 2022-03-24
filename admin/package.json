@@ -7,15 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "nodemonConfig": {
-    "ignore": [
-      "admin/js/admin/*",
-      "admin/js/teach/*",
-      "admin/js/client/*",
-      "admin/assets/*"
-    ],
-    "delay": 0
-  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,7 +15,7 @@
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^3.1.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {

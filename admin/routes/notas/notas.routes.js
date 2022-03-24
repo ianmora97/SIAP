@@ -7,6 +7,7 @@ const {logSistema, DDL, TABLE} = require('../../systemLogs');
 
 const con = require('../../databaseLite');
 
+// * ----------------------------------- NOTAS ------------------------------------
 router.get('/api/admin/notas',ensureToken, (req, res) => {
     con.all('SELECT * FROM notas',
     (err, rows, fields) => {
@@ -39,7 +40,64 @@ router.delete('/api/admin/notas/:id',ensureToken, (req, res) => {
         }
     });
 });
+// * ----------------------------------- TASK ------------------------------------
+router.get('/api/admin/tasks',ensureToken, (req, res) => {
+    con.all('SELECT * FROM tasks',
+    (err, rows, fields) => {
+        if(!err){
+            res.send(rows);
+        }else{
+            res.status(300).send(err);
+        }
+    });
+});
 
+router.post('/api/admin/tasks',ensureToken, (req, res) => {
+    let name = req.body.name;
+    let description = req.body.description;
+    con.run("INSERT INTO tasks (name,description) VALUES (?,?)", [name,description], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+router.put('/api/admin/tasks',ensureToken, (req, res) => {
+    let data = req.query;
+    con.run("UPDATE tasks set name = ?, description = ?, completed = ? where id = ?", 
+    [data.name, data.description, data.completed, data.id], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+router.put('/api/admin/tasks/status',ensureToken, (req, res) => {
+    let data = req.body;
+    con.run("UPDATE tasks set completed = ? where id = ?", 
+    [data.completed, data.id], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+router.delete('/api/admin/tasks/:id',ensureToken, (req, res) => {
+    let id = req.params.id;
+    con.run("DELETE FROM tasks WHERE id = ?", [id], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
 
 // ! ----------------------------------- SECURITY ------------------------------------
 function ensureToken(req,res,next) {

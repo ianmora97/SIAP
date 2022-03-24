@@ -1,0 +1,10 @@
+{
+    "verbose": true,
+    "ignore": [
+        "admin/js/admin/*",
+        "admin/js/teach/*",
+        "admin/js/client/*",
+        "admin/assets/*"
+    ],
+    "ext": "js"
+  }

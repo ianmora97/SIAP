@@ -1,0 +1,262 @@
+<div class="container-custom animate__faster" id="containerTask">
+    <div class="row m-0 px-3 py-4 d-flex justify-content-between align-items-center">
+        <h4 class=" m-0"><i class="fas fa-clipboard-check pr-2 text-primary"></i>To Do</h4>
+        <div class="close " role="button" onclick="closeFilter()">&times;</div>
+    </div>
+    <div class="cont px-3">
+        <hr class="my-2">
+        <h5 class="my-2 font-weight-bold">Tareas:</h5>
+        <div id="tareasList" class="list-group" style="min-height: calc(100vh - 300px); overflow-y: auto;">
+
+        </div>
+        <button type="button" class="btn btn-primary btn-block mt-3" data-toggle="modal" 
+        data-target="#modalAgregarTask"><i class="fas fa-plus-circle pr-2"></i>Nueva Tarea</button>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div>
+                <small class="text-muted">Pendientes</small>
+                <h4 class="font-weight-bold" id="stats-tasks-pendiente">0</h4>
+            </div>
+            <div>
+                <small class="text-muted">En progreso</small>
+                <h4 class="font-weight-bold" id="stats-tasks-progreso">0</h4>
+            </div>
+            <div>
+                <small class="text-muted">Completadas</small>
+                <h4 class="font-weight-bold" id="stats-tasks-completadas">0</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalAgregarTask" tabindex="-1"  data-keyboard="false" 
+aria-labelledby="modalAgregarTask" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white pl-2 font-weight-bold" id="modalAgregarTaskLabel">
+                    <i class="pr-2 fas fa-clipboard-check"></i>Agregar Tarea
+                </h5>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="tituloAgregarTarea">Título</label>
+                    <input type="text" class="form-control" id="tituloAgregarTarea" name="tituloAgregarTarea" placeholder="Título de la Tarea" required>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="contenidoAgregarTarea" name="contenidoAgregarTarea" rows="6" placeholder="Contenido de la Tarea" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer py-1 bg-light">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times pr-2"></i>Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarTarea" onclick="agregarTareaPanel()"><i class="fas fa-save pr-2"></i>Guardar</button>
+            </div>
+        </div>
+    </div>        
+</div>
+<div class="modal fade" id="modalVerTask" tabindex="-1"  data-keyboard="false" aria-labelledby="modalVerTask" aria-hidden="true">
+    <div class="modal-dialog modal modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white pl-2 font-weight-bold" id="modalVerTaskLabel"></h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span class="sr-only" id="idNotaabiertaTask"></span>
+                <p id="contentModalVerTask"></p>
+            </div>
+            <div class="modal-footer py-1 bg-light">
+                <button type="button" class="btn btn-danger btn-sm" id="borrarTask" onclick="eliminarTareaModalPanel()"><i class="fas fa-backspace pr-2"></i>Borrar</button>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonTaskModal" 
+                    data-toggle="dropdown" aria-expanded="false">
+                        Cambiar Estado
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTaskModal" id="editarTaskStatusDropdown">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>        
+</div>
+<script>
+    var g_tasksPanelMap = new Map();
+    function loadTaskPanel(event) {
+        loadTasksDB();
+        onmodalOpenTask();
+    }
+    function onmodalOpenTask(){
+        $('#modalVerTask').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = parseInt(button.data('id'));
+            let task = g_tasksPanelMap.get(id);
+            var modal = $(this);
+            $("#modalVerTaskLabel").text(task.name);
+            $('#idNotaabiertaTask').text(id);
+            $('#contentModalVerTask').text(task.description);
+            let text = task.completed == 0 ? "Pendiente" : task.completed == 1 ? "En progreso" : "Completeada";
+            $("#dropdownMenuButtonTaskModal").text(text);
+            if(task.completed == 0){
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 1)"><i class="fas fa-minus-circle text-warning pr-2"></i>En Progreso</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 2)"><i class="fas fa-check-circle text-success pr-2"></i>Completada</a>
+                `);
+            }else if(task.completed == 1){
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 0)"><i class="fas fa-exclamation-circle text-danger pr-2"></i>Pendiente</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 2)"><i class="fas fa-check-circle text-success pr-2"></i>Completada</a>
+                `);
+            }else{
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 0)"><i class="fas fa-exclamation-circle text-danger pr-2"></i>Pendiente</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 1)"><i class="fas fa-minus-circle text-warning pr-2"></i>En Progreso</a>
+                `);
+            }
+        });
+    }
+    function editarTaskStatus(boton, status){
+        let bearer = 'Bearer '+g_token;
+        let data = {
+            id: parseInt($("#idNotaabiertaTask").html()),
+            completed: parseInt(status),
+        }
+        $.ajax({
+            type: "PUT",
+            url: "/api/admin/tasks/status",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            let text = parseInt(status) == 0 ? "Pendiente" : parseInt(status) == 1 ? "En progreso" : "Completeada";
+            $("#dropdownMenuButtonTaskModal").text(text);
+            if(parseInt(status) == 0){
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 1)"><i class="fas fa-minus-circle text-warning pr-2"></i>En Progreso</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 2)"><i class="fas fa-check-circle text-success pr-2"></i>Completada</a>
+                `);
+            }else if(parseInt(status) == 1){
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 0)"><i class="fas fa-exclamation-circle text-danger pr-2"></i>Pendiente</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 2)"><i class="fas fa-check-circle text-success pr-2"></i>Completada</a>
+                `);
+            }else{
+                $('#editarTaskStatusDropdown').html(`
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 0)"><i class="fas fa-exclamation-circle text-danger pr-2"></i>Pendiente</a>
+                    <a class="dropdown-item" href="#" onclick="editarTaskStatus(this, 1)"><i class="fas fa-minus-circle text-warning pr-2"></i>En Progreso</a>
+                `);
+            }
+            loadTasksDB();
+        }, (error) => {
+
+        });
+    }
+    function eliminarTareaModalPanel(){
+        let bearer = 'Bearer '+g_token;
+        let id = parseInt($("#idNotaabiertaTask").html());
+        $.ajax({
+            type: "DELETE",
+            url: "/api/admin/tasks/"+id,
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            $("#modalVerTask").modal("hide");
+            loadTasksDB();
+        }, (error) => {
+
+        });
+    }
+    function openTasksBar(){
+        $("#containerTask").addClass("active");
+        animateCSS('#containerTask','fadeInRight');
+    }
+    function closeFilter(){
+        animateCSS('#containerTask','fadeOutRight').then(()=>{
+            $('#containerTask').removeClass('active');
+        });
+    }
+    function clearTaskAgregar(){
+        $("#tituloAgregarTarea").val("");
+        $("#contenidoAgregarTarea").val("");
+    }
+    function agregarTareaPanel(){
+        let bearer = 'Bearer '+g_token;
+        let data = {
+            name: $("#tituloAgregarTarea").val(),
+            description: $("#contenidoAgregarTarea").val(),
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/admin/tasks",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            $("#modalAgregarTask").modal("hide");
+            clearTaskAgregar();
+            loadTasksDB();
+        }, (error) => {
+
+        });
+    }
+    function loadTasksDB(){
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/api/admin/tasks",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            cargarTareas_panel(response);
+        }, (error) => {
+
+        });
+    }
+    function cargarTareas_panel(tareas){
+        $("#tareasList").html('');
+        $("#stats-tasks-pendiente").html(tareas.filter(t => t.completed == 0).length);
+        $("#stats-tasks-progreso").html(tareas.filter(t => t.completed == 1).length);
+        $("#stats-tasks-completadas").html(tareas.filter(t => t.completed == 2).length);
+        if(tareas.length > 0){
+            tareas.forEach(function(tarea){
+                g_tasksPanelMap.set(tarea.id,tarea);
+                showTarea_panel(tarea);
+            });
+        }else{
+            $("#tareasList").html('<div class="text-muted">No hay tareas creadas</div>');
+        }
+    }
+    function showTarea_panel(e){
+        let color = e.completed == 0 ? "danger" : e.completed == 1 ? "warning" : "success";
+        let text = e.completed == 0 ? "Pendiente" : e.completed == 1 ? "En progreso" : "Completeada";
+        $("#tareasList").append(`
+            <a href="#" data-toggle="modal" data-target="#modalVerTask" data-id="${e.id}" 
+            class="list-group-item list-group-item-cus list-group-item-action mb-2" id="taskID-${e.id}">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 font-weight-bold">${e.name}</h5>
+                    <small>${moment(e.created_at).calendar()}</small>
+                </div>
+                <p class="mb-0">${e.description}</p>
+                <div class="text-right">
+                    <i class="pl-2 fas fa-circle text-${color}"></i>
+                </div>
+            </a>
+        `);
+        tippy(`#taskID-${e.id}`, {
+            content: `${text}`,
+            placement: 'left',
+            animation: 'shift-away-extreme',
+        });
+    }
+    document.addEventListener("DOMContentLoaded", loadTaskPanel);
+</script>
