@@ -19,81 +19,47 @@
 	<main role="main">
 		<div id="myCarousel" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
-				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-				<li data-target="#myCarousel" data-slide-to="1"></li>
-				<li data-target="#myCarousel" data-slide-to="2"></li>
+				<% json.fma.forEach((e,i)=>{ %>
+					<%if(e.show == "true"){%>
+						<li data-target="#myCarousel" data-slide-to="<%=i%>" class="<%=i==0?'active':''%>"></li>
+					<%}%>
+				<% }); %>
 			</ol>
 			<div class="carousel-inner">
-				<div class="carousel-item active">
-                    <div class="container-blur"></div>
-					<img src="/img/piscina2.jpg" class="d-block w-100 custom-image-car">
-					<div class="container">
-						<div class="carousel-caption text-left">
-							<h1 class="display-3 font-weight-bold">Inicio de Clases</h1>
-							<p>Inscripciones a partir del 22 de Enero</p>
+				<% json.fma.forEach((e,i)=>{ %>
+					<%if(e.show == "true"){%>
+						<div class="carousel-item <%if(i == 0){%>active<%}%>">
+							<div class="container-blur"></div>
+							<img src="/img/piscina<%=i+1%>.jpg" class="d-block w-100 custom-image-car">
+							<div class="container">
+								<div class="carousel-caption text-left">
+									<h1 class="display-3 font-weight-bold"><%= e.title %></h1>
+									<p><%= e.subtitle %></p>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="carousel-item">
-					<div class="container-blur"></div>
-					<img src="/img/piscina3.jpg" class="d-block w-100 custom-image-car">
-					<div class="container">
-						<div class="carousel-caption text-left">
-							<h1>Another example headline.</h1>
-							<p>Some representative placeholder content for the second slide of the carousel.</p>
-							<p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="carousel-item">
-					<div class="container-blur"></div>
-					<img src="/img/piscina1.jpg" class="d-block w-100 custom-image-car">
-					<div class="container">
-						<div class="carousel-caption text-left">
-							<h1>One more for good measure.</h1>
-							<p>Some representative placeholder content for the third slide of this carousel.</p>
-							<p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
-						</div>
-					</div>
-				</div>
+					<%}%>
+				<% }); %>
+
 			</div>
 			
 		</div>
 
 		<div class="container marketing">
-			<div class="row featurette animate__slow" id="feature1">
-				<div class="col-md-7">
-					<h2 class="featurette-heading">Iniciacion.</h2>
-					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
+			<% json.feature.forEach((e,i)=>{ %>
+				<%if(e.show == "true"){%>
+				<div class="row featurette animate__slow" id="feature<%=i+1%>">
+					<div class="col-md-7">
+						<h2 class="featurette-heading"><%= e.title %></h2>
+						<p class="lead"><%= e.subtitle %></p>
+					</div>
+					<div class="col-md-5">
+						<img src="/img/square<%=i+1%>.JPG" width="100%" style="filter: saturate(1.4);">
+					</div>
 				</div>
-				<div class="col-md-5">
-					<img src="/img/square2.JPG" width="100%" style="filter: saturate(1.4);">
-				</div>
-			</div>
-
-			<hr class="featurette-divider">
-			<div class="row featurette animate__slow" id="feature2">
-				<div class="col-md-7 order-md-2">
-					<h2 class="featurette-heading">Perfeccionamiento.</h2>
-					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
-				</div>
-				<div class="col-md-5 order-md-1">
-					<img src="/img/square3.JPG" width="100%" style="filter: saturate(1.4);">
-				</div>
-			</div>
-
-			<hr class="featurette-divider">
-			<div class="row featurette animate__slow" id="feature3">
-				<div class="col-md-7">
-					<h2 class="featurette-heading">Entrenamiento Deportivo.</h2>
-					<p class="lead">Para estudiantes que no tienen experiencia en natacion, ideal para los que quieren empezar.</p>
-				</div>
-				<div class="col-md-5">
-					<img src="/img/square1.JPG" width="100%" style="filter: saturate(1.4);">
-				</div>
-			</div>
-
-			<hr class="featurette-divider">
+				<hr class="featurette-divider">
+				<%}%>
+			<% }); %>
 		</div>
 		<%- include('footer') %>
 	</main>

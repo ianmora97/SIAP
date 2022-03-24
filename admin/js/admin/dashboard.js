@@ -105,6 +105,7 @@ function load_stats() {
             'Authorization':bearer
         }
     }).then((response) => {
+        console.log("NUEVOS:",response);
         cargarTablaUsuariosNuevos(response);
     }, (error) => {
 
@@ -150,7 +151,7 @@ function showTablaUsuariosNuevos(u) {
                 </div>
                 <div class="d-flex flex-column mb-auto justify-content-end pr-2">
                     <small class="mb-2">${moment(u.created_at, "YYYY-MM-DD").format('ll')}</small>
-                    <span class="badge badge-primary">${u.tipo ? 'Estudiante' : 'Funcionario'}</span>
+                    <span class="badge badge-primary">${u.tipo_usuario}</span>
                 </div>
             </div>
         </a>

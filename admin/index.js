@@ -106,9 +106,15 @@ if(process.env.ENV != 'dev'){
 
 // HTTPS server
 var server;
-if(process.env.ENV != 'dev') http.createServer(app).listen(80);
-if(process.env.ENV != 'dev') server = https.createServer(options, app).listen(443);
-server = http.createServer(app).listen(80);
+if(process.env.ENV != 'dev'){
+    http.createServer(app).listen(80);
+}else{
+    server = http.createServer(app).listen(80);
+    console.log('[',chalk.green('OK'),'] DEVELOPMENT server started on port 80');
+}
+if(process.env.ENV != 'dev') server = https.createServer(options, app).listen(443, () => {
+    console.log('[',chalk.green('OK'),'] PRODUCTION SERVER STARTED');
+});
 
 const io = SocketIo(server);
 

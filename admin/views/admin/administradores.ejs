@@ -136,11 +136,18 @@
                                 Lista
                             </span>
                         </a>
-                        <a class="nav-item-line-cus" id="nav-subirarchivos-tab" data-toggle="tab" href="#nav-subirarchivos" role="tab" aria-controls="nav-subirarchivos" aria-selected="false">
-                            <span>
-                                Archivos
-                            </span>
-                        </a>
+                        <% if(usuario.rol >= 4){ %>
+                            <a class="nav-item-line-cus" id="nav-subirarchivos-tab" data-toggle="tab" href="#nav-subirarchivos" role="tab" aria-controls="nav-subirarchivos" aria-selected="false">
+                                <span>
+                                    Archivos
+                                </span>
+                            </a>
+                            <a class="nav-item-line-cus" id="nav-textoInicio-tab" data-toggle="tab" href="#nav-textoInicio" role="tab" aria-controls="nav-textoInicio" aria-selected="false">
+                                <span>
+                                    Homepage
+                                </span>
+                            </a>
+                            <%}%>
                         <% if(usuario.rol == 5){ %>
                             <a class="nav-item-line-cus" id="nav-querys-tab" data-toggle="tab" href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false">
                                 <span>
@@ -254,47 +261,178 @@
                             </div>
                         </div>
                         
-                        <div class="tab-pane fade" id="nav-subirarchivos" role="tabpanel" aria-labelledby="nav-subirarchivos-tab">
-                            <div class="bg-white border-0 rounded-3 p-4">
-                                <div class="row ">
-                                    <div class="col-md-6 ">
-                                        <h1 class="font-weight-bolder display-5">Carga de Archivos</h1>
-                                        <p class="text-muted">Los estudiantes que se encuentren en un Excel "MACRO" 
-                                            pueden ser agregados a la base de datos de manera automática.
-                                        </p>
+                        <% if(usuario.rol >= 4){ %>
+                            <div class="tab-pane fade" id="nav-subirarchivos" role="tabpanel" aria-labelledby="nav-subirarchivos-tab">
+                                <div class="bg-white border-0 rounded-3 p-4">
+                                    <div class="row ">
+                                        <div class="col-md-6 ">
+                                            <h1 class="font-weight-bolder display-5">Carga de Archivos</h1>
+                                            <p class="text-muted">Los estudiantes que se encuentren en un Excel "MACRO" 
+                                                pueden ser agregados a la base de datos de manera automática.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white border-0 rounded-3 mt-4 animate__animated animate__fadeInUp">
+                                    <div class="row px-3 py-2 mx-0" >
+                                        <div class="col-md-6" style="height: 65vh; overflow-y: auto;">
+                                            <div class="form-group my-2">
+                                                <h5 class="font-weight-bold mb-3">Agregar Estudiantes desde un Archivo Excel</h5>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text bg-success" id="inputGroupFileAddon01">
+                                                            <i class="far fa-file-excel text-white"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="upload" 
+                                                        name="files[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                                        <label class="custom-file-label" for="upload">Subir Excel</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-3" id="resultTableScript1"></div>
+                                            
+                                        </div>
+                                        <div class="col-md-6 border-left">
+                                            <div class=" bg-dark w-100 rounded-3 shadow p-3 text-white " style="height: 62vh;" 
+                                            id="feedbackAfterUpload">
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        <div class="tab-pane fade" id="nav-textoInicio" role="tabpanel" aria-labelledby="nav-textoInicio-tab">
+
                             <div class="bg-white border-0 rounded-3 mt-4 animate__animated animate__fadeInUp">
                                 <div class="row px-3 py-2 mx-0" >
-                                    <div class="col-md-6" style="height: 65vh; overflow-y: auto;">
+                                    <div class="col-md-5" style="height: 85vh; overflow-y: auto;">
                                         <div class="form-group my-2">
-                                            <h5 class="font-weight-bold mb-3">Agregar Estudiantes desde un Archivo Excel</h5>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text bg-success" id="inputGroupFileAddon01">
-                                                        <i class="far fa-file-excel text-white"></i>
-                                                    </span>
+                                            <h5 class="font-weight-bold mb-3">FMA</h5>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="slide1Show">
+                                                        <label class="custom-control-label" for="slide1Show"><h6 class="font-weight-bold mb-3">Slide 1</h6></label>
+                                                    </div>
                                                 </div>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="upload" 
-                                                    name="files[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="upload">Subir Excel</label>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="slide1-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide1-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="slide1-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide1-body-HP" placeholder="Text...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="slide2Show">
+                                                        <label class="custom-control-label" for="slide2Show"><h6 class="font-weight-bold mb-3">Slide 2</h6></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="slide2-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide2-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="slide2-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide2-body-HP" placeholder="Text...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="slide3Show">
+                                                        <label class="custom-control-label" for="slide3Show"><h6 class="font-weight-bold mb-3">Slide 3</h6></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="slide3-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide3-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="slide3-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="slide3-body-HP" placeholder="Text...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="my-2">
+                                            <h5 class="font-weight-bold mb-3">Features</h5>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="feature1Show">
+                                                        <label class="custom-control-label" for="feature1Show"><h6 class="font-weight-bold mb-3">Feature 1</h6></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="feature1-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature1-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="feature1-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature1-body-HP" placeholder="Text...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="feature2Show">
+                                                        <label class="custom-control-label" for="feature2Show"><h6 class="font-weight-bold mb-3">Feature 2</h6></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="feature2-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature2-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="feature2-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature2-body-HP" placeholder="Text...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="feature3Show">
+                                                        <label class="custom-control-label" for="feature3Show"><h6 class="font-weight-bold mb-3">Feature 3</h6></label>
+                                                    </div>
+                                                </div>
+                                                <div class="row mx-0">
+                                                    <div class="col-md-6">
+                                                        <label for="feature3-head-HP">Headline</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature3-head-HP" placeholder="Text...">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="feature3-body-HP">Body</label>
+                                                        <input type="text" class="form-control form-control-sm" id="feature3-body-HP" placeholder="Text...">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mt-3" id="resultTableScript1"></div>
+                                        <div class="mt-3">
+                                            <button type="submit" class="btn btn-primary btn-block my-2" onclick="salvarHomepage()">Save</button>
+                                        </div>
                                         
                                     </div>
-                                    <div class="col-md-6 border-left">
-                                        <div class=" bg-dark w-100 rounded-3 shadow p-3 text-white " style="height: 62vh;" 
-                                        id="feedbackAfterUpload">
-                                            
-                                        </div>
+                                    <div class="col-md-7 border-left">
+                                        <iframe id="homepagepreviewiframe" src="/" style="min-height:83vh;width:100%;" title="Pagina de Inicio"></iframe>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <%}%>
                         <% if(usuario.rol == 5){ %>
                         <div class="tab-pane fade" id="nav-querys" role="tabpanel" aria-labelledby="nav-querys-tab">
                             <div class="bg-white border-0 rounded-3 p-4">

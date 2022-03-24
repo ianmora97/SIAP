@@ -10,4 +10,4 @@ admin/img/.DS_Store
 
 admin/public/uploads/
 
-admin/logs/
+admin/logs/*.txt

@@ -247,7 +247,10 @@ function loadFromDB(){
             }).then((response) => {
                 g_asistencias = response;
                 g_asistencias.forEach(g => {
-                    g_mapAsistencias.set(g.cedula,g);
+                    let fechahoy = moment().format('DD-MM-YYYY');
+                    if(g.fecha == fechahoy){
+                        g_mapAsistencias.set(g.cedula,g);
+                    }
                 });
                 showAsistenciasdeHoy();
             }, (error) => {

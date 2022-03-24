@@ -1,20 +1,46 @@
 const express = require('express');
 const request = require('request-promise');
 const cheerio = require('cheerio');
+const fs = require('fs');
 const router = express.Router();
 
 const fetch = require("cross-fetch");
 
 const db = require('../database');
 
+const logError = require('../logError');
+
 router.get('/', (req, res) => {
-    let tab = 'inicio';
-    res.render('index',{tab});
+    fs.readFile('./assets/inicio.json', 'utf8', (err, data) => {
+        let tab = 'inicio';
+        if (err) console.log(err);
+        let json = JSON.parse(data);
+        res.render('index',{tab,json});
+    });
+        
+});
+
+router.get('/admin/homepage/get', (req, res) => {
+    fs.readFile('./assets/inicio.json', 'utf8', (err, data) => {
+        if (err) console.log(err);
+        let json = JSON.parse(data);
+        res.send(json);
+    });
+})
+router.get('/admin/homepage/save', (req, res) => {
+    let json = req.query;
+    fs.writeFile('./assets/inicio.json', JSON.stringify(json), (err) => {
+        if (err) console.log(err);
+        res.send({
+            status: 'ok'
+        });
+    });
 });
 
 router.get('/registrarse', (req, res) => {
     let tab = 'registro';
-    res.render('registrarse',{tab});
+    // res.render('registrarse',{tab});
+    res.redirect('/')
 });
 
 router.get('/talleres', (req, res) => {
@@ -32,10 +58,12 @@ router.get('/talleres', (req, res) => {
                     let grupos = rows2;
                     res.render('talleres',{tab,talleres,grupos, moment});
                 }else{
+                    logError(err1,'/talleres');
                     res.send({err:'NotFound'});
                 }
             });
         }else{
+            logError(err1,'/talleres');
             res.send({err:'NotFound'});
         }
     });
