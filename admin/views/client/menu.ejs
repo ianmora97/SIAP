@@ -31,5 +31,12 @@
                 this.classList.add('active');
             });
         });
+        $(".nav-menu-item").on("click", function(event) {
+            event.preventDefault();
+            var id = $(this).attr('href');
+            setTimeout(function() {
+                location.href = id;
+            }, 800);
+        });
     });
 </script>

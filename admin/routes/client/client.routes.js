@@ -30,6 +30,15 @@ router.post('/client/log',(req,res)=>{
         }
     });
 });
+router.get('/logout',(req,res)=>{
+    if(req.session.value){
+        req.session.destroy((err) => {
+            res.redirect('/');
+        })
+    }else{
+        res.redirect('/');
+    }
+});
 // ? ----------------- PERFIL -----------------
 router.get('/client/perfil',(req,res)=>{
     if(req.session.value){
