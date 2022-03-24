@@ -1,0 +1,131 @@
+ <!DOCTYPE html>
+ <html lang="es" class="h-100">
+ <head>
+    <title>Dashboard | Notas</title>
+    <%- include('headers')%>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+ </head>
+ <body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+    <div class="modal fade" id="modalAgregar" tabindex="-1"  data-keyboard="false" aria-labelledby="modalAgregar" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white pl-2 font-weight-bold" id="modalAgregarLabel"><i class="pr-2 fas fa-sticky-note"></i>Agregar Nota</h5>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="tituloAgregar">Título</label>
+                        <input type="text" class="form-control" id="tituloAgregar" name="tituloAgregar" placeholder="Título de la nota" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtituloAgregar">Subtítulo</label>
+                        <input type="text" class="form-control" id="subtituloAgregar" name="subtituloAgregar" placeholder="Subtítulo de la nota" required>
+                    </div>
+                    <div class="row mx-0">
+                        <div class="col-md-6 pl-0">
+                            <div class="form-group">
+                                <textarea class="form-control" id="contenidoAgregar" name="contenidoAgregar" rows="15" placeholder="Contenido de la nota" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pr-0">
+                            <div id="contentParseMd" class="border rounded p-2" style="min-height: 375px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer py-1 bg-light">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times pr-2"></i>Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarNota"><i class="fas fa-save pr-2"></i>Guardar</button>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="modal fade" id="modalVer" tabindex="-1"  data-keyboard="false" aria-labelledby="modalVer" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h4 class="modal-title text-white pl-2 font-weight-bold" id="modalVerLabel"></h4>
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                        <span aria-hidden="true" class="text-white">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span class="sr-only" id="idNotaabierta"></span>
+                    <h5 id="subtitleModalVer"></h5>
+                    <hr class="my-2">
+                    <div id="modalBodyVer"></div>
+                </div>
+                <div class="modal-footer py-1 bg-light">
+                    <button type="button" class="btn btn-danger" id="borrarNota"><i class="fas fa-backspace pr-2"></i>Borrar</button>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+             <%- include('headerDashboard') %>
+             <div class="container-fluid my-4">
+                <div class="bg-white p-4 rounded-3"> 
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <h1 class="font-weight-bolder display-5">Notas</h1>
+                            <p class="text-muted mb-0">En esta sección se pueden agregar o actualizar notas que puedan ser 
+                                de utilidad para el administrador.
+                            </p>
+                            <small>Información Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col text-center border-right">
+                            <div id="stats1">
+                                <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1" id="statsTotal1">0</h1>
+                                <small class="text-muted">Total de Notas <i class="fas fa-align-center text-secondary" style="font-size:10px;"></i></small>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        tippy('#stats1', {
+                            content: 'Total de Notas',
+                            placement: 'bottom',
+                            animation: 'shift-away-extreme',
+                        });
+                    </script>
+                </div>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__fadeIn">
+                    <div class="row mx-0 d-flex justify-content-between">
+                        <div class="col pl-0">
+                            <div class="mb-1">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-end pr-0">
+                            <div class="w-100 h-100">
+                                <button type="button" class="btn btn-secondary w-100" 
+                                data-toggle="modal" data-target="#modalAgregar"><i class="fas fa-plus"></i> Agregar Nota</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-2 rounded-3 " style="min-height: 650px;">
+                    <div class="row mx-0 justify-content-start flex-wrap" id="notas-tab">
+
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+         </div>
+    </div>
+    <script src="/js/admin/notas.js"></script>
+ </body>
+ </html>

@@ -21,7 +21,7 @@ transporter.verify(function (error, success) {
 	if (error) {
 	  console.log(error);
 	} else {
-    console.log('[',chalk.green('OK'),'] Server is ready to take our messages');
+    console.log('[',chalk.green('OK'),'] Gmail Successfully Verified.');
 	}
 });
 

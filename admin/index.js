@@ -80,6 +80,8 @@ app.use(require('./routes/reportes/sistema.routes'));
 app.use(require('./routes/reportes/conductas.routes'));
 app.use(require('./routes/reportes/uso.routes'));
 
+app.use(require('./routes/notas/notas.routes'));
+
 app.use(require('./routes/estudiante/admin.routes'));
 app.use(require('./routes/administradores/admin.routes'));
 app.use(require('./routes/profesores/profesor.routes'));
@@ -110,7 +112,7 @@ if(process.env.ENV != 'dev'){
     http.createServer(app).listen(80);
 }else{
     server = http.createServer(app).listen(80);
-    console.log('[',chalk.green('OK'),'] DEVELOPMENT server started on port 80');
+    console.log('[',chalk.green('OK'),'] DEVELOPMENT server started.');
 }
 if(process.env.ENV != 'dev') server = https.createServer(options, app).listen(443, () => {
     console.log('[',chalk.green('OK'),'] PRODUCTION SERVER STARTED');
