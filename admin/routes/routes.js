@@ -42,6 +42,23 @@ router.get('/registrarse', (req, res) => {
     // res.render('registrarse',{tab});
     res.redirect('/')
 });
+router.get('/matricula/cliente', (req, res) => {
+    let cedula = req.params.cedula || "";
+    res.render('matriculaCliente',{cedula});
+});
+router.get('/api/checkEst/:cedula', (req, res) => {
+    let cedula = req.params.cedula;
+    db.query("SELECT * from vta_cliente_estudiante where cedula = ?", 
+    [cedula],(err2,rows2,fields2)=>{
+        if(!err2){
+            if(rows2.length > 0){
+                res.send(true);
+            }
+        }else{
+            res.status(501).send({err:'NotFound'});
+        }
+    });
+});
 
 router.get('/talleres', (req, res) => {
     var moment = require('moment');
@@ -52,7 +69,7 @@ router.get('/talleres', (req, res) => {
                 var t = rows1[0][i];
                 talleres.push(t.descripcion);
             }
-            db.query("SELECT * from  vta_grupos", (err2,rows2,fields2)=>{
+            db.query("SELECT * from vta_grupos", (err2,rows2,fields2)=>{
                 if(!err2){
                     let tab = 'talleres';
                     let grupos = rows2;
@@ -64,6 +81,27 @@ router.get('/talleres', (req, res) => {
             });
         }else{
             logError(err1,'/talleres');
+            res.send({err:'NotFound'});
+        }
+    });
+});
+router.get('/api/talleres', (req, res) => {
+    db.query("call prc_seleccionar_talleres", (err1,rows1,fields1)=>{
+        if(!err1){
+            var talleres = new Array();
+            for(var i=0;i<rows1[0].length;i++){
+                var t = rows1[0][i];
+                talleres.push(t.descripcion);
+            }
+            db.query("SELECT * from vta_grupos", (err2,rows2,fields2)=>{
+                if(!err2){
+                    let grupos = rows2;
+                    res.send({talleres,grupos});
+                }else{
+                    res.send({err:'NotFound'});
+                }
+            });
+        }else{
             res.send({err:'NotFound'});
         }
     });

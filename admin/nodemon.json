@@ -4,7 +4,8 @@
         "admin/js/admin/*",
         "admin/js/teach/*",
         "admin/js/client/*",
-        "admin/assets/*"
+        "admin/assets/*",
+        "admin/js/*"
     ],
     "ext": "js"
   }

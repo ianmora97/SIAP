@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Matricula</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/dashboard.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="/js/jq-bs-bundle.js"></script> 
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away-extreme.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="modal fade" id="iniciarSesion" data-backdrop="static" data-keyboard="false" 
+    tabindex="-1" aria-labelledby="iniciarSesionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white font-weight-bold pl-3" id="iniciarSesionLabel">Iniciar Sesión</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container text-center w-75">
+                        <div class="form-group">
+                            <label for="inicioSesion-cedula">Cedula</label>
+                            <input type="text" class="form-control" name="inicioSesion-cedula" id="inicioSesion-cedula" placeholder="Cedula" autocomplete="inicioSesion-cedula">
+                        </div>
+                        <div id="claveInicioDrop" class="animate__faster" style="display: none;">
+                            <hr>
+                            <div class="form-group">
+                                <label for="inicioSesion-clave">Clave</label>
+                                <input type="password" class="form-control" name="inicioSesion-clave" id="inicioSesion-clave" placeholder="Clave" autocomplete="inicioSesion-clave">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success btn-block mx-auto">Iniciar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary text-white">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="d-flex align-items-center">
+                    <img src="/img/logo-white.png" alt="UNA" loading="lazy" 
+                    class="d-inline mx-2 my-auto" height="30px">
+                    <h4 class="text-white m-0">SIAP</h4>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+                <span span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <h6 class="mb-0"><a class="nav-link text-white" href="/">Inicio</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main role="main" class="container">
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <h1 class="font-weight-bold">Sistema de Matricula</h1>
+            <div class="d-flex justify-content-center align-items-center border rounded-3 p-2" id="datos-btn-check" style="width:300px;height: 100px;">
+            </div>
+        </div>
+        <div class="bg-white rounded-3 shadow-sm p-3 mt-4">
+            <div class="row mx-0">
+                <div class="col-md-6">
+                    <div class="input-group flex-nowrap">
+                        <div class="input-group-prepend">
+                            <div class="btn bg-light" id="button_search">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control border-0 shadow-none bg-light"
+                            onkeyup="searchonfind()" placeholder="Buscar..."
+                            aria-label="Username" id="barraBuscar">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButtonDiaFilter" 
+                        data-toggle="dropdown" aria-expanded="false">
+                            Dia
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonDiaFilter">
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Lunes')">Lunes</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Martes')">Martes</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Miercoles')">Miercoles</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Jueves')">Jueves</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Viernes')">Viernes</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Sabado')">Sabado</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownDia('Domingo')">Domingo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" 
+                        id="dropdownMenuButtonHoraFilter" data-toggle="dropdown" aria-expanded="false">
+                            Hora
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonHoraFilter">
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('6:00 am')">6:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('7:00 am')">7:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('8:00 am')">8:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('9:00 am')">9:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('10:00 am')">10:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('11:00 am')">11:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('12:00 am')">12:00 am</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('1:00 pm')">1:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('2:00 pm')">2:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('3:00 pm')">3:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('4:00 pm')">4:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('5:00 pm')">5:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('6:00 pm')">6:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('7:00 pm')">7:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('8:00 pm')">8:00 pm</a>
+                            <a class="dropdown-item" href="#" onclick="selectDropdownHora('9:00 pm')">9:00 pm</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButtonNivelFilter" 
+                        data-toggle="dropdown" aria-expanded="false">
+                            Nivel
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonNivelFilter" id="dropdownFilterNiveles">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2 user-select-none d-flex justify-content-start" id="filterBadges" style="height:50px;">
+
+        </div>
+        <div class="row mx-0" id="gruposCards" style="height: 50vh; overflow-y: auto;">
+
+        </div>
+        <div class="bg-white rounded-3 shadow-sm p-3 mt-4 d-flex justify-content-start" style="min-height: 136px;">
+            <div class="row mx-0" id="cursosMatriculadosTemp" style="width: 80%;">
+
+            </div>
+            <div class="ml-auto">
+                <button type="button" class="btn btn-secondary">Matricular</button>
+            </div>
+        </div>
+    </main>
+    <%- include('footer') %>
+    <script>
+        var g_cedula = '<%= cedula %>';
+        const animateCSS = (element, animation) =>
+            new Promise((resolve, reject) => {
+            let prefix = 'animate__';
+            const animationName = `${prefix}${animation}`;
+            const node = document.querySelector(element);
+
+            node.classList.add(`${prefix}animated`, animationName);
+
+            // When the animation ends, we clean the classes and resolve the Promise
+            function handleAnimationEnd(event) {
+                event.stopPropagation();
+                node.classList.remove(`${prefix}animated`, animationName);
+                resolve('Animation ended');
+            }
+
+            node.addEventListener('animationend', handleAnimationEnd, { once: true });
+        });
+    </script>
+    <script src="/js/sistemadeMatricula.js"></script>
+</body>
+</html>
