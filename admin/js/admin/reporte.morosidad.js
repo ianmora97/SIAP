@@ -33,6 +33,7 @@ function bringData(){
         $('#infoTiming').html(t)
         fillListMorosos(response);
         $('#estudiantes_morosos_stats').html(response.length)
+        closeProgressBarLoader();
     }, (error) => {
     });
 }

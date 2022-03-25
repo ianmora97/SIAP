@@ -2,27 +2,7 @@ const socket = io();
 
 function cargasSockets(event){
     socket_pushNotificationNewUser();
-    socket_prueba();
     socket_pushNotificationNuevaMatricula();
-}
-function socket_prueba(){
-    $('#toastBoton').on('click',function(){
-        $('#toastsNotifications').append(
-            '<div class="toast" data-autohide="false" id="toast-11">'+
-            '<div class="toast-header bg-dark text-white">'+
-            '<i class="far fa-user"></i>&nbsp;<strong class="mr-auto">Nuevo Usuario</strong>'+
-            '<small class="text-white">just now</small>'+
-            '<button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">'+
-            '<span aria-hidden="true">&times;</span>'+
-            '</button>'+
-            '</div>'+
-            '<div class="toast-body bg-light">'+
-            'algo'+
-            '</div>'+
-            '</div>'
-        );
-        $("#toast-11").toast('show');
-    });
 }
 
 function socket_pushNotificationNewUser(){
@@ -50,22 +30,38 @@ function socket_pushNotificationNewUser(){
 }
 
 function socket_pushNotificationNuevaMatricula(){
-    socket.on(' chat:nueva_matricula',function (data) {
+    socket.on('matricula:newMatricula',function (data) {
         $('#notifications').append(
-            `<a class="dropdown-item bg-light" href="#"><i class="far fa-user"></i> 
-            Nueva Matricula<br> <strong>${data.nombre}</strong></a>`
+            `<a class="dropdown-item bg-white p-1 mb-2" href="/admin/matricula">
+                <div class="d-flex justify-content-between align-items-stretch pb-3">
+                    <div class="d-flex justify-content-start align-items-start">
+                        <div class="mx-2">
+                            <i class="fas fa-circle text-primary" style="font-size:10px;"></i> 
+                        </div>
+                        <div>
+                            <p class="mb-0 d-block">Estudiante Matriculado</p>
+                            <strong class="mb-0 d-block">${data.nombreEst}</strong>
+                            <small class="text-muted d-block">${moment(new Date()).format('lll')}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center pr-2">
+                        <i class="fas fa-user-edit text-primary fa-2x"></i>
+                    </div>
+                </div>
+                <hr class="mx-4">
+            </a>`
         );
         $('#toastsNotifications').append(
             '<div class="toast" data-autohide="false" id="toast-'+data.cedula+'">'+
             '<div class="toast-header bg-dark text-white">'+
-            '<i class="far fa-user"></i>&nbsp;<strong class="mr-auto">Nuevo Matricula</strong>'+
+            '<i class="far fa-user"></i>&nbsp;<strong class="mr-auto">Nueva Matricula</strong>'+
             '<small class="text-white">hace 1seg</small>'+
             '<button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">'+
             '<span aria-hidden="true">&times;</span>'+
             '</button>'+
             '</div>'+
             '<div class="toast-body bg-light">'+
-            '<strong>'+data.cedula+'</strong> '+data.nombre+' '+data.apellido+
+            '<strong>'+data.cedula+'</strong> '+data.nombreEst+
             '</div>'+
             '</div>'
         );

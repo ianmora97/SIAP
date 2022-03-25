@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" style="overflow-x: hidden; min-height: 100%;">
+<head>
+    <title>Instructor | Grupos</title>
+    <%- include('headers') %>
+</head>
+<body style="overflow-x:hidden;" class="d-flex flex-column h-100">
+    <div class="modal fade" id="crearAnotacion" tabindex="-1" aria-labelledby="crearAnotacion" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary py-3 justify-content-center">
+                    <h5 class="modal-title text-white pl-3">Información</h5>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <span class="sr-only" id="idGrupo"><%= grupo%></span>
+    <%- include('menu') %>
+    <div id="wrapperTeach">
+        <%- include('header') %>
+        <div class="container-fluid my-2">
+            <div class="" id="infoGrupo"></div>
+        </div>
+        <div id="contentLista" class="row mx-0 mb-5 mt-3 p-0 w-100">
+            
+        </div>
+        <%- include('footer') %>
+    </div>
+    <script src="/js/teach/grupos.js"></script>
+</body>
+</html>

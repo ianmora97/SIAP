@@ -34,7 +34,7 @@
  <body class="page bg-light d-flex flex-column h-100">
     <%- include('email') %> 
      <div class="modal fade" id="modalAdd" data-keyboard="false" tabindex="-1" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered modal-xxl">
+         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xxl">
              <div class="modal-content">
                  <div class="modal-header pl-3 border-0 bg-primary text-white">
                      <h5 class="modal-title ml-3" id="staticBackdropLabel">Solicitar una Reposicion</h5>
@@ -83,13 +83,11 @@
                             </div>
                             <div class="col-lg-6" style="display: none;" id="escogerReposicion">
                                 <div class="form-group">
-                                    <label for="grupoAddSelect">Fecha de reposicion</label>
+                                    <label for="grupoAddSelect" class="d-block">Fecha de reposicion</label>
+                                    <button class="btn btn-outline-primary d-block my-2" type="button" data-toggle="modal" data-target="#modalAdd">
+                                        <i class="fas fa-calendar-alt"></i> Seleccione una fecha
+                                    </button>
                                     <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modalAdd">
-                                                <i class="fas fa-calendar-alt"></i>
-                                            </button>
-                                        </div>
                                         <select class="custom-select" id="grupoAddSelect" name="grupo_reposicion" required>
                                         </select>
                                         <input class="form-control" type="date" id="fechareposicion" name="fecha_reposicion" required>
@@ -97,7 +95,7 @@
                                     <div id="grupoescogido" style="height: 34px;" class="mt-1"></div>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <div class="border border-light p-2 mr-3" style="max-width: 200px; max-height: 200px; display: none;" id="fotoContainer">
+                                    <div class="border border-light p-2 mr-3" style="max-width: 200px; max-height: 200px; display: none; overflow: auto;" id="fotoContainer">
 
                                     </div>
                                     <div class="form-group flex-fill">

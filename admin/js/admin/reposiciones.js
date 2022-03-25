@@ -90,26 +90,10 @@ function obtenerReposiciones(){
             }
         }).then((estudiantes) => {
             listaEstudiantes(estudiantes);
+            closeProgressBarLoader();
         }, (error) => {
 
         });
-        // $.ajax({
-        //     type: "GET",
-        //     url: "/admin/talleres/getGrupos", 
-        //     contentType: "appication/json",
-        //     headers:{
-        //         'Authorization':bearer
-        //     }
-        // }).then((grupos) => {
-        //     $('#grupos_stats').html(grupos.length)
-        //     let totalTime = new Date().getTime() - ajaxTime;
-        //     let a = Math.ceil(totalTime / 1000);
-        //     let t = a == 1 ? a + ' segundo' : a + ' segundos';
-        //     $('#infoTiming').text(t);
-        //     showGrupos(grupos);
-        //     fillCalendar(grupos);
-        // }, (error) => {
-        // });
     });
 }
 function listaGrupos(data) {

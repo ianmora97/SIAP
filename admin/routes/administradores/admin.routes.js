@@ -32,8 +32,6 @@ router.get('/admin/administrador/agregarEstudiante',ensureToken,(req,res)=>{
     if(req.session.value){
         if(req.session.value.rol > 2){
             let d = req.query;
-            
-            res.send({type:"good"})
             con.query("CALL prc_insertar_usuario_admin(?,?,?,?,?,?,?,?)",
             [d.cedula_add, d.nombre_add, d.apellido_add, d.fechaNacimiento_add, d.username_add, d.sexo, d.perfil, d.correo_add],
             (err,rows,fields)=>{

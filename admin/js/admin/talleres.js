@@ -55,40 +55,82 @@ $(function () {
 function checkInputsTaller() {
     $('#codigoTallerModalAgregar').keyup(function () {
         var codigo = $('#codigoTallerModalAgregar').val();
+        let flag = false;
+        let des = "";
         g_mapTalleres.forEach( e=>{
             if(e.codigo == codigo){
-                $('#feedback').html('')
-                $('#feedback').append(`
-                    <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
-                        <img src="/img/emoji/sad_face.png" width="30px">
-                        <strong>El código debe ser único.</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                `);
+                des = e.descripcion;
+                flag = true;
             }
         })
+        if(flag){
+            $('#feedback').html('')
+            $('#feedback').append(`
+                <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
+                    <img src="/img/emoji/sad_face.png" width="30px">
+                    <strong>El código debe ser único.</strong> ya hay un taller con este nivel. <span class="badge badge-light">${des}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+        }else{
+            $('#feedback').html('')
+        }
     });
     $('#nivelTallerModalAgregar').on("change keyup",function () {
         var nivel = $('#nivelTallerModalAgregar').val();
+        let des = "";
+        let flag = false;
         g_mapTalleres.forEach( e=>{
             if(e.nivel == nivel){
-                $('#feedback').html('')
-                $('#feedback').append(`
-                    <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
-                        <img src="/img/emoji/sad_face.png" width="30px">
-                        <strong>El nivel debe ser único</strong> ya hay un taller con este nivel. <span class="badge badge-light">${e.descripcion}</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                `);
+                des = e.descripcion;
+                flag = true;
             }
         })
+        if(flag){
+            $('#feedback').html('')
+            $('#feedback').append(`
+                <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
+                    <img src="/img/emoji/sad_face.png" width="30px">
+                    <strong>El nivel debe ser único</strong> ya hay un taller con este nivel. <span class="badge badge-light">${des}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+        }else{
+            $('#feedback').html('')
+        }
     });
-    
-
+    $('#nivelModalTaller').on("change keyup",function () {
+        var nivel = $('#nivelModalTaller').val();
+        let des = "";
+        let flag = false;
+        let id = $('#idTallerModal').html();
+        g_mapTalleres.forEach( e=>{
+            if(e.nivel == nivel){
+                if(id != e.id){
+                    des = e.descripcion;
+                    flag = true;
+                }
+            }
+        })
+        if(flag){
+            $('#feedbackEditTaller').html('')
+            $('#feedbackEditTaller').append(`
+                <div class="alert alert-danger alert-dismissible fade show py-2 animate__animated animate__bounceIn" role="alert">
+                    <img src="/img/emoji/sad_face.png" width="30px">
+                    <strong>El nivel debe ser único</strong> ya hay un taller con este nivel. <span class="badge badge-light">${des}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `);
+        }else{
+            $('#feedbackEditTaller').html('')
+        }
+    });
 }
 function openmodal(modal) {
     $(modal).modal('show');
@@ -176,7 +218,8 @@ function openModal(){
         
         $('#cupobaseActualizarModal').val(grupo.cupo_base);
         $('#cupoExtraActualizarModal').val(grupo.cupo_extra);
-        $('#periodoActualizarModal').val(grupo.periodo);
+        $('#periodoInicioEditModal').val(grupo.periodo);
+        $('#periodoEditModal').val(grupo.periodo_final);
 
 
     })
@@ -226,7 +269,7 @@ function agregarHorario() {
         }).then((response) => {
             console.log(response)
             if(response.fb == "good"){
-                location.href = "/admin/talleres";
+                location.href = "/admin/talleres?view=horario";
             }else{
                 $('#feedbackHorarioAgregar').html('')
                 if(response.fb.code == "ER_DUP_ENTRY"){
@@ -274,7 +317,7 @@ function actualizarDatosHorario() {
                 'Authorization':bearer
             }
         }).then((response) => {
-            location.href = "/admin/talleres";
+            location.href = "/admin/talleres?view=horario";
         }, (error) => {
         });
     }else{
@@ -302,7 +345,7 @@ function eliminarHorario() {
         }
     }).then((response) => {
         if(response.fb == "good"){
-            location.href = "/admin/talleres";
+            location.href = "/admin/talleres?view=horario";
         }else{
             $('#feedbackHorarioEditar').html('');
             if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
@@ -352,7 +395,7 @@ function agregarTaller() {
             }
         }).then((response) => {
             if(response.fb == "good"){
-                location.href = "/admin/talleres";
+                location.href = "/admin/talleres?view=taller";
             }else{
                 $('#feedback').html('')
                 if(response.fb.code == "ER_DUP_ENTRY"){
@@ -398,7 +441,7 @@ function actualizarDatosTaller() {
                 'Authorization':bearer
             }
         }).then((response) => {
-            location.href = "/admin/talleres";
+            location.href = "/admin/talleres?view=taller";
         }, (error) => {
         });
     }else{
@@ -426,7 +469,7 @@ function eliminarTaller() {
         }
     }).then((response) => {
         if(response.fb == "good"){
-            location.href = "/admin/talleres";
+            location.href = "/admin/talleres?view=taller";
         }
         if(response.fb.code.match('ER_ROW_IS_REFERENCED')){
             $('#feedbackEditarTaller').html('')
@@ -445,7 +488,6 @@ function eliminarTaller() {
 }
 // ? ------------------------------------- Grupo CRUD ------------------------------
 function agregarGrupo() {
-
     let horario = parseInt($('#horarioSelectGrupo').val());
     let profesor = parseInt($('#profesoresSelectGrupo').val());
     let taller = parseInt($('#talleresSelectGrupo').val());
@@ -465,7 +507,7 @@ function agregarGrupo() {
             }
         }).then((response) => {
             if(response.fb == "good"){
-                location.href = "/admin/talleres";
+                location.href = "/admin/talleres?view=grupo";
             }else{
                 $('#feedbackAgregarGrupo').html('')
                 if(response.fb.code == "ER_DUP_ENTRY"){
@@ -487,6 +529,7 @@ function agregarGrupo() {
         $('#feedbackAgregarGrupo').append(`
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Error!</strong> Tiene que llenar todos los campos.
+                <p>${horario ? "":"Horario,"} ${profesor ? "":"Profesor,"} ${taller ? "":"Taller,"} ${cupobase ? "":"Cupo Base,"} ${periodo ? "":"Periodo Final,"} ${periodoInicio ? "":"Periodo de Inicio"} </p>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -501,20 +544,21 @@ function actualizarDatosGrupo() {
     let profesor = parseInt($('#profesoresSelectGrupoActualizar').val());
     let cupobase = parseInt($('#cupobaseActualizarModal').val());
     let cupoextra = parseInt($('#cupoExtraActualizarModal').val());
-    let periodo = $('#periodoActualizarModal').val();
+    let periodoInicio = $('#periodoInicioEditModal').val();
+    let periodo = $('#periodoEditModal').val();
 
     let bearer = 'Bearer '+g_token;
-    if(horario && profesor && taller && cupobase && periodo) {
+    if(horario && profesor && taller && cupobase && periodo && periodoInicio) {
         $.ajax({
             type: "GET",
             url: "/admin/talleres/actualizarGrupo", 
-            data:{id,horario,profesor,taller,cupobase,cupoextra,periodo},
+            data:{id,horario,profesor,taller,cupobase,cupoextra,periodo, periodoInicio},
             contentType: "appication/json",
             headers:{
                 'Authorization':bearer
             }
         }).then((response) => {
-            location.href = "/admin/talleres";
+            location.href = "/admin/talleres?view=grupo";
         }, (error) => {
         });
     }else{
@@ -571,7 +615,7 @@ function eliminarDefGrupo() {
             'Authorization':bearer
         }
     }).then((response) => {
-        location.href = "/admin/talleres";
+        location.href = "/admin/talleres?view=grupo";
     }, (error) => {
     });
 }
@@ -636,6 +680,7 @@ function loadFromDb() {
                 $('.infoTiming').text(t);
                 showGrupos(grupos);
                 fillCalendar(grupos);
+                closeProgressBarLoader();
             }, (error) => {
             });
         }, (error) => {
@@ -646,6 +691,9 @@ function loadFromDb() {
     
 }
 function selectProfesoresFromGrupo(profesores) {
+    $('#profesoresSelectGrupo').append(`
+        <option selected>Seleccione un profesor</option>
+    `);
     profesores.forEach(e => {
         $('#profesoresSelectGrupo').append(`
             <option value="${e.id_profesor}">${e.nombre} ${e.apellido} - ${e.cedula}</option>
@@ -658,6 +706,9 @@ function selectProfesoresFromGrupo(profesores) {
     });
 }
 function selectTallerFromGrupo(talleres) {
+    $('#talleresSelectGrupo').append(`
+        <option selected>Seleccione un taller</option>
+    `)
     talleres.forEach(e => {
         $('#talleresSelectGrupo').append(`
             <option value="${e.id}">${e.descripcion} Nivel: ${e.nivel}</option>
@@ -670,6 +721,9 @@ function selectTallerFromGrupo(talleres) {
     });
 }
 function selectHorarioFromGrupo(horarios) {
+    $('#horarioSelectGrupo').append(`
+        <option selected>Seleccione un horario</option>
+    `);
     horarios.forEach(e => {
         $('#horarioSelectGrupo').append(`
             <option value="${e.id}" data-day="${e.dia}">${e.dia} ${e.hora}</option>

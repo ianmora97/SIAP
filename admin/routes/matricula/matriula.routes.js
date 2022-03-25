@@ -19,6 +19,7 @@ const nodemailer = require('nodemailer');
 const qr = require("qrcode");
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 
 var email = require('../../email');
 
@@ -29,11 +30,10 @@ const con = require('../../database');
 
 router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
     let textCursos = "";
-    let text = "";
+    let text = `${req.body.cedula}`;
     for(let i = 0; i < req.body.grupos.length; i++){
         let grupo = req.body.grupos[i];
         let allG = req.body.gruposAll[i];
-        text += `${req.body.estudiante}-${allG.nivel}-${allG.allp}-${grupo}.`;
         textCursos += `<p style="background-color:#edf0ff;padding:5px 8px; color:black; border-radius:5px;">Nivel: ${allG.nivel} - Dias: ${allG.allp}</p>`;
     }
     for(let i = 0; i < req.body.grupos.length; i++){
@@ -56,7 +56,7 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                 var mailOptions = {
                     name:'SIAP - Matricula',
                     from: 'SIAP UNA <siapduna2020@gmail.com>',
-                    to:  'ianmorar03@gmail.com', // req.body.correo
+                    to: process.env.ENV != "dev" ? req.body.correo: "ianmorar03@gmail.com" ,
                     subject: 'Confirmacion de Matricula',
                     html: `
                         <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
@@ -64,7 +64,7 @@ router.post('/admin/matricula/matricularCursos', ensureToken, (req,res)=>{
                                 <div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">
                                     <h1 style="color:#ffffff">Sistema de Administración de la Piscina</h1>
                                 </div>
-                                <img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">
+                                <img src="https://siapdpe.com/img/logo-vive-promocion-transparency.png" style="background-color: white; margin:0; padding:0;">
                                 <h1>${req.body.estudiante}</h1>
                                 <p>Usted ha sido Matriculado en los siguientes cursos:</p><br>
                                 ${textCursos}
@@ -119,8 +119,8 @@ router.get('/admin/inbox/enviarCorreo',ensureToken,(req,res)=>{
     });
 });
 router.get('/admin/matricula/qr/check',(req,res)=>{
-    con.query("SELECT * FROM vta_matriculados_por_grupo WHERE id_grupo = ? AND cedula = ?",
-    [req.query.grupo, req.query.cedula],
+    con.query("SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?",
+    [req.query.cedula],
         (err,result,fields)=>{
         if(!err){
             res.send(result);

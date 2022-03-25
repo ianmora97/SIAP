@@ -1,3 +1,5 @@
+var g_MapNotas = new Map();
+
 function loaded(event){
     events(event);
 }
@@ -11,7 +13,7 @@ function events(event){
     changeProfilePhoto();
     fotoonChange();
     onshowtabscharts();
-    
+    onModalVerNotaOpen();
 }
 
 function onshowtabscharts(){
@@ -99,62 +101,68 @@ function load_stats() {
     let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
-        url: "/admin/stats/usuariosNuevosTabla",
+        url: "/api/admin/notas",
         contentType: "application/json",
         headers:{
             'Authorization':bearer
         }
     }).then((response) => {
-        cargarTablaUsuariosNuevos(response);
+        console.log(response);
+        cargarNotas(response);
     }, (error) => {
 
     });
 }
-function cargarTablaUsuariosNuevos(usuarios) {
-    $('#list-comprobacion').html('');
-    if(usuarios.length > 0){
-        $('#statNuevoUsusariosNotificacion').append(usuarios.length);
-        usuarios.forEach((u)=>{
-            showTablaUsuariosNuevos(u);
+function cargarNotas(notas) {
+    $('#list-notas').html('');
+    if(notas.length > 0){
+        notas.forEach((u,i)=>{
+            g_MapNotas.set(u.id, u);
+            mostrarNotas(u,i);
         });
     }else{
-        $('#statNuevoUsusariosNotificacion').append(0);
-        $('#list-comprobacion').append(
-            `<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <div>
-                    <h4>No hay usuarios nuevos</h4>
-                    <hr>
-                    <p class="mb-0">Puede registrar a un usuario desde el <a href="/admin/estudiantes" class="alert-link">panel de administracion</a> 
-                    , o bien dirijase al <a href="/registrarse" target="_blank" class="alert-link">sistema de registro</a></p>
-                </div>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        $('#list-notas').html(
+            `<div class="text-center text-muted p-5">
+                No hay notas creadas
             </div>`
         );
     }
 }
-function showTablaUsuariosNuevos(u) {
-    $('#list-comprobacion').append(`
-        <a href="/admin/comprobacion" class="list-group-item list-group-item-action p-1 border-0">
-            <div class="d-flex w-100 justify-content-between">
-                <div class="d-flex justify-content-start align-items-center">
-                    <div class="pr-0 pl-2 d-flex align-items-center">
-                        <span class="rounded-circle py-1 px-2 text-white mr-2" 
-                        style="background:${getRandomColor()}; display:block; width:35px; height:35px;">${u.nombre[0] + u.apellido[0]}</span>
+function mostrarNotas(e,i) {
+    $('#list-notas').append(`
+        <div class="col-4 mt-4">
+            <div class="card-nota animate__animated animate__backInUp" style="animation-delay: ${i}00ms; min-height:200px;" id="notaid-${e.id}-tab" >
+                <div class="d-flex justify-content-start flex-column">
+                    <div class="d-flex justify-content-between mb-auto">
+                        <a role="button" href="#" data-id="${e.id}" data-toggle="modal" 
+                        data-target="#modalVer" class="stretched-link">
+                            <i class="text-primary fas fa-sticky-note"></i>
+                        </a>
+                        <small class="text-muted">${moment(e.created_at).format('DD/MM/YYYY')}</small>
                     </div>
-                    <div class="pl-3 pr-0">
-                        <p class="mb-1 font-weight-bold">${u.nombre + ' ' + u.apellido}</p>
-                        <small>${u.cedula}</small>
-                    </div>
-                </div>
-                <div class="d-flex flex-column mb-auto justify-content-end pr-2">
-                    <small class="mb-2">${moment(u.created_at, "YYYY-MM-DD").format('ll')}</small>
-                    <span class="badge badge-primary">${u.tipo ? 'Estudiante' : 'Funcionario'}</span>
+                    <h5 class="font-weight-bold">${e.title}</h5>
+                    <p class="text-muted">${e.subtitle}</p>
                 </div>
             </div>
-        </a>
+            <script>
+                tippy('#notaid-${e.id}-tab', {
+                    content: '${e.title}',
+                    placement: 'top',
+                    animation: 'shift-away-extreme',
+                });
+            </script>
+        </div>
     `);
+}
+function onModalVerNotaOpen(){
+    $('#modalVer').on('show.bs.modal', (e) => {
+        let id = $(e.relatedTarget).data('id');
+        let nota = g_MapNotas.get(parseInt(id));
+        $("#idNotaabierta").html(nota.id);
+        $('#modalVerLabel').text(nota.title);
+        $('#subtitleModalVer').text(nota.subtitle);
+        $('#modalBodyVer').html(marked.parse(nota.description));
+    });
 }
 function getRandomColor() {
     let number = Math.floor(Math.random() * 6) + 1;
@@ -339,7 +347,7 @@ function cargarDatos() {
             addData(cuposDisponiblesChartVar,'Disponibles', 0);
             addData(cuposDisponiblesChartVar,'Matriculados', total);
         }
-        
+        closeProgressBarLoader();
     }, (error) => {
     });
 

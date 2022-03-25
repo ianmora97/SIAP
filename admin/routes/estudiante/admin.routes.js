@@ -17,11 +17,119 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const chalk = require('chalk');
 const router = express.Router();
-
+var email = require('../../email');
 const {logSistema, DDL, TABLE} = require('../../systemLogs')
 const con = require('../../database');
 
-router.get('/admin/estudiante/listaEstudiantes',ensureToken,(req,res)=>{
+router.post('/solicitud/cambioClave', (req, res) => {
+    con.query("SELECT * FROM vta_cliente_estudiante where cedula = ? and correo = ?",
+    [req.body.cedula, req.body.correo],
+    (err,rows,fields)=>{
+        if(!err){
+            if(rows[0] != undefined){
+                let user = {
+                    cedula : req.body.cedula,
+                    correo : req.body.correo
+                }
+                jwt.sign({user},'secretKeyToken',(err,token)=>{
+                    if(err){
+                        console.log(err)
+                    }else{
+                        req.session.solicitudClave = user;
+                        var mailOptions = {
+                            name:'SIAP - Registro',
+                            from: 'siapduna2020@gmail.com',
+                            to: req.body.correo,
+                            subject: 'Sistema de Administracion de la Piscina',
+                            html: '<body style="background:white;color:black;"><div style="padding: 0; width: 100%; background-color: rgb(184, 22, 22);">' +
+                                '<img src="https://raw.githubusercontent.com/ianmora97/2020-10/master/src/web/img/UNA-VVE-logo-3.png" style="background-color: white; margin:0; padding:0;">' +
+                                '</div>' +
+                                '<h1>Solicitud de cambio de clave</h1>' +
+                                `<p>Usted ha hecho una solicitud de cambio de clave, si no lo ha hecho omita este mensaje y consulte a un administrador, de lo contrario
+                                siga a este link a continuacion para proceder con el cambio de la contraseña.</p><br>
+                                <a href="https://siapdpe.com/solicitud/cambiar/clave?token=${token}">https://siapdpe.com/solicitud/cambiar/clave?token=${token}</a>
+                                <h4 style="color:red;">Este link es de unico acceso, expira en el momento que se ingresa.</h4>
+                                </body>
+                                `
+                        };
+                        email.sendMail(mailOptions, function(error, info){
+                            if (error) {
+                                console.log(error)
+                            } else {
+                                console.log('[Cambio Clave] Email sent: ' + info.response);
+                                let fb = {
+                                    text:'GOOD'
+                                }
+                                res.render('solicitudCambioClave',{fb});
+                            }
+                        });
+                    }
+                }); //json web token
+            }else{
+
+                let fb= {
+                    text:'ERROR',
+                    error:'No se encuentra Registrado'
+                }
+                res.render('solicitudCambioClave',{fb});
+            }
+                
+        }else{
+            let fb= {
+                text:'ERROR',
+                error:'Error en el sistema consulte a un administrador'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }
+    });
+    
+});
+router.get('/solicitud/cambiar/clave', (req, res) => {
+    let tokenQ = req.query.token;
+    jwt.verify(tokenQ, 'secretKeyToken', function(err, decoded) {
+        if(err){
+            let fb= {
+                text:'ERROR',
+                error:'Usted no ha solicitado ningun cambio o existe algun error en la solicitud consulte a un administrador'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }else{
+            if(decoded != undefined){
+                let user = decoded.user;
+                res.render('cambiarClave',{user});
+            }else{
+				console.log(decoded)
+                let fb= {
+                    text:'ERROR',
+                    error:'Usted no ha solicitado ningun cambio o existe algun error en la solicitud consulte a un administrador'
+                }
+                res.render('solicitudCambioClave',{fb});
+            }
+        }
+    });
+})
+
+router.post('/solicitud/cambiarClave', (req, res) => {
+    con.query("call prc_actualizar_clave_sha1_usuario(?, ?)",[req.body.cedula, req.body.clave],(err,rows,fields)=>{
+        if(err){
+	console.lo(err)
+            let fb= {
+                text: 'ERROR',
+                feed:'NO SE PUDO CAMBIAR LA CLAVE'
+            }
+            res.render('solicitudCambioClave',{fb});
+        }else{
+let tab = 'inicio';
+            res.render('loginCliente',{tab});
+        }
+    });
+})
+
+router.get('/cambiarClave', (req, res) => {
+    res.render('solicitudCambioClave');
+});
+
+router.get('/admin/estudiante/listaEstudiantes',(req,res)=>{
     var script = 'select * from vta_admin_estudiante;';
     con.query(script,(err,rows,fields)=>{
         if(!err){
@@ -79,6 +187,55 @@ router.get('/api/admin/estudiantes/getEstudiante', (req,res)=>{
 });
 
 router.get('/api/admin/estudiantes/getEstudiante/full', (req,res)=>{
+    con.query('SELECT * FROM vta_admin_estudiante WHERE cedula = ?',
+    [req.query.cedulaID],(err1,rows1,fields1)=>{
+        if(!err1){
+            if(rows1.length > 0){
+                var estudiante = rows1[0];
+                con.query('SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?',
+                [req.query.cedulaID],(err2,rows2,fields2)=>{
+                    if(!err2){
+                        var talleres = rows2;
+                        con.query('SELECT * FROM vta_conductas WHERE cedula = ?',
+                        [req.query.cedulaID],(err3,rows3,fields3)=>{
+                            if(!err3){
+                                var conducta = rows3;
+                                con.query('SELECT * FROM vta_anotaciones WHERE cedula_estudiante = ?',
+                                    [req.query.cedulaID],
+                                    (err4,rows4,fields4)=>{
+                                    if(!err4){
+                                        var anotaciones = rows4;
+                                        con.query('SELECT * FROM vta_matriculados_por_grupo where cedula = ?',
+                                        [req.query.cedulaID],
+                                            (err5,rows5,fields5)=>{
+                                            if(!err5){
+                                                var talleres_p = rows5;
+                                                res.send({estudiante,talleres,anotaciones,conducta,talleres_p});
+                                            }else{
+                                                res.send(err5);
+                                            }
+                                        });
+                                    }else{
+                                        res.send(err4);
+                                    }
+                                });
+                            }else{
+                                res.send(err3);
+                            }
+                        });
+                    }else{
+                        res.send(err2);
+                    }
+                });
+            }else{
+                res.send('NO_DATA');
+            }
+        }else{
+            res.send(err1);
+        }
+    });
+});
+router.get('/api/client/estudiantes/getEstudiante/full', (req,res)=>{
     con.query('SELECT * FROM vta_admin_estudiante WHERE cedula = ?',
     [req.query.cedulaID],(err1,rows1,fields1)=>{
         if(!err1){
@@ -266,7 +423,7 @@ router.post('/admin/estudiantes/agregarEstudiantes',(req,res)=>{
             (err,rows,fields)=>{
                 if(!err){
                     logSistema(req.session.value.cedula, `AGREGAR USUARIO -> ${req.body.cedula_add} `, DDL.INSERT, TABLE.ESTUDIANTE);
-                    res.redirect('/admin/estudiantes');
+                    res.redirect('/admin/estudiantes/getEstudiante/'+req.body.cedula_add);
                 }else{
                     console.log(err)
                     res.redirect('/admin/estudiantes');

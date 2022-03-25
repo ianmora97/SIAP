@@ -9,7 +9,7 @@
                 "authProtocol": "default"
             },
             "previewLimit": 50,
-            "server": "3.16.169.84",
+            "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
             "database": "siap",
@@ -17,5 +17,6 @@
             "password": "root",
             "name": "SIAP NEW"
         }
-    ]
+    ],
+    "git.ignoreLimitWarning": true
 }

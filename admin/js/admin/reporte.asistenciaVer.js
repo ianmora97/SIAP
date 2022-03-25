@@ -2,6 +2,7 @@
 var g_grupoInfo = {};
 var g_asistencias = new Array();
 var g_mapAsistencias = new Map();
+var g_profesorCedula;
 
 function loaded(event){
     events(event);
@@ -9,7 +10,35 @@ function loaded(event){
 
 function events(event){
     bringData();
+    onModalOpenSsistencia();
 }
+function onModalOpenSsistencia(){
+    $('#asistenciaCambiar').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget)
+        let id = button.data('id')
+        let cedula = button.data('cedula')
+        $("#cedulaAsistenciaEditar").html(cedula);
+        $("#idAsistenciaEditar").html(id);
+    })
+}
+function eliminarAsistencia(){
+    let id = parseInt($("#idAsistenciaEditar").html());
+    // /admin/reportes/asistencia/eliminar
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/reportes/asistencia/eliminar",
+        data: {id:id},
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        console.log(response);
+        location.reload();
+    });
+}
+
 function searchonfind(num) {
     var table = $(`#table`).DataTable();
     let val = $(`#barraBuscar`).val();           
@@ -28,14 +57,36 @@ function bringData(){
         }
     }).then((response) => {
         g_grupoInfo = response[0];
-        console.log(g_grupoInfo);
+        g_profesorCedula = response[0].cedula;
         $('#estudiantes_total_stats').html(g_grupoInfo.cupo_actual);
         $('#text_informacion').html(`
             <b>${g_grupoInfo.descripcion}</b> <br>
             <i class="fas fa-user-tie pr-1"></i> <b>${g_grupoInfo.nombre} ${g_grupoInfo.apellido}</b> <br>
             <i class="fas fa-calendar pr-1"></i> <b>${g_grupoInfo.dia} ${g_grupoInfo.hora}-${g_grupoInfo.hora_final}</b>
         `);
-
+        let _dataAfter = {
+            grupo: g_grupo, 
+            profesor: {
+                cedula: g_profesorCedula
+            }
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/admin/grupoMatriculados",
+            data: _dataAfter,
+            contentType: "application/json",
+            headers: {
+                'Authorization': 'Bearer '+g_token
+            },
+        }).then((response) => {
+            console.log(response);
+            if(response.length > 0){
+                g_Matriculados = response;
+                g_Matriculados.forEach(g => {
+                    g_mapMatriculados.set(g.cedula,g);
+                });
+            }
+        });
         $.ajax({
             type: "GET",
             url: "/admin/reportes/asistencia/getByGrupo",
@@ -51,7 +102,7 @@ function bringData(){
             let t = a == 1 ? a + ' segundo' : a + ' segundos';
             $('#infoTiming').html(t)
             forEachGroups(response);
-            console.log(response);
+            closeProgressBarLoader();
         }, (error) => {
             console.log('error ajax')
         });
@@ -63,7 +114,7 @@ function forEachGroups(data){
     for (let i = 0; i < data.length; i++) {
         const e = data[i];
         showRowsOntablesgroup(e,i)
-        g_mapAsistencias.set(e.id,e)
+        g_mapAsistencias.set(e.id_asistencia,e)
     }
     $('#table').DataTable({
         "language": {
@@ -119,14 +170,18 @@ function forEachGroups(data){
 }
 function showRowsOntablesgroup(data,i) {
     let foto = '<img src="/public/uploads/'+data.foto+'" class="rounded-circle" width="30px" height="30px">';
-    $(`#lista_asistencia_grupo${data.id_grupo}`).append(`
+    $(`#lista_asistencia_grupo`).append(`
         <tr class="align-middle">
             <td class="text-center">${foto}</td>
             <td class="align-middle">${data.cedula}</td>
-            <td class="align-middle">${data.nombre.toUpperCase()  + ' ' + data.apellido.toUpperCase() }</td>
-            <td class="align-middle">${data.fecha}</td>
-            <td class="align-middle"><button class="w-75 btn btn-sm btn-${data.estado == 'Presente'? 'success': data.estado == 'Ausente' ? 'danger' : 'warning'}">${data.estado}</button></td>
-            <td class="align-middle"><a href="/admin/reposiciones" class="btn btn-dark btn-sm"><i class="fas fa-edit"></i> Reponer Clase</a></td>
+            <td class="align-middle">${data.nombre + ' ' + data.apellido}</td>
+            <td class="align-middle">${moment(data.fecha,"YYYY-MM-DD").format('ll')}</td>
+            <td class="align-middle"><button class="w-75 btn btn-sm btn-${data.estado == '1'? 'success': 'danger'}">${data.estado == '1'? 'Presente':'Ausente'}</button></td>
+            <td class="align-middle">
+                <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#asistenciaCambiar" data-cedula="${data.cedula}" data-id="${data.id_asistencia}">
+                    <i class="fas fa-edit"></i>
+                </button>
+            </td>
         </tr>
     `);
 }

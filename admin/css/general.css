@@ -292,17 +292,6 @@ select {
   border: none;
   border-bottom: 1px solid #1c1c1c; }
 
-.dropdownNotificaciones {
-  position: absolute;
-  top: 35px;
-  right: -25px;
-  background-color: white;
-  width: 230px;
-  border-radius: 5px;
-  border: 1px #cacaca solid;
-  min-height: 300px;
-  display: none; }
-
 .pro-nav-link:hover {
   background-color: #a31616; }
 

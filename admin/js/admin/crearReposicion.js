@@ -30,7 +30,11 @@ function onFileLoad(){
         let archivos = fileInput.files;
         let nombre = archivos[0].name;
         let tipo = archivos[0].type;
+        console.log(tipo);
         if(tipo == 'image/jpeg' || tipo == 'image/png' || tipo == 'image/jpg' ){
+            readFile(this);
+            $('#labelfileFoto').text(nombre);
+        }else if(tipo == 'application/pdf' ){ //is pdf
             readFile(this);
             $('#labelfileFoto').text(nombre);
         }
@@ -41,7 +45,11 @@ function readFile(input){
         $('#fotoContainer').show();
         var reader = new FileReader(); 
         reader.onload = function (e) {
-            $('#fotoContainer').html('<img src="'+e.target.result+'" class="img-fluid" width="100%">');
+            if(input.files[0].type == 'application/pdf'){
+                $('#fotoContainer').html('<embed src="'+e.target.result+'" type="application/pdf" class="d-block mx-auto w-100" />');
+            }else{
+                $('#fotoContainer').html('<img src="'+e.target.result+'" class="img-fluid" width="100%">');
+            }
         }; 
         reader.readAsDataURL(input.files[0]);
     }
@@ -319,7 +327,7 @@ function fillCalendar(grupos) {
             },
         },
         headerToolbar: {
-            start: 'today prev,next',
+            start: 'prev,today,next',
             center: 'title',
             end: 'dayGridMonth'
         },

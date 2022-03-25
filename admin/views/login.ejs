@@ -8,27 +8,99 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Login</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/general.css">
-    <link rel="stylesheet" href="../css/animate.css">
-    <script src="../js/jq-bs-bundle.js"></script> 
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <script src="/js/jq-bs-bundle.js"></script> 
 </head>
 <!-- style="background: url('/img/IMG_12.png'); background-size: cover; " -->
 <style>
-    .bg-linearGradient{
-        background-image: linear-gradient(to top, #4658e4b3 0%, #e2ebf0 100%);
-
-
+    body{
+        overscroll-behavior: contain;
     }
-    .wave1{
-        border-bottom-left-radius: 15px;
+    #fondoImagen {
+        filter: blur(50px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+    }
+    #fondoColor {
+        background: rgb(255, 255, 255);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+    }
+    .rounded-lg {
+        border-radius: 20px;
+    }
+    .amarillo {
+        position: absolute;
+        width: 50%;
+        bottom: 0;
+        left: 0;
+    }
+    .azul {
+        position: absolute;
+        width: 50%;
+        top: 0;
+        right: 0;
+    }
+    #path1 {
+        fill: #4659E4;
+    }
+    #path2 {
+        fill: #02CA80;
+    }
+
+    #svg3 {
+        position: absolute;
+        width: 100%;
+        height: 100%;  
+        overflow: visible !important;
+        z-index: 2;
+    }
+    #svg-background {
+        fill: rgba(255, 255, 255, 0);
+    }
+    .form-control:-webkit-autofill,
+    .form-control:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:active {
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-text-fill-color: #000 !important;
+    }
+    @media screen and (max-width: 668px) {
+        #login-con{
+            width: 100%;
+        }
+        .amarillo{
+            width: 60%;
+        }
+        .azul{
+            width: 60%;
+        }
     }
 </style>
-<body class="d-flex flex-column h-100 bg-linearGradient pt-5" >
-    <div class="my-auto mx-auto" style="width: 400px;">
-        <div class="w-100 m-auto bg-white shadow-lg rounded-3 animate__animated animate__zoomIn">
-            <div class="p-md-5 p-3 mb-auto">
+<body class="d-flex flex-column h-100 pt-5" >
+    <div id="fondoImagen">
+        <svg id="svg" viewBox="0 0 1000 1000" class="azul">
+            <path id="path1" ></path>           
+        </svg>
+        <svg id="svg" viewBox="0 0 1000 1000" class="amarillo">
+            <path id="path2" ></path>           
+        </svg>
+    </div>
+    <div id="fondoColor"></div>
+    <div class="my-auto mx-auto" id="login-con" style="z-index: 3;">
+        <div class="w-100 m-auto animate__animated animate__fadeIn">
+            <div class="p-5 mb-auto">
                 <%if(typeof err != "undefined"){%>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Login Failed!</strong> <%= err%>
@@ -37,44 +109,113 @@
                         </button>
                     </div>
                 <%}%>
-                <h1 class="font-weight-bold mt-3 display-5 text-center">Iniciar Sesión</h1>
-                <span class="d-block text-muted text-center">Administrador <i class="ml-2 fas fa-user-shield text-info" style="font-size: 1.6rem !important;"></i></span>
-                <form action="/admin/log" method="post" class="my-5">
-                    <label for="cedula">Cedula</label>
-                    <input type="text" id="cedula" name="cedula" class="form-control mb-3" placeholder="Cedula..." required="">
+                <span class="d-block text-muted"><i class="mr-1 fas fa-user-shield text-primary" style="font-size: 1.6rem !important;"></i> Admin</span>
+                <h1 class="font-weight-bold display-5">Inicio Sesión</h1>
+                <form action="/admin/log" method="post" class="my-5 bg-white">
+                    <!-- <label for="cedula">Cedula</label> -->
+                    <input type="text" id="cedula" name="cedula" class="form-control mb-2" placeholder="Cedula" style="border-radius: 10px; padding: 22px 20px; border: none; background-color: #ededed;" required="">
                     
-                    <label for="clave">Clave</label>
-                    <input type="password" id="clave" name="clave" class="form-control" placeholder="Clave..." required="">
+                    <!-- <label for="clave">Clave</label> -->
+                    <input type="password" id="clave" name="clave" class="form-control" placeholder="Clave" style="border-radius: 10px; padding: 22px 20px; border: none; background-color: #ededed;" required="">
                     
-                    <button class="btn btn-lg btn-primary d-block mx-auto w-100 mt-4" type="submit" id="inciarSesion">Entrar</button>
+                    <button class="btn btn-lg btn-primary d-block mx-auto w-100 mt-5" type="submit" id="inciarSesion"><i class="fas fa-sign-in-alt"></i> Entrar</button>
                 </form>
+                <small class="mb-1 mt-auto text-center text-muted d-block">© 2020-2021 Universidad Nacional de Costa Rica</small>
             </div>
         </div>
     </div>
-    <footer class="footer mt-2 py-3 justify-content-center">
-        <p class="mb-1 text-center text-white">© 2020-2021 Universidad Nacional de Costa Rica</p>
-   </footer>
-   <script src="https://rawgit.com/peacepostman/wavify/master/wavify.js"></script>
-    <script src="https://rawgit.com/peacepostman/wavify/master/jquery.wavify.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+    
     <script>
-        $(document).ready(function () {
-            var wave1 = $('#feel-the-wave').wavify({
-                height: 1,
-                bones: 6,
-                amplitude: 20,
-                color: '#fff',
-                speed: .35
-            });
-            var wave2 = $('#feel-the-wave2').wavify({
-                height: 1,
-                bones: 6,
-                amplitude: 20,
-                color: '#4659E4',
-                speed: .35
-            });
+        const svg = document.querySelector("#svg3");
+        let moved = true;
+        var blob1 = createBlob({
+            element: document.querySelector("#path1"),
+            numPoints: 10,
+            centerX: 600,
+            centerY: 100,
+            minRadius: 400,
+            maxRadius: 325,
+            minDuration: 1,
+            maxDuration: 2
         });
+        var blob2 = createBlob({
+            element: document.querySelector("#path2"),
+            numPoints: 10,
+            centerX: 400,
+            centerY: 600,
+            minRadius: 300,
+            maxRadius: 225,
+            minDuration: 0.75,
+            maxDuration: 1.75
+        });
+        function createBlob(options) {
+            var points = [];
+            var path = options.element;
+            var slice = (Math.PI * 2) / options.numPoints;
+            var startAngle = random(Math.PI * 2);
+            var tl = new TimelineMax({
+                onUpdate: update
+            });
+            for (var i = 0; i < options.numPoints; i++) {
+                var angle = startAngle + i * slice;
+                var duration = random(options.minDuration, options.maxDuration);
+                var point = {
+                    x: options.centerX + Math.cos(angle) * options.minRadius,
+                    y: options.centerY + Math.sin(angle) * options.minRadius
+                };
+                var tween = TweenMax.to(point, duration, {
+                    x: options.centerX + Math.cos(angle) * options.maxRadius,
+                    y: options.centerY + Math.sin(angle) * options.maxRadius,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: Sine.easeInOut
+                });
+                tl.add(tween, -random(duration));
+                points.push(point);
+            }
+            options.tl = tl;
+            options.points = points;
+            if(!navigator.userAgent.match(/safari/i)){
+                function update() {
+                    path.setAttribute("d", cardinal(points, true, 1));
+                }
+            }
+            return options;
+        }
+        // Cardinal spline - a uniform Catmull-Rom spline with a tension option
+        function cardinal(data, closed, tension) {
+            if (data.length < 1) return "M0 0";
+            if (tension == null) tension = 1;
+            var size = data.length - (closed ? 0 : 1);
+            var path = "M" + data[0].x + " " + data[0].y + " C";
+            for (var i = 0; i < size; i++) {
+                var p0, p1, p2, p3;
+                if (closed) {
+                    p0 = data[(i - 1 + size) % size];
+                    p1 = data[i];
+                    p2 = data[(i + 1) % size];
+                    p3 = data[(i + 2) % size];
+                } else {
+                    p0 = i == 0 ? data[0] : data[i - 1];
+                    p1 = data[i];
+                    p2 = data[i + 1];
+                    p3 = i == size - 1 ? p2 : data[i + 2];
+                }
+                var x1 = p1.x + (p2.x - p0.x) / 6 * tension;
+                var y1 = p1.y + (p2.y - p0.y) / 6 * tension;
+                var x2 = p2.x - (p3.x - p1.x) / 6 * tension;
+                var y2 = p2.y - (p3.y - p1.y) / 6 * tension;
+                path += " " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + p2.x + " " + p2.y;
+            }
+            return closed ? path + "z" : path;
+        }
+        function random(min, max) {
+            if (max == null) { max = min; min = 0; }
+            if (min > max) { var tmp = min; min = max; max = tmp; }
+            return min + (max - min) * Math.random();
+        }
     </script>
-    <script src="../js/login.js"></script>
 </body>
 </html>

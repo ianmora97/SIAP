@@ -1,0 +1,44 @@
+<div id="menuSideBar" class="sidenav">
+    <div class="mx-2 mb-3 d-flex justify-content-between">
+        <div class="d-flex justify-content-start align-items-start px-2">
+            <div class="mr-2">
+                <img src="/public/uploads/<%= usuario.foto%>" class="foto-rounded">
+            </div>
+            <div class="d-flex flex-column align-items-start">
+                <small class="text-muted">Instructor <img src="/img/emoji/hand-hi.png" width="13px"> </small>
+                <h6 class="text-white mb-0"><%= usuario.nombre.toUpperCase()%> <%= usuario.apellido.toUpperCase() %></h6>
+            </div>
+        </div>
+        <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()"><i class="fas fa-times"></i></a> -->
+    </div>
+    <div class="px-3">
+        <hr class="my-2" style="border:1px solid #383838">
+    </div>
+    <div class="my-3">
+        <a href="/teach/inicio" style="animation-delay: 100ms;" class="menu-teach-item animate__animated animate__slideInLeft <%if(selected == "inicio"){%>active<%}%>"><i class="fas fa-home pr-2"></i> Clases</a>
+    </div>
+    <div class="my-3">
+        <a href="/teach/asistencias" style="animation-delay: 200ms;" class="menu-teach-item animate__animated animate__slideInLeft <%if(selected == "asistencia"){%>active<%}%>"><i class="fas fa-clipboard-list pr-2"></i> Asistencia</a>
+    </div>
+    <div class="my-3">
+        <a href="#" style="animation-delay: 200ms;" class="menu-teach-item animate__animated animate__slideInLeft <%if(selected == "reposiciones"){%>active<%}%>"><i class="fas fa-clipboard-list pr-2"></i> Reposiciones</a>
+    </div>
+    <div class="mt-auto mb-2 ">
+        <div class="px-3">
+            <hr class="my-2" style="border:1px solid #383838">
+        </div>
+        <div class="d-flex flex-column">
+            <a href="/teach/logout" class="menu-teach-item"><i class="fas fa-power-off pr-2"></i> Salir</a>
+        </div>
+    </div>
+</div>
+<div id="shadowTeach"></div>
+<script>
+    function toggleMenu() {
+        $("#wrapperTeach").toggleClass("toggled");
+        $(".sidenav").toggleClass("toggled");
+    }
+</script>
+<script>
+    var g_token = '<%= token%>';
+</script>

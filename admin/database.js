@@ -19,7 +19,7 @@ con.getConnection(function(err) {
         console.log(err);
         return;
     }else{
-        console.log('[',chalk.green('OK'),'] BD siapd conected');
+        console.log('[',chalk.green('OK'),'] Connected to MYSQL database.');
     }
 });
 module.exports = con;

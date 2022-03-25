@@ -1,0 +1,42 @@
+<!-- Tab Bar menu Mobile -->
+<div class="menuTabBar">
+    <div class="d-flex justify-content-around">
+        <a class="nav-menu-item <%if(title == 'inicio'){%>active<%}%>" href="/client/inicio">
+            <span class="d-flex flex-column justify-content-center align-items-center">
+                <div>
+                    <i class="fas fa-home"></i>
+                </div>
+                <small>Inicio</small>
+            </span>
+        </a>
+        <a class="nav-menu-item <%if(title == 'perfil'){%>active<%}%>" href="/client/perfil">
+            <span class="d-flex flex-column justify-content-center align-items-center">
+                <div>
+                    <i class="fas fa-user"></i>
+                </div>
+                <small>Perfil</small>
+            </span>
+        </a>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // nav-menu-item
+        var navMenuItem = document.querySelectorAll('.nav-menu-item');
+        navMenuItem.forEach(function(item) {
+            item.addEventListener('click', function() {
+                navMenuItem.forEach(function(item) {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        $(".nav-menu-item").on("click", function(event) {
+            event.preventDefault();
+            var id = $(this).attr('href');
+            setTimeout(function() {
+                location.href = id;
+            }, 800);
+        });
+    });
+</script>

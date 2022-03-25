@@ -109,6 +109,7 @@ function traer_estudiantes() {
         estudiantes = usuarios;
         mostrarUsuarios(usuarios);
         load_stats(usuarios);
+        closeProgressBarLoader();
     }, (error) => {
     });
 }

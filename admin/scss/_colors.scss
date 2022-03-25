@@ -1,3 +1,10 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 $theme-colors: (
     "primary":#4659E4,
     "dark-primary":#3347e0,
@@ -7,7 +14,10 @@ $theme-colors: (
     "light-alt":#f1f1f1,
     "gray":#e0e2f0,
     "dark":#212529,
-    "info":#0c8df7
+    "info":#0c8df7,
+    "fresh1":#9fccff,
+    "fresh2":#ffe17e,
+    "fresh3":#f78a4b,
 );
 
 $grid-breakpoints: (
@@ -18,16 +28,18 @@ $grid-breakpoints: (
     xl: 1400px,
     xxl: 1900px
 );
-    
-
 
 $breadcrumb-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E");
 
 $modal-fade-transform: scaleY(.01) scaleX(0);
 
 body{
-    font-family: 'Nunito Sans', sans-serif !important;
+    font-family: 'Mulish', sans-serif !important;
 }
 
 $enable-shadows:true;
 $enable-responsive-font-sizes:true;
+
+.navbar-dark .navbar-toggler-icon{
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='rgba%28202, 202, 202, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>") !important;
+}

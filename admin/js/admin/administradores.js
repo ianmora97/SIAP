@@ -168,8 +168,122 @@ function agregarUsuario() {
     (error) => {}
   );
 }
+function salvarHomepage(){
+	let showslide1 = $("#slide1Show").is(":checked");
+	let slide1head = $("#slide1-head-HP").val();
+	let slide1body = $("#slide1-body-HP").val();
 
+	let showslide2 = $("#slide2Show").is(":checked");
+	let slide2head = $("#slide2-head-HP").val();
+	let slide2body = $("#slide2-body-HP").val();
+
+	let showslide3 = $("#slide3Show").is(":checked");
+	let slide3head = $("#slide3-head-HP").val();
+	let slide3body = $("#slide3-body-HP").val();
+
+	let showfeature1 = $("#feature1Show").is(":checked");
+	let feature1head = $("#feature1-head-HP").val();
+	let feature1body = $("#feature1-body-HP").val();
+
+	let showfeature2 = $("#feature2Show").is(":checked");
+	let feature2head = $("#feature2-head-HP").val();
+	let feature2body = $("#feature2-body-HP").val();
+
+	let showfeature3 = $("#feature3Show").is(":checked");
+	let feature3head = $("#feature3-head-HP").val();
+	let feature3body = $("#feature3-body-HP").val();
+
+	let data = {
+		fma: [
+			{
+				show: showslide1,
+				title: slide1head,
+				subtitle: slide1body
+			},
+			{
+				show: showslide2,
+				title: slide2head,
+				subtitle: slide2body
+			},
+			{
+				show: showslide3,
+				title: slide3head,
+				subtitle: slide3body
+			}
+		],
+		feature:[
+			{
+				show: showfeature1,
+				title: feature1head,
+				subtitle: feature1body
+		  	},
+			{
+				show: showfeature2,
+				title: feature2head,
+				subtitle: feature2body
+			},
+			{
+				show: showfeature3,
+				title: feature3head,
+				subtitle: feature3body
+		  	}
+		]
+	}
+	console.log(data);
+	$.ajax({
+		type: "GET",
+		url: "/admin/homepage/save",
+		data: data,
+		contentType: "application/json",
+		headers: {
+			Authorization: "Bearer " + g_token
+		},
+	}).then((response) =>{
+		if(response.status == 'ok'){
+			var iframe = document.getElementById('homepagepreviewiframe');
+			iframe.src = iframe.src;
+		}
+	});
+}
+function getHomepageJson(){
+	$.ajax({
+		type: "GET",
+		url: "/admin/homepage/get",
+		contentType: "application/json",
+		headers: {
+			Authorization: "Bearer " + g_token
+		},
+	}).then((response) =>{
+		var data = response;
+		var fma = data.fma;
+		var feature = data.feature;
+		$("#slide1Show").prop("checked", fma[0].show == 'true');
+		$("#slide1-head-HP").val(fma[0].title);
+		$("#slide1-body-HP").val(fma[0].subtitle);
+
+		$("#slide2Show").prop("checked", fma[1].show == 'true');
+		$("#slide2-head-HP").val(fma[1].title);
+		$("#slide2-body-HP").val(fma[1].subtitle);
+
+		$("#slide3Show").prop("checked", fma[2].show == 'true');
+		$("#slide3-head-HP").val(fma[2].title);
+		$("#slide3-body-HP").val(fma[2].subtitle);
+
+		$("#feature1Show").prop("checked", feature[0].show == 'true');
+		$("#feature1-head-HP").val(feature[0].title);
+		$("#feature1-body-HP").val(feature[0].subtitle);
+
+		$("#feature2Show").prop("checked", feature[1].show == 'true');
+		$("#feature2-head-HP").val(feature[1].title);
+		$("#feature2-body-HP").val(feature[1].subtitle);
+
+		$("#feature3Show").prop("checked", feature[2].show == 'true');
+		$("#feature3-head-HP").val(feature[2].title);
+		$("#feature3-body-HP").val(feature[2].subtitle);
+	});
+}
 function bringDB() {
+	getHomepageJson();
   let ajaxTime = new Date().getTime();
   let bearer = "Bearer " + g_token;
   $.ajax({
@@ -190,6 +304,7 @@ function bringDB() {
       $("#administradores_total_stats").html(response.length);
       $("#superusuarios_stats").html(su);
       showAdminList(response);
+      closeProgressBarLoader();
     },
     (error) => {}
   );

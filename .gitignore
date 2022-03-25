@@ -9,3 +9,5 @@ admin/.env
 admin/img/.DS_Store
 
 admin/public/uploads/
+
+admin/logs/*.txt

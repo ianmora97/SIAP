@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" style="overflow-x: hidden;">
+<head>
+    <title>Clases</title>
+    <%- include('headers') %>
+</head>
+<body style="overflow-x:hidden;" class="d-flex flex-column" style="min-height: 400px;">
+    <span class="sr-only" id="id_usuario"><%= usuario.id_usuario%></span>
+    <span class="sr-only" id="id_profesor"><%= usuario.id_profesor%></span>
+    <span class="sr-only" id="id_cedula"><%= usuario.cedula%></span>
+    <%- include('menu') %>
+    <div id="wrapperTeach">
+        <%- include('header') %>
+        <div class="container-fluid my-2">
+            <div id="contentLista" class="row m-0">
+                
+            </div>
+        </div>
+        <%- include('footer') %>
+    </div>
+    <script src="/js/teach/lista.js"></script>
+</body>
+</html>

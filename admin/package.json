@@ -7,12 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "nodemonConfig": {
-    "ignore": [
-      "admin/js/admin/*"
-    ],
-    "delay": 0
-  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,8 +15,7 @@
     "gulp": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
-    "gulp-sass": "^4.1.0",
-    "node-sass": "^6.0.0",
+    "gulp-sass": "^3.1.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
@@ -33,12 +27,15 @@
     "chart.js": "^2.9.3",
     "cheerio": "^1.0.0-rc.5",
     "cors": "^2.8.5",
+    "cross-fetch": "^3.1.5",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fs": "0.0.1-security",
     "fullcalendar": "^5.7.0",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
     "imap": "^0.8.19",
     "instascan": "^1.0.0",
     "jquery": "^3.5.1",
@@ -54,6 +51,7 @@
     "qrcode-svg": "^1.1.0",
     "request-promise": "^4.2.6",
     "socket.io": "^4.1.2",
+    "sqlite3": "^5.0.2",
     "sweetalert2": "^11.2.1",
     "uuid": "^8.3.2",
     "xlsexport": "^1.5.2"

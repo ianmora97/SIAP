@@ -245,6 +245,7 @@ function loadFromDb() {
             addData(tallerCh,key, value);
         }
         $('#talleres_stats').html(Object.entries(g_gruposExistentes).length);
+        closeProgressBarLoader();
     },(error) => {
     }); 
 }
@@ -351,13 +352,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ lunes -------------------------
     let lunes = []; //todas las horas de los lunes 
     data.filter(e => e.dia == 'LUNES').forEach(e =>{
-        lunes.push(convertTime12to24(e.hora));
+        lunes.push(parseInt(e.hora.split(':')[0]));
     })
     let i_lunes = new Array(24); // contar los cantidad de horas al dia
     i_lunes.fill(0);
     for (let i = 0; i < i_lunes.length; i++) {
         for (let j = 0; j < lunes.length; j++) {
-            if (i == convertTime12to24(lunes[j])) {
+            if (i == (lunes[j])) {
                 i_lunes[i] = i_lunes[i] + 1;
             }
         }
@@ -386,13 +387,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ martes -------------------------
     let martes = [];
     data.filter(e => e.dia == 'MARTES').forEach(e =>{
-        martes.push(convertTime12to24(e.hora));
+        martes.push(parseInt(e.hora.split(':')[0]));
     })
     let i_martes = new Array(24); // contar los cantidad de horas al dia
     i_martes.fill(0);
     for (let i = 0; i < i_martes.length; i++) {
         for (let j = 0; j < martes.length; j++) {
-            if (i == convertTime12to24(martes[j])) {
+            if (i == (martes[j])) {
             i_martes[i] = i_martes[i] + 1;
             }
         }
@@ -415,13 +416,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ miercoles -------------------------
     let miercoles = [];
     data.filter(e => e.dia == 'MIERCOLES').forEach(e =>{
-        miercoles.push(convertTime12to24(e.hora));
+        miercoles.push(parseInt(e.hora.split(':')[0]));
     })
     let i_miercoles = new Array(24); // contar los cantidad de horas al dia
     i_miercoles.fill(0);
     for (let i = 0; i < i_miercoles.length; i++) {
         for (let j = 0; j < miercoles.length; j++) {
-            if (i == convertTime12to24(miercoles[j])) {
+            if (i == (miercoles[j])) {
             i_miercoles[i] = i_miercoles[i] + 1;
             }
         }
@@ -445,13 +446,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ jueves -------------------------
     let jueves = [];
     data.filter(e => e.dia == 'JUEVES').forEach(e =>{
-        jueves.push(convertTime12to24(e.hora));
+        jueves.push(parseInt(e.hora.split(':')[0]));
     })
     let i_jueves = new Array(24); // contar los cantidad de horas al dia
     i_jueves.fill(0);
     for (let i = 0; i < i_jueves.length; i++) {
         for (let j = 0; j < jueves.length; j++) {
-            if (i == convertTime12to24(jueves[j])) {
+            if (i == (jueves[j])) {
             i_jueves[i] = i_jueves[i] + 1;
             }
         }
@@ -474,13 +475,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ viernes -------------------------
     let viernes = [];
     data.filter(e => e.dia == 'VIERNES').forEach(e =>{
-        viernes.push(convertTime12to24(e.hora));
+        viernes.push(parseInt(e.hora.split(':')[0]));
     })
     let i_viernes = new Array(24); // contar los cantidad de horas al dia
     i_viernes.fill(0);
     for (let i = 0; i < i_viernes.length; i++) {
         for (let j = 0; j < viernes.length; j++) {
-            if (i == convertTime12to24(viernes[j])) {
+            if (i == (viernes[j])) {
             i_viernes[i] = i_viernes[i] + 1;
             }
         }
@@ -503,13 +504,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ sabado -------------------------
     let sabado = [];
     data.filter(e => e.dia == 'SABADO').forEach(e =>{
-        sabado.push(convertTime12to24(e.hora));
+        sabado.push(parseInt(e.hora.split(':')[0]));
     })
     let i_sabado = new Array(24); // contar los cantidad de horas al dia
     i_sabado.fill(0);
     for (let i = 0; i < i_sabado.length; i++) {
         for (let j = 0; j < sabado.length; j++) {
-            if (i == convertTime12to24(sabado[j])) {
+            if (i == (sabado[j])) {
             i_sabado[i] = i_sabado[i] + 1;
             }
         }
@@ -532,13 +533,13 @@ function cargarHorayDia(data) {
     // ! ------------------------ domingo -------------------------
     let domingo = [];
     data.filter(e => e.dia == 'DOMINGO').forEach(e =>{
-        domingo.push(convertTime12to24(e.hora));
+        domingo.push(parseInt(e.hora.split(':')[0]));
     })
     let i_domingo = new Array(24); // contar los cantidad de horas al dia
     i_domingo.fill(0);
     for (let i = 0; i < i_domingo.length; i++) {
         for (let j = 0; j < domingo.length; j++) {
-            if (i == convertTime12to24(domingo[j])) {
+            if (i == (domingo[j])) {
             i_domingo[i] = i_domingo[i] + 1;
             }
         }

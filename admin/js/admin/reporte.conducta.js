@@ -106,6 +106,7 @@ function bringData(){
                 <option value="${e.id_estudiante}">${e.nombre} ${e.cedula}</option>
             `);
         })
+        closeProgressBarLoader();
     }, (error) => {
     });
 }

@@ -6,9 +6,13 @@ const SocketIo = require('socket.io');
 const multer = require('multer');
 const uuid = require('uuid');
 var cors = require('cors')
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const router = express.Router();
 require('dotenv').config();
+
 
 usersOnline = new Map();
 
@@ -33,6 +37,14 @@ app.use(session({
 //Archivos estaticos
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname,'/public')));
+
+// redirect to https
+if(process.env.ENV != 'dev'){
+    app.enable('trust proxy')
+        app.use((req, res, next) => {
+        req.secure ? next() : res.redirect('https://' + req.headers.host + req.url)
+    })
+}
 
 const storage = multer.diskStorage({
     destination: path.join(__dirname,'/public/uploads'),
@@ -68,6 +80,8 @@ app.use(require('./routes/reportes/sistema.routes'));
 app.use(require('./routes/reportes/conductas.routes'));
 app.use(require('./routes/reportes/uso.routes'));
 
+app.use(require('./routes/notas/notas.routes'));
+
 app.use(require('./routes/estudiante/admin.routes'));
 app.use(require('./routes/administradores/admin.routes'));
 app.use(require('./routes/profesores/profesor.routes'));
@@ -77,17 +91,40 @@ app.use(require('./routes/reposiciones/reposicion.routes'));
 app.use(require('./routes/matricula/matriula.routes'));
 
 app.use(require('./routes/client/registro.routes'));
+app.use(require('./routes/client/client.routes'));
 
+app.use(require('./routes/instructores/teach.routes'));
 
-const server = app.listen(app.get('port'), () =>{
-    console.log('[',chalk.green('OK'),']' ,chalk.yellow('SERVER'),'Admin server running on','http://'+app.get('host')+':'+ app.get('port'));
+// CERT
+var certPath = "";
+var options = {};
+if(process.env.ENV != 'dev'){
+    certPath = '/etc/letsencrypt/live/siapdpe.com';
+    options = {
+        key: fs.readFileSync(`${certPath}/privkey.pem`),
+        cert: fs.readFileSync(`${certPath}/fullchain.pem`)
+    };
+}
+
+// HTTPS server
+var server;
+if(process.env.ENV != 'dev'){
+    http.createServer(app).listen(80);
+}else{
+    server = http.createServer(app).listen(80);
+    console.log('[',chalk.green('OK'),'] DEVELOPMENT server started.');
+}
+if(process.env.ENV != 'dev') server = https.createServer(options, app).listen(443, () => {
+    console.log('[',chalk.green('OK'),'] PRODUCTION SERVER STARTED');
 });
 
 const io = SocketIo(server);
 
-
-
 io.on('connection', (socket) =>{
+    socket.on('matricula:newMatricula', (data) => {
+        io.sockets.emit('matricula:newMatricula',data);
+    });
+    
     socket.on(' chat:nuevo_registro', (data) => {
         io.sockets.emit(' chat:nuevo_registro',data);
     });

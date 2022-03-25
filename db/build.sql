@@ -14,6 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema siap
 -- -----------------------------------------------------
+drop schema `siap`;
 CREATE SCHEMA IF NOT EXISTS `siap` DEFAULT CHARACTER SET latin1 ;
 USE `siap` ;
 
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_actividad` (
   `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 107
+AUTO_INCREMENT = 1093
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -41,20 +42,20 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cedula` VARCHAR(45) NOT NULL,
   `foto` VARCHAR(100) NULL DEFAULT 'default-avatar.png',
-  `nombre` VARCHAR(55) NOT NULL,
+  `nombre` VARCHAR(100) NOT NULL,
   `apellido` VARCHAR(100) NOT NULL,
   `nacimiento` DATE NULL DEFAULT NULL,
-  `usuario` VARCHAR(45) NOT NULL,
+  `usuario` VARCHAR(100) NOT NULL,
   `clave` VARCHAR(45) NOT NULL,
   `sexo` VARCHAR(45) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `correo` VARCHAR(45) NULL DEFAULT NULL,
+  `correo` VARCHAR(100) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 201
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_administrativo` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -89,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_estudiante` (
   `carrera_departamento` VARCHAR(100) NULL DEFAULT NULL,
   `cantidad_dias` INT NULL DEFAULT NULL,
   `telefono_emergencia` VARCHAR(150) NULL DEFAULT NULL,
-  `notas` VARCHAR(255) NULL DEFAULT NULL,
+  `padecimientos` VARCHAR(2000) CHARACTER SET 'latin1' NULL DEFAULT NULL,
   `provincia` VARCHAR(11) NULL DEFAULT NULL,
   `canton` VARCHAR(50) NULL DEFAULT NULL,
   `distrito` VARCHAR(60) NULL DEFAULT NULL,
@@ -110,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_estudiante` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 166
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -121,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_profesor` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `usuario` INT NOT NULL,
   `rol` INT NOT NULL DEFAULT '2',
+  `aso` INT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `usuario_UNIQUE` (`usuario` ASC) VISIBLE,
   INDEX `fk_t_profesor_t_usuario1_idx` (`usuario` ASC) VISIBLE,
@@ -130,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_profesor` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -158,7 +160,6 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_anotaciones` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -176,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_taller` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -190,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_horario` (
   `hora_final` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 37
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -227,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_grupo` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
+AUTO_INCREMENT = 38
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -263,11 +264,11 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `siap`.`t_casillero` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `codigo` VARCHAR(45) NOT NULL,
+  `tipo` VARCHAR(20) NOT NULL DEFAULT 'M' COMMENT 'M:mujeres, H: hombres',
   `estado` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -294,7 +295,6 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_casillero_estudiante` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -316,7 +316,6 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_conductas` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -350,6 +349,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_matricula` (
   `estudiante` INT NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `activa` TINYINT NOT NULL DEFAULT '1',
+  `qr` VARCHAR(200) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_t_matricula_t_taller1_idx` (`grupo` ASC) VISIBLE,
   INDEX `fk_t_matricula_t_estudiante_idx` (`estudiante` ASC) VISIBLE,
@@ -364,7 +364,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_matricula` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 348
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_matricula_reporte` (
   `accion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
+AUTO_INCREMENT = 392
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -388,9 +388,9 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `siap`.`t_padecimiento` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(255) NOT NULL,
+  `descripcion` VARCHAR(2000) CHARACTER SET 'latin1' NOT NULL,
   `estudiante` INT NOT NULL,
-  `observaciones` VARCHAR(255) NULL DEFAULT NULL,
+  `observaciones` VARCHAR(2000) CHARACTER SET 'latin1' NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_t_padecimiento_t_estudiante_idx` (`estudiante` ASC) VISIBLE,
   CONSTRAINT `fk_t_padecimiento_t_estudiante`
@@ -531,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_reposicion` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -600,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`t_usuario_temp` (
   UNIQUE INDEX `cedula_UNIQUE` (`cedula` ASC) VISIBLE,
   UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = latin1;
 
 USE `siap` ;
@@ -608,7 +608,7 @@ USE `siap` ;
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_admin_estudiante`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_admin_estudiante` (`id` INT, `cedula` INT, `foto` INT, `apellido` INT, `nombre` INT, `nacimiento` INT, `usuario` INT, `sexo` INT, `correo` INT, `id_estudiante` INT, `celular` INT, `telefono` INT, `nivel` INT, `descripcion` INT, `carrera_departamento` INT, `cantidad_dias` INT, `telefono_emergencia` INT, `provincia` INT, `canton` INT, `distrito` INT, `direccion` INT, `moroso` INT, `estado` INT, `notas` INT, `prematricula` INT, `motivo_ingreso` INT, `tipo` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_admin_estudiante` (`id` INT, `cedula` INT, `foto` INT, `apellido` INT, `nombre` INT, `nacimiento` INT, `usuario` INT, `sexo` INT, `correo` INT, `id_estudiante` INT, `celular` INT, `telefono` INT, `nivel` INT, `descripcion` INT, `carrera_departamento` INT, `cantidad_dias` INT, `telefono_emergencia` INT, `provincia` INT, `canton` INT, `distrito` INT, `direccion` INT, `moroso` INT, `estado` INT, `padecimientos` INT, `prematricula` INT, `motivo_ingreso` INT, `tipo` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_administradores`
@@ -623,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`vta_anotaciones` (`id_anotaciones` INT, `nota
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_asistencia`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_asistencia` (`id_asistencia` INT, `fecha` INT, `id_matricula` INT, `id_grupo` INT, `id_taller` INT, `codigo` INT, `id_estudiante` INT, `foto` INT, `id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `estado` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_asistencia` (`id_asistencia` INT, `fecha` INT, `id_matricula` INT, `id_grupo` INT, `id_taller` INT, `descripcion` INT, `codigo` INT, `dia` INT, `hora` INT, `hora_final` INT, `id_estudiante` INT, `foto` INT, `id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `estado` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_asistencia_admin`
@@ -638,7 +638,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`vta_cantidad_usuarios_registrados` (`cantidad
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_casilleros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_casilleros` (`id_casillero` INT, `codigo_casillero` INT, `id_reserva` INT, `id_estudiante` INT, `id_usuario` INT, `cedula` INT, `hora_entrada` INT, `hora_salida` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_casilleros` (`id_casillero` INT, `codigo_casillero` INT, `tipo` INT, `id_reserva` INT, `id_estudiante` INT, `id_usuario` INT, `cedula` INT, `hora_entrada` INT, `hora_salida` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_cliente_estudiante`
@@ -678,7 +678,7 @@ CREATE TABLE IF NOT EXISTS `siap`.`vta_matriculados_grupo_detalle` (`id_grupo` I
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_matriculados_por_grupo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_matriculados_por_grupo` (`codigo_taller` INT, `nivel_taller` INT, `descripcion` INT, `id_grupo` INT, `periodo` INT, `periodo_final` INT, `dia` INT, `hora` INT, `hora_final` INT, `nombre_profesor` INT, `id_matricula` INT, `activa` INT, `created_at` INT, `id_estudiante` INT, `id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `foto` INT, `correo` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_matriculados_por_grupo` (`codigo_taller` INT, `nivel_taller` INT, `descripcion` INT, `id_grupo` INT, `periodo` INT, `periodo_final` INT, `dia` INT, `hora` INT, `hora_final` INT, `cedula_profeosr` INT, `nombre_profesor` INT, `id_matricula` INT, `qr` INT, `activa` INT, `created_at` INT, `id_estudiante` INT, `id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `foto` INT, `correo` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_padecimientos`
@@ -698,12 +698,12 @@ CREATE TABLE IF NOT EXISTS `siap`.`vta_profesor_reposiciones` (`id_reposicion` I
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_profesores`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_profesores` (`id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `nacimiento` INT, `usuario` INT, `sexo` INT, `clave` INT, `foto` INT, `correo` INT, `id_profesor` INT, `rol` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_profesores` (`id_usuario` INT, `cedula` INT, `apellido` INT, `nombre` INT, `nacimiento` INT, `usuario` INT, `sexo` INT, `clave` INT, `foto` INT, `correo` INT, `id_profesor` INT, `rol` INT, `aso` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_reposiciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `siap`.`vta_reposiciones` (`id_reposicion` INT, `grupo_reposicion` INT, `fecha_reposicion` INT, `dia_reposicion` INT, `hora_reposicion` INT, `comprobante` INT, `observacion` INT, `estado` INT, `descripcion` INT, `id_estudiante` INT, `nivel` INT, `id_usuario` INT, `cedula` INT, `nombre` INT, `apellido` INT);
+CREATE TABLE IF NOT EXISTS `siap`.`vta_reposiciones` (`id_reposicion` INT, `grupo_reposicion` INT, `fecha_reposicion` INT, `dia_reposicion` INT, `hora_reposicion` INT, `hora_reposicion_final` INT, `comprobante` INT, `observacion` INT, `estado` INT, `descripcion` INT, `id_estudiante` INT, `nivel` INT, `id_usuario` INT, `cedula` INT, `nombre` INT, `apellido` INT);
 
 -- -----------------------------------------------------
 -- Placeholder table for view `siap`.`vta_usuario_temp`
@@ -715,14 +715,13 @@ CREATE TABLE IF NOT EXISTS `siap`.`vta_usuario_temp` (`id` INT, `cedula` INT, `f
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `siap`.`vta_usuario_temp_admin` (`id` INT, `cedula` INT, `foto` INT, `nombre` INT, `apellido` INT, `nacimiento` INT, `usuario` INT, `clave` INT, `sexo` INT, `tipo_usuario` INT, `creado` INT, `estado` INT);
 
-
 -- -----------------------------------------------------
 -- function fi_cantidad_administrativos
 -- -----------------------------------------------------
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_administrativos`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_administrativos`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -740,7 +739,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_asistencias_estudiante_grupo`(vps_cedula varchar(11), vpi_grupo int) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_asistencias_estudiante_grupo`(vps_cedula varchar(11), vpi_grupo int) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -761,7 +760,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_ausencias_estudiante_grupo`(vps_cedula varchar(11), vpi_grupo int) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_ausencias_estudiante_grupo`(vps_cedula varchar(11), vpi_grupo int) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -782,7 +781,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_estudiantes`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_estudiantes`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -800,7 +799,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_grupos`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_grupos`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -818,7 +817,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_horarios`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_horarios`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -836,7 +835,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_matriculados`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_matriculados`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -854,7 +853,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_matriculados_en_grupo`(vpi_id_grupo int) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_matriculados_en_grupo`(vpi_id_grupo int) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cuenta int default 0;
@@ -873,7 +872,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_profesores`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_profesores`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -891,7 +890,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_talleres`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_talleres`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -909,7 +908,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_usuarios`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_usuarios`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -927,7 +926,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cantidad_usuarios_temp`() RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cantidad_usuarios_temp`() RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cantidad int default 0;
@@ -945,7 +944,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cupo_disponible_grupo`(vpi_id_grupo int) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cupo_disponible_grupo`(vpi_id_grupo int) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cupo_maximo int;
@@ -967,7 +966,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_cupos_reposicion_restantes_grupo_fecha`(vpi_id_grupo int, vpd_fecha timestamp) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_cupos_reposicion_restantes_grupo_fecha`(vpi_id_grupo int, vpd_fecha timestamp) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_cuenta int default 0;
@@ -989,7 +988,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_id_administrativo_por_cedula`(vps_cedula varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_id_administrativo_por_cedula`(vps_cedula varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_id_adm int default 0;
@@ -1008,7 +1007,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_id_casillero_casilleroEstudiante_por_id`(vps_id int) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_id_casillero_casilleroEstudiante_por_id`(vps_id int) RETURNS int
     DETERMINISTIC
 BEGIN
 declare vli_id_casillero int default 0;
@@ -1027,7 +1026,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_id_casillero_por_codigo`(vps_codigo varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_id_casillero_por_codigo`(vps_codigo varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_id_casillero int default 0;
@@ -1046,7 +1045,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_id_estudiante_por_cedula`(vps_cedula varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_id_estudiante_por_cedula`(vps_cedula varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_id_est int default 0;
@@ -1065,7 +1064,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_verificar_usuario_es_administrativo`(vps_cedula varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_verificar_usuario_es_administrativo`(vps_cedula varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_admin_encontrado int;
@@ -1088,7 +1087,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_verificar_usuario_es_estudiante`(vps_cedula varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_verificar_usuario_es_estudiante`(vps_cedula varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_estudiante_encontrado int;
@@ -1111,7 +1110,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fi_verificar_usuario_es_profesor`(vps_cedula varchar(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `fi_verificar_usuario_es_profesor`(vps_cedula varchar(45)) RETURNS int
     DETERMINISTIC
 begin
 	declare vli_profe_encontrado int;
@@ -1134,7 +1133,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` FUNCTION `fs_cedula_estudiante_por_id`(vpi_id int(11)) RETURNS varchar(45) CHARSET utf8
+CREATE DEFINER=`root`@`localhost` FUNCTION `fs_cedula_estudiante_por_id`(vpi_id int(11)) RETURNS varchar(45) CHARSET utf8mb3
     DETERMINISTIC
 BEGIN
 	declare vls_ced_est varchar(45) default 0;
@@ -1153,7 +1152,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_activa_matricula`(in vpi_id int,in vpi_activa int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_activa_matricula`(in vpi_id int,in vpi_activa int)
 begin
 	update t_matricula set activa = vpi_activa
     where id = vpi_activa;
@@ -1167,7 +1166,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_apellido_usuario`(in vps_cedula varchar(45), in vps_apellido varchar(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_apellido_usuario`(in vps_cedula varchar(45), in vps_apellido varchar(100))
 begin 
 	update t_usuario set apellido = vps_apellido
     where cedula = vps_cedula;
@@ -1182,7 +1181,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_cantidad_dias_estudiante`(in vps_cedula varchar(45),in vpi_cantidad_dias int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_cantidad_dias_estudiante`(in vps_cedula varchar(45),in vpi_cantidad_dias int)
 begin
 	update t_estudiante set cantidad_dias = vpi_cantidad_dias
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1196,7 +1195,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_canton_estudiante`(in vps_cedula varchar(45),in vps_canton varchar(50))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_canton_estudiante`(in vps_cedula varchar(45),in vps_canton varchar(50))
 begin
 	update t_estudiante set canton = vps_canton
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1210,7 +1209,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_carrera_departamento_estudiante`(in vps_cedula varchar(45),in vps_carrera_departamento varchar(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_carrera_departamento_estudiante`(in vps_cedula varchar(45),in vps_carrera_departamento varchar(100))
 begin
 	update t_estudiante set carrera_departamento = vps_carrera_departamento
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1224,7 +1223,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_cedula_usuario`(in vps_cedula_actual varchar(45), in vps_cedula_nueva varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_cedula_usuario`(in vps_cedula_actual varchar(45), in vps_cedula_nueva varchar(45))
 begin
 	update t_usuario set cedula = vps_cedula_nueva
     where cedula = vps_cedula_actual;
@@ -1238,7 +1237,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_celular_estudiante`(in vps_cedula varchar(45),in vps_celular varchar(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_celular_estudiante`(in vps_cedula varchar(45),in vps_celular varchar(10))
 begin
 	update t_estudiante set celular = vps_celular
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1252,11 +1251,10 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_clave_sha1_usuario`(in vps_cedula varchar(45), in vps_clave varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_clave_sha1_usuario`(in vps_cedula varchar(45), in vps_clave varchar(45))
 begin 
 	update t_usuario set clave = sha1(vps_clave)
     where cedula = vps_cedula;
-    call prc_actualizar_updated_at_usuario(vps_cedula);
 end$$
 
 DELIMITER ;
@@ -1267,7 +1265,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_clave_usuario`(in vps_cedula varchar(45), in vps_clave varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_clave_usuario`(in vps_cedula varchar(45), in vps_clave varchar(45))
 begin 
 	update t_usuario set clave = vps_clave
     where cedula = vps_cedula;
@@ -1282,7 +1280,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_codigo_taller`(in vpi_id int,in vps_codigo varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_codigo_taller`(in vpi_id int,in vps_codigo varchar(45))
 begin 
 	update t_taller
     set codigo = vps_codigo
@@ -1297,7 +1295,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_comprobante_reposicion`(in vpi_id int, in vps_comprobante varchar(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_comprobante_reposicion`(in vpi_id int, in vps_comprobante varchar(100))
 begin
 	update t_reposicion set comprobante = vps_comprobante 
     where id = vpi_id;
@@ -1311,7 +1309,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_consentimiento_estudiante`(in vps_cedula varchar(45), in vpi_consentimiento tinyint)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_consentimiento_estudiante`(in vps_cedula varchar(45), in vpi_consentimiento tinyint)
 begin
 	update t_estudiante set consentimiento = vpi_consentimiento
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1325,7 +1323,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_correo_usuario`(in vps_cedula varchar(45),in vps_correo varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_correo_usuario`(in vps_cedula varchar(45),in vps_correo varchar(45))
 begin
 	update t_usuario set correo = vps_correo
     where cedula = vps_cedula;
@@ -1340,7 +1338,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_costo_funcionario_taller`(in vpi_id int,in vpi_costo_funcionario int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_costo_funcionario_taller`(in vpi_id int,in vpi_costo_funcionario int)
 begin 
 	update t_taller
     set costo_funcionario = vpi_costo_funcionario
@@ -1355,7 +1353,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_costo_taller`(in vpi_id int,in vpi_costo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_costo_taller`(in vpi_id int,in vpi_costo int)
 begin 
 	update t_taller
     set costo = vpi_costo
@@ -1370,7 +1368,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_cupo_base_grupo`(in vpi_id int, in vpi_cupo_base int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_cupo_base_grupo`(in vpi_id int, in vpi_cupo_base int)
 begin
 	update t_grupo set cupo_base = vpi_cupo_base
     where id = vpi_id;
@@ -1384,7 +1382,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_cliente_estudiante`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_cliente_estudiante`(
 	in vps_cedula varchar(45),
     in vps_correo varchar(85),
 	in vps_celular varchar(10),
@@ -1416,7 +1414,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_estudiante`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_estudiante`(
 	in vps_cedula varchar(45), 
 	in vps_celular varchar(10),
 	in vps_telefono varchar(10), 
@@ -1457,7 +1455,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_estudiante_admin`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_estudiante_admin`(
 	in vps_cedula varchar(45),
     in vps_correo varchar(85),
     in vps_usuario varchar(85),
@@ -1488,7 +1486,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_reposicion`(in vpi_id int, in vpi_grupo_origen int, in vpi_grupo_reposicion int, in vpd_fecha_reposicion date, in vps_comprobante varchar(100), in vpi_estado int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_reposicion`(in vpi_id int, in vpi_grupo_origen int, in vpi_grupo_reposicion int, in vpd_fecha_reposicion date, in vps_comprobante varchar(100), in vpi_estado int)
 begin
 	call prc_actualizar_grupo_origen_reposicion(vpi_id,vpi_grupo_origen);
     call prc_actualizar_grupo_destino_reposicion(vpi_id,vpi_grupo_reposicion);
@@ -1505,7 +1503,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_taller`(in vpi_id int, in vps_codigo varchar(45),
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_taller`(in vpi_id int, in vps_codigo varchar(45),
  in vps_descripcion varchar(255), in vpi_nivel int, in vpi_costo int)
 begin 
 	call prc_actualizar_codigo_taller(vpi_id, vps_codigo);
@@ -1522,7 +1520,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_datos_usuario`(in vps_cedula varchar(45), in vps_foto varchar(100), in vps_nombre varchar(55), in vps_apellido varchar(100),
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_datos_usuario`(in vps_cedula varchar(45), in vps_foto varchar(100), in vps_nombre varchar(55), in vps_apellido varchar(100),
 in vpd_nacimiento date, in vps_usuario varchar(45), in vps_clave varchar(45), in vps_sexo varchar(45),in vps_correo varchar(45))
 begin 
 	call prc_actualizar_foto_usuario(vps_cedula, vps_foto);
@@ -1543,7 +1541,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_descripcion_padecimiento`(in vpi_id int, vps_descripcion varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_descripcion_padecimiento`(in vpi_id int, vps_descripcion varchar(255))
 begin 
 	update t_padecimiento 
     set descripcion = vps_descripcion
@@ -1558,7 +1556,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_descripcion_taller`(in vpi_id int,in vps_descripcion varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_descripcion_taller`(in vpi_id int,in vps_descripcion varchar(255))
 begin 
 	update t_taller
     set descripcion = vps_descripcion
@@ -1573,7 +1571,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_dia_horario`(in vpi_id int, in vps_dia varchar(55))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_dia_horario`(in vpi_id int, in vps_dia varchar(55))
 begin 
 	update t_horario set dia = vps_dia
     where id = vpi_id;
@@ -1587,7 +1585,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_direccion_estudiante`(in vps_cedula varchar(45),in vps_direccion varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_direccion_estudiante`(in vps_cedula varchar(45),in vps_direccion varchar(255))
 begin
 	update t_estudiante set direccion = vps_direccion
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1601,7 +1599,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_distrito_estudiante`(in vps_cedula varchar(45),in vps_distrito varchar(60))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_distrito_estudiante`(in vps_cedula varchar(45),in vps_distrito varchar(60))
 begin
 	update t_estudiante set distrito = vps_distrito
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1615,7 +1613,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_estado_estudiante`(in vps_cedula varchar(45),in vpi_estado int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_estado_estudiante`(in vps_cedula varchar(45),in vpi_estado int)
 begin
 	update t_estudiante set estado = vpi_estado
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1629,7 +1627,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_estado_estudiante_temporal`(in vps_cedula varchar(45),in vpi_estado int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_estado_estudiante_temporal`(in vps_cedula varchar(45),in vpi_estado int)
 begin
     call prc_eliminar_usuario_temp(vps_cedula);
 end$$
@@ -1642,7 +1640,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_estado_reposicion`(in vpi_id int, in vpi_estado int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_estado_reposicion`(in vpi_id int, in vpi_estado int)
 begin
 	update t_reposicion
     set estado = vpi_estado
@@ -1657,7 +1655,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_estudiante_anotaciones`(in vpi_id int, in vpi_estudiante int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_estudiante_anotaciones`(in vpi_id int, in vpi_estudiante int)
 begin 
 	update t_anotaciones set estudiante = vpi_estudiante
     where id = vpi_id;
@@ -1671,7 +1669,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_fecha_reposicion_reposicion`(in vpi_id int, in vpd_fecha_reposicion date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_fecha_reposicion_reposicion`(in vpi_id int, in vpd_fecha_reposicion date)
 begin
 	update t_reposicion set fecha_reposicion = vpd_fecha_reposicion
     where id = vpi_id;
@@ -1685,7 +1683,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_foto_usuario`(in vps_cedula varchar(45),in vps_foto varchar(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_foto_usuario`(in vps_cedula varchar(45),in vps_foto varchar(100))
 begin
 	update t_usuario set foto = vps_foto
     where cedula = vps_cedula;
@@ -1699,17 +1697,18 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_grupo`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_grupo`(
 in vpi_id int, 
 in vpi_horario int,
 in vpi_profesor int, 
 in vpi_taller int,
 in vpi_cupobase int,
 in vpi_cupoextra int,
-in vpi_periodo date
+in vpi_periodo date,
+in vpi_periodoFinal date
 )
 begin
-	update t_grupo set horario = vpi_horario, profesor = vpi_profesor, taller = vpi_taller, cupo_base = vpi_cupobase, cupo_extra = vpi_cupoextra, periodo = vpi_periodo  
+	update t_grupo set horario = vpi_horario, profesor = vpi_profesor, taller = vpi_taller, cupo_base = vpi_cupobase, cupo_extra = vpi_cupoextra, periodo = vpi_periodo, periodo_final = vpi_periodoFinal   
     where id = vpi_id;
 end$$
 
@@ -1721,7 +1720,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_grupo_destino_reposicion`(in vpi_id int, in vpi_grupo_destino int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_grupo_destino_reposicion`(in vpi_id int, in vpi_grupo_destino int)
 begin
 	update t_reposicion set grupo_destino = vpi_grupo_destino
     where id = vpi_id;
@@ -1735,7 +1734,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_grupo_origen_reposicion`(in vpi_id int, in vpi_grupo_origen int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_grupo_origen_reposicion`(in vpi_id int, in vpi_grupo_origen int)
 begin
 	update t_reposicion set grupo_origen = vpi_grupo_origen
     where id = vpi_id;
@@ -1749,7 +1748,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_hora_horario`(in vpi_id int, in vpi_hora varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_hora_horario`(in vpi_id int, in vpi_hora varchar(45))
 begin 
 	update t_horario set hora = vpi_hora
     where id = vpi_id;
@@ -1763,7 +1762,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_horario`(in vpi_id int, in vpi_dia varchar(45), in vpi_hora varchar(45), in vpi_hora_final varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_horario`(in vpi_id int, in vpi_dia varchar(45), in vpi_hora varchar(45), in vpi_hora_final varchar(45))
 begin 
 	update t_horario set hora = vpi_hora, dia = vpi_dia, hora_final = vpi_hora_final  
     where id = vpi_id;
@@ -1777,7 +1776,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_horario_grupo`(in vpi_id int, in vpi_horario int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_horario_grupo`(in vpi_id int, in vpi_horario int)
 begin
 	update t_grupo set horario = vpi_horario
     where id = vpi_id;
@@ -1791,7 +1790,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_matricula_estudiante`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_matricula_estudiante`(
 in vpi_id_matricula int,
 in vpi_estado int
 )
@@ -1807,7 +1806,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_moroso_estudiante`(in vps_cedula varchar(45),in vpi_moroso int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_moroso_estudiante`(in vps_cedula varchar(45),in vpi_moroso int)
 begin
 	update t_estudiante set moroso = vpi_moroso
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1821,7 +1820,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_motivo_ingreso_estudiante`(in vps_cedula varchar(45), in vps_motivo_ingreso varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_motivo_ingreso_estudiante`(in vps_cedula varchar(45), in vps_motivo_ingreso varchar(255))
 begin
 	update t_estudiante set motivo_ingreso = vps_motivo_ingreso
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1835,7 +1834,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_nacimiento_usuario`(in vps_cedula varchar(45), in vpd_nacimiento date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_nacimiento_usuario`(in vps_cedula varchar(45), in vpd_nacimiento date)
 begin 
 	update t_usuario set nacimiento = vpd_nacimiento
     where cedula = vps_cedula;
@@ -1850,7 +1849,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_nivel_estudiante`(in vps_cedula varchar(45),in vpi_nivel int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_nivel_estudiante`(in vps_cedula varchar(45),in vpi_nivel int)
 begin
 	update t_estudiante set nivel = vpi_nivel
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1864,7 +1863,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_nivel_taller`(in vpi_id int,in vpi_nivel int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_nivel_taller`(in vpi_id int,in vpi_nivel int)
 begin 
 	update t_taller
     set nivel = vpi_nivel
@@ -1879,7 +1878,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_nombre_usuario`(in vps_cedula varchar(45), in vps_nombre varchar(55))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_nombre_usuario`(in vps_cedula varchar(45), in vps_nombre varchar(55))
 begin 
 	update t_usuario set nombre = vps_nombre
     where cedula = vps_cedula;
@@ -1894,7 +1893,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_nota_anotaciones`(in vpi_id int, in vps_nota varchar(300))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_nota_anotaciones`(in vpi_id int, in vps_nota varchar(300))
 begin 
 	update t_anotaciones set nota = vps_nota
     where id = vpi_id;
@@ -1908,7 +1907,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_notas_estudiante`(in vps_cedula varchar(45),in vps_notas varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_notas_estudiante`(in vps_cedula varchar(45),in vps_notas varchar(255))
 begin
 	update t_estudiante set notas = vps_notas
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1922,7 +1921,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_observacion_padecimiento`(in vpi_id int, vps_observaciones varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_observacion_padecimiento`(in vpi_id int, vps_observaciones varchar(255))
 begin 
 	update t_padecimiento 
     set observaciones = vps_obervaciones
@@ -1937,7 +1936,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_prematricula_estudiante`(in vps_cedula varchar(45),in vpd_prematricula date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_prematricula_estudiante`(in vps_cedula varchar(45),in vpd_prematricula date)
 begin
 	update t_estudiante set prematricula = vpd_prematricula
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1951,7 +1950,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_profesor_anotaciones`(in vpi_id int, in vpi_profesor int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_profesor_anotaciones`(in vpi_id int, in vpi_profesor int)
 begin 
 	update t_anotaciones set profesor = vpi_profesor
     where id = vpi_id;
@@ -1965,7 +1964,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_profesor_grupo`(in vpi_id int, in vpi_profesor int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_profesor_grupo`(in vpi_id int, in vpi_profesor int)
 begin
 	update t_grupo set profesor = vpi_profesor
     where id = vpi_id;
@@ -1979,7 +1978,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_provincia_estudiante`(in vps_cedula varchar(45),in vps_provincia varchar(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_provincia_estudiante`(in vps_cedula varchar(45),in vps_provincia varchar(11))
 begin
 	update t_estudiante set provincia = vps_provincia
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -1993,7 +1992,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_rol_administrativo`(in vps_cedula varchar(45), in vpi_rol int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_rol_administrativo`(in vps_cedula varchar(45), in vpi_rol int)
 begin
 	update t_administrativo 
     set rol = vpi_rol
@@ -2008,7 +2007,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_sexo_usuario`(in vps_cedula varchar(45), in vps_sexo varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_sexo_usuario`(in vps_cedula varchar(45), in vps_sexo varchar(45))
 begin 
 	update t_usuario set sexo = vps_sexo
     where cedula = vps_cedula;
@@ -2023,7 +2022,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_taller`(in vpi_id int, in vpi_descripcion VARCHAR(45),  in vpi_nivel int, in vpi_costo int, in vpi_costof int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_taller`(in vpi_id int, in vpi_descripcion VARCHAR(45),  in vpi_nivel int, in vpi_costo int, in vpi_costof int)
 begin
 	update t_taller set descripcion = vpi_descripcion, nivel = vpi_nivel, costo = vpi_costo, costo_funcionario = vpi_costof 
     where id = vpi_id;
@@ -2037,7 +2036,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_telefono_emergencia_estudiante`(in vps_cedula varchar(45),in vps_telefono_emergencia varchar(150))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_telefono_emergencia_estudiante`(in vps_cedula varchar(45),in vps_telefono_emergencia varchar(150))
 begin
 	update t_estudiante set telefono_emergencia = vps_telefono_emergencia
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -2051,7 +2050,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_telefono_estudiante`(in vps_cedula varchar(45),in vps_telefono varchar(10))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_telefono_estudiante`(in vps_cedula varchar(45),in vps_telefono varchar(10))
 begin
 	update t_estudiante set telefono = vps_telefono
     where id = fi_id_estudiante_por_cedula(vps_cedula);
@@ -2065,7 +2064,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_updated_at_usuario`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_updated_at_usuario`(in vps_cedula varchar(45))
 begin
 	update t_usuario set updated_at = sysdate()
     where cedula = vps_cedula;
@@ -2079,7 +2078,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_updated_at_usuario_temp`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_updated_at_usuario_temp`(in vps_cedula varchar(45))
 begin
 	update t_usuario_temp set updated_at = sysdate()
     where cedula = vps_cedula;
@@ -2093,7 +2092,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_actualizar_usuario_usuario`(in vps_cedula varchar(45), in vps_usuario varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_actualizar_usuario_usuario`(in vps_cedula varchar(45), in vps_usuario varchar(45))
 begin 
 	update t_usuario set usuario = vps_usuario
     where cedula = vps_cedula;
@@ -2108,7 +2107,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_agregar_actividad`(in vps_usuario varchar(45),in vps_descripcion varchar(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_agregar_actividad`(in vps_usuario varchar(45),in vps_descripcion varchar(100))
 begin
 	insert into t_actividad(usuario,descripcion,created_at,updated_at)
     values (vps_usuario, vps_descripcion, sysdate(),sysdate());
@@ -2123,7 +2122,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_cambiar_usuario_temp_a_permanente`(IN `vps_cedula` VARCHAR(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_cambiar_usuario_temp_a_permanente`(IN `vps_cedula` VARCHAR(45))
 begin
 
 	declare vls_cedula varchar(45); 
@@ -2227,7 +2226,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_cambiar_usuario_temp_estado`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_cambiar_usuario_temp_estado`(
 in vps_cedula varchar(45)
 )
 BEGIN
@@ -2242,7 +2241,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_cuenta_repo_aceptada_nivel_gf`(in vpi_nivel int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_cuenta_repo_aceptada_nivel_gf`(in vpi_nivel int)
 begin
 	select count(grupo_reposicion) cuenta, grupo_reposicion,
     fecha_reposicion, nivel, estado
@@ -2261,7 +2260,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_administrativo`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_administrativo`(in vps_cedula varchar(45))
 BEGIN
 	declare vli_id int;
     
@@ -2283,7 +2282,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_anotaciones`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_anotaciones`(in vpi_id int)
 begin
 	delete from t_anotaciones
     where id = vpi_id;
@@ -2297,7 +2296,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_asistencia`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_asistencia`(in vpi_id int)
 begin
 	delete from t_asistencia 
     where id = vpi_id;
@@ -2311,7 +2310,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_casillero`(in vpv_codigo varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_casillero`(in vpv_codigo varchar(45))
 BEGIN
 	delete from t_casillero where codigo = vpv_codigo;
     commit;
@@ -2325,7 +2324,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_casillero_estudiante`(in vpi_id int, in vpv_codigo varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_casillero_estudiante`(in vpi_id int, in vpv_codigo varchar(45))
 begin
 	delete from t_casillero_estudiante
     where id = vpi_id;
@@ -2340,7 +2339,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_documento_usuario`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_documento_usuario`(in vpi_id int)
 begin 
 	delete from t_documento_usuario
     where id = vpi_id;
@@ -2354,7 +2353,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_grupo`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_grupo`(in vpi_id int)
 begin
 	delete from t_grupo
     where id = vpi_id;
@@ -2368,7 +2367,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_horario`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_horario`(in vpi_id int)
 begin 
 	delete from t_horario
     where id = vpi_id;
@@ -2382,14 +2381,14 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_matricula`(in vpi_id_matricula int, in vpi_cupoActual int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_matricula`(IN `vpi_id_matricula` INT, IN `vpi_cupoActual` INT, IN `vpi_grupo` INT)
 begin
 delete from
     t_matricula
 where
     id = vpi_id_matricula;
 
-update t_grupo set cupo_actual = vpi_cupoActual;
+update t_grupo set cupo_actual = vpi_cupoActual WHERE id = vpi_grupo;
 
  end$$
 
@@ -2401,7 +2400,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_padecimiento`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_padecimiento`(in vpi_id int)
 begin
 	delete from t_padecimiento
     where id = vpi_id;
@@ -2415,10 +2414,16 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_profesor`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_profesor`(in vpi_id int)
 begin
+    declare v_id_profesor int;
+
+    SELECT usuario into v_id_profesor from t_profesor WHERE id = vpi_id;
+
 	delete from t_profesor
     where id = vpi_id;
+
+    delete from t_usuario where id = v_id_profesor;
 end$$
 
 DELIMITER ;
@@ -2429,7 +2434,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_reposicion`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_reposicion`(in vpi_id int)
 begin
 	delete from t_reposicion
     where id = vpi_id;
@@ -2443,7 +2448,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_taller`(in vpi_id int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_taller`(in vpi_id int)
 begin 
 	delete from t_taller
     where id = vpi_id;
@@ -2457,7 +2462,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_usuario`(in vps_cedula VARCHAR(15))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_usuario`(in vps_cedula VARCHAR(15))
 begin 
 	delete from t_usuario
     where cedula = vps_cedula;
@@ -2471,7 +2476,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_eliminar_usuario_temp`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_eliminar_usuario_temp`(in vps_cedula varchar(45))
 begin
 	delete from t_usuario_temp where cedula = vps_cedula;
 end$$
@@ -2484,7 +2489,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_actividad`(in vps_usuario varchar(45), in vps_descripcion varchar(100), in vps_ddl varchar(45), in vps_tabla varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_actividad`(in vps_usuario varchar(45), in vps_descripcion varchar(100), in vps_ddl varchar(45), in vps_tabla varchar(45))
 begin
 	insert into t_actividad(usuario,descripcion,ddl,tabla)
     values (vps_usuario,vps_descripcion,vps_ddl,vps_tabla);
@@ -2499,7 +2504,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_administrador`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_administrador`(
 IN `vps_cedula` VARCHAR(45),
 IN `vps_nombre` VARCHAR(45),
 IN `vps_apellido` VARCHAR(45),
@@ -2529,7 +2534,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_administrativo`(in vpi_rol int, in vpi_usuario int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_administrativo`(in vpi_rol int, in vpi_usuario int)
 begin 
 	insert into t_administrativo (rol,usuario)
     values (vpi_rol, vpi_usuario);
@@ -2544,7 +2549,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_anotaciones`(in vps_nota varchar(300), in vpi_profesor int, in vpi_estudiante int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_anotaciones`(IN `vps_nota` VARCHAR(300), IN `vpi_profesor` INT, IN `vpi_estudiante` INT)
 begin 
 	insert into t_anotaciones(nota, profesor, estudiante)
     values (vps_nota, vpi_profesor, vpi_estudiante);
@@ -2559,7 +2564,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_asistencia`(in vpi_estado varchar(25), in vpi_estudiante int, in vpi_grupo int, in vpi_fecha varchar(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_asistencia`(in vpi_estado varchar(25), in vpi_estudiante int, in vpi_grupo int, in vpi_fecha varchar(30))
 begin
 	insert into t_asistencia(estado, estudiante, grupo, fecha)
     values (vpi_estado, vpi_estudiante, vpi_grupo, vpi_fecha);
@@ -2574,10 +2579,10 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_casillero`(in vpi_codigo VARCHAR(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_casillero`(IN `vpi_codigo` VARCHAR(45), IN `vpi_tipo` VARCHAR(20))
 begin
-	insert into t_casillero(codigo,estado)
-    values (vpi_codigo,0);
+	insert into t_casillero(codigo,estado,tipo)
+    values (vpi_codigo,0,vpi_tipo);
     commit;
 end$$
 
@@ -2589,7 +2594,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_casillero_estudiante`(in vps_cedula varchar(45), in vps_codigo_casillero varchar(45), in vpd_hora_entrada time, in vpd_hora_salida time)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_casillero_estudiante`(in vps_cedula varchar(45), in vps_codigo_casillero varchar(45), in vpd_hora_entrada time, in vpd_hora_salida time)
 begin
 	insert into t_casillero_estudiante(estudiante, casillero, hora_entrada, hora_salida)
     values (fi_id_estudiante_por_cedula(vps_cedula) , fi_id_casillero_por_codigo(vps_codigo_casillero), vpd_hora_entrada, vpd_hora_salida);
@@ -2605,7 +2610,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_conducta`(in vpi_id int,in vpi_nota VARCHAR(300),in vpi_tipo VARCHAR(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_conducta`(in vpi_id int,in vpi_nota VARCHAR(300),in vpi_tipo VARCHAR(45))
 BEGIN
 	insert into t_conductas(estudiante, texto, tipo) 
     values(vpi_id, vpi_nota,vpi_tipo);
@@ -2620,7 +2625,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_documento_usuario`(in vpi_tipo_documento int, in vps_documento varchar(100), in vpi_usuario int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_documento_usuario`(in vpi_tipo_documento int, in vps_documento varchar(100), in vpi_usuario int)
 begin 
 	insert into t_documento_usuario(tipo_documento,documento,usuario)
     values (vpi_tipo_documento, vps_documento, vpi_usuario);
@@ -2635,7 +2640,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_estudiante`(in vpi_usuario int, in vpi_tipo VARCHAR(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_estudiante`(in vpi_usuario int, in vpi_tipo VARCHAR(45))
 begin
 	insert into t_estudiante(moroso,estado,nivel,usuario,tipo)
     values (0,1,1,vpi_usuario,vpi_tipo);
@@ -2650,7 +2655,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_grupo`(in vpi_horario int, in vpi_profesor int, in vpi_taller int, in vpi_cupo_base int, in vpi_cupo_extra int, in vpd_periodo_inicio date, in vpd_periodo_fin date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_grupo`(in vpi_horario int, in vpi_profesor int, in vpi_taller int, in vpi_cupo_base int, in vpi_cupo_extra int, in vpd_periodo_inicio date, in vpd_periodo_fin date)
 begin
 	insert into t_grupo(horario, profesor, taller, cupo_base, cupo_extra, periodo, periodo_final)
     values (vpi_horario, vpi_profesor, vpi_taller, vpi_cupo_base, vpi_cupo_extra, vpd_periodo_inicio, vpd_periodo_fin);
@@ -2665,7 +2670,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_horario`(in vps_dia varchar(55), in vpi_hora varchar(45), in vpi_hora_final varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_horario`(in vps_dia varchar(55), in vpi_hora varchar(45), in vpi_hora_final varchar(45))
 begin 
 	insert into t_horario(dia, hora, hora_final)
     values (vps_dia, vpi_hora, vpi_hora_final);
@@ -2680,7 +2685,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_matricula`(in vpi_grupo int, in vpi_estudiante int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_matricula`(IN `vpi_grupo` INT, IN `vpi_estudiante` INT)
 begin 
 	insert into t_matricula(grupo, estudiante)
     values (vpi_grupo, vpi_estudiante);
@@ -2699,7 +2704,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_padecimiento_estudiante`(in vps_descripcion varchar(255),in vpi_estudiante int, in vps_observacion varchar(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_padecimiento_estudiante`(in vps_descripcion varchar(255),in vpi_estudiante int, in vps_observacion varchar(255))
 begin
 	insert into t_padecimiento(descripcion,estudiante,observaciones)
     values (vps_descripcion,vpi_estudiante,vps_observacion);
@@ -2714,7 +2719,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_profesor`(in vpi_usuario int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_profesor`(in vpi_usuario int)
 begin
 	insert into t_profesor(usuario)
     values (vpi_usuario);
@@ -2729,7 +2734,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_profesor_admin`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_profesor_admin`(
     in `vps_cedula` VARCHAR(30),
     in `vps_nombre` VARCHAR(100),
     in `vps_apellido` VARCHAR(100),
@@ -2761,7 +2766,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_profesor_asistencia`(in vpi_estado VARCHAR(15), in vps_fecha varchar(30), in vpi_profesor int(11), in vpi_grupo int(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_profesor_asistencia`(in vpi_estado VARCHAR(15), in vps_fecha varchar(30), in vpi_profesor int(11), in vpi_grupo int(11))
 begin 
 		insert into t_profesor_asistencia
         (estado, fecha, profesor, grupo)
@@ -2777,7 +2782,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_profesor_reposicion`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_profesor_reposicion`(
 in vpi_profesor_origen int(11), 
 in vpi_profesor_reposicion int(11), 
 in vps_fecha_reposicion varchar(30),
@@ -2798,7 +2803,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_reposicion`(in vpi_estudiante int,  
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_reposicion`(in vpi_estudiante int,  
 in vpi_grupo_reposicion int, in vpd_fecha_reposicion date, in vps_observacion varchar(255),in vps_comprobante varchar(100))
 begin 
 	insert into t_reposicion(estudiante, grupo_reposicion, fecha_reposicion, observacion, comprobante)
@@ -2814,7 +2819,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_t_usuario`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_t_usuario`(
 IN `vps_cedula` VARCHAR(45), 
 IN `vps_nombre` VARCHAR(55), 
 IN `vps_apellido` VARCHAR(100), 
@@ -2842,7 +2847,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_taller`(in vps_codigo varchar(45), in vps_descripcion varchar(255), in vpi_nivel int, in vpi_costo int, in vpi_costo_funcionario int, in vpi_color varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_taller`(in vps_codigo varchar(45), in vps_descripcion varchar(255), in vpi_nivel int, in vpi_costo int, in vpi_costo_funcionario int, in vpi_color varchar(45))
 begin 
 	insert into t_taller (codigo, descripcion, nivel, costo, costo_funcionario, color)
     values (vps_codigo, vps_descripcion, vpi_nivel, vpi_costo, vpi_costo_funcionario, vpi_color);
@@ -2857,7 +2862,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_usuario`(IN `vps_cedula` VARCHAR(45), IN `vps_nombre` VARCHAR(55), IN `vps_apellido` VARCHAR(100), IN `vpd_nacimiento` DATE, IN `vps_usuario` VARCHAR(45), IN `vps_clave` VARCHAR(45), IN `vps_sexo` VARCHAR(45), IN `vps_correo` VARCHAR(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_usuario`(IN `vps_cedula` VARCHAR(45), IN `vps_nombre` VARCHAR(100), IN `vps_apellido` VARCHAR(100), IN `vpd_nacimiento` DATE, IN `vps_usuario` VARCHAR(100), IN `vps_clave` VARCHAR(45), IN `vps_sexo` VARCHAR(45), IN `vps_correo` VARCHAR(100))
 begin
 
 	insert into `siap`.`t_usuario`(`cedula`, `nombre`, `apellido`, `nacimiento`, `usuario`, `clave`, `sexo`, `correo`)
@@ -2876,20 +2881,20 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_usuario_admin`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_usuario_admin`(
 IN `vps_cedula` VARCHAR(45), 
-IN `vps_nombre` VARCHAR(55), 
+IN `vps_nombre` VARCHAR(100), 
 IN `vps_apellido` VARCHAR(100), 
 IN `vpd_nacimiento` DATE, 
-IN `vps_usuario` VARCHAR(45), 
+IN `vps_usuario` VARCHAR(100), 
 IN `vps_sexo` VARCHAR(45),
 IN `vpi_tipo` VARCHAR(45), 
-IN `vps_correo` VARCHAR(45)
+IN `vps_correo` VARCHAR(100)
 )
 begin
 	declare vli_id int;
 	insert into `siap`.`t_usuario`(`cedula`, `nombre`, `apellido`, `nacimiento`, `usuario`, `clave`, `sexo`, `correo`)
-    values (vps_cedula, vps_nombre, vps_apellido, vpd_nacimiento, vps_usuario, sha1('1234'), vps_sexo, vps_correo);
+    values (vps_cedula, UPPER(vps_nombre), UPPER(vps_apellido), vpd_nacimiento, vps_usuario, sha1('1234'), vps_sexo, vps_correo);
     
     select id into vli_id
 	from t_usuario 
@@ -2909,7 +2914,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_insertar_usuario_temp`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_insertar_usuario_temp`(
 in vps_cedula varchar(45),
 in vps_nombre varchar(55),
 in vps_apellido varchar(100),
@@ -2934,7 +2939,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_mostrar_actividad_fecha`(in vpd_fecha date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_mostrar_actividad_fecha`(in vpd_fecha date)
 begin 
 		select * from t_actividad
         where day(created_at) = day(vpd_fecha)
@@ -2950,7 +2955,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_mostrar_actividad_usuario`(in vps_usuario varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_mostrar_actividad_usuario`(in vps_usuario varchar(45))
 begin
 	select * from t_actividad
     where usuario = vps_usuario
@@ -2965,7 +2970,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_mostrar_actividad_usuario_ddl`(in vps_usuario varchar(45), in vps_ddl varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_mostrar_actividad_usuario_ddl`(in vps_usuario varchar(45), in vps_ddl varchar(45))
 begin
 		select * from t_actividad
         where usuario = vps_usuario and ddl = vps_ddl;
@@ -2979,7 +2984,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_mostrar_usuarios_morosos`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_mostrar_usuarios_morosos`()
 begin
 		select  `id`, `cedula`, `nombre`, `apellido`, `nacimiento`, `usuario`, `sexo`, `correo`, `nivel`, `estado`
         from vta_admin_estudiante
@@ -2994,7 +2999,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_actividad`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_actividad`()
 begin
 		select id, usuario, descripcion, ddl, tabla, created_at
         from t_actividad
@@ -3009,7 +3014,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_administrativo_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_administrativo_cedula`(in vps_cedula varchar(45))
 begin
 	select * from vta_administradores where cedula = vps_cedula;
 end$$
@@ -3022,7 +3027,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_cedula_estudiante`(in vps_cedula_estudiante varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_cedula_estudiante`(in vps_cedula_estudiante varchar(45))
 begin	
 	select * from vta_anotaciones
     where cedula_estudiante = vps_cedula_estudiante;
@@ -3036,7 +3041,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_cedula_profesor`(in vps_cedula_profesor varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_cedula_profesor`(in vps_cedula_profesor varchar(45))
 begin
 	select * from vta_anotaciones
     where cedula_profesor = vps_cedula_profesor;
@@ -3050,7 +3055,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_profesor_y_estudiante`(in vps_cedula_profesor varchar(45), in vps_cedula_estudiante varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_anotaciones_por_profesor_y_estudiante`(in vps_cedula_profesor varchar(45), in vps_cedula_estudiante varchar(45))
 begin
 	select * from vta_anotaciones
     where cedula_profesor = vps_cedula_profesor
@@ -3065,7 +3070,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia`()
 begin
 	select * from vta_asistencia
     where estado = 1;
@@ -3079,7 +3084,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_dia`(in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_dia`(in vpd_dia date)
 begin
 	select * from vta_asistencia
     where dia = vpd_dia
@@ -3094,7 +3099,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_estudiante`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_estudiante`(in vps_cedula varchar(45))
 begin
 	select * from vta_asistencia
     where cedula = vps_cedula
@@ -3109,7 +3114,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo`(in vpi_id_grupo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo`(in vpi_id_grupo int)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3124,7 +3129,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_dia`(in vpi_id_grupo int, in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_dia`(in vpi_id_grupo int, in vpd_dia date)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3140,7 +3145,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_estudiante`(in vpi_id_grupo int, in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_estudiante`(in vpi_id_grupo int, in vps_cedula varchar(45))
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3156,7 +3161,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_estudiante_y_dia`(in vpi_id_grupo int, in vps_cedula varchar(45), in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_asistencia_por_grupo_y_estudiante_y_dia`(in vpi_id_grupo int, in vps_cedula varchar(45), in vpd_dia date)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3173,7 +3178,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias`()
 begin
 	select * from vta_asistencia
     where estado = 0;
@@ -3187,7 +3192,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_dia`(in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_dia`(in vpd_dia date)
 begin
 	select * from vta_asistencia
     where dia = vpd_dia
@@ -3202,7 +3207,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_estudiante`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_estudiante`(in vps_cedula varchar(45))
 begin
 	select * from vta_asistencia
     where cedula = vps_cedula
@@ -3217,7 +3222,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo`(in vpi_id_grupo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo`(in vpi_id_grupo int)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3232,7 +3237,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_dia`(in vpi_id_grupo int, in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_dia`(in vpi_id_grupo int, in vpd_dia date)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3248,7 +3253,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_estudiante`(in vpi_id_grupo int, in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_estudiante`(in vpi_id_grupo int, in vps_cedula varchar(45))
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3264,7 +3269,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_estudiante_y_dia`(in vpi_id_grupo int, in vps_cedula varchar(45), in vpd_dia date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_ausencias_por_grupo_y_estudiante_y_dia`(in vpi_id_grupo int, in vps_cedula varchar(45), in vpd_dia date)
 begin
 	select * from vta_asistencia
     where id_grupo = vpi_id_grupo
@@ -3281,7 +3286,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario`()
 BEGIN
 	select * from vta_documentos_usuarios
     order by cedula, id_documento;
@@ -3295,7 +3300,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario_por_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario_por_cedula`(in vps_cedula varchar(45))
 BEGIN
 	select * from vta_documentos_usuarios
     where cedula = vps_cedula
@@ -3310,7 +3315,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario_por_cedula_y_tipo`(in vps_cedula varchar(45), in vpi_tipo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_documentos_usuario_por_cedula_y_tipo`(in vps_cedula varchar(45), in vpi_tipo int)
 BEGIN
 	select * from vta_documentos_usuarios
     where cedula = vps_cedula
@@ -3327,7 +3332,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_estudiante_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_estudiante_cedula`(in vps_cedula varchar(45))
 begin
 	select * from vta_cliente_estudiante
     where cedula = vps_cedula;
@@ -3341,7 +3346,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_estudiante_cedula_admin`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_estudiante_cedula_admin`(in vps_cedula varchar(45))
 begin
 	select * from vta_admin_estudiante
     where cedula = vps_cedula;
@@ -3355,7 +3360,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_horarios`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_horarios`()
 begin
 	select * from t_horario
     order by dia,hora;
@@ -3369,7 +3374,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_matricula_por_estudiante`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_matricula_por_estudiante`(in vps_cedula varchar(45))
 begin
 	select * from vta_matriculados_por_grupo
     where cedula = vps_cedula and activa = 1;
@@ -3383,7 +3388,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_padecimientos_estudiante`(in vps_cedula varchar(11))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_padecimientos_estudiante`(in vps_cedula varchar(11))
 begin 
 	select * from vta_padecimientos
     where cedula = vps_cedula;
@@ -3397,7 +3402,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_profesor_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_profesor_cedula`(in vps_cedula varchar(45))
 begin
 	select * from vta_profesores where cedula = vps_cedula;
 end$$
@@ -3410,7 +3415,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_profesores`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_profesores`()
 begin
 	select * from vta_profesores;
 end$$
@@ -3423,7 +3428,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas`()
 begin
 	select * from vta_reposiciones
     where estado = 1;
@@ -3437,7 +3442,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_cedula`(in vps_cedula varchar(45))
 begin
 	select * from vta_reposiciones
     where cedula_estudiante = vps_cedula
@@ -3452,7 +3457,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_por_grupo`(in vpi_grupo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_por_grupo`(in vpi_grupo int)
 begin
 	select * from vta_reposiciones
     where grupo_reposicion = vpi_grupo
@@ -3467,7 +3472,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_por_grupo_y_fecha`(in vpi_grupo int, in vpd_fecha date)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_aprobadas_por_grupo_y_fecha`(in vpi_grupo int, in vpd_fecha date)
 begin
 	select * from vta_reposiciones_reservadas
     where grupo_reposicion = vpi_grupo
@@ -3483,7 +3488,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_cedula`(in vps_cedula varchar(45))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_cedula`(in vps_cedula varchar(45))
 begin
 	select * from vta_reposiciones 
     where cedula = vps_cedula;
@@ -3497,7 +3502,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_grupo`(in vpi_grupo int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_grupo`(in vpi_grupo int)
 begin
 	select * from vta_reposiciones
     where grupo_reposicion = vpi_grupo;
@@ -3511,7 +3516,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_nivel`(in vpi_nivel int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_reposiciones_por_nivel`(in vpi_nivel int)
 begin
 	select * from vta_reposiciones
     where nivel = vpi_nivel;
@@ -3525,7 +3530,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_talleres`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_talleres`()
 begin
 	select * from t_taller
     order by nivel;
@@ -3539,7 +3544,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_talleres_por_nivel`(in vpi_nivel int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_talleres_por_nivel`(in vpi_nivel int)
 begin
 	select * from t_taller
     where nivel = vpi_nivel
@@ -3554,7 +3559,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `siap`$$
-CREATE DEFINER=`siapadmindb`@`localhost` PROCEDURE `prc_seleccionar_usuarios`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_seleccionar_usuarios`()
 begin
 	select * from t_usuario;
 end$$
@@ -3566,160 +3571,164 @@ DELIMITER ;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_admin_estudiante`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_admin_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`correo` AS `correo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`n`.`descripcion` AS `descripcion`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`moroso` AS `moroso`,`e`.`estado` AS `estado`,`e`.`notas` AS `notas`,`e`.`prematricula` AS `prematricula`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`tipo` AS `tipo` from ((`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) join `siap`.`t_taller` `n`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`nivel` = `n`.`nivel`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_admin_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`correo` AS `correo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`n`.`descripcion` AS `descripcion`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`moroso` AS `moroso`,`e`.`estado` AS `estado`,`e`.`padecimientos` AS `padecimientos`,`e`.`prematricula` AS `prematricula`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`tipo` AS `tipo` from ((`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) join `siap`.`t_taller` `n`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`nivel` = `n`.`nivel`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_administradores`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_administradores`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_administradores` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`correo` AS `correo`,`u`.`clave` AS `clave`,`a`.`id` AS `id_administrativo`,`a`.`rol` AS `rol` from (`siap`.`t_usuario` `u` join `siap`.`t_administrativo` `a`) where (`u`.`id` = `a`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_administradores` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`correo` AS `correo`,`u`.`clave` AS `clave`,`a`.`id` AS `id_administrativo`,`a`.`rol` AS `rol` from (`siap`.`t_usuario` `u` join `siap`.`t_administrativo` `a`) where (`u`.`id` = `a`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_anotaciones`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_anotaciones`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_anotaciones` AS select `a`.`id` AS `id_anotaciones`,`a`.`nota` AS `nota`,`a`.`profesor` AS `id_profesor`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`up`.`cedula` AS `cedula_profesor`,`up`.`apellido` AS `apellido_profesor`,`up`.`nombre` AS `nombre_profesor`,`a`.`estudiante` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante` from ((((`siap`.`t_anotaciones` `a` join `siap`.`t_profesor` `p`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `up`) join `siap`.`t_usuario` `ue`) where ((`a`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`) and (`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`)) order by `up`.`cedula`,`ue`.`cedula`,`a`.`id`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_anotaciones` AS select `a`.`id` AS `id_anotaciones`,`a`.`nota` AS `nota`,`a`.`profesor` AS `id_profesor`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`up`.`cedula` AS `cedula_profesor`,`up`.`apellido` AS `apellido_profesor`,`up`.`nombre` AS `nombre_profesor`,`a`.`estudiante` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante` from ((((`siap`.`t_anotaciones` `a` join `siap`.`t_profesor` `p`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `up`) join `siap`.`t_usuario` `ue`) where ((`a`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`) and (`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`)) order by `up`.`cedula`,`ue`.`cedula`,`a`.`id`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_asistencia`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_asistencia`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_asistencia` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%d-%m-%Y-%h-%i') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`codigo` AS `codigo`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado` from (((((`siap`.`t_asistencia` `a` join `siap`.`t_matricula` `m`) join `siap`.`t_grupo` `g`) join `siap`.`t_taller` `t`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_asistencia` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%Y-%m-%d') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`descripcion` AS `descripcion`,`t`.`codigo` AS `codigo`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado` from ((((((`siap`.`t_asistencia` `a` join `siap`.`t_matricula` `m`) join `siap`.`t_grupo` `g`) join `siap`.`t_taller` `t`) join `siap`.`t_horario` `h`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`horario` = `h`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_asistencia_admin`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_asistencia_admin`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_asistencia_admin` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%d-%m-%Y-%h-%i') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`codigo` AS `codigo`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `profesor` from (((((((`siap`.`t_asistencia` `a` join `siap`.`t_matricula` `m`) join `siap`.`t_grupo` `g`) join `siap`.`t_taller` `t`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_usuario` `up`) join `siap`.`t_profesor` `p`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_asistencia_admin` AS select distinct `a`.`id` AS `id_asistencia`,date_format(`a`.`fecha`,'%Y-%m-%d') AS `fecha`,`m`.`id` AS `id_matricula`,`g`.`id` AS `id_grupo`,`t`.`id` AS `id_taller`,`t`.`codigo` AS `codigo`,`e`.`id` AS `id_estudiante`,`u`.`foto` AS `foto`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`a`.`estado` AS `estado`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `profesor` from (((((((`siap`.`t_asistencia` `a` join `siap`.`t_matricula` `m`) join `siap`.`t_grupo` `g`) join `siap`.`t_taller` `t`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_usuario` `up`) join `siap`.`t_profesor` `p`) where ((`a`.`estudiante` = `e`.`id`) and (`a`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`m`.`grupo` = `g`.`id`) and (`e`.`usuario` = `u`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `up`.`id`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_cantidad_usuarios_registrados`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_cantidad_usuarios_registrados`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_cantidad_usuarios_registrados` AS select count(`cantidad`.`cedula`) AS `cantidad` from (select `siap`.`vta_usuario_temp`.`cedula` AS `cedula` from `siap`.`vta_usuario_temp` where (`siap`.`vta_usuario_temp`.`estado` = 0) union all select `siap`.`vta_admin_estudiante`.`cedula` AS `cedula` from `siap`.`vta_admin_estudiante`) `cantidad`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_cantidad_usuarios_registrados` AS select count(`cantidad`.`cedula`) AS `cantidad` from (select `siap`.`vta_usuario_temp`.`cedula` AS `cedula` from `siap`.`vta_usuario_temp` where (`siap`.`vta_usuario_temp`.`estado` = 0) union all select `siap`.`vta_admin_estudiante`.`cedula` AS `cedula` from `siap`.`vta_admin_estudiante`) `cantidad`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_casilleros`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_casilleros`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_casilleros` AS select `c`.`id` AS `id_casillero`,`c`.`codigo` AS `codigo_casillero`,`r`.`id` AS `id_reserva`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`r`.`hora_entrada` AS `hora_entrada`,`r`.`hora_salida` AS `hora_salida` from (((`siap`.`t_casillero` `c` join `siap`.`t_casillero_estudiante` `r`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) where ((`r`.`casillero` = `c`.`id`) and (`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`)) order by `c`.`codigo`,`r`.`id`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_casilleros` AS select `c`.`id` AS `id_casillero`,`c`.`codigo` AS `codigo_casillero`,`c`.`tipo` AS `tipo`,`r`.`id` AS `id_reserva`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`r`.`hora_entrada` AS `hora_entrada`,`r`.`hora_salida` AS `hora_salida` from (((`siap`.`t_casillero` `c` join `siap`.`t_casillero_estudiante` `r`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) where ((`r`.`casillero` = `c`.`id`) and (`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`)) order by `c`.`codigo`,`r`.`id`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_cliente_estudiante`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_cliente_estudiante`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_cliente_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) where (`u`.`id` = `e`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_cliente_estudiante` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) where (`u`.`id` = `e`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_conductas`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_conductas`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_conductas` AS select `a`.`id` AS `id_conducta`,`a`.`texto` AS `texto`,`a`.`strike` AS `strike`,`a`.`tipo` AS `tipo`,`a`.`created_at` AS `created_at`,`a`.`estudiante` AS `id_estudiante`,`e`.`estado` AS `estado`,`ue`.`foto` AS `foto`,`ue`.`cedula` AS `cedula`,`ue`.`apellido` AS `apellido`,`ue`.`nombre` AS `nombre` from ((`siap`.`t_conductas` `a` join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `ue`) where ((`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_conductas` AS select `a`.`id` AS `id_conducta`,`a`.`texto` AS `texto`,`a`.`strike` AS `strike`,`a`.`tipo` AS `tipo`,`a`.`created_at` AS `created_at`,`a`.`estudiante` AS `id_estudiante`,`e`.`estado` AS `estado`,`ue`.`foto` AS `foto`,`ue`.`cedula` AS `cedula`,`ue`.`apellido` AS `apellido`,`ue`.`nombre` AS `nombre` from ((`siap`.`t_conductas` `a` join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `ue`) where ((`a`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `ue`.`id`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_documentos_usuarios`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_documentos_usuarios`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_documentos_usuarios` AS select `d`.`id` AS `id_documento`,`d`.`tipo_documento` AS `tipo_documento`,`d`.`documento` AS `documento`,`d`.`created_at` AS `created_at`,`d`.`updated_at` AS `updated_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula` from ((`siap`.`t_documento_usuario` `d` join `siap`.`t_usuario` `u`) join `siap`.`t_estudiante` `e`) where ((`d`.`usuario` = `u`.`id`) and (`e`.`usuario` = `u`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_documentos_usuarios` AS select `d`.`id` AS `id_documento`,`d`.`tipo_documento` AS `tipo_documento`,`d`.`documento` AS `documento`,`d`.`created_at` AS `created_at`,`d`.`updated_at` AS `updated_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula` from ((`siap`.`t_documento_usuario` `d` join `siap`.`t_usuario` `u`) join `siap`.`t_estudiante` `e`) where ((`d`.`usuario` = `u`.`id`) and (`e`.`usuario` = `u`.`id`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_estadistica`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_estadistica`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_estadistica` AS select `fi_cantidad_talleres`() AS `cantidad_talleres`,`fi_cantidad_grupos`() AS `cantidad_grupos`,`fi_cantidad_matriculados`() AS `cantidad_matriculados`,`fi_cantidad_estudiantes`() AS `cantidad_estudiantes`,`fi_cantidad_administrativos`() AS `cantidad_administrativos`,`fi_cantidad_profesores`() AS `cantidad_profesores`,`fi_cantidad_usuarios`() AS `cantidad_usuarios`,`fi_cantidad_usuarios_temp`() AS `cantidad_usuarios_temp`,`fi_cantidad_horarios`() AS `cantidad_horarios`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_estadistica` AS select `fi_cantidad_talleres`() AS `cantidad_talleres`,`fi_cantidad_grupos`() AS `cantidad_grupos`,`fi_cantidad_matriculados`() AS `cantidad_matriculados`,`fi_cantidad_estudiantes`() AS `cantidad_estudiantes`,`fi_cantidad_administrativos`() AS `cantidad_administrativos`,`fi_cantidad_profesores`() AS `cantidad_profesores`,`fi_cantidad_usuarios`() AS `cantidad_usuarios`,`fi_cantidad_usuarios_temp`() AS `cantidad_usuarios_temp`,`fi_cantidad_horarios`() AS `cantidad_horarios`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_estudiante_moroso`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_estudiante_moroso`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_estudiante_moroso` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`pago` AS `pago`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`moroso` = 1)) order by `u`.`apellido`,`u`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_estudiante_moroso` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`correo` AS `correo`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`e`.`id` AS `id_estudiante`,`e`.`celular` AS `celular`,`e`.`telefono` AS `telefono`,`e`.`nivel` AS `nivel`,`e`.`carrera_departamento` AS `carrera_departamento`,`e`.`cantidad_dias` AS `cantidad_dias`,`e`.`telefono_emergencia` AS `telefono_emergencia`,`e`.`provincia` AS `provincia`,`e`.`pago` AS `pago`,`e`.`canton` AS `canton`,`e`.`distrito` AS `distrito`,`e`.`direccion` AS `direccion`,`e`.`tipo` AS `tipo`,`e`.`moroso` AS `moroso`,`e`.`motivo_ingreso` AS `motivo_ingreso`,`e`.`estado` AS `estado`,`u`.`clave` AS `clave` from (`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) where ((`u`.`id` = `e`.`usuario`) and (`e`.`moroso` = 1)) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_grupos`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_grupos`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_grupos` AS select `t`.`codigo` AS `codigo_taller`,`t`.`costo` AS `costo`,`t`.`costo_funcionario` AS `costo_funcionario`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`t`.`id` AS `id_taller`,`t`.`color` AS `color`,`g`.`id` AS `id_grupo`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,date_format(`g`.`periodo`,'%Y-%m-%d') AS `periodo`,date_format(`g`.`periodo_final`,'%Y-%m-%d') AS `periodo_final`,`h`.`id` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_profesor`,`u`.`cedula` AS `cedula` from ((((`siap`.`t_taller` `t` join `siap`.`t_grupo` `g`) join `siap`.`t_usuario` `u`) join `siap`.`t_profesor` `p`) join `siap`.`t_horario` `h`) where ((`g`.`taller` = `t`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`) and (`g`.`horario` = `h`.`id`)) order by `t`.`codigo`,`g`.`id`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_grupos` AS select `t`.`codigo` AS `codigo_taller`,`t`.`costo` AS `costo`,`t`.`costo_funcionario` AS `costo_funcionario`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`t`.`id` AS `id_taller`,`t`.`color` AS `color`,`g`.`id` AS `id_grupo`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,date_format(`g`.`periodo`,'%Y-%m-%d') AS `periodo`,date_format(`g`.`periodo_final`,'%Y-%m-%d') AS `periodo_final`,`h`.`id` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_profesor`,`u`.`cedula` AS `cedula` from ((((`siap`.`t_taller` `t` join `siap`.`t_grupo` `g`) join `siap`.`t_usuario` `u`) join `siap`.`t_profesor` `p`) join `siap`.`t_horario` `h`) where ((`g`.`taller` = `t`.`id`) and (`g`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`) and (`g`.`horario` = `h`.`id`)) order by `t`.`codigo`,`g`.`id`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_matriculados_grupo_detalle`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_matriculados_grupo_detalle`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_matriculados_grupo_detalle` AS select `g`.`id` AS `id_grupo`,`e`.`id` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`correo` AS `correo_estudiante`,`e`.`carrera_departamento` AS `carrera_departamento`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante`,`ue`.`foto` AS `foto_estudiante`,`ue`.`sexo` AS `sexo_estudiante`,`e`.`celular` AS `celular_estudiante`,`e`.`telefono_emergencia` AS `telefono_emergencia_estudiante`,`ue`.`nacimiento` AS `nacimiento_estudiante`,`p`.`id` AS `id_profesor`,`up`.`cedula` AS `cedula_profesor` from (((((`siap`.`t_grupo` `g` join `siap`.`t_estudiante` `e`) join `siap`.`t_profesor` `p`) join `siap`.`t_usuario` `ue`) join `siap`.`t_usuario` `up`) join `siap`.`t_matricula` `m`) where ((`e`.`usuario` = `ue`.`id`) and (`p`.`usuario` = `up`.`id`) and (`m`.`grupo` = `g`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`g`.`profesor` = `p`.`id`)) order by `ue`.`cedula`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_matriculados_grupo_detalle` AS select `g`.`id` AS `id_grupo`,`e`.`id` AS `id_estudiante`,`ue`.`cedula` AS `cedula_estudiante`,`ue`.`correo` AS `correo_estudiante`,`e`.`carrera_departamento` AS `carrera_departamento`,`ue`.`apellido` AS `apellido_estudiante`,`ue`.`nombre` AS `nombre_estudiante`,`ue`.`foto` AS `foto_estudiante`,`ue`.`sexo` AS `sexo_estudiante`,`e`.`celular` AS `celular_estudiante`,`e`.`telefono_emergencia` AS `telefono_emergencia_estudiante`,`ue`.`nacimiento` AS `nacimiento_estudiante`,`p`.`id` AS `id_profesor`,`up`.`cedula` AS `cedula_profesor` from (((((`siap`.`t_grupo` `g` join `siap`.`t_estudiante` `e`) join `siap`.`t_profesor` `p`) join `siap`.`t_usuario` `ue`) join `siap`.`t_usuario` `up`) join `siap`.`t_matricula` `m`) where ((`e`.`usuario` = `ue`.`id`) and (`p`.`usuario` = `up`.`id`) and (`m`.`grupo` = `g`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`g`.`profesor` = `p`.`id`)) order by `ue`.`cedula`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_matriculados_por_grupo`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_matriculados_por_grupo`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_matriculados_por_grupo` AS select `t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel_taller`,`t`.`descripcion` AS `descripcion`,`g`.`id` AS `id_grupo`,date_format(`g`.`periodo`,'%Y-%m-%d') AS `periodo`,date_format(`g`.`periodo_final`,'%Y-%m-%d') AS `periodo_final`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `nombre_profesor`,`m`.`id` AS `id_matricula`,`m`.`activa` AS `activa`,date_format(`m`.`created_at`,'%Y-%m-%d') AS `created_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo` from (((((((`siap`.`t_taller` `t` join `siap`.`t_grupo` `g`) join `siap`.`t_matricula` `m`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_usuario` `up`) join `siap`.`t_horario` `h`) join `siap`.`t_profesor` `p`) where ((`m`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`h`.`id` = `g`.`horario`) and (`p`.`id` = `g`.`profesor`) and (`up`.`id` = `p`.`usuario`)) order by `t`.`codigo`,`g`.`id`,`u`.`apellido`,`u`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_matriculados_por_grupo` AS select `t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel_taller`,`t`.`descripcion` AS `descripcion`,`g`.`id` AS `id_grupo`,date_format(`g`.`periodo`,'%Y-%m-%d') AS `periodo`,date_format(`g`.`periodo_final`,'%Y-%m-%d') AS `periodo_final`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`up`.`cedula` AS `cedula_profeosr`,concat(`up`.`nombre`,' ',`up`.`apellido`) AS `nombre_profesor`,`m`.`id` AS `id_matricula`,`m`.`qr` AS `qr`,`m`.`activa` AS `activa`,date_format(`m`.`created_at`,'%Y-%m-%d') AS `created_at`,`e`.`id` AS `id_estudiante`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo` from (((((((`siap`.`t_taller` `t` join `siap`.`t_grupo` `g`) join `siap`.`t_matricula` `m`) join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_usuario` `up`) join `siap`.`t_horario` `h`) join `siap`.`t_profesor` `p`) where ((`m`.`grupo` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`m`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`h`.`id` = `g`.`horario`) and (`p`.`id` = `g`.`profesor`) and (`up`.`id` = `p`.`usuario`)) order by `t`.`codigo`,`g`.`id`,`u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_padecimientos`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_padecimientos`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_padecimientos` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`e`.`id` AS `id_estudiante`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_padecimiento`,`p`.`descripcion` AS `descripcion`,`p`.`observaciones` AS `observaciones` from ((`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) join `siap`.`t_padecimiento` `p`) where ((`u`.`id` = `e`.`usuario`) and (`p`.`estudiante` = `e`.`id`)) order by `u`.`cedula`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_padecimientos` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`e`.`id` AS `id_estudiante`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`p`.`id` AS `id_padecimiento`,`p`.`descripcion` AS `descripcion`,`p`.`observaciones` AS `observaciones` from ((`siap`.`t_usuario` `u` join `siap`.`t_estudiante` `e`) join `siap`.`t_padecimiento` `p`) where ((`u`.`id` = `e`.`usuario`) and (`p`.`estudiante` = `e`.`id`)) order by `u`.`cedula`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_profesor_asistencias`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_profesor_asistencias`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesor_asistencias` AS select `pa`.`id` AS `id_profesor_asistencia`,`pa`.`estado` AS `estado`,`pa`.`fecha` AS `fecha`,`pa`.`profesor` AS `id_profesor`,`p`.`usuario` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`pa`.`grupo` AS `id_grupo` from ((`siap`.`t_profesor_asistencia` `pa` join `siap`.`t_profesor` `p`) join `siap`.`t_usuario` `u`) where ((`pa`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`)) order by `u`.`apellido`,`u`.`nombre`,`pa`.`fecha`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesor_asistencias` AS select `pa`.`id` AS `id_profesor_asistencia`,`pa`.`estado` AS `estado`,`pa`.`fecha` AS `fecha`,`pa`.`profesor` AS `id_profesor`,`p`.`usuario` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`pa`.`grupo` AS `id_grupo` from ((`siap`.`t_profesor_asistencia` `pa` join `siap`.`t_profesor` `p`) join `siap`.`t_usuario` `u`) where ((`pa`.`profesor` = `p`.`id`) and (`p`.`usuario` = `u`.`id`)) order by `u`.`apellido`,`u`.`nombre`,`pa`.`fecha`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_profesor_reposiciones`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_profesor_reposiciones`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesor_reposiciones` AS select `pr`.`id` AS `id_reposicion`,`pr`.`profesor_origen` AS `id_profesor_origen`,`po`.`usuario` AS `id_usuario_origen`,`uo`.`cedula` AS `cedula_origen`,`uo`.`nombre` AS `nombre_origen`,`uo`.`apellido` AS `apellido_origen`,`pr`.`profesor_reposicion` AS `id_profesor_reposicion`,`pd`.`usuario` AS `id_usuario_reposicion`,`ud`.`cedula` AS `cedula_reposicion`,`ud`.`nombre` AS `nombre_reposicion`,`ud`.`apellido` AS `apellido_reposicion`,`pr`.`fecha_reposicion` AS `fecha_reposicion`,`pr`.`grupo` AS `id_grupo`,`g`.`horario` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`g`.`taller` AS `id_taller`,`t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo` from (((((((`siap`.`t_profesor_reposicion` `pr` join `siap`.`t_profesor` `po`) join `siap`.`t_profesor` `pd`) join `siap`.`t_usuario` `uo`) join `siap`.`t_usuario` `ud`) join `siap`.`t_grupo` `g`) join `siap`.`t_horario` `h`) join `siap`.`t_taller` `t`) where ((`pr`.`profesor_origen` = `po`.`id`) and (`po`.`usuario` = `uo`.`id`) and (`pr`.`profesor_reposicion` = `pd`.`id`) and (`pd`.`usuario` = `ud`.`id`) and (`g`.`id` = `pr`.`grupo`) and (`g`.`horario` = `h`.`id`) and (`g`.`taller` = `t`.`id`)) order by `uo`.`apellido`,`uo`.`nombre`,`ud`.`apellido`,`ud`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesor_reposiciones` AS select `pr`.`id` AS `id_reposicion`,`pr`.`profesor_origen` AS `id_profesor_origen`,`po`.`usuario` AS `id_usuario_origen`,`uo`.`cedula` AS `cedula_origen`,`uo`.`nombre` AS `nombre_origen`,`uo`.`apellido` AS `apellido_origen`,`pr`.`profesor_reposicion` AS `id_profesor_reposicion`,`pd`.`usuario` AS `id_usuario_reposicion`,`ud`.`cedula` AS `cedula_reposicion`,`ud`.`nombre` AS `nombre_reposicion`,`ud`.`apellido` AS `apellido_reposicion`,`pr`.`fecha_reposicion` AS `fecha_reposicion`,`pr`.`grupo` AS `id_grupo`,`g`.`horario` AS `id_horario`,`h`.`dia` AS `dia`,`h`.`hora` AS `hora`,`h`.`hora_final` AS `hora_final`,`g`.`taller` AS `id_taller`,`t`.`codigo` AS `codigo_taller`,`t`.`nivel` AS `nivel`,`t`.`descripcion` AS `descripcion`,`g`.`cupo_base` AS `cupo_base`,`g`.`cupo_extra` AS `cupo_extra`,`g`.`cupo_actual` AS `cupo_actual`,`g`.`periodo` AS `periodo` from (((((((`siap`.`t_profesor_reposicion` `pr` join `siap`.`t_profesor` `po`) join `siap`.`t_profesor` `pd`) join `siap`.`t_usuario` `uo`) join `siap`.`t_usuario` `ud`) join `siap`.`t_grupo` `g`) join `siap`.`t_horario` `h`) join `siap`.`t_taller` `t`) where ((`pr`.`profesor_origen` = `po`.`id`) and (`po`.`usuario` = `uo`.`id`) and (`pr`.`profesor_reposicion` = `pd`.`id`) and (`pd`.`usuario` = `ud`.`id`) and (`g`.`id` = `pr`.`grupo`) and (`g`.`horario` = `h`.`id`) and (`g`.`taller` = `t`.`id`)) order by `uo`.`apellido`,`uo`.`nombre`,`ud`.`apellido`,`ud`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_profesores`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_profesores`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesores` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`clave` AS `clave`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo`,`p`.`id` AS `id_profesor`,`p`.`rol` AS `rol` from (`siap`.`t_usuario` `u` join `siap`.`t_profesor` `p`) where (`u`.`id` = `p`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_profesores` AS select `u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`apellido` AS `apellido`,`u`.`nombre` AS `nombre`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`sexo` AS `sexo`,`u`.`clave` AS `clave`,`u`.`foto` AS `foto`,`u`.`correo` AS `correo`,`p`.`id` AS `id_profesor`,`p`.`rol` AS `rol`,`p`.`aso` AS `aso` from (`siap`.`t_usuario` `u` join `siap`.`t_profesor` `p`) where (`u`.`id` = `p`.`usuario`) order by `u`.`apellido`,`u`.`nombre`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_reposiciones`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_reposiciones`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_reposiciones` AS select `r`.`id` AS `id_reposicion`,`r`.`grupo_reposicion` AS `grupo_reposicion`,`r`.`fecha_reposicion` AS `fecha_reposicion`,`h`.`dia` AS `dia_reposicion`,`h`.`hora` AS `hora_reposicion`,`r`.`comprobante` AS `comprobante`,`r`.`observacion` AS `observacion`,`r`.`estado` AS `estado`,`t`.`descripcion` AS `descripcion`,`e`.`id` AS `id_estudiante`,`e`.`nivel` AS `nivel`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido` from (((((`siap`.`t_reposicion` `r` join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_taller` `t`) join `siap`.`t_grupo` `g`) join `siap`.`t_horario` `h`) where ((`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`r`.`grupo_reposicion` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`g`.`horario` = `h`.`id`));
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_reposiciones` AS select `r`.`id` AS `id_reposicion`,`r`.`grupo_reposicion` AS `grupo_reposicion`,`r`.`fecha_reposicion` AS `fecha_reposicion`,`h`.`dia` AS `dia_reposicion`,`h`.`hora` AS `hora_reposicion`,`h`.`hora_final` AS `hora_reposicion_final`,`r`.`comprobante` AS `comprobante`,`r`.`observacion` AS `observacion`,`r`.`estado` AS `estado`,`t`.`descripcion` AS `descripcion`,`e`.`id` AS `id_estudiante`,`e`.`nivel` AS `nivel`,`u`.`id` AS `id_usuario`,`u`.`cedula` AS `cedula`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido` from (((((`siap`.`t_reposicion` `r` join `siap`.`t_estudiante` `e`) join `siap`.`t_usuario` `u`) join `siap`.`t_taller` `t`) join `siap`.`t_grupo` `g`) join `siap`.`t_horario` `h`) where ((`r`.`estudiante` = `e`.`id`) and (`e`.`usuario` = `u`.`id`) and (`r`.`grupo_reposicion` = `g`.`id`) and (`g`.`taller` = `t`.`id`) and (`g`.`horario` = `h`.`id`));
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_usuario_temp`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_usuario_temp`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_usuario_temp` AS select `siap`.`t_usuario_temp`.`id` AS `id`,`siap`.`t_usuario_temp`.`cedula` AS `cedula`,`siap`.`t_usuario_temp`.`foto` AS `foto`,`siap`.`t_usuario_temp`.`nombre` AS `nombre`,`siap`.`t_usuario_temp`.`apellido` AS `apellido`,date_format(`siap`.`t_usuario_temp`.`nacimiento`,'%Y-%m-%d') AS `nacimiento`,`siap`.`t_usuario_temp`.`usuario` AS `usuario`,`siap`.`t_usuario_temp`.`sexo` AS `sexo`,date_format(`siap`.`t_usuario_temp`.`created_at`,'%Y-%m-%d') AS `created_at`,`siap`.`t_usuario_temp`.`tipo_usuario` AS `tipo_usuario`,`siap`.`t_usuario_temp`.`estado` AS `estado`,`siap`.`t_usuario_temp`.`correo` AS `correo`,`siap`.`t_usuario_temp`.`comprobante` AS `comprobante` from `siap`.`t_usuario_temp`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_usuario_temp` AS select `siap`.`t_usuario_temp`.`id` AS `id`,`siap`.`t_usuario_temp`.`cedula` AS `cedula`,`siap`.`t_usuario_temp`.`foto` AS `foto`,`siap`.`t_usuario_temp`.`nombre` AS `nombre`,`siap`.`t_usuario_temp`.`apellido` AS `apellido`,date_format(`siap`.`t_usuario_temp`.`nacimiento`,'%Y-%m-%d') AS `nacimiento`,`siap`.`t_usuario_temp`.`usuario` AS `usuario`,`siap`.`t_usuario_temp`.`sexo` AS `sexo`,date_format(`siap`.`t_usuario_temp`.`created_at`,'%Y-%m-%d') AS `created_at`,`siap`.`t_usuario_temp`.`tipo_usuario` AS `tipo_usuario`,`siap`.`t_usuario_temp`.`estado` AS `estado`,`siap`.`t_usuario_temp`.`correo` AS `correo`,`siap`.`t_usuario_temp`.`comprobante` AS `comprobante` from `siap`.`t_usuario_temp`;
 
 -- -----------------------------------------------------
 -- View `siap`.`vta_usuario_temp_admin`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `siap`.`vta_usuario_temp_admin`;
 USE `siap`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`siapadmindb`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_usuario_temp_admin` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`clave` AS `clave`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado` from `siap`.`t_usuario_temp` `u` order by `u`.`estado`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `siap`.`vta_usuario_temp_admin` AS select `u`.`id` AS `id`,`u`.`cedula` AS `cedula`,`u`.`foto` AS `foto`,`u`.`nombre` AS `nombre`,`u`.`apellido` AS `apellido`,`u`.`nacimiento` AS `nacimiento`,`u`.`usuario` AS `usuario`,`u`.`clave` AS `clave`,`u`.`sexo` AS `sexo`,`u`.`tipo_usuario` AS `tipo_usuario`,`u`.`created_at` AS `creado`,`u`.`estado` AS `estado` from `siap`.`t_usuario_temp` `u` order by `u`.`estado`;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `siap`;
 
 DELIMITER $$
 USE `siap`$$
 CREATE
-DEFINER=`siapadmindb`@`localhost`
+DEFINER=`root`@`localhost`
 TRIGGER `siap`.`t_matricula_AFTER_INSERT`
 AFTER INSERT ON `siap`.`t_matricula`
 FOR EACH ROW
@@ -3738,7 +3747,7 @@ END$$
 
 USE `siap`$$
 CREATE
-DEFINER=`siapadmindb`@`localhost`
+DEFINER=`root`@`localhost`
 TRIGGER `siap`.`t_matricula_BEFORE_DELETE`
 BEFORE DELETE ON `siap`.`t_matricula`
 FOR EACH ROW
@@ -3757,7 +3766,3 @@ END$$
 
 
 DELIMITER ;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Matricula</title>
+    <%- include('headers') %>
+</head>
+<body>
+    <%- include('header',{titleHere: "Subir archivo"}) %>
+    <div class="container-fluid">
+        <div class="p-3 text-center bg-white my-4 rounded-3 shadow ">
+            <h4 class="font-weight-bold">Comprobante de Matricula</h4>
+            <!-- https://www.fundauna.una.ac.cr/ssl/comercios/dpe/ -->
+            <p class="">
+                Dirijase a <a href="https://www.fundauna.una.ac.cr/ssl/comercios/dpe/" target="_blank">Funda UNA</a> y realice el pago del taller.
+                Debera descargar el comprobante de matricula del taller. En el siguiente campo debera subir el archivo descargado.
+            </p>
+        </div>
+        
+        <form action="/client/create/matricula" method="POST" autocomplete="off" enctype="multipart/form-data">
+            <div class="form-group w-100">
+                <strong class="text-dark mb-0">Subir comprobante</strong><small class="text-danger">
+                    *</small><br>
+                <div class="input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="input_arialabeled"><i
+                                class="fa fa-upload"></i></span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="fileFoto" name="image" required
+                            aria-describedby="input_arialabeled">
+                        <label class="custom-file-label" for="fileFoto">Archivo</label>
+                    </div>
+                </div>
+            </div> 
+            <div id="buttonStatus"></div>
+        </form>
+        <div id="imagenSubida" style="width: 350px; min-height: 200px; overflow: auto;"> 
+
+        </div>
+    </div>
+    <%- include('menu') %>
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script src="/js/client/sockets.js"></script>
+    <script src="/js/client/matriculaNew.js"></script>
+</body>
+</html>

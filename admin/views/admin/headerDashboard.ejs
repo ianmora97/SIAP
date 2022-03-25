@@ -15,7 +15,7 @@
             </li>
             <li class="pl-0 pl-lg-3 mt-2 mt-md-0 flex-fill">
                 <div class="bg-light d-flex justify-content-between px-3 align-items-center" style="border-radius: 9px;">
-                    <div class="text-dark pr-3" id="nombreUsuario" style="width: 200px;">
+                    <div class="text-dark pr-3" id="nombreUsuario" style="width: 250px;">
                         <% let usernameNombre = usuario.nombre.split(' ')[0][0] + usuario.nombre.split(' ')[0].substring(1,usuario.nombre.split(' ')[0].length).toLowerCase()%>
                         <% let usernameApellido = usuario.apellido.split(' ')[0][0] + usuario.apellido.split(' ')[0].substring(1,usuario.apellido.split(' ')[0].length).toLowerCase()%>
                         <h6 class="align-middle mb-0">
@@ -40,27 +40,51 @@
                         <a class="nav-link px-0 mx-0" href="#" role="button" id="inboxButton" >
                             <i class="fas fa-inbox fa-2x text-muted" style="font-size: 20px;"></i>
                         </a>
-                        <div class="dropdown d-inline ml-4">
+                        <div class="dropdown d-inline mx-4">
                             <a class="nav-link px-0 mx-0" href="#" role="button" id="notificaciones" >
                                 <i class="far fa-bell fa-2x text-muted" style="font-size: 20px;"></i>
                             </a>
-                            <div class="dropdownNotificaciones" id="notificacionesDrop">
-                                <strong class="px-2 py-3">Notificaciones</strong>
-                                <hr>
-                                <div class="container-fluid px-2" id="notifications">
-            
+                            <div class="dropdownNotificaciones " id="notificacionesDrop">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex justify-content-between align-items-start p-2">
+                                        <strong class="d-block">Notificaciones</strong>
+                                        <small class="mb-0 d-block" onclick="$('#notifications').html('')" role="button"><i class="fas fa-check-double text-primary" style="font-size: 12px;"></i> Borrar Todo</small>
+                                    </div>
+                                    <div>
+                                        <div class="container-fluid px-0" id="notifications">
+                    
+                                        </div>
+                                    </div>
+                                    <a class="dropdown-item text-center mt-auto" href="#">...</a>
                                 </div>
-                                <hr>
-                                <a class="dropdown-item text-center mt-auto" href="#">...</a>
                             </div>
                         </div>
+                        <a class="nav-link px-0 mx-0" href="#" onclick="openTasksBar()" role="button" id="tasksButton_navbar" >
+                            <i class="fas fa-tasks fa-2x text-muted" style="font-size: 20px;"></i>
+                        </a>
                     </div>
                 </div>
             </li>
         </ul>
     </div>
 </nav>
-
+<div class="progress" id="progressBarLoaderParent" style="position: fixed; top: 0; left: 0; z-index: 99999; width: 100%; height: 5px;">
+    <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" id="progressBarLoader" 
+    role="progressbar" style="width: 25%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<script>
+    $("#progressBarLoader").css({
+        "width": "75%",'transition':'width 0.5s ease-out'
+    }, 1000);
+    function closeProgressBarLoader(){
+        $("#progressBarLoader").css({"width": "100%",'transition':'width 0.5s ease-out'});
+        setTimeout(function(){
+            animateCSS('#progressBarLoaderParent','fadeOut').then(function(){
+                $("#progressBarLoaderParent").remove();
+            });
+        }, 1300);
+    }
+</script>
 <script>
     function loadFunctions(event) {
         cargarNotificacionesDropdrown();
@@ -69,20 +93,35 @@
         loadURLSearch();
         onfindBarUp();
     }
-    function loadURLSearch() {
-        let bearer = 'Bearer '+g_token;
-        $.ajax({
-            type: "GET",
-            url: "/admin/ajax/getUrls", 
-            contentType: "appication/json",
-            headers:{
-                'Authorization':bearer
-            }
-        }).then((urls) => {
-            g_links = urls;
-            getURLSearch(urls);
-        }, (error) => {
+    async function N_checkPermission(){
+        return Notification.requestPermission().
+        then(status => status === 'granted');
+    }
+    function sendNotificationChrome(title, options){
+        N_checkPermission().then(isAllowed => {
+            if(isAllowed) new Notification(title, options);
         });
+    }
+    function loadURLSearch() {
+        let rows = [];
+        rows.push(
+            {'url':'/admin/estudiantes','description':'Lista de clientes, estudiantes, usuarios de la piscina','name':'Cliente', 'icon':'<i class="fa fa-users"></i>', 'variation':'usuarios,cliente,estudiante,estudiantes'},
+            {'url':'/admin/profesores','description':'Lista de instructores, profesores de la piscina','name':'Profesor', 'icon':'<i class="fas fa-user-graduate"></i>', 'variation':'usuarios,profesor,profesores,instructor,instructores'},
+            {'url':'/admin/administradores','description':'Lista de administradores del sistema','name':'Administrativo', 'icon':'<i class="fas fa-user-tie"></i>', 'variation':'usuarios,administrativo,administrativos,oficina'},
+            {'url':'/admin/talleres','description':'Lista de talleres, horarios, grupos que se imparten en la piscina','name':'Talleres', 'icon':'<i class="fas fa-chalkboard-teacher"></i>', 'variation':'talleres,cursos,curso,horarios,grupos,calendario'},
+            {'url':'/admin/reposiciones','description':'Lista de reposiciones solicitadas','name':'Reposiciones', 'icon':'<i class="fas fa-exchange-alt"></i>', 'variation':'reposiciones,solicitud'},
+            {'url':'/admin/matricula','description':'Lista de estudiantes matriculados en la piscina','name':'Matricula', 'icon':'<i class="fas fa-user-graduate"></i>', 'variation':'matricula,matriculas,matriculacion,matriculaciones'},
+            {'url':'/admin/matricula/reportes','description':'Reportes de matricula y desmatricula','name':'Reportes', 'icon':'<i class="fas fa-file-pdf"></i>', 'variation':'reportes de matricula,reportes,reporte,informes,informe,informacion,informaciones'},
+            {'url':'/admin/comprobacion','description':'Comprobacion de Datos de usuarios registradas','name':'Comprobacion', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'comprobacion,comprobaciones,registro,estudiantes,usuarios,nuevos'},
+            {'url':'/admin/reportes/asistencia','description':'Reportes de asistencia por grupo','name':'Asistencia', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'asistencia,asistencias,reportes'},
+            {'url':'/admin/reportes/conducta','description':'Reportes de conducta generados por un administrativo','name':'Conducta', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'conducta,conductas,reportes'},
+            {'url':'/admin/reportes/mororosos','description':'Reportes de Morosidad, lista de personas morosas','name':'Morosos', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'morosos,reportes'},
+            {'url':'/admin/reportes/uso','description':'Reportes de Uso en la piscina','name':'Uso', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'uso,usos,reportes'},
+            {'url':'/admin/reportes/sistema','description':'Reportes de uso del sistema','name':'Sistema', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'sistema,sistemas,reportes'},
+            {'url':'/admin/casilleros','description':'Lista de casilleros en la piscina','name':'Casilleros', 'icon':'<i class="fas fa-check-circle    "></i>', 'variation':'casilleros'},
+        );
+        g_links = rows;
+        getURLSearch(rows);
     }
     function getURLSearch(urls){
         $('.finder').html('');
@@ -145,12 +184,7 @@
     function toogleMenu() {
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
-        //$('#sidebar-wrapper').css('position','relative');
         $("#wrapper").toggleClass("toggled");
-        //$("#side-panel").css('margin-left','-12px');
-        //$("#sidebar-wrapper").toggle("'slide', {direction: 'right' }, 1000");
-        //$("#sidebar-wrapper").css({'transform': 'translate(-13rem, 0px)'});
-        //$("#sidebar-wrapper").animate({left:'-200'},1000);
     });
 }
     const animateCSS = (element, animation) =>
@@ -187,6 +221,3 @@
         "sexo": "<%= usuario.sexo%>"
     };
 </script>
-<!-- <div class="progress rounded-0" style="height: 10px;">
-    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-</div> -->

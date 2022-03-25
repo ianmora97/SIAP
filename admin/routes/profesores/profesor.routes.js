@@ -72,6 +72,17 @@ router.get('/admin/profesor/agregar',ensureToken,(req,res)=>{
         }
     });
 });
+router.get('/admin/profesor/agregarAso',ensureToken,(req,res)=>{
+    con.query('INSERT INTO t_profesor(usuario,rol,aso) values(?,2,1)',[req.query.data],
+        (err,rows,fields)=>{
+        if(!err){
+            logSistema(req.session.value.cedula, `AGREGAR ASOCIADO ${req.query.data}`, DDL.INSERT, TABLE.PROFESOR);
+            res.send(rows);
+        }else{
+            res.send(err);
+        }
+    });
+});
 
 router.get('/admin/profesor/actualizar',ensureToken,(req,res)=>{
     con.query("update t_usuario set usuario = ?, correo = ? where cedula = ?",
