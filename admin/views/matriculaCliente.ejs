@@ -44,7 +44,7 @@
                                 <input type="password" class="form-control" name="inicioSesion-clave" id="inicioSesion-clave" placeholder="Clave" autocomplete="inicioSesion-clave">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-success btn-block mx-auto">Iniciar Sesión</button>
+                        <button type="button" class="btn btn-success btn-block mx-auto" onclick="iniciarSesionModal()">Iniciar Sesión</button>
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                     <div class="dropdown">
                         <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButtonDiaFilter" 
                         data-toggle="dropdown" aria-expanded="false">
-                            Dia
+                            <i class="fas fa-calendar pr-2"></i>Dia
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonDiaFilter">
                             <a class="dropdown-item" href="#" onclick="selectDropdownDia('Lunes')">Lunes</a>
@@ -114,7 +114,7 @@
                     <div class="dropdown">
                         <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" 
                         id="dropdownMenuButtonHoraFilter" data-toggle="dropdown" aria-expanded="false">
-                            Hora
+                        <i class="fas fa-clock pr-2"></i>Hora
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonHoraFilter">
                             <a class="dropdown-item" href="#" onclick="selectDropdownHora('6:00 am')">6:00 am</a>
@@ -140,7 +140,7 @@
                     <div class="dropdown">
                         <button class="w-100 mt-md-0 mt-3 btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButtonNivelFilter" 
                         data-toggle="dropdown" aria-expanded="false">
-                            Nivel
+                            <i class="fas fa-layer-group pr-2"></i>Nivel
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonNivelFilter" id="dropdownFilterNiveles">
     
@@ -149,18 +149,18 @@
                 </div>
             </div>
         </div>
-        <div class="mt-2 user-select-none d-flex justify-content-start" id="filterBadges" style="height:50px;">
+        <div class="mt-2 user-select-none d-flex justify-content-start" id="filterBadges" style="height:30px;">
 
         </div>
         <div class="row mx-0" id="gruposCards" style="height: 50vh; overflow-y: auto;">
 
         </div>
-        <div class="bg-white rounded-3 shadow-sm p-3 mt-4 d-flex justify-content-start" style="min-height: 136px;">
-            <div class="row mx-0" id="cursosMatriculadosTemp" style="width: 80%;">
+        <div class="bg-white rounded-3 shadow-sm p-3 mt-4 d-flex justify-content-start flex-md-row flex-column" style="min-height: 136px;">
+            <div class="row mx-0 flex-fill order-1 order-md-0" id="cursosMatriculadosTemp">
 
             </div>
-            <div class="ml-auto">
-                <button type="button" class="btn btn-secondary">Matricular</button>
+            <div class="px-3 order-0 order-md-1 mb-3 mb-md-0">
+                <button type="button" class="w-100 btn btn-secondary">Matricular</button>
             </div>
         </div>
     </main>

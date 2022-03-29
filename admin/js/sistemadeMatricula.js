@@ -28,6 +28,7 @@ function checkSesion(){
 
     }
 }
+var g_estExists = false;
 function findEstudent(cedula){
     return new Promise((resolve,reject)=>{
         $.ajax({
@@ -47,9 +48,13 @@ async function checkInputSesionEst(){
         if(val.length > 8){
             findEstudent(val).then((res)=>{
                 if(res){
+                    g_estExists = true;
                     $("#claveInicioDrop").show();
                     animateCSS('#claveInicioDrop','slideInDown');
                 }else{
+                    g_estExists = false;
+                    $("#claveInicioDrop").hide();
+                    animateCSS('#claveInicioDrop','slideInUp');
                 }
             },(error)=>{
                 console.log(error);
@@ -185,7 +190,6 @@ function removeFilter(filter){
 }
 
 function agregarMatriculaTemp(id_grupo){
-    $("#cursosMatriculadosTemp").html('');
     if(g_matriculaTemp.size < 3){
         if(!g_matriculaTemp.has(id_grupo)){
             g_matriculaTemp.set(id_grupo,g_mapGrupos.get(parseInt(id_grupo)));
@@ -194,9 +198,10 @@ function agregarMatriculaTemp(id_grupo){
     fillMatriculaTempShow();
 }
 function fillMatriculaTempShow(){
+    $("#cursosMatriculadosTemp").html('');
     g_matriculaTemp.forEach((e,i) => {
         $("#cursosMatriculadosTemp").append(`
-            <div class="col-md-4 mt-md-0 mb-3">
+            <div class="col-md-4 mt-md-0 mb-3" id="colCardMatricula-${i}">
                 <div class="bg-primary rounded-3 p-3 text-white">
                     <span role="button" onclick="removeFromMatricula('${i}')" class="text-white"><i class="fas fa-times-circle"></i></span>
                     <p class="font-weight-bold mb-0">${e.descripcion}</p>
@@ -206,4 +211,54 @@ function fillMatriculaTempShow(){
         `);
     });
 }
+function searchonfind(){
+    let search = $("#barraBuscar").val();
+    if(search.length > 0){
+        let vec = g_grupos.filter((e,i)=>{
+            if(e.descripcion.toLowerCase().includes(search.toLowerCase())){
+                return true;
+            }else if(e.dia.toLowerCase().includes(search.toLowerCase())){
+                return true;
+            }
+        })
+        buildGruposCards(vec);
+    }else{
+        buildGruposCards(g_grupos);
+    }
+}
+function removeFromMatricula(id){
+    g_matriculaTemp.delete(id);
+    fillMatriculaTempShow();
+}
+
+function iniciarSesionModal(){
+    let cedula = $("#inicioSesion-cedula").val();
+    let clave = $("#inicioSesion-clave").val();
+    if(g_estExists && cedula.length > 8 && clave.length > 0){
+        let data ={
+            cedula:cedula,
+            clave:clave
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/iniciosesion/matricula",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        }).then((res) => {
+            if(res.status == "ok"){
+                localStorage.setItem("token",res.token);
+                inicioSesionCorrecto(res.data);
+            }
+        },(error) => {
+            reject(error);
+        });
+    }else{
+        alert("Ingrese todos los datos");
+    }
+}
+
+function inicioSesionCorrecto(data){
+
+}
+
 document.addEventListener("DOMContentLoaded", loaded);
