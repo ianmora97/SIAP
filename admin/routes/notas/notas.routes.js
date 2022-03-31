@@ -98,6 +98,54 @@ router.delete('/api/admin/tasks/:id',ensureToken, (req, res) => {
         }
     });
 });
+// * ----------------------------------- CALENDARIO ------------------------------------
+router.get('/api/admin/calendar',ensureToken, (req, res) => {
+    con.all('SELECT * FROM calendario',
+    (err, rows, fields) => {
+        if(!err){
+            res.send(rows);
+        }else{
+            res.status(300).send(err);
+        }
+    });
+});
+
+router.post('/api/admin/tasks',ensureToken, (req, res) => {
+    let name = req.body.name;
+    let description = req.body.description;
+    con.run("INSERT INTO tasks (name,description) VALUES (?,?)", [name,description], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+router.put('/api/admin/tasks',ensureToken, (req, res) => {
+    let data = req.query;
+    con.run("UPDATE tasks set name = ?, description = ?, completed = ? where id = ?", 
+    [data.name, data.description, data.completed, data.id], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+router.delete('/api/admin/tasks/:id',ensureToken, (req, res) => {
+    let id = req.params.id;
+    con.run("DELETE FROM tasks WHERE id = ?", [id], (err) => {
+        if (err) {
+            console.log(err);
+        }else{
+            res.send("success");
+        }
+    });
+});
+
+
 
 // ! ----------------------------------- SECURITY ------------------------------------
 function ensureToken(req,res,next) {

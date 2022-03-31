@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+    <title>Dashboard | Pagos</title>
+    <%- include('headers')%>
+</head>
+
+<body class="page bg-light d-flex flex-column h-100">
+    <%- include('email') %> 
+    <div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title px-3 text-white" id="agregarModalLabel">Registrar Pago</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="estudiantesAgregarSelect">Estudiante</label>
+                        <select class="form-control" id="estudiantesAgregarSelect">
+
+                        </select>
+                    </div>           
+                    <div class="form-group">
+                        <label for="grupoAgregarSelect">Grupo</label>
+                        <select class="form-control" id="grupoAgregarSelect">
+
+                        </select>
+                    </div>           
+                    <div class="form-group">
+                        <label for="montoAgregarModal">Monto</label>
+                        <input type="number" class="form-control" id="montoAgregarModal">
+                    </div>
+                    <div class="form-group">
+                        <label for="cuentaAgregarModal">Cuenta (opcional)</label>
+                        <input type="text" class="form-control" id="cuentaAgregarModal">
+                    </div>
+                </div>
+                <div class="modal-footer py-1 bg-light">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="registrarPago()">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex" id="wrapper">
+        <%- include('menuDashboard') %>
+        <div id="page-content-wrapper">
+            <%- include('headerDashboard') %>
+            <div class="container-fluid my-4">
+                <div class="bg-white p-4 rounded-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 class="font-weight-bolder display-5">Lista de Pagos</h1>
+                            <p class="text-muted mb-0">En esta seccion se muestra los pagos de los estudiantes,
+                                puedes ver el detalle de cada pago, asi como la fecha de pago y el estado del pago.
+                                Puede Registrar, editar o eliminar un pago.
+                            </p>
+                            <small>Informacion Actualizada hace: <span class="text-success" id="infoTiming"></span></small>
+                        </div>
+                        <div class="col border-right text-center">
+                            <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t1"
+                                id="usuarios_registrados_stats">0</h1>
+                            <small class="text-muted" >Pagos Registrados <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                        </div>
+                        <div class="col text-center">
+                            <h1 class="display-3 m-0 font-weight-bolder text-primary animate__animated animate__flipInX animate_delay_t3" 
+                            id="usuarios_nuevos_stats">0</h1>
+                            <small class="text-muted" >Morosos <i style="font-size: 10px;" class="fas fa-align-center text-secondary"></i></small>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-3 mt-4 animate__animated animate__fadeIn animate__slow">
+                    <div class="row mx-0 d-flex justify-content-between">
+                        <div class="col pl-0">
+                            <div class="mb-1">
+                                <div class="input-group flex-nowrap">
+                                    <div class="input-group-prepend">
+                                        <div class="btn bg-light" id="button_search">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none bg-light"
+                                        onkeyup="searchonfind()" placeholder="Buscar..."
+                                        aria-label="Username" id="barraBuscar">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-end align-items-end pr-0">
+                            <div class="w-100 h-100">
+                                <button type="button" data-toggle="modal" data-target="#agregarModal" 
+                                class="btn btn-secondary mr-2 w-100">Registrar Pago</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                    <div class="row mx-0 pt-1">
+                        <div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline pl-0">
+                            <div class="w-100" id="length">
+                                <select class="custom-select">
+                                    <option selected>All columns</option>
+                                    <option value="1">5</option>
+                                    <option value="2">10</option>
+                                    <option value="3">100</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white px-0 mt-4 rounded-3 animate__animated animate__slideInUp">
+                    <div class="row w-100 mx-0" style="height: 74vh; overflow-y: auto;">
+                        <table class="table custom-table table-responsive-sm table-borderless text-center table-hover"
+                         id="table" data-order="[[ 1, &quot;asc&quot; ]]">
+                            <thead class="table-light-header">
+                                <tr>
+                                    <th scope="col">&nbsp;</th>
+                                    <th scope="col">Cedula</th>
+                                    <th data-class-name="priority"scope="col">Nombre</th>
+                                    <th scope="col">Grupo</th>
+                                    <th scope="col">Monto</th>
+                                    <th scope="col">Pago Registrado</th>
+                                    <th scope="col">Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista">
+
+                            </tbody>
+                        </table>
+                        <div class="d-flex align-items-center align-self-end justify-content-between border-top py-2 w-100">
+                            <div><small id="info" class="d-flex align-items-end ml-4"></small></div>
+                            <div id="pagination" class="mr-3">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                      <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <style>
+                                ul.pagination{
+                                    margin-bottom: 0px !important;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include('footerDashboard') %>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
+    <script src="/js/admin/pagos.js"></script>
+</body>
+</html>

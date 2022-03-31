@@ -1,0 +1,155 @@
+<div class="modal fade modal-p-bottom" id="calendarModalevents"  aria-labelledby="calendarModaleventsLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-p-bottom modal-dialog-scrollable">
+        <div class="modal-content" style="height: 90vh;">
+            <div class="modal-body p-0 rounded-3 bg-white position-relative">
+                <div class="d-flex justify-content-between py-2 px-3 align-items-end">
+                    <h2 class="font-weight-bold px-2 mt-2">Calendario</h2>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <hr class="my-2">
+                <div class="p-2" id="calendarModal"></div>
+                <style>
+                    #calendarModal {
+                        width:100%;
+                    }
+                    
+                    .fc-daygrid-event{
+                        white-space: normal !important;
+                        padding: 10px 15px;
+                        border-radius: 10px;
+                    }
+                    .fc-daygrid-event-harness{
+                        margin-bottom: 4px;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loaderDOMEvents(){
+        loadEventsCalendar();
+        onModalCalendarEventOpen();
+    }
+    function loadEventsCalendar(){
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/api/admin/calendar",
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            cargarCalendario(response);
+
+        }, (error) => {
+
+        });
+    }
+    function onModalCalendarEventOpen(){
+        $('#calendarModalevents').on('show.bs.modal', function (event) {
+            setTimeout(() => {
+                $(".fc-dayGridMonth-button").trigger("click");
+            }, 600);
+            console.log("modal open");
+            calendarEvents.render();
+        })
+    }
+    var calendarModal;
+    var calendarEvents;
+    function cargarCalendario(data){
+        calendarModal = document.getElementById('calendarModal');
+        calendarEvents = new FullCalendar.Calendar(calendarModal, {
+            locale: 'es',
+            initialView: 'dayGridMonth',
+            height: 800,
+            nowIndicator: true,
+            aspectRatio:1,
+            themeSystem: 'bootstrap',
+            views: {
+                dayGrid: {
+                    titleFormat: { month: 'long' }
+                },
+                timeGrid: {
+                    // options apply to timeGridWeek and timeGridDay views
+                },
+                week: {
+                    // options apply to dayGridWeek and timeGridWeek views
+                },
+                day: {
+                    // options apply to dayGridDay and timeGridDay views
+                }
+            },
+            customButtons: {
+                doEventoAgregar: {
+                    text: 'Agregar Evento',
+                    click: async function() {
+                        
+                        Swal.fire({
+                            title: 'Agregar Evento',
+                            html: `
+                                <div class="form-group">
+                                    <label for="agregarEventoModal-titulo">Titulo</label>
+                                    <input type="text" class="form-control" id="agregarEventoModal-titulo" placeholder="Titulo Evento" tabindex="-1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="agregarEventoModal-description">Descripcion</label>
+                                    <textarea class="form-control" id="agregarEventoModal-description" rows="3"></textarea>
+                                </div>
+                            `,
+                            confirmButtonText: 'Agregar',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                
+                            }
+                        })
+                    }
+                },
+            },
+            headerToolbar: {
+                start: 'doEventoAgregar',
+                center: 'prev title next',
+                end: 'dayGridMonth listWeek'
+            },
+            events: data,
+
+            buttonText: {
+                today:    'Hoy',
+                month:    'Mes',
+                week:     'Semana',
+                day:      'Dia',
+                list:     'Lista'
+            },
+            dateClick: function(info) {
+                g_modalFechaCalendario = info.dateStr;
+                $('#agregarGrupo').modal();
+            },
+            eventClick: function(event) {
+                let info = event.event._def.extendedProps
+                console.log(event.event._def.extendedProps)
+                $('.event-icon').html("<i class='fa fa-"+info.icon+"'></i>");
+                $('.event-title').html(info.codigo);
+                $('.event-body').html(info.description);
+                $('#modal-view-event').modal();
+            },
+            eventContent: function (args, createElement) {
+                const hora = args.event._def.extendedProps.hora;
+                const icon = args.event._def.extendedProps.icon;
+                const text = `<i class="fa fa-${icon}"></i> <span class="font-weight-bold">${args.event._def.title}</span> <span class="badge badge-light">${hora}</span>`;
+                return {
+                html: text
+                };
+            },
+            viewDidMount: function(info) {
+                $('.fc-doEventoAgregar-button').removeClass('btn-primary').addClass('btn-primary');
+                $('.fc-next-button').removeClass('btn-primary').addClass('');
+                $('.fc-prev-button').removeClass('btn-primary').addClass('');
+            },
+        });
+        
+    }
+    document.addEventListener("DOMContentLoaded", loaderDOMEvents);
+</script>

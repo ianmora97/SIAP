@@ -81,6 +81,7 @@ app.use(require('./routes/reportes/conductas.routes'));
 app.use(require('./routes/reportes/uso.routes'));
 
 app.use(require('./routes/notas/notas.routes'));
+app.use(require('./routes/pagos/pagos.routes'));
 
 app.use(require('./routes/estudiante/admin.routes'));
 app.use(require('./routes/administradores/admin.routes'));
