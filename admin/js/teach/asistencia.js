@@ -42,6 +42,7 @@ function enviarAsistencia(){
                 }
             }
         });
+        
         let bearer = 'Bearer '+g_token;
         data.forEach((e,i) =>{
             console.log(e)
@@ -89,32 +90,7 @@ var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 280,
 function onScanSuccess(decodedText, decodedResult) {
     console.log(`Scan result:`, decodedText);
     let cedula = decodedText;
-    if(g_Map_asistenciasVerify.get(cedula) != undefined){
-        html5QrcodeScanner.clear();
-        Swal.fire({
-            icon: 'warning',
-            title: 'El estudiante ya fue verificado',
-            timer: 2000,
-        }).then((result) => {
-            html5QrcodeScanner.render(onScanSuccess, onScanError);
-            if(result.dismiss === Swal.DismissReason.timer) {
-            }
-        });
-        return;
-    }
-    if(g_mapAsistencias.get(cedula) != undefined){
-        html5QrcodeScanner.clear();
-        Swal.fire({
-            icon: 'warning',
-            title: 'El estudiante ya fue verificado',
-            timer: 2000,
-        }).then((result) => {
-            html5QrcodeScanner.render(onScanSuccess, onScanError);
-            if(result.dismiss === Swal.DismissReason.timer) {
-            }
-        });
-        return;
-    }
+
     let est = g_mapMatriculados.get(cedula);
     if(est.id_grupo == g_grupo.id_grupo){
         if(est){
