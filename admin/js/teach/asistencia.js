@@ -27,25 +27,17 @@ function enviarAsistencia(){
         let f = new Date();
         let fecha = `${f.getFullYear()}-${f.getMonth()+1}-${f.getDate()}`;
         g_Matriculados.forEach(e =>{
-            if(e.activa){
-                if(g_mapAsistencias.get(e.cedula) == undefined){
-                    if(g_Map_asistenciasVerify.get(e.cedula) != undefined){ //paso y esta
-                        data.push({
-                            estado: 1,
-                            est: parseInt(e.id_estudiante),
-                            grupo: parseInt(id_grupo),
-                            fecha: fecha
-                        });
-                    }else{
-                        
-                    }
-                }
+            if(g_Map_asistenciasVerify.get(e.cedula) != undefined){ //paso y esta
+                data.push({
+                    estado: 1,
+                    est: parseInt(e.id_estudiante),
+                    grupo: parseInt(id_grupo),
+                    fecha: fecha
+                });
             }
         });
-        
         let bearer = 'Bearer '+g_token;
         data.forEach((e,i) =>{
-            console.log(e)
             $.ajax({
                 type: 'GET',
                 url: '/teach/enviarAsistencia',
@@ -60,6 +52,7 @@ function enviarAsistencia(){
                 
             });
             if(i == data.length-1){
+                g_Map_asistenciasVerify.clear();
                 Swal.fire({
                     icon: 'success',
                     title: 'Asistencia Enviada',
@@ -71,8 +64,9 @@ function enviarAsistencia(){
                     timerProgressBar: true,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // window.location.reload()
+                        window.location.reload();
                     }else if (result.isDenied) {
+                        window.location.reload();
                     }
                 });
             }
@@ -112,16 +106,14 @@ function onScanSuccess(decodedText, decodedResult) {
                     html5QrcodeScanner.render(onScanSuccess, onScanError);
                     if (result.isConfirmed) {
                         showVerify(est);
-                        // g_asistenciasVerify.push(est);
                         g_Map_asistenciasVerify.set(est.cedula, est);
                     }else if (result.isDenied) {
                         console.log('no existe');
                     }else if (result.dismiss === Swal.DismissReason.timer && flag) {
                         showVerify(est);
-                        // g_asistenciasVerify.push(est);
                         g_Map_asistenciasVerify.set(est.cedula, est);
                     }
-                });
+                }); 
             }else{
                 html5QrcodeScanner.clear();
                 Swal.fire({

@@ -253,6 +253,11 @@ function buildPrimaryInfo(data){
     $("#v_carrera").val(data.carrera_departamento);
     $("#v_perfil").val(data.tipo);
 
+    var qrcode = new QRCode(document.getElementById("qrImg"), {
+        text: data.cedula,
+    });
+    console.log(qrcode)
+
 }
 function buildSwitches(data){
     // ! Morosidad
