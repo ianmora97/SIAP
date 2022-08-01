@@ -39,13 +39,9 @@ router.get('/admin/homepage/save', (req, res) => {
 
 router.get('/registrarse', (req, res) => {
     let tab = 'registro';
-    // res.render('registrarse',{tab});
-    res.redirect('/')
+    res.render('registrarse',{tab});
 });
-router.get('/matricula/cliente', (req, res) => {
-    let cedula = req.params.cedula || "";
-    res.render('matriculaCliente',{cedula});
-});
+
 router.get('/api/checkEst/:cedula', (req, res) => {
     let cedula = req.params.cedula;
     db.query("SELECT * from vta_cliente_estudiante where cedula = ?", 

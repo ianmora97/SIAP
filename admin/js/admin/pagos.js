@@ -190,10 +190,10 @@ function buildRowTable(e){
             <td id="colones-tippy-${e.id_pago}">₡ ${e.monto_pagado}</td>
             <td>${moment(e.pagado_fecha).format('LL')}</td>
             <td>
-                <button type="button" class="btn btn-sm d-inline btn-warning text-white" 
-                data-toggle="modal" data-target="#actualizarModal" data-id="${e.id_pago}"><i class="fa-solid fa-pencil"></i> Actualizar</button>
-                <button type="button" class="btn btn-sm d-inline btn-danger" 
-                data-toggle="modal" data-target="#borrarPago" data-id="${e.id_pago}"><i class="fa-solid fa-delete-left"></i> Eliminar</button>
+                <button type="button" class="btn btn-sm d-inline btn-warning text-white disabled" 
+                data-toggle="modal" data-target="#actualizarModal" disabled data-id="${e.id_pago}"><i class="fa-solid fa-pencil"></i> Actualizar</button>
+                <button type="button" class="btn btn-sm d-inline btn-danger disabled" 
+                data-toggle="modal" data-target="#borrarPago" disabled data-id="${e.id_pago}"><i class="fa-solid fa-delete-left"></i> Eliminar</button>
             </td>
         </tr>
     `);

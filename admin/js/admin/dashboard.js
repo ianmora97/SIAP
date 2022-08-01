@@ -130,8 +130,8 @@ function cargarNotas(notas) {
 }
 function mostrarNotas(e,i) {
     $('#list-notas').append(`
-        <div class="col-4 mt-4">
-            <div class="card-nota animate__animated animate__backInUp" style="animation-delay: ${i}00ms; min-height:200px;" id="notaid-${e.id}-tab" >
+        <div class="col mt-4">
+            <div class="card-nota animate__animated animate__backInUp" style="width:300px;animation-delay: ${i}00ms; min-height:200px;" id="notaid-${e.id}-tab" >
                 <div class="d-flex justify-content-start flex-column">
                     <div class="d-flex justify-content-between mb-auto">
                         <a role="button" href="#" data-id="${e.id}" data-toggle="modal" 

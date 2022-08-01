@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Confirmacion de Matricula</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/dashboard.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <script src="/js/jq-bs-bundle.js"></script> 
+	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away-extreme.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-light">
+    <style>
+        @media print {
+            .footer-no-print{
+                display: none;
+            }
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary text-white">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="d-flex align-items-center">
+                    <img src="/img/logo-white.png" alt="UNA" loading="lazy" 
+                    class="d-inline mx-2 my-auto" height="30px">
+                    <h4 class="text-white m-0">SIAP</h4>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+                <span span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <h6 class="mb-0"><a class="nav-link text-white" href="/">Inicio</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main role="main" class="container mt-4">
+        <div class="alert alert-success" role="alert">
+            Confirmacion de Matricula
+        </div>
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <img src="/img/logo-white.png" alt="UNA" loading="lazy" 
+                class="d-inline mx-2 my-auto" height="80px" >
+                <img src="/img/UNA-VVE-logo-3.png" width="200" >
+            </div>
+            <a class="" href="#" onclick="window.print()" role="button">Print</a>
+        </div>
+        <h3 class="font-weight-bold mt-2">Sistema de Administracion de la Piscina</h3>
+        <p>Departamento de Promocion Estudiantil</p>
+        <hr>
+        <p class="font-weight-bold">Estudiante:</p>
+        <div class="d-flex justify-content-start align-items-center">
+            <div id="foto"></div>
+            <h5 class="font-weight-bold px-3" id="nombre"></h5>
+        </div>
+        <hr>
+        <p class="font-weight-bold">Talleres Matriculados:</p>
+        <div class="d-flex flex-wrap justify-content-between align-items-start">
+            <div id="gruposmatriculados"></div>
+            <div id="qrCode" class="mt-5 mt-md-0"></div>
+        </div>
+
+    </main>
+    <%- include('footer') %>
+    <script>
+        const animateCSS = (element, animation) =>
+            new Promise((resolve, reject) => {
+            let prefix = 'animate__';
+            const animationName = `${prefix}${animation}`;
+            const node = document.querySelector(element);
+
+            node.classList.add(`${prefix}animated`, animationName);
+
+            // When the animation ends, we clean the classes and resolve the Promise
+            function handleAnimationEnd(event) {
+                event.stopPropagation();
+                node.classList.remove(`${prefix}animated`, animationName);
+                resolve('Animation ended');
+            }
+
+            node.addEventListener('animationend', handleAnimationEnd, { once: true });
+        });
+    </script>
+    <script>
+        let check = sessionStorage.getItem('cedula_matriula_check');
+        if(check != 'true'){
+            location.href = '/registrarse';
+        }
+        let items = sessionStorage.getItem('grupos_matricula');
+        let cedula = sessionStorage.getItem('cedula_matriula');
+        let grupos = JSON.parse(items);
+        grupos.forEach(e => {
+            $("#gruposmatriculados").append(`
+                <span class="bg-primary mb-4 d-inline-block" style="padding:5px 8px; color:white; border-radius:5px;">${e.descripcion} | Dia: ${e.dia} de ${e.hora} - ${e.hora_final}</span> <br>
+            `);
+        });
+        $.ajax({
+                type: "GET",
+                url: '/estudiante/info',
+                contentType: "application/json",
+                data: {cedula},
+            }).then((response) => {
+                $("#nombre").html(`${response.nombre} ${response.apellido} <br><small>${cedula}</small>`);
+                $("#foto").html(`<img src="/public/uploads/${response.foto}" class="rounded-circle" width="100px" height="100px">`);
+                var qrcode = new QRCode(document.getElementById("qrCode"), {
+                    text: cedula,
+                });
+                sessionStorage.clear();
+            }, (error) => {
+            
+            });
+    </script>
+</body>
+</html>

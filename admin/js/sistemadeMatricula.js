@@ -6,9 +6,9 @@ var g_mapGrupos = new Map();
 var g_matriculaTemp = new Map();
 
 function loaded(event){
-    checkSesion();
     checkInputSesionEst();
     loadDB();
+    matricularCursos();
 }
 moment.locale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -18,16 +18,7 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
   }
 );
-function checkSesion(){
-    if(localStorage.getItem("sesion_sm_siap") == null){
-        $("#datos-btn-check").html(`
-            <a href="#" data-toggle="modal" data-target="#iniciarSesion" 
-            class="btn btn-primary">Iniciar Sesión</a>
-        `)
-    }else{
 
-    }
-}
 var g_estExists = false;
 function findEstudent(cedula){
     return new Promise((resolve,reject)=>{
@@ -62,8 +53,25 @@ async function checkInputSesionEst(){
         }
     });
 }
+var g_cursosMatriculados = new Map();
+var g_cursosMat_length = 0;
+
+
 function loadDB(){
-    // dropdownFilterNiveles
+    let cedula = sessionStorage.getItem("cedula_matriula");
+    $.ajax({
+        type: "GET",
+        url: "/matricula/cursos/checkcantidad",
+        data: {cedula},
+        contentType: "application/json",
+    }).then((response) => {
+        g_cursosMat_length = response.length;
+        response.forEach((e,i) => {
+            g_cursosMatriculados.set(e.id_grupo,e);
+        });
+    }, (error) => {
+        return false;  
+    });
     $.ajax({
         type: "GET",
         url: "/api/talleres",
@@ -91,6 +99,13 @@ function getTalleres(talleres){
 }
 function buildGruposCards(grupos){
     $("#gruposCards").html('');
+    let vec = new Array();
+    grupos.forEach(e => {
+        if(!g_cursosMatriculados.has(e.id_grupo)){
+            vec.push(e);
+        }
+    });
+    grupos = vec;
     grupos.forEach((e,i) => {
         g_mapGrupos.set(e.id_grupo,e);
         showGruposCards(e,i);
@@ -113,18 +128,17 @@ function showGruposCards(e,i){
                 <div class="d-flex justify-content-around mt-3">
                     <div>
                         <div class="d-flex justify-content-start align-items-center">
-                            <a role="button" href="#" class="btn btn-primary rounded-circle" 
-                            style="width:40px;height:40px; padding-left:9px;"><i class="fas fa-user-friends"></i></a>
-                            <div class="d-flex justify-content-center flex-column ml-2">
-                                <h4 class="font-weight-bold mb-0">${e.cupo_base - e.cupo_actual}</h4>
-                                <small class="text-muted">Cupos</small>
-                            </div>
+                            <a role="button" href="#" class="btn btn-primary">
+                                <i class="fas fa-user-friends"></i><br>
+                                <small>${e.cupo_base - e.cupo_actual} Cupos</small>
+                            </a>
                         </div>
                     </div>
                     <div>
-                        <button role="button" style="width:40px;height:40px;" href="#" data-id="${e.id_grupo}" 
-                        onclick="agregarMatriculaTemp('${e.id_grupo}')" class="btn btn-success rounded-circle">
-                            <i class="fas fa-plus"></i>
+                        <button role="button" href="#" data-id="${e.id_grupo}" 
+                        onclick="agregarMatriculaTemp('${e.id_grupo}')" class="btn btn-success">
+                            <i class="fas fa-plus"></i><br>
+                            <small>Agregar</small>
                         </button>
                     </div>
                 </div>
@@ -190,10 +204,17 @@ function removeFilter(filter){
 }
 
 function agregarMatriculaTemp(id_grupo){
-    if(g_matriculaTemp.size < 3){
+    
+    if(g_matriculaTemp.size < 3 && g_matriculaTemp.size < ( 3 - g_cursosMat_length)){
         if(!g_matriculaTemp.has(id_grupo)){
             g_matriculaTemp.set(id_grupo,g_mapGrupos.get(parseInt(id_grupo)));
         }
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'No puede agregar mas de 3 cursos!',
+            text: `Usted actualmente tiene matriculado: ${g_cursosMat_length} cursos.`,
+        })
     }
     fillMatriculaTempShow();
 }
@@ -257,8 +278,40 @@ function iniciarSesionModal(){
     }
 }
 
-function inicioSesionCorrecto(data){
-
+function matricularCursos(){
+    $("#matricularcursos_btn").on("click",function(){
+        console.log(g_matriculaTemp);
+        let gruposAll = [];
+        let grupos = [];
+        g_matriculaTemp.forEach((grupo) => {
+            grupos.push(grupo.id_grupo);
+            gruposAll.push(grupo);
+        });
+        let cedula = sessionStorage.getItem("cedula_matriula");
+        let data = {
+            cedula: cedula,
+            grupos: grupos,
+            gruposAll: gruposAll
+        }
+        $("#matricularcursos_btn").attr('disabled', true);
+        $("#matricularcursos_btn").html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Verificando...
+        `)
+        $.ajax({
+            type: "POST",
+            url: "/matricula/cursos/client",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+        }).then((response) => {
+            sessionStorage.setItem("grupos_matricula",JSON.stringify(gruposAll));
+            setTimeout(() => {
+                location.href = "/matricula/confirmacion"
+            }, 2000);
+        }, (error) => {
+            $("#alertadanger").fadeIn('slow');   
+        });
+    });
 }
 
 document.addEventListener("DOMContentLoaded", loaded);

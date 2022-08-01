@@ -16,6 +16,45 @@ function events(event){
     verificar_correo();
     validar_cedula();
     verificarCambioNacionalidad();
+    inicioSesion();
+}
+function inicioSesion(){
+    $('#inicioSesion_verify').on('click', ()=>{
+        let cedula = $("#numerocedula_is").val();
+        let clave = $("#clave_is").val();
+
+        if(cedula != "" && clave != ""){
+            $("#inicioSesion_verify").attr('disabled', true);
+            $("#inicioSesion_verify").html(`
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Verificando...
+            `)
+            $.ajax({
+                type: "GET",
+                url: '/verify/estudiante/is',
+                contentType: "application/json",
+                data: {cedula, clave},
+            }).then((response) => {
+                if(response){
+                    sessionStorage.setItem('cedula_matriula_check', 'true');
+                    sessionStorage.setItem('cedula_matriula', cedula);
+                    $('#iniciarSesion').modal('hide');
+                    setTimeout(() => {
+                        location.href = '/matricula/cliente';
+                    }, 2000);
+                }else{
+                    $("#inicioSesion_verify").attr('disabled', false);
+                    $("#inicioSesion_verify").html(`Iniciar Sesión`);
+                    $("#alertaerror_inicio").fadeIn('slow');
+                    setTimeout(() => {
+                        $("#alertaerror_inicio").fadeOut('slow');
+                    }, 3000);
+                }
+            }, (error) => {
+            
+            });
+        }
+    });
 }
 var g_tipo_nacionalidad = "";
 function verificarCambioNacionalidad(){
@@ -247,9 +286,11 @@ function registrar_usuario_ajax(){
                         if(response.status == 'ok'){
                             // socket.emit(' chat:nuevo_registro',data);
                             $('html').scrollTop(0);
-                            limpiarCampos();
+                            // limpiarCampos();
+                            sessionStorage.setItem('cedula_matriula_check','true');
+                            sessionStorage.setItem('cedula_matriula', cedula);
                             setTimeout(() => {
-                                location.href = "/registrarse/subircomprobante"+"?cedula="+response.data;
+                                location.href = "/registro/do"
                             }, 2000);
                         }else{
                             $('#spinnerWaiter').hide();

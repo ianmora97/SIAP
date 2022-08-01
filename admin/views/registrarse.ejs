@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
-	<title>Registro | SIAP</title>
+	<title>Registro | Matricula</title>
 	<link rel="stylesheet" href="/css/bootstrap.css">
 	<link rel="stylesheet" href="/css/animate.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
@@ -21,8 +21,68 @@
 </head>
 
 <body class="bg-light">
-	<%- include('menu') %>
-		<div class="pt-5" style="margin-top: 75px;">
+	<nav class="navbar navbar-expand-lg navbar-light bg-primary text-white">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="d-flex align-items-center">
+                    <img src="/img/logo-white.png" alt="UNA" loading="lazy" 
+                    class="d-inline mx-2 my-auto" height="30px">
+                    <h4 class="text-white m-0">SIAP</h4>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+                <span span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <h6 class="mb-0"><a class="nav-link text-white" href="/">Inicio</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+	<div class="modal fade" id="iniciosesion" tabindex="-1" aria-labelledby="iniciosesionLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="iniciosesionLabel">Iniciar Sesion</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-danger alert-dismissible my-2 mb-0" role="alert"
+						style="display: none; position: sticky; top: 0; z-index: 999;" id="alertaerror_inicio">
+						<b class="alert-heading">Datos Incorrectos!</b>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="form-group">
+						<label for="numerocedula">Cedula</label>
+						<input type="email" class="form-control" id="numerocedula_is" aria-describedby="emailHelp">
+					</div>
+					<div class="form-group">
+						<label for="clave">Clave</label>
+						<input type="password" class="form-control" id="clave_is">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary" id="inicioSesion_verify">Iniciar Sesion</button>
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="pt-3">
+			<div class="container">
+				<div class="alert alert-warning" role="alert">
+					<b>1. Registro de Datos</b>
+				</div>
+			</div>
 			<div class="container shadow border rounded-3 bg-white ">
 				<div class="alert alert-success alert-dismissible mt-4 mb-0" role="alert" style="display: none;"
 					id="alertasuccess">
@@ -45,16 +105,9 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="py-4 text-center">
-					<h2 class="featurette-heading my-4">Formulario de Registro</h2>
-					<p class="lead px-4">
-						Al completar la información de registro un funcionario de la Universidad Nacional de Costa Rica
-						le habilitará
-						el acceso a la plataforma una vez verificado su elegibilidad para matricular los talleres de la
-						piscina.
-						Tendra que proporsionar una seria de datos y adicionalmente un comprobante que matricula del
-						semestre actual.
-					</p>
+				<div class="mt-2">
+					Ya se encuentra registrado en el sistema, <a href="#" data-toggle="modal" 
+					data-target="#iniciosesion">ingrese aqui.</a>
 				</div>
 				<hr>
 				<form action="" autocomplete="off">

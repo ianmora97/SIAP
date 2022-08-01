@@ -19,8 +19,15 @@
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away-extreme.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"></script>
 </head>
 <body class="bg-light">
+    <script>
+        let check = sessionStorage.getItem('cedula_matriula_check');
+        if(check != 'true'){
+            // location.href = '/registrarse';
+        }
+    </script>
     <div class="modal fade" id="iniciarSesion" data-backdrop="static" data-keyboard="false" 
     tabindex="-1" aria-labelledby="iniciarSesionLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -74,9 +81,9 @@
         </div>
     </nav>
     <main role="main" class="container">
-        <div class="d-flex justify-content-between align-items-center mt-5">
-            <h1 class="font-weight-bold">Sistema de Matricula</h1>
-            <div class="d-flex justify-content-center align-items-center border rounded-3 p-2" id="datos-btn-check" style="width:300px;height: 100px;">
+        <div class="container my-3">
+            <div class="alert alert-warning" role="alert">
+                <b>2. Matricula de Talleres</b>
             </div>
         </div>
         <div class="bg-white rounded-3 shadow-sm p-3 mt-4">
@@ -152,7 +159,7 @@
         <div class="mt-2 user-select-none d-flex justify-content-start" id="filterBadges" style="height:30px;">
 
         </div>
-        <div class="row mx-0" id="gruposCards" style="height: 50vh; overflow-y: auto;">
+        <div class="row mx-0" id="gruposCards" style="height: 60vh; overflow-y: auto;">
 
         </div>
         <div class="bg-white rounded-3 shadow-sm p-3 mt-4 d-flex justify-content-start flex-md-row flex-column" style="min-height: 136px;">
@@ -160,7 +167,7 @@
 
             </div>
             <div class="px-3 order-0 order-md-1 mb-3 mb-md-0">
-                <button type="button" class="w-100 btn btn-secondary">Matricular</button>
+                <button type="button" class="w-100 btn btn-secondary" id="matricularcursos_btn">Matricular</button>
             </div>
         </div>
     </main>
