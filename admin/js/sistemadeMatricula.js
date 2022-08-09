@@ -104,8 +104,6 @@ function loadDB(){
             g_grupos = res.grupos;
             g_grupos = g_grupos.filter(e =>{ 
                 return e.cupo_actual < e.cupo_base;
-            }).filter(e =>{
-                return parseInt(e.nivel) == parseInt(g_cursoLimit);
             })
             getTalleres(g_talleres);
             buildGruposCards(g_grupos);
