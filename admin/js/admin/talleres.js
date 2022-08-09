@@ -771,6 +771,7 @@ function showTalleres(data) {
                 }
             }
         },
+        "lengthMenu": [ 30, 50, 100, 500 ],
         columnDefs: [
             { targets: [6], orderable: false,},
             { targets: '_all', orderable: true }
