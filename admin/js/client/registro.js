@@ -46,6 +46,7 @@ function inicioSesion(){
                     $("#inicioSesion_verify").attr('disabled', false);
                     $("#inicioSesion_verify").html(`Iniciar Sesión`);
                     $("#alertaerror_inicio").fadeIn('slow');
+                    $("#alertaerror_inicio").html('Crendenciales incorrectas');
                     setTimeout(() => {
                         $("#alertaerror_inicio").fadeOut('slow');
                     }, 3000);

@@ -20,6 +20,8 @@ function events(event) {
     onModalOpen();
     checkCustomView();
     // socketNewMatricula();
+    loadJsonGlobal();
+    checkChangesMatricula();
 }
 moment.locale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
@@ -29,6 +31,70 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
   }
 );
+function checkChangesMatricula(){
+    // habilitarMatriculaswitch
+    $('#habilitarMatriculaswitch').on('change',function(){
+        let enable = $(this).prop('checked') + "";
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/matricula/json/updateenable",
+            data: {enable},
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response){
+                alert(`Matricula ${enable === 'true' ? 'habilitada' : 'deshabilitada'}`);
+            }
+        },(error) => {
+            console.log('error')
+        });
+    })
+    // cantidadselectmatriculaest
+    $('#cantidadselectmatriculaest').on('change',function(){
+        let cantidad = $(this).val();
+        let bearer = 'Bearer '+g_token;
+        $.ajax({
+            type: "GET",
+            url: "/admin/matricula/json/updatecantidad",
+            data: {cantidad},
+            contentType: "application/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((response) => {
+            if(response){
+                alert(`Cantidad de matriculas ${cantidad}`);
+            }
+        },(error) => {
+            console.log('error')
+        });
+    })
+}
+function loadJsonGlobal(){
+    let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/admin/matricula/json",
+        contentType: "application/json",
+        headers:{
+            'Authorization':bearer
+        }
+    }).then((response) => {
+        console.log(response.matricula.enable);
+        if(response){
+            let check = response.matricula.enable == 'true';
+            $("#habilitarMatriculaswitch").attr('checked',check);
+            // cantidadselectmatriculaest
+            $('#cantidadselectmatriculaest').val(response.matricula.cantidad);
+        }
+    },(error) => {
+        console.log('error')
+    });
+
+}
 function onModalOpen(){
     $('#gruposCalendario').on('shown.bs.modal', function (event) {
         calendar.updateSize();

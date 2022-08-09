@@ -10,10 +10,30 @@ var g_modalGrupoSelected = null;
 
 var g_map_grupoSelected = new Map();
 
+var g_maxGrupos = 0;
+
 function loaded(event){
+    loadOptions();
     loadDB();
     onModalOpen();
     onMatricular();
+}
+//admin/matricula/json
+function loadOptions(){
+    $.ajax({
+        type: "GET",
+        url: "/admin/matricula/json",
+        contentType: "application/json",
+    }).then((response) => {
+        if(response){
+            if(response.matricula.enable == "true"){
+                location.href = '/';
+            }
+            g_maxGrupos = parseInt(response.matricula.cantidad);
+        }
+    },(error) => {
+        console.log('error')
+    });
 }
 function onMatricular(){
     $('#matricularBotonSelected').on('click', function (event) {
@@ -68,7 +88,7 @@ function onModalOpen(){
 }
 function seleccionarGrupo(){
     if(g_map_grupoSelected.size == 0) $('#listSelected').slideDown();
-    if(g_map_grupoSelected.size < 3){
+    if(g_map_grupoSelected.size < g_maxGrupos){
         let id_grupo = g_modalGrupoSelected;
         let grupo = g_mapGrupos.get(id_grupo);
         if(g_map_grupoSelected.has(parseInt(id_grupo))){
@@ -108,7 +128,7 @@ function seleccionarGrupo(){
     }else{
         Swal.fire({
             icon: 'warning',
-            title: "Solo se pueden seleccionar 3 grupos",
+            title: `Solo se pueden seleccionar ${g_maxGrupos} grupos`,
             timer: 5000,
         });
     }

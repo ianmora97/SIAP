@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" class="h-100">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
+	<title>Registro | Matricula</title>
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/animate.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+	<link rel="stylesheet" href="/css/datatables.min.css">
+	<script src="/js/jq-bs-bundle.js"></script>
+</head>
+
+<body class="bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light bg-primary text-white">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="d-flex align-items-center">
+                    <img src="/img/logo-white.png" alt="UNA" loading="lazy" 
+                    class="d-inline mx-2 my-auto" height="30px">
+                    <h4 class="text-white m-0">SIAP</h4>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+                <span span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <h6 class="mb-0"><a class="nav-link text-white" href="/">Inicio</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="py-3" style="min-height: 400px;">
+        <div class="container shadow border rounded-3 bg-white ">
+            <div class="alert alert-warning my-4" role="alert">
+                <strong>La Matricula esta deshabilitada en este momento.</strong>
+            </div>
+        </div>
+    </div>
+    <%- include('footer') %>
+</body>
+</html>

@@ -3,6 +3,7 @@ const request = require('request-promise');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const router = express.Router();
+const path = require('path');
 
 const fetch = require("cross-fetch");
 
@@ -38,10 +39,35 @@ router.get('/admin/homepage/save', (req, res) => {
 });
 
 router.get('/registrarse', (req, res) => {
-    let tab = 'registro';
-    res.render('registrarse',{tab});
+    fs.readFile(path.join(__dirname,"../assets/global.json"), (err, data) => {
+        if (err) {
+            res.redirect('/');
+        }else{
+            let json = JSON.parse(data);
+            let tab = 'registro';
+            if(json.matricula.enable == 'true'){
+                res.render('registrarse',{tab});
+            }else{
+                res.render('registrarseNo',{tab});
+            }
+        }
+    })
+    
 });
 
+router.get('/api/estudiante/:cedula', (req, res) => {
+    let cedula = req.params.cedula;
+    db.query("SELECT nivel from vta_admin_estudiante where cedula = ?", 
+    [cedula],(err2,rows2,fields2)=>{
+        if(!err2){
+            if(rows2.length > 0){
+                res.send(rows2);
+            }
+        }else{
+            res.status(501).send({err:'NotFound'});
+        }
+    });
+});
 router.get('/api/checkEst/:cedula', (req, res) => {
     let cedula = req.params.cedula;
     db.query("SELECT * from vta_cliente_estudiante where cedula = ?", 

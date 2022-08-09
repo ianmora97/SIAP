@@ -118,6 +118,36 @@ router.get('/admin/inbox/enviarCorreo',ensureToken,(req,res)=>{
         }
     });
 });
+router.get('/admin/matricula/json', (req,res)=>{
+    fs.readFile(path.join(__dirname,"../../assets/global.json"), (err, data) => {
+        if (err) res.send(false);
+        res.send(JSON.parse(data));
+    })
+});
+router.get('/admin/matricula/json/updateenable',ensureToken, (req,res)=>{
+    fs.readFile(path.join(__dirname,"../../assets/global.json"), (err, data) => {
+        if (err) res.send(false);
+        let json = JSON.parse(data);
+        json.matricula.enable = req.query.enable;
+        fs.writeFile(path.join(__dirname,"../../assets/global.json"), JSON.stringify(json), (err) => {
+            if (err) res.send(false);
+            res.send(true);
+        } )
+    })
+});
+
+router.get('/admin/matricula/json/updatecantidad',ensureToken, (req,res)=>{
+    fs.readFile(path.join(__dirname,"../../assets/global.json"), (err, data) => {
+        if (err) res.send(false);
+        let json = JSON.parse(data);
+        json.matricula.cantidad = req.query.cantidad;
+        fs.writeFile(path.join(__dirname,"../../assets/global.json"), JSON.stringify(json), (err) => {
+            if (err) res.send(false);
+            res.send(true);
+        } )
+    })
+});
+
 router.get('/admin/matricula/qr/check',(req,res)=>{
     con.query("SELECT * FROM vta_matriculados_por_grupo WHERE cedula = ?",
     [req.query.cedula],

@@ -4,8 +4,10 @@ var g_grupos = new Array();
 var g_mapTalleres = new Map();
 var g_mapGrupos = new Map();
 var g_matriculaTemp = new Map();
-
+var g_maxGrupos = 0;
+var g_cursoLimit = "";
 function loaded(event){
+    loadOptions();
     checkInputSesionEst();
     loadDB();
     matricularCursos();
@@ -18,7 +20,22 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
   }
 );
-
+function loadOptions(){
+    $.ajax({
+        type: "GET",
+        url: "/admin/matricula/json",
+        contentType: "application/json",
+    }).then((response) => {
+        if(response){
+            if(response.matricula.enable == "false"){
+                location.href = '/';
+            }
+            g_maxGrupos = parseInt(response.matricula.cantidad);
+        }
+    },(error) => {
+        console.log('error')
+    });
+}
 var g_estExists = false;
 function findEstudent(cedula){
     return new Promise((resolve,reject)=>{
@@ -74,16 +91,27 @@ function loadDB(){
     });
     $.ajax({
         type: "GET",
-        url: "/api/talleres",
+        url: "/api/estudiante/"+cedula,
         contentType: "application/json"
     }).then((res) => {
-        g_talleres = res.talleres;
-        g_grupos = res.grupos;
-        g_grupos = g_grupos.filter(e =>{ 
-            return e.cupo_actual < e.cupo_base;
-        })
-        getTalleres(g_talleres);
-        buildGruposCards(g_grupos);
+        g_cursoLimit = res[0].nivel;
+        $.ajax({
+            type: "GET",
+            url: "/api/talleres",
+            contentType: "application/json"
+        }).then((res) => {
+            g_talleres = res.talleres;
+            g_grupos = res.grupos;
+            g_grupos = g_grupos.filter(e =>{ 
+                return e.cupo_actual < e.cupo_base;
+            }).filter(e =>{
+                return parseInt(e.nivel) == parseInt(g_cursoLimit);
+            })
+            getTalleres(g_talleres);
+            buildGruposCards(g_grupos);
+        },(error) => {
+            console.log(error);
+        });
     },(error) => {
         console.log(error);
     });
@@ -205,14 +233,14 @@ function removeFilter(filter){
 
 function agregarMatriculaTemp(id_grupo){
     
-    if(g_matriculaTemp.size < 3 && g_matriculaTemp.size < ( 3 - g_cursosMat_length)){
+    if(g_matriculaTemp.size < g_maxGrupos && g_matriculaTemp.size < ( g_maxGrupos - g_cursosMat_length)){
         if(!g_matriculaTemp.has(id_grupo)){
             g_matriculaTemp.set(id_grupo,g_mapGrupos.get(parseInt(id_grupo)));
         }
     }else{
         Swal.fire({
             icon: 'error',
-            title: 'No puede agregar mas de 3 cursos!',
+            title: `No puede agregar mas de ${g_maxGrupos} cursos!`,
             text: `Usted actualmente tiene matriculado: ${g_cursosMat_length} cursos.`,
         })
     }
