@@ -8,6 +8,7 @@ const router = express.Router();
 var email = require('../../email');
 const {logSistema, DDL, TABLE} = require('../../systemLogs');
 const con = require('../../database');
+const moment = require('moment');
 
 // todo: login
 // ? --------- login ---------
@@ -215,6 +216,60 @@ router.get('/teach/enviarAsistencia',ensureToken,(req,res)=>{
     (err,rows,fields)=>{
         if(!err){
             console.log(rows)
+            res.send(rows);
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+
+// ? ---------------------- Asistencia de Profesor ----------------------
+
+router.get('/api/teach/enviarasistenciateach',ensureToken,(req,res)=>{ 
+    con.query("call prc_insertar_profesor_asistencia(?,?,?,?)",
+    ["Presente",req.query.fecha,parseInt(req.query.id),0],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(true);
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+
+router.get('/api/teach/asistencia/byteach',ensureToken,(req,res)=>{ 
+    con.query("SELECT * FROM vta_profesor_asistencias where cedula = ?",
+    [req.query.cedula],
+    (err,rows,fields)=>{
+        if(!err){
+            if(rows.length != 0){
+                let flag = false;
+                for (let i = 0; i < rows.length; i++) {
+                    const e = rows[i];
+                    if(e.fecha == moment().format('DD/MM/YYYY')){
+                        flag = true;
+                    }
+                }
+                if(flag){
+                    res.send("true");
+                }else{
+                    res.send("false");
+                }
+            }else{
+                res.send("false");
+            }
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+router.get('/api/teach/asistencia/allteach',ensureToken,(req,res)=>{ 
+    con.query("SELECT * FROM vta_profesor_asistencias",
+    (err,rows,fields)=>{
+        if(!err){
             res.send(rows);
         }else{
             console.log(err)

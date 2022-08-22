@@ -104,13 +104,15 @@ router.post('/matricula/cursos/client',(req,res)=>{
                                 <body style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
                                     <div style="background-color:rgb(255,255,255);color:rgb(0,0,0);">
                                         <div style="padding: 5px 10px; width: 100%; background-color: rgb(184, 22, 22);">
+                                            <img src="https://siapdpe.com/img/logo-vive-promocion-transparency.png" width="75px" style="background-color: white; margin:0; padding:0;">
                                             <h1 style="color:#ffffff">Sistema de Administración de la Piscina | Departamento de Promocion Estudiantil</h1>
                                         </div>
-                                        <img src="https://siapdpe.com/img/logo-vive-promocion-transparency.png" style="background-color: white; margin:0; padding:0;">
+
                                         <h1>${estudiante.nombre +" "+ estudiante.apellido}</h1>
                                         <p>Usted ha matriculado los siguientes cursos:</p><br>
                                         ${textCursos}
-                                        <p>Debe presentar el codigo QR para poder ingresar a la piscina:</p>
+                                        <p>Debe presentar el codigo QR para poder ingresar a la piscina.</p>
+                                        <p style="color:red;"><b>Por favor no contestar este correo.</b> Las solicitudes no se atienden por este correo. De tener una consulta hacerlo al correo <a href="mailto:piscinadpe@una.cr">piscinadpe@una.cr</a></p>
                                     </div>
                                 </body>
                             `,

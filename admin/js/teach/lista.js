@@ -9,8 +9,56 @@ function events(e){
 }
 
 function loadFromDB(){
-    console.log('loadFromDB')
+    let cedulaprofesor = $('#id_cedula').html();
+    let idProfesor = $('#id_profesor').html();
+    let fecha = moment().format('DD/MM/YYYY');
     let bearer = 'Bearer '+g_token;
+    $.ajax({
+        type: "GET",
+        url: "/api/teach/asistencia/byteach",
+        data: {cedula: cedulaprofesor},
+        contentType: "application/json",
+        headers: {
+            'Authorization': bearer
+        },
+    }).then((res) => {
+        if(res == "false"){
+            Swal.fire({
+                title: `${cedulaprofesor}`,
+                text: "Registrar Asistencia de hoy",
+                icon: 'info',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonColor: '#4659E4',
+                confirmButtonText: 'Enviar Asistencia!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/api/teach/enviarasistenciateach",
+                        data: {id: parseInt(idProfesor), fecha: fecha},
+                        contentType: "application/json",
+                        headers: {
+                            'Authorization': bearer
+                        },
+                    }).then((response) => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Asistencia Enviada',
+                        })
+                    }, (error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'error',
+                        })
+                    });
+                }
+            });
+        }
+    }, (error) => {
+        
+    });
     $.ajax({
         type: "GET",
         url: "/api/teach/inicio",
