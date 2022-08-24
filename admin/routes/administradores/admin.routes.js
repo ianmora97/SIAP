@@ -116,6 +116,51 @@ router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
     });
 });
 
+router.get('/admin/administrador/getHorarios', ensureToken,(req,res)=>{
+    con.query("SELECT * FROM vta_horario_asistencia", (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }
+    });
+});
+router.get('/admin/asistencia/horario/update', ensureToken,(req,res)=>{
+    con.query("call prc_actualizar_horario_asistencia(?,?,?)", 
+    [req.query.fecha, req.query.tipo, parseInt(req.query.id)],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(true);
+        }else{
+            console.log(err);
+            res.status(501).send(false);
+        }
+    });
+});
+router.get('/admin/asistencia/horario/eliminar', ensureToken,(req,res)=>{
+    con.query("call prc_eliminar_horario_asistencia(?)", 
+    [parseInt(req.query.id)],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(true);
+        }else{
+            console.log(err);
+            res.status(501).send(false);
+        }
+    });
+});
+router.get('/admin/asistencia/horario/add', ensureToken,(req,res)=>{
+    con.query("call prc_insertar_horario_asistencia(?,?,?)", 
+    [req.query.cedula, req.query.fecha, req.query.tipo],
+    (err,rows,fields)=>{
+        if(!err){
+            let id = rows[0][0].id;
+            console.log(id);
+            res.send({status:true, id:id});
+        }else{
+            res.status(501).send(false);
+        }
+    });
+});
+
 router.get('/admin/administrador/getTables', ensureToken,(req,res)=>{
     con.query("SELECT * FROM information_schema.tables WHERE table_schema = 'siap'",
         (err,rows,fields)=>{

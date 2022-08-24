@@ -1,6 +1,15 @@
 var g_mapAdmins = new Map();
 var estudiantesXLS = [];
 
+moment.lang('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+  }
+);
+
 function loaded(event) {
   events(event);
 }
@@ -12,6 +21,7 @@ function events(event) {
   llenarDatos();
   verificar_correo();
   verificar_clave();
+  bringHorariosAsistencia();
 }
 
 $(function () {
@@ -316,11 +326,13 @@ function searchonfind() {
 }
 
 function showAdminList(data) {
+	
   $("#lista_administradores").html();
   data.forEach((e) => {
     g_mapAdmins.set(e.cedula, e);
     showRowAdminList(e);
   });
+  dropdownAdminHorario();
   $("#table").DataTable({
     language: {
       decimal: "",
@@ -907,7 +919,358 @@ function handleFileSelect(evt) {
   var xl2json = new ExcelToJSON();
   xl2json.parseExcel(files[0]);
 }
-document
-  .getElementById("upload")
-  .addEventListener("change", handleFileSelect, false);
+var g_profesores = new Map();
+var g_horariosMap = new Map();
+var g_horarios = new Array();
+
+function bringHorariosAsistencia(){
+    let bearer = "Bearer " + g_token;
+    $.ajax({
+		type: "GET",
+		url: "/admin/profesores/getProfesores",
+		contentType: "appication/json",
+		headers: {
+			Authorization: bearer,
+		},
+    }).then((response) => {
+        showProfesores(response);
+	},(error) => {
+
+	});
+    $.ajax({
+		type: "GET",
+		url: "/admin/administrador/getHorarios",
+		contentType: "appication/json",
+		headers: {
+			Authorization: bearer,
+		},
+    }).then((response) => {
+        afterbuildCalendarHorarios(response);
+	},(error) => {
+
+	});
+	
+}
+function showProfesores(data){
+	data.forEach((e) => {
+		g_profesores.set(e.cedula,e);
+		$("#usuariodropdownselecthorario_piscina").append(`
+			<div class="p-2 text-white bg-primary font-weight-bold rounded mb-2 fc-event" 
+			style="cursor:grab"
+			data-value="${e.cedula}"
+			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Piscina" }'
+			data-description="Piscina"
+			data-color="#4659e4"
+			>${e.nombre} ${e.apellido}</div>
+		`);
+		$("#usuariodropdownselecthorario_oficina").append(`
+			<div class="p-2 text-white bg-fresh1 font-weight-bold rounded mb-2 fc-event" 
+			style="cursor:grab"
+			data-value="${e.cedula}"
+			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Oficina" }'
+			data-description="Oficina"
+			data-color="#9fccff"
+			>${e.nombre} ${e.apellido}</div>
+		`);
+	});
+}
+function dropdownAdminHorario(){
+	g_mapAdmins.forEach((e) => {
+		$("#usuariodropdownselecthorario_piscina").append(`
+			<div class="p-2 text-white bg-primary font-weight-bold rounded mb-2 fc-event" 
+			style="cursor:grab"
+			data-value="${e.cedula}"
+			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Piscina" }'
+			data-description="Piscina"
+			data-color="#4659e4"
+			>${e.nombre} ${e.apellido}</div>
+		`);
+		$("#usuariodropdownselecthorario_oficina").append(`
+			<div class="p-2 text-white bg-fresh1 font-weight-bold rounded mb-2 fc-event" 
+			style="cursor:grab"
+			data-value="${e.cedula}"
+			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Oficina" }'
+			data-description="Oficina"
+			data-color="#9fccff"
+			>${e.nombre} ${e.apellido}</div>
+		`);
+		
+	});
+}
+function afterbuildCalendarHorarios(data){
+	var arr = new Array();
+	data.forEach((e) => {
+		g_horariosMap.set(e.id,e);
+		arr.push({
+			id: e.id,
+			title: e.nombre,
+			startRecur: moment().startOf('year').format('DD-MM-YYYY'),
+			endRecur: moment().endOf('year').format('DD-MM-YYYY'),
+			daysOfWeek: [parseInt(moment(e.fecha,"dddd, hh:mm a").format("d"))],
+			startTime: moment(e.fecha,"dddd, hh:mm a").format("HH:mm"),
+			endTime: moment(e.fecha,"dddd, hh:mm a").add(1, 'hours').format("HH:mm"),
+			duration: "01:00",
+			description: e.tipo,
+			borderColor: e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
+			backgroundColor: e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
+		});
+	});
+	g_horarios = arr;
+	buildCalendarHorarios(arr);
+}
+
+var calendar;
+function buildCalendarHorarios(data){
+	var calendarEl = document.getElementById('calendarHorarios');
+
+	var Draggable = FullCalendar.Draggable;
+	var containerEl = document.getElementById('usuariodropdownselecthorario_piscina');
+	var containerEl2 = document.getElementById('usuariodropdownselecthorario_oficina');
+	new Draggable(containerEl, {
+		itemSelector: '.fc-event',
+		eventData: function(eventEl) {
+			return {
+				title: eventEl.innerText,
+				duration: "01:00",
+				description: eventEl.getAttribute("data-description"),
+				backgroundColor: eventEl.getAttribute("data-color"),
+				borderColor: eventEl.getAttribute("data-color"),
+				cedula: eventEl.getAttribute("data-value"),
+			};
+		}
+	});
+	new Draggable(containerEl2, {
+		itemSelector: '.fc-event',
+		eventData: function(eventEl) {
+			return {
+				title: eventEl.innerText,
+				duration: "01:00",
+				description: eventEl.getAttribute("data-description"),
+				backgroundColor: eventEl.getAttribute("data-color"),
+				borderColor: eventEl.getAttribute("data-color"),
+				cedula: eventEl.getAttribute("data-value"),
+			};
+		}
+	});
+
+    calendar = new FullCalendar.Calendar(calendarEl, {
+		editable: true,
+		droppable: true,
+        timeZone: 'local',
+        initialView: 'timeGridWeek',
+		firstDay: 1,
+		displayEventTime: false,
+		locale: 'es',
+		nowIndicator: true,
+		allDaySlot: false,
+		businessHours: [
+			{
+				daysOfWeek: [1, 2, 3, 4, 5, 6],
+				startTime: '06:00',
+				endTime: '22:00',
+			},
+		],
+		dayHeaderFormat:{
+			weekday: 'long'
+		},
+		slotMinTime: "06:00:00",
+		slotMaxTime: "22:00:00",
+		
+		slotLabelFormat: {
+			hour: 'numeric',
+			minute: '2-digit',
+			omitZeroMinute: true,
+			hour12: true
+		},
+
+		hiddenDays: [ 0 ],
+        themeSystem: 'bootstrap',
+        headerToolbar: {
+            start: 'prev,next today',
+            center: 'title',
+            end: 'timeGridWeek,listWeek,timeGridDay'
+        },
+		titleFormat:{
+			month: 'long',
+			day: 'numeric'
+		},
+        events: data,
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Dia',
+            list:     'Lista'
+        },
+		eventDrop: function(info) {
+			var fecha = moment(info.event.start).format("dddd, hh:mm a");
+			var id = info.event._def.publicId;
+			let bearer = "Bearer " + g_token;
+			$.ajax({
+				type: "GET",
+				url: "/admin/asistencia/horario/update",
+				data: {
+					fecha: fecha,
+					id: id,
+					tipo: info.event.extendedProps.description,
+				},
+				contentType: "appication/json",
+				headers: {
+					Authorization: bearer,
+				},
+			}).then((response) => {
+				if(response == true){
+					const Toast = Swal.mixin({
+						toast: true,
+						position: 'top-end',
+						showConfirmButton: false,
+						timer: 2000,
+						timerProgressBar: true,
+						didOpen: (toast) => {
+						  toast.addEventListener('mouseenter', Swal.stopTimer)
+						  toast.addEventListener('mouseleave', Swal.resumeTimer)
+						}
+					});
+					Toast.fire({
+						icon: 'success',
+						title: 'Horario actualizado'
+					});
+				}
+			},(error) => {
+
+			});
+		},
+		eventReceive: function(info) {
+			var fecha = moment(info.event.start).format("dddd, hh:mm a");
+			let bearer = "Bearer " + g_token;
+			$.ajax({
+				type: "GET",
+				url: "/admin/asistencia/horario/add",
+				data: {
+					fecha: fecha,
+					cedula: info.event.extendedProps.cedula,
+					tipo: info.event.extendedProps.description,
+				},
+				contentType: "appication/json",
+				headers: {
+					Authorization: bearer,
+				},
+			}).then((response) => {
+				if(response.status == true){
+					info.event._def.publicId = response.id;
+					console.log(info.event._def);
+					const Toast = Swal.mixin({
+						toast: true,
+						position: 'top-end',
+						showConfirmButton: false,
+						timer: 2000,
+						timerProgressBar: true,
+						didOpen: (toast) => {
+							toast.addEventListener('mouseenter', Swal.stopTimer)
+							toast.addEventListener('mouseleave', Swal.resumeTimer)
+						}
+					});
+					Toast.fire({
+						icon: 'success',
+						title: 'Horario asignado'
+					});
+				}
+			},(error) => {
+
+			});
+		
+		
+		},
+		eventContent: function(ele, createE) {
+			let en = ele.event._def;
+			var html = `<b>${en.title}</b><br><small>${en.extendedProps.description}</small>`;
+			return {html: html};
+		},
+        eventClick: function(info) {
+            Swal.fire({
+				title: `${info.event.title}`,
+				showDenyButton: true,
+				showCancelButton: false,
+				confirmButtonText: 'Cancelar',
+				denyButtonText: `Eliminar`,
+				confirmButtonColor: '#3085d6',
+  				cancelButtonColor: '#d33',
+			}).then((result) => {
+				if (result.isDenied) {
+					info.event.remove(); // ! EVENTO SE ELIMINA
+					let bearer = "Bearer " + g_token;
+					$.ajax({
+						type: "GET",
+						url: "/admin/asistencia/horario/eliminar",
+						data: {id: info.event._def.publicId},
+						contentType: "appication/json",
+						headers: {
+							Authorization: bearer,
+						},
+					}).then((response) => {
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 2000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+							  toast.addEventListener('mouseenter', Swal.stopTimer)
+							  toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+						});
+						Toast.fire({
+							icon: 'success',
+							title: 'Eliminado'
+						});
+					},(error) => {
+
+					});
+				}else if(result.isConfirmed){
+					let horario = g_horariosMap.get(parseInt(info.event._def.publicId));
+					horario.tipo = result.value;
+
+					let bearer = "Bearer " + g_token;
+					$.ajax({
+						type: "GET",
+						url: "/admin/asistencia/horario/update",
+						data: horario,
+						contentType: "appication/json",
+						headers: {
+							Authorization: bearer,
+						},
+					}).then((response) => {
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 2000,
+							timerProgressBar: true,
+							didOpen: (toast) => {
+							  toast.addEventListener('mouseenter', Swal.stopTimer)
+							  toast.addEventListener('mouseleave', Swal.resumeTimer)
+							}
+						});
+						Toast.fire({
+							icon: 'success',
+							title: `${info.event.title} Actualizado`
+						});
+						location.reload();
+					},(error) => {
+
+					});
+				}
+			})
+		}
+      });
+      calendar.render();
+}
+document.addEventListener("DOMContentLoaded", function (event) {
+	$("#nav-horariosasisencia-tab").on("click", (event)=>{
+		setTimeout(() => {
+			$(".fc-timeGridWeek-button").trigger("click");
+			$(".fc-timeGridWeek-button").click();
+		}, 1000);
+	});
+});
 document.addEventListener("DOMContentLoaded", loaded);

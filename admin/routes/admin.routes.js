@@ -405,6 +405,36 @@ router.get('/admin/pagos',(req,res)=>{
         res.render('login');
     }
 });
+
+router.get('/admin/asistencia/profesores',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-asistencia-teach';
+            res.render('admin/reportes/asistenciaprofe', {usuario,s, token});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
+    }
+});
+
+router.get('/admin/asistencia/oficina',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'reportes-asistencia-admin';
+            res.render('admin/reportes/asistenciaoficina', {usuario,s, token});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
+    }
+});
 // ! ----------------------------------- inside routes ------------------------------------
 // ? ----------------------------------- nav routes ------------------------------------
 // TODO: rutas del navbar del panel administrativo

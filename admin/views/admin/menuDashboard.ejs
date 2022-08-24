@@ -50,28 +50,42 @@
         <a href="/admin/comprobacion" style="animation-delay:500ms" class="menu-items-var list-group-item   <%if(s == "comprobacion"){%> menu-active <%}%>" title="Comprobacion de datos">
             <i class="fas fa-user-check mr-2"></i>Comprobación
         </a>
-        <a href="/admin/reportes/asistencia" style="animation-delay:500ms" class="menu-items-var list-group-item   <%if(s == "reportes-asistencia"){%> menu-active <%}%>" title="Reportes de Asistencia">
-            <i class="fas fa-clipboard-list mr-2"></i>Asistencia
+        <a style="animation-delay:500ms" 
+            data-toggle="collapse" href="#collapseAsistencias" role="button" aria-expanded="false" aria-controls="collapseAsistencias"
+            class="menu-items-var list-group-item" 
+            title="Reportes de Asistencia">
+            <i class="fas fa-clipboard-list mr-2"></i>Asistencia <i class="fas fa-angle-down float-right"></i>
         </a>
-        <a style="animation-delay:600ms" class="menu-items-var list-group-item pl-2  "
-        data-toggle="collapse" href="#collapseReportes" role="button" aria-expanded="false" aria-controls="collapseReportes">
+        <div class="collapse <%if(s == 'reportes-asistencia' || s == 'reportes-asistencia-teach' || s == 'reportes-asistencia-admin'){%> show <%}%>" id="collapseAsistencias" data-parent="#accordion-menu-lateral">
+            <a href="/admin/reportes/asistencia" class="menu-items-var in-menu list-group-item <%if(s == "reportes-asistencia"){%> menu-active <%}%>" title="Asistencia de Estudiantes">
+                <i class="fas fa-clipboard-list mr-2"></i>Estudiantes
+            </a>
+            <a href="/admin/asistencia/profesores" class="menu-items-var in-menu list-group-item <%if(s == "reportes-asistencia-teach"){%> menu-active <%}%>" title="Asistencia de Instructures">
+                <i class="fas fa-clipboard-list mr-2"></i>Profesores
+            </a>
+            <a href="/admin/asistencia/oficina" class="menu-items-var in-menu list-group-item <%if(s == "reportes-asistencia-admin"){%> menu-active <%}%>" title="Asistencia de Oficina">
+                <i class="fas fa-clipboard-list mr-2"></i>Oficina
+            </a>
+        </div>
+        <a style="animation-delay:600ms" class="menu-items-var list-group-item pl-2" data-toggle="collapse" href="#collapseReportes" 
+            role="button" aria-expanded="false" aria-controls="collapseReportes">
             <i class="fas fa-clipboard-list mr-2"></i>Reportes <i class="fas fa-angle-down float-right"></i>
         </a>
-            <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-conducta' || s == 'reportes-uso'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
+        <div class="collapse <%if(s == 'reportes-sistema' || s == 'reportes-morosos' || s == 'reportes-conducta' || s == 'reportes-uso'){%> show <%}%>" id="collapseReportes" data-parent="#accordion-menu-lateral">
 
-                <a href="/admin/reportes/conducta" class="menu-items-var in-menu list-group-item <%if(s == "reportes-conducta"){%> menu-active <%}%>" title="Reportes de conducta">
-                    <i class="fas fa-clipboard-list mr-2"></i>Conducta
-                </a>
-                <a href="/admin/reportes/morosos" class="menu-items-var in-menu list-group-item <%if(s == "reportes-morosos"){%> menu-active <%}%>" title="Reportes de Morosidad">
-                    <i class="fas fa-clipboard-list mr-2"></i>Morosos
-                </a>
-                <a href="/admin/reportes/uso" class="menu-items-var in-menu list-group-item <%if(s == "reportes-uso"){%> menu-active <%}%>" title="Reportes de uso de instalacion">
-                    <i class="fas fa-clipboard-list mr-2"></i>Instalaciones
-                </a>
-                <a href="/admin/reportes/sistema" class="menu-items-var in-menu list-group-item <%if(s == "reportes-sistema"){%> menu-active <%}%>" title="Reportes del Sistema">
-                    <i class="fas fa-clipboard-list mr-2"></i>Sistema
-                </a>
-            </div>
+            <a href="/admin/reportes/conducta" class="menu-items-var in-menu list-group-item <%if(s == "reportes-conducta"){%> menu-active <%}%>" title="Reportes de conducta">
+                <i class="fas fa-clipboard-list mr-2"></i>Conducta
+            </a>
+            <a href="/admin/reportes/morosos" class="menu-items-var in-menu list-group-item <%if(s == "reportes-morosos"){%> menu-active <%}%>" title="Reportes de Morosidad">
+                <i class="fas fa-clipboard-list mr-2"></i>Morosos
+            </a>
+            <a href="/admin/reportes/uso" class="menu-items-var in-menu list-group-item <%if(s == "reportes-uso"){%> menu-active <%}%>" title="Reportes de uso de instalacion">
+                <i class="fas fa-clipboard-list mr-2"></i>Instalaciones
+            </a>
+            <a href="/admin/reportes/sistema" class="menu-items-var in-menu list-group-item <%if(s == "reportes-sistema"){%> menu-active <%}%>" title="Reportes del Sistema">
+                <i class="fas fa-clipboard-list mr-2"></i>Sistema
+            </a>
+        </div>
         <a href="/admin/casilleros" style="animation-delay:700ms" class="menu-items-var list-group-item   <%if(s == "casilleros"){%> menu-active <%}%>" role="button" title="Administracion de Casilleros">
             <i class="fas fa-lock"></i>&nbsp; Casilleros
         </a>

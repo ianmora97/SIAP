@@ -142,6 +142,11 @@
                                     Homepage
                                 </span>
                             </a>
+                            <a class="nav-item-line-cus" id="nav-horariosasisencia-tab" data-toggle="tab" href="#nav-horariosasisencia" role="tab" aria-controls="nav-horariosasisencia" aria-selected="false">
+                                <span>
+                                    Horarios
+                                </span>
+                            </a>
                             <%}%>
                         <% if(usuario.rol == 5){ %>
                             <a class="nav-item-line-cus" id="nav-querys-tab" data-toggle="tab" href="#nav-querys" role="tab" aria-controls="nav-querys" aria-selected="false">
@@ -257,49 +262,41 @@
                         </div>
                         
                         <% if(usuario.rol >= 4){ %>
-                            <div class="tab-pane fade" id="nav-subirarchivos" role="tabpanel" aria-labelledby="nav-subirarchivos-tab">
+                            <div class="tab-pane fade" id="nav-horariosasisencia" role="tabpanel" aria-labelledby="nav-horariosasisencia-tab">
                                 <div class="bg-white border-0 rounded-3 p-4">
-                                    <div class="row ">
-                                        <div class="col-md-6 ">
-                                            <h1 class="font-weight-bolder display-5">Carga de Archivos</h1>
-                                            <p class="text-muted">Los estudiantes que se encuentren en un Excel "MACRO" 
-                                                pueden ser agregados a la base de datos de manera automática.
-                                            </p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h1 class="font-weight-bolder display-5">Horarios de Asistencia</h1>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="bg-white border-0 rounded-3 mt-4 animate__animated animate__fadeInUp">
                                     <div class="row px-3 py-2 mx-0" >
-                                        <div class="col-md-6" style="height: 65vh; overflow-y: auto;">
-                                            <div class="form-group my-2">
-                                                <h5 class="font-weight-bold mb-3">Agregar Estudiantes desde un Archivo Excel</h5>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text bg-success" id="inputGroupFileAddon01">
-                                                            <i class="far fa-file-excel text-white"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="upload" 
-                                                        name="files[]" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                        <label class="custom-file-label" for="upload">Subir Excel</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mt-3" id="resultTableScript1"></div>
+                                        <div class="col-md-2" style="height: 65vh; overflow-y: auto;">
+                                            <h4 class="mt-3 font-weight-bold"><i class="fas fa-users text-primary"></i> Usuarios:</h4>
+                                            <hr class="my-3">
+                                            <p class="mb-1 font-weight-bold">Piscina:</p>
+                                            <div id="usuariodropdownselecthorario_piscina"></div>
+                                            <hr class="my-4">
+                                            <p class="mb-1 font-weight-bold">Oficina:</p>
+                                            <div id="usuariodropdownselecthorario_oficina"></div>
+
+                                        </div>
+                                        <div class="col border-left pt-3" id="calendarHorarios">
                                             
                                         </div>
-                                        <div class="col-md-6 border-left">
-                                            <div class=" bg-dark w-100 rounded-3 shadow p-3 text-white " style="height: 62vh;" 
-                                            id="feedbackAfterUpload">
-                                                
-                                            </div>
-                                        </div>
+                                        <style>
+                                            .fc .fc-timegrid-col.fc-day-today{
+                                                background-color: #03ca8080 !important;
+                                            }
+                                            .fc-timegrid-event .fc-event-main{
+                                                overflow: auto;
+                                            }
+                                        </style>
                                     </div>
                                 </div>
                             </div>
                         <div class="tab-pane fade" id="nav-textoInicio" role="tabpanel" aria-labelledby="nav-textoInicio-tab">
-
                             <div class="bg-white border-0 rounded-3 mt-4 animate__animated animate__fadeInUp">
                                 <div class="row px-3 py-2 mx-0" >
                                     <div class="col-md-5" style="height: 85vh; overflow-y: auto;">

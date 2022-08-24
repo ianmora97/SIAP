@@ -398,7 +398,7 @@ function fillCalendar(grupos) {
 
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        timeZone: 'UTC',
+        timeZone: 'local',
         initialView: 'listWeek',
         lazyFetching: true,
         themeSystem: 'bootstrap',
