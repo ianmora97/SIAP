@@ -9,5 +9,7 @@ admin/.env
 admin/img/.DS_Store
 
 admin/public/uploads/
+# CONFIG FILES JSON
+admin/assets/*.json
 
 admin/logs/*.txt

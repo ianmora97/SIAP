@@ -140,6 +140,18 @@ router.get('/admin/estudiante/listaEstudiantes',(req,res)=>{
         }
     });
 });
+router.get('/admin/estudiante/cambioCedula',(req,res)=>{
+    con.query('call prc_actualizar_cedula_usuario(?,?)',
+    [req.query.cedulaactual, req.query.cedula],
+    (err,rows,fields)=>{
+        if(!err){
+            res.redirect('/admin/estudiantes/getEstudiante/'+req.query.cedula);
+        }else{
+            console.log(err)
+            res.send(err);
+        }
+    });
+});
 
 
 router.get('/admin/estudiante/getTalleres',ensureToken,(req,res)=>{

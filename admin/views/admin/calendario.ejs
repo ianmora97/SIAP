@@ -39,14 +39,15 @@
                         padding: 15px;
                         margin: 0%;
                     }
-                    .fc td, .fc th {
-                        border-style: none !important;
-                    }
                     .fc-toolbar-title{
                         font-size: 1rem !important;
                     }
                     .fc-col-header-cell {
                         padding: 20px 0 !important;
+                    }
+                    .fc-toolbar-title {
+                        min-width: 260px !important;
+                        display: block !important;
                     }
                 </style>
             </div>
@@ -98,12 +99,8 @@
         var g_horariosMap = new Map();
         function afterbuildCalendarHorarios(data){
             var arr = new Array();
+            
             data.forEach((e) => {
-                let exists = g_asistenciaall.find((element) => {
-                    return moment(element.fecha, "DD/MM/YYYY, hh:mm a").format("DD/MM/YYYY, hh:mm a") == moment(e.fecha,"dddd, hh:mm a").format("DD/MM/YYYY, hh:mm a") && 
-                    element.cedula == e.cedula;
-                });
-                console.log(exists);
                 g_horariosMap.set(e.id,e);
                 arr.push({
                     id: e.id,
@@ -116,8 +113,8 @@
                     endTime: moment(e.fecha,"dddd, hh:mm a").add(1, 'hours').format("HH:mm"),
                     duration: "01:00",
                     description: e.tipo,
-                    backgroundColor: exists ? "#02CA80" : e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
-                    borderColor: exists ? "#02CA80" : e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
+                    backgroundColor: e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
+                    borderColor: e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
                 });
             });
             g_horarios = arr;
@@ -162,7 +159,7 @@
                 themeSystem: 'bootstrap',
                 headerToolbar: {
                     start: 'title',
-                    center: '',
+                    center: 'prev,today,next',
                     end: 'timeGridWeek'
                 },
                 titleFormat:{
@@ -182,9 +179,21 @@
                 },
                 eventContent: function(ele, createE) {
                     let en = ele.event._def;
+                    let isChecked = g_asistenciaall.find((element) => {
+                        return moment(element.fecha, "DD/MM/YYYY, hh:mm a").format("DD/MM/YYYY, hh:mm a") == moment(ele.event.start).format("DD/MM/YYYY, hh:mm a")
+                    });
+                    // "#02CA80"
+                    
+                    if(isChecked){
+                        ele.backgroundColor = "#02CA80";
+                    }
                     var html = `
-                    <div id="event-tooltip-${en.publicId}">
-                        <b>${en.title}</b>
+                    <div id="event-tooltip-${en.publicId}" class="position-relative px-1">
+                        <div class="position-absolute" style="top: 30%; right: 5px;">
+                            ${isChecked ? '<i class="fa fa-check-circle text-white"></i>' : ''}
+                        </div>
+                        <b>${en.title}</b><br>
+                        <small>${en.extendedProps.description}</small>
                     </div>
                     `;
                     

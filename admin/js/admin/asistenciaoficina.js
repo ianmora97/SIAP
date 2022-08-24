@@ -94,7 +94,7 @@ function showRowAsistenica(e){
             <td>${e.id}</td>
             <td>${e.nombre}</td>
             <td>${e.cedula}</td>
-            <td>${moment(e.fecha, 'DD/MM/YYYY').format("dddd, Do MMMM YYYY") }</td>
+            <td>${moment(e.fecha, 'DD/MM/YYYY, hh:mm a').format("dddd, Do MMMM YYYY, hh:mm a") }</td>
             <td>${estado}</td>
         </tr>
     `);

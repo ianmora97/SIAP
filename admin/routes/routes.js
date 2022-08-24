@@ -12,11 +12,32 @@ const db = require('../database');
 const logError = require('../logError');
 
 router.get('/', (req, res) => {
-    fs.readFile('./assets/inicio.json', 'utf8', (err, data) => {
-        let tab = 'inicio';
-        if (err) console.log(err);
-        let json = JSON.parse(data);
-        res.render('index',{tab,json});
+    var moment = require('moment');
+    db.query("call prc_seleccionar_talleres", (err1,rows1,fields1)=>{
+        if(!err1){
+            var talleres = new Array();
+            for(var i=0;i<rows1[0].length;i++){
+                var t = rows1[0][i];
+                talleres.push(t.descripcion);
+            }
+            db.query("SELECT * from vta_grupos", (err2,rows2,fields2)=>{
+                if(!err2){
+                    let grupos = rows2;
+                    fs.readFile('./assets/inicio.json', 'utf8', (err, data) => {
+                        let tab = 'inicio';
+                        if (err) console.log(err);
+                        let json = JSON.parse(data);
+                        res.render('index',{tab,talleres,grupos, moment,json});
+                    });
+                }else{
+                    logError(err1,'/talleres');
+                    res.send({err:'NotFound'});
+                }
+            });
+        }else{
+            logError(err1,'/talleres');
+            res.send({err:'NotFound'});
+        }
     });
         
 });

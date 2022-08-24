@@ -6,15 +6,30 @@
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+	<meta property="og:image" content="/img/logo-white.png">
     <title>SIAP | Sistema de Administracion de la Piscina del Departamento de Promocion Estudiantil</title>
+	<!-- meta description -->
+	<meta name="description" content="Sistema de Administracion de la Piscina del Departamento de Promocion Estudiantil, ideal para estudiantes que desean aprender a nadar o mejorar sus técnicas de natación. <%= json.fma[0].subtitle %>">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/animate.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
     <script src="/js/jq-bs-bundle.js"></script> 
 	<script src="https://cdn.jsdelivr.net/ally.js/1.4.1/ally.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.js"></script>
 </head>
 <body>
+	<%
+        moment.locale('es', {
+            months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+            monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+            weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+            weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+        });
+    %>
 	<%- include('menu') %>
 	<main role="main">
 		<div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -44,7 +59,109 @@
 			</div>
 			
 		</div>
-
+		<div class="container my-3">
+            <h2 class="featurette-heading mt-3" id="horarios">Horarios Disponibles</h2>
+            <p class="lead">Los horarios de los talleres estan sujetos a los cupos disponibles. <a href="/registrarse">Matricule aqui.</a></p>
+            </p>
+			<div class="table-responsive">
+				<div class="row mx-auto rounded-lg justify-content-between py-1 my-1">
+					<div class="col-sm-6 col-md-4 d-inline d-flex justify-content-end align-items-baseline ">
+						<div id="lenghtTable" class="px-1 m-0 w-100">
+						</div> 
+					</div>
+						 
+				</div>
+				<table class="table table-hover table-striped table-borderless" id="tabla">
+					<thead class="bg-primary text-white">
+					  <tr>
+						<th scope="col">Horario</th>
+						<th scope="col">Taller</th>
+						<th scope="col">Cupos Disponibles</th>
+						<th scope="col">Periodo</th>
+					  </tr>
+					</thead>
+					<tbody>
+						<!-- for grupos -->
+						<% grupos.forEach((e) => { %>
+							<tr>
+								<td style="line-height: 1.5;">
+									<div class="d-flex flex-column">
+										<div><strong>Dia: </strong><%= e.dia %></div>
+										<div><strong>Hora: </strong><%= e.hora %> - <%= e.hora_final %></div>
+									</div>
+								</td>
+								<td><%= e.descripcion %></td>
+								<td><%= e.cupo_base - e.cupo_actual %></td>
+								<td style="line-height: 1.5;">
+									<div class="d-flex flex-column">
+										<span><%= moment(e.periodo,"YYYY-MM-DD").format('LL') %></span>
+										<span><%= moment(e.periodo_final,"YYYY-MM-DD").format('LL') %></span>
+									</div>
+								</td>
+							</tr>
+						<% }); %>
+						<script>
+							$(document).ready(function() {
+								$('#tabla').DataTable({
+									"language": {
+										"decimal":        "",
+										"emptyTable":     "No hay talleres disponibles",
+										"info":           "Mostrando _END_ de _TOTAL_ talleres",
+										"infoEmpty":      "Mostrando 0 hasta 0 de 0 talleres",
+										"infoFiltered":   "(Filtrado de _MAX_ talleres totales)",
+										"infoPostFix":    "",
+										"thousands":      ",",
+										"lengthMenu":     "_MENU_",
+										"loadingRecords": "Cargando...",
+										"processing":     "Procesando...",
+										"search":         "Buscar:",
+										"zeroRecords":    "No se encontraron talleres similares",
+										"paginate": {
+											"first": '<i class="fas fa-angle-double-left"></i>',
+											"previous": '<i class="fas fa-angle-left"></i>',
+											"next": '<i class="fas fa-angle-right"></i>',
+											"last": '<i class="fas fa-angle-double-right"></i>'
+										},
+										"aria": {
+											"paginate": {
+												"first": '<i class="fas fa-angle-double-left"></i>',
+												"previous": '<i class="fas fa-angle-left"></i>',
+												"next": '<i class="fas fa-angle-right"></i>',
+												"last": '<i class="fas fa-angle-double-right"></i>'
+											}
+										}
+									},
+								});
+								$('#infoTable').html('');
+								$('#pagination').html('');
+								$('#lenghtTable').html('');
+	
+								$('#tabla_wrapper').addClass('px-0')
+								let a = $('#tabla_wrapper').find('.row')[1];
+								$(a).addClass('mx-0')
+								$(a).find('.col-sm-12').addClass('px-0');
+	
+								$('#tabla_filter').css('display', 'none');
+								$('#tabla_info').appendTo('#infoTable');
+								
+								$('#tabla_paginate').appendTo('#pagination');
+	
+								$('#tabla_length').find('label').find('select').removeClass('form-control form-control-sm')
+								// $('#tabla_length').find('label').find('select').appendTo('#lenghtTable');
+								$('#tabla_length').html('');
+							});
+						</script>
+					</tbody>
+				</table>
+				<div class="d-flex justify-content-between text-muted pl-2">
+					<div><small id="infoTable" class="d-flex align-items-end"></small></div>
+					<div class="d-flex justify-content-end align-items-baseline mt-2 mt-sm-0">
+						<div id="pagination"></div>
+					</div> 
+				</div>
+			</div>
+			<hr class="my-4">
+		</div>
 		<div class="container marketing">
 			<% json.feature.forEach((e,i)=>{ %>
 				<%if(e.show == "true"){%>

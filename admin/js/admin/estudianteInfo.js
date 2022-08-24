@@ -227,7 +227,7 @@ function buildConductas(data){
 }
 
 function buildPrimaryInfo(data){
-    $('#idEstudiante').html(data.id_estudiante)
+    $('#idEstudiante').html(data.id_estudiante);
     $('#v_cedula').val(data.cedula);
     $('#nombreEstudiante').html(`${data.nombre} ${data.apellido}`);
     $('#tipodeUsuario').html(data.tipo);
@@ -235,9 +235,12 @@ function buildPrimaryInfo(data){
     //correo on correoUsuariosend
     $("#correoUsuariosend").html(data.correo);
     $("#correoUsuariosend").attr("href","mailto:"+data.correo);
-
+    
     let nomE = data.telefono_emergencia == null ? '':data.telefono_emergencia.split('&')[1];
     let telE = data.telefono_emergencia == null ? '':data.telefono_emergencia.split('&')[0];
+    
+    $('#estudianteIdcambiocedula').val(data.cedula);
+    $('#cedulaCambio').val(data.cedula);
 
 
     $('#v_telefonoEmergenciaNombre').val(nomE)
