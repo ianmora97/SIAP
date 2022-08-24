@@ -3,6 +3,7 @@
  <head>
      <title>Dashboard | Asistencia Registro</title>
      <%- include('headers')%>
+     <script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
  </head>
  <body class="page bg-light d-flex flex-column h-100">
     <%- include('email') %> 
@@ -10,13 +11,11 @@
          <%- include('menuDashboard') %>
          <div id="page-content-wrapper">
             <%- include('headerDashboard') %>
-            <div class="container-fluid my-4">
-                <div class="d-flex justify-content-between py-2 px-3 align-items-end bg-white rounded-3">
-                    <h2 class="font-weight-bold px-2 mt-2">Registrar Asistencia</h2>
+            <div class="container-fluid py-4 bg-white ">
+                <div class="d-flex justify-content-between pt-2 px-2 align-items-end bg-light rounded-3-top">
+                    <h4 class="font-weight-bold px-2 mt-2">Registrar Asistencia</h4>
                 </div>
-                <div class="bg-white rounded-3 p-2 mt-4">
-                    <div id="calendarModal"></div>
-                </div>
+                <div id="calendarModal"></div>
                 <style>
                     .fc .fc-timegrid-col.fc-day-today{
                         background-color: #03ca8080 !important;
@@ -35,9 +34,21 @@
                     .fc-daygrid-event-harness{
                         margin-bottom: 4px;
                     }
+                    .fc .fc-toolbar.fc-header-toolbar{
+                        background-color: #edf0ff;
+                        padding: 15px;
+                        margin: 0%;
+                    }
+                    .fc td, .fc th {
+                        border-style: none !important;
+                    }
+                    .fc-toolbar-title{
+                        font-size: 1rem !important;
+                    }
+                    .fc-col-header-cell {
+                        padding: 20px 0 !important;
+                    }
                 </style>
-            
-                
             </div>
             <%- include('footerDashboard') %>
          </div>
@@ -48,7 +59,7 @@
             monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
             weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
             weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
-            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+            weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_'),
         }
         );
         function loaderDOMEvents(){
@@ -105,8 +116,8 @@
                     endTime: moment(e.fecha,"dddd, hh:mm a").add(1, 'hours').format("HH:mm"),
                     duration: "01:00",
                     description: e.tipo,
-                    borderColor: exists ? "#02CA80" : e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
                     backgroundColor: exists ? "#02CA80" : e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
+                    borderColor: exists ? "#02CA80" : e.tipo == "Piscina" ? "#4659e4" : "#9fccff",
                 });
             });
             g_horarios = arr;
@@ -142,15 +153,17 @@
                     hour: 'numeric',
                     minute: '2-digit',
                     omitZeroMinute: true,
-                    hour12: true
+                    meridiem: false,
+                    hour12: true,
+                    omitCommas: true
                 },
     
                 hiddenDays: [ 0 ],
                 themeSystem: 'bootstrap',
                 headerToolbar: {
-                    start: 'today',
-                    center: 'title',
-                    end: 'timeGridWeek,timeGridDay'
+                    start: 'title',
+                    center: '',
+                    end: 'timeGridWeek'
                 },
                 titleFormat:{
                     month: 'long',
@@ -164,9 +177,17 @@
                     day:      'Dia',
                     list:     'Lista'
                 },
+                viewDidMount: function() {
+                    $('.fc-timeGridWeek-button').removeClass('btn-primary').addClass('btn-primary');
+                },
                 eventContent: function(ele, createE) {
                     let en = ele.event._def;
-                    var html = `<b>${en.title}</b><br><small>${en.extendedProps.description}</small>`;
+                    var html = `
+                    <div id="event-tooltip-${en.publicId}">
+                        <b>${en.title}</b>
+                    </div>
+                    `;
+                    
                     return {html: html};
                 },
                 eventClick: function(info) {
@@ -219,7 +240,7 @@
                                                 type: "GET",
                                                 url: "/admin/asistencia/horario/registrarAsistencia",
                                                 data: {
-                                                    fecha: moment().format("DD/MM/YYYY, hh:mm a"),
+                                                    fecha: moment(info.event.start).format("DD/MM/YYYY, hh:mm a"),
                                                     usuario: response.id,
                                                 },
                                                 contentType: "appication/json",
@@ -263,5 +284,8 @@
         // });
         document.addEventListener("DOMContentLoaded", loaderDOMEvents);
     </script>
+    <style>
+        
+    </style>
  </body>
  </html>

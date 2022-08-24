@@ -1227,38 +1227,7 @@ function buildCalendarHorarios(data){
 
 					});
 				}else if(result.isConfirmed){
-					let horario = g_horariosMap.get(parseInt(info.event._def.publicId));
-					horario.tipo = result.value;
-
-					let bearer = "Bearer " + g_token;
-					$.ajax({
-						type: "GET",
-						url: "/admin/asistencia/horario/update",
-						data: horario,
-						contentType: "appication/json",
-						headers: {
-							Authorization: bearer,
-						},
-					}).then((response) => {
-						const Toast = Swal.mixin({
-							toast: true,
-							position: 'top-end',
-							showConfirmButton: false,
-							timer: 2000,
-							timerProgressBar: true,
-							didOpen: (toast) => {
-							  toast.addEventListener('mouseenter', Swal.stopTimer)
-							  toast.addEventListener('mouseleave', Swal.resumeTimer)
-							}
-						});
-						Toast.fire({
-							icon: 'success',
-							title: `${info.event.title} Actualizado`
-						});
-						location.reload();
-					},(error) => {
-
-					});
+					
 				}
 			})
 		}
