@@ -435,6 +435,21 @@ router.get('/admin/asistencia/oficina',(req,res)=>{
         res.render('login');
     }
 });
+
+router.get('/admin/asistencia/registrar',(req,res)=>{
+    if(req.session.value){
+        if(req.session.value.rol > 2){
+            let token = req.session.token;
+            let usuario = req.session.value;
+            let s = 'registro-asistencia';
+            res.render('admin/calendario', {usuario,s, token});
+        }else{
+            res.render('login');
+        }
+    }else{
+        res.render('login');
+    }
+});
 // ! ----------------------------------- inside routes ------------------------------------
 // ? ----------------------------------- nav routes ------------------------------------
 // TODO: rutas del navbar del panel administrativo

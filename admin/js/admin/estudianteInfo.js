@@ -228,6 +228,7 @@ function buildConductas(data){
 
 function buildPrimaryInfo(data){
     $('#idEstudiante').html(data.id_estudiante)
+    $('#v_cedula').val(data.cedula);
     $('#nombreEstudiante').html(`${data.nombre} ${data.apellido}`);
     $('#tipodeUsuario').html(data.tipo);
     $("#fotoPerfil").attr("src","/public/uploads/"+data.foto);

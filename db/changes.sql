@@ -1,102 +1,126 @@
-ALTER TABLE `siap`.`t_pago` 
-DROP COLUMN `fecha`,
-ADD COLUMN `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `cuenta`,
-CHANGE COLUMN `documento` `cuenta` VARCHAR(55) NULL DEFAULT NULL ;
-
-ALTER TABLE `siap`.`t_pago` 
-ADD COLUMN `grupo` INT NOT NULL AFTER `estudiante`,
-ADD INDEX `fk_t_pago_t_grupo_idx` (`grupo` ASC) VISIBLE;
+use siap;
+ALTER TABLE `siap`.`t_profesor_asistencia` 
+DROP FOREIGN KEY `fk_t_asistencia_t_grupo2`;
+ALTER TABLE `siap`.`t_profesor_asistencia` 
+DROP COLUMN `grupo`,
+DROP INDEX `fk_t_asistencia_t_grupo2_idx` ;
 ;
-ALTER TABLE `siap`.`t_pago` 
-ADD CONSTRAINT `fk_t_pago_t_grupo`
-  FOREIGN KEY (`grupo`)
-  REFERENCES `siap`.`t_grupo` (`id`)
+ALTER TABLE `siap`.`t_profesor_asistencia` 
+ADD COLUMN `grupo` INT NOT NULL AFTER `profesor`;
+
+
+
+CREATE TABLE `siap`.`t_oficina_asistencia` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `estado` VARCHAR(45) NOT NULL,
+  `fecha` VARCHAR(30) NOT NULL,
+  `usuario` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_asistencia_admin_idx` (`usuario` ASC) VISIBLE,
+  CONSTRAINT `fk_asistencia_admin`
+    FOREIGN KEY (`usuario`)
+    REFERENCES `siap`.`t_administrativo` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+ALTER TABLE `siap`.`t_oficina_asistencia` 
+DROP FOREIGN KEY `fk_asistencia_admin`;
+ALTER TABLE `siap`.`t_oficina_asistencia` 
+ADD INDEX `fk_asistencia_admin_idx` (`usuario` ASC) VISIBLE,
+DROP INDEX `fk_asistencia_admin_idx` ;
+;
+ALTER TABLE `siap`.`t_oficina_asistencia` 
+ADD CONSTRAINT `fk_asistencia_admin`
+  FOREIGN KEY (`usuario`)
+  REFERENCES `siap`.`t_usuario` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`localhost` 
-    SQL SECURITY DEFINER
-VIEW `vta_pagos` AS
-    SELECT 
-        `t`.`codigo` AS `codigo_taller`,
-        `t`.`nivel` AS `nivel_taller`,
-        `t`.`descripcion` AS `descripcion`,
-        `g`.`id` AS `id_grupo`,
-        DATE_FORMAT(`g`.`periodo`, '%Y-%m-%d') AS `periodo`,
-        DATE_FORMAT(`g`.`periodo_final`, '%Y-%m-%d') AS `periodo_final`,
-        `h`.`dia` AS `dia`,
-        `h`.`hora` AS `hora`,
-        `h`.`hora_final` AS `hora_final`,
-        CONCAT(`up`.`nombre`, ' ', `up`.`apellido`) AS `nombre_profesor`,
-        `m`.`id` AS `id_matricula`,
-        `m`.`activa` AS `activa`,
-        DATE_FORMAT(`m`.`created_at`, '%Y-%m-%d') AS `created_at`,
-        `e`.`id` AS `id_estudiante`,
-        `u`.`id` AS `id_usuario`,
+
+CREATE TABLE `siap`.`t_horario_asistencia` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `usuario` VARCHAR(200) NOT NULL,
+  `tipo` VARCHAR(45) NOT NULL,
+  `fecha` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+CREATE  OR REPLACE VIEW `vta_horario_asistencia` AS
+select 
+	a.id as id,
+	CONCAT(u.nombre ," ", u.apellido) as nombre,
+    u.cedula as cedula, 
+    a.fecha as fecha,
+		a.tipo as tipo
+from t_usuario u join t_horario_asistencia a
+where u.cedula = a.usuario;
+
+
+
+
+DROP procedure IF EXISTS `prc_actualizar_horario_asistencia`;
+
+DELIMITER $$
+USE `siap`$$
+CREATE PROCEDURE `prc_actualizar_horario_asistencia` (in _fecha VARCHAR(200), in _tipo varchar(45), in _id INT)
+BEGIN
+	update t_horario_asistencia set fecha = _fecha, tipo = _tipo where id = _id;
+END$$
+
+DELIMITER ;
+
+
+DROP procedure IF EXISTS `prc_eliminar_horario_asistencia`;
+
+DELIMITER $$
+USE `siap`$$
+CREATE PROCEDURE `prc_eliminar_horario_asistencia` (in _id INT)
+BEGIN
+	delete from t_horario_asistencia where id = _id;
+END$$
+
+DELIMITER ;
+
+
+USE `siap`;
+DROP procedure IF EXISTS `prc_insertar_horario_asistencia`;
+
+DELIMITER $$
+USE `siap`$$
+CREATE PROCEDURE `prc_insertar_horario_asistencia` (in _usuario varchar(200), in _fecha varchar(200), in _tipo varchar(45))
+BEGIN
+	insert into t_horario_asistencia(usuario,fecha,tipo) values(_usuario, _fecha, _tipo);
+select last_insert_id() as id from dual;
+END$$
+
+DELIMITER ;
+
+USE `siap`;
+CREATE  OR REPLACE VIEW `vta_oficina_asistencia` AS
+
+SELECT 
+        `oa`.`id` AS `id`,
+        `oa`.`estado` AS `estado`,
+        `oa`.`fecha` AS `fecha`,
+        `oa`.`usuario` AS `id_admin`,
         `u`.`cedula` AS `cedula`,
-        `u`.`apellido` AS `apellido`,
-        `u`.`nombre` AS `nombre`,
-        `u`.`foto` AS `foto`,
-        `u`.`correo` AS `correo`,
-        `pa`.`id` AS `id_pago`,
-        `pa`.`monto` AS `monto_pagado`,
-        `pa`.`cuenta` AS `cuenta_pago`,
-        `pa`.`created_at` AS `pagado_fecha`
+        CONCAT(`u`.`nombre` , " ", `u`.`apellido` ) as `nombre`
     FROM
-        ((((((((`t_taller` `t`
-        JOIN `t_grupo` `g`)
-        JOIN `t_matricula` `m`)
-        JOIN `t_estudiante` `e`)
+        (`t_oficina_asistencia` `oa`
         JOIN `t_usuario` `u`)
-        JOIN `t_usuario` `up`)
-        JOIN `t_horario` `h`)
-        JOIN `t_profesor` `p`)
-        JOIN `t_pago` `pa`)
     WHERE
-        ((`m`.`grupo` = `g`.`id`)
-            AND (`g`.`taller` = `t`.`id`)
-            AND (`m`.`estudiante` = `e`.`id`)
-            AND (`e`.`usuario` = `u`.`id`)
-            AND (`h`.`id` = `g`.`horario`)
-            AND (`p`.`id` = `g`.`profesor`)
-            AND (`up`.`id` = `p`.`usuario`)
-            AND (`pa`.`estudiante` = `e`.`id`)
-            AND (`g`.`id` = `pa`.`grupo`))
-    ORDER BY `t`.`codigo` , `g`.`id` , `u`.`apellido` , `u`.`nombre`
+        (`oa`.`usuario` = `u`.`id`);
 
 
-DROP procedure IF EXISTS `prc_insertar_pago`;
-DELIMITER $$
-USE `siap`$$
-CREATE PROCEDURE `prc_insertar_pago` (in vpi_est INT, in vpv_cuenta VARCHAR(55), in vpi_monto INT)
-BEGIN
-	insert into t_pago (estudiante,monto,cuenta) values(vpi_est,vpi_monto,vpi_cuenta);
-END$$
-
-DELIMITER ;
-
-
-DROP procedure IF EXISTS `prc_actualizar_pago`;
+USE `siap`;
+DROP procedure IF EXISTS `prc_insertar_asistencia_horario_all`;
 
 DELIMITER $$
 USE `siap`$$
-CREATE PROCEDURE `prc_actualizar_pago` (in id_pago INT, in vpi_est INT, in vpv_cuenta VARCHAR(55), in vpi_monto INT)
+CREATE PROCEDURE `prc_insertar_asistencia_horario_all` (in _estado varchar(45), in _fecha varchar(30), in _usuario INT)
 BEGIN
-	update t_pago set estudiante = vpi_est , monto = vpi_monto , cuenta = vpv_cuenta where id = id_pago;
-END$$
-
-DELIMITER ;
-
-DROP procedure IF EXISTS `prc_eliminar_pago`;
-
-DELIMITER $$
-USE `siap`$$
-CREATE PROCEDURE `prc_eliminar_pago` (in id_pago INT)
-BEGIN
-	delete from t_pago where id = id_pago;
+	insert into t_oficina_asistencia (estado, fecha, usuario) values(_estado, _fecha, _usuario);
 END$$
 
 DELIMITER ;

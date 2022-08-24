@@ -116,6 +116,44 @@ router.get('/admin/administrador/agregarAdministrador',ensureToken,(req,res)=>{
     });
 });
 
+router.get('/api/teach/asistencia/alloficina',ensureToken,(req,res)=>{ 
+    con.query("SELECT * FROM vta_oficina_asistencia",
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+router.get('/admin/asistencia/horario/verificarUsuario',ensureToken,(req,res)=>{ 
+    con.query("select id from t_usuario where cedula = ? and clave = sha1(?)",
+    [req.query.cedula, req.query.clave],
+    (err,rows,fields)=>{
+        if(!err){
+            if(rows.length > 0){
+                res.send({id:rows[0].id, status:200});
+            }
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+router.get('/admin/asistencia/horario/registrarAsistencia',ensureToken,(req,res)=>{ 
+    con.query("call prc_insertar_asistencia_horario_all(?,?,?)",
+    ["Presente", req.query.fecha, parseInt(req.query.usuario)],
+    (err,rows,fields)=>{
+        if(!err){
+            res.send(rows);
+        }else{
+            console.log(err)
+            res.status(501).send('error');
+        }
+    });
+});
+
 router.get('/admin/administrador/getHorarios', ensureToken,(req,res)=>{
     con.query("SELECT * FROM vta_horario_asistencia", (err,rows,fields)=>{
         if(!err){

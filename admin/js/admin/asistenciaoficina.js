@@ -20,7 +20,7 @@ function bringDB() {
 	let bearer = 'Bearer '+g_token;
     $.ajax({
         type: "GET",
-        url: "/api/teach/asistencia/allteach",
+        url: "/api/teach/asistencia/alloficina",
         contentType: "appication/json",
         headers:{
             'Authorization':bearer
@@ -35,7 +35,7 @@ function bringDB() {
 function llenarAsistencia(data){
     $('#lista_asistencia').html();
     data.forEach(e=>{
-        g_mapProfesoresAsistencia.set(e.id_profesor_asistencia,e);
+        g_mapProfesoresAsistencia.set(e.id,e);
         showRowAsistenica(e);
     })
     $('#table_asistencia').DataTable({
@@ -91,8 +91,8 @@ function showRowAsistenica(e){
     let estado = e.estado == 'Presente' ? '<i class="fas fa-check-circle text-success"></i> <b>Presente</b>' : '<i class="fas fa-times-circle text-danger"></i>';
     $("#lista_asistencia").append(`
         <tr>
-            <td>${e.id_profesor_asistencia}</td>
-            <td>${e.nombre} ${e.apellido}</td>
+            <td>${e.id}</td>
+            <td>${e.nombre}</td>
             <td>${e.cedula}</td>
             <td>${moment(e.fecha, 'DD/MM/YYYY').format("dddd, Do MMMM YYYY") }</td>
             <td>${estado}</td>
