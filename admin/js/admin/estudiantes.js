@@ -187,6 +187,7 @@ var estudiantes = [];
 var g_estudiantes_map = new Map();
 var g_talleres = new Map();
 var g_talleresA = [];
+var g_matriculados = new Map();
 
 function loadFromDb() {
     let bearer = 'Bearer '+g_token;
@@ -199,14 +200,29 @@ function loadFromDb() {
             'Authorization':bearer
         }
     }).then((solicitudes) => {
-        console.log(solicitudes)
-        let totalTime = new Date().getTime() - ajaxTime;
-        let a = Math.ceil(totalTime / 1000);
-        let t = a == 1 ? a + ' segundo' : a + ' segundos';
-        $('#infoTiming-usuarios-estudiantes').text(t);
-        estudiantes = solicitudes;
-        cargar_estudiante(solicitudes);
-        load_stats(solicitudes);
+        $.ajax({
+            type: "GET",
+            url: "/admin/matricula/listaMatriculados", 
+            contentType: "appication/json",
+            headers:{
+                'Authorization':bearer
+            }
+        }).then((matriculados) => {
+            matriculados.forEach(m => {
+                g_matriculados.set(m.cedula,m);
+            });
+            let totalTime = new Date().getTime() - ajaxTime;
+            let a = Math.ceil(totalTime / 1000);
+            let t = a == 1 ? a + ' segundo' : a + ' segundos';
+            $('#infoTiming-usuarios-estudiantes').text(t);
+            estudiantes = solicitudes;
+            cargar_estudiante(solicitudes);
+            load_stats(solicitudes);
+
+
+        }, (error) => {
+        });
+        
     }, (error) => {
         console.log(error)
     });
@@ -295,14 +311,15 @@ function cargar_estudiante(data) {
 
 }
 function llenar_Estudiantes(data) {
+    let matriculado = g_matriculados.get(data.cedula);
     let foto = `<img src="/public/uploads/${data.foto}" class="rounded-circle" width="40px" height="40px">`;
     $("#lista_estudiantes").append(`
-        <tr style="height:calc(55vh / 10);" class="">
+        <tr style="height:calc(55vh / 10);" class="${matriculado ? "" : "table-danger"}">
             <td class="align-center"><a href="/admin/estudiantes/getEstudiante/${data.cedula}">${foto}</a></td>
             <td class="align-center descriptionRow"><a href="/admin/estudiantes/getEstudiante/${data.cedula}">${data.nombre + " " + data.apellido}</a></td>
             <td class="descriptionRow">${data.cedula}</td>
             <td class="descriptionRow"><i class="fas fa-flag text-primary"></i>&nbsp;&nbsp; ${data.descripcion}</td>
-            <td class="descriptionRow"><i style="font-size:0.7rem;" class="fas fa-circle text-${data.estado == 0 ? 'danger' : 'success'}"></i>&nbsp; ${data.estado == 0 ? 'Inactivo' : 'Activo'}</td>
+            <td class="descriptionRow"><i style="font-size:0.7rem;" class="fas fa-circle text-${matriculado ? data.estado == 0 ? 'danger' : 'success' : "danger"}"></i>&nbsp; ${matriculado ? data.estado == 0 ? 'Inactivo' : 'Activo' : "No matricula"}</td>
             <td class="descriptionRow">
                 <a href="mailto:${data.correo}">${data.correo}</a>
             </td>

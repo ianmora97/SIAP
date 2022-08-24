@@ -91,6 +91,15 @@ router.post('/matricula/cursos/client',(req,res)=>{
                         console.log(err);
                     }
                 });
+                con.query("update t_estudiante set nivel = ? where id = ?",
+                    [parseInt(req.body.gruposAll[i].nivel), parseInt(estudiante.id_estudiante)],
+                    (err,result,fields)=>{
+                    if(!err){
+                        console.log('Cambio de Nivel')
+                    }else{
+                        console.log(err);
+                    }
+                });
                 if(i == req.body.grupos.length - 1){
                     let imagePathname = `temp${grupo}-${estudiante.id_estudiante}.png`
                     qr.toFile(path.join(__dirname,"../../public/QRcodes/"+imagePathname),text)

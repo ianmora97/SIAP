@@ -314,6 +314,7 @@ function matricularCursos(){
             gruposAll.push(grupo);
         });
         let cedula = sessionStorage.getItem("cedula_matriula");
+        console.log(gruposAll[0])
         let data = {
             cedula: cedula,
             grupos: grupos,
