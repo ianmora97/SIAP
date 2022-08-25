@@ -326,7 +326,6 @@ function searchonfind() {
 }
 
 function showAdminList(data) {
-	
   $("#lista_administradores").html();
   data.forEach((e) => {
     g_mapAdmins.set(e.cedula, e);
@@ -975,26 +974,27 @@ function showProfesores(data){
 	});
 }
 function dropdownAdminHorario(){
-	g_mapAdmins.filter(e => e.rol != 5).forEach((e) => {
-		$("#usuariodropdownselecthorario_piscina").append(`
-			<div class="p-2 text-white bg-primary font-weight-bold rounded mb-2 fc-event" 
-			style="cursor:grab"
-			data-value="${e.cedula}"
-			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Piscina" }'
-			data-description="Piscina"
-			data-color="#4659e4"
-			>${e.nombre} ${e.apellido}</div>
-		`);
-		$("#usuariodropdownselecthorario_oficina").append(`
-			<div class="p-2 text-white bg-fresh1 font-weight-bold rounded mb-2 fc-event" 
-			style="cursor:grab"
-			data-value="${e.cedula}"
-			data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Oficina" }'
-			data-description="Oficina"
-			data-color="#9fccff"
-			>${e.nombre} ${e.apellido}</div>
-		`);
-		
+	g_mapAdmins.forEach((e) => {
+		if(e.rol != 5){
+			$("#usuariodropdownselecthorario_piscina").append(`
+				<div class="p-2 text-white bg-primary font-weight-bold rounded mb-2 fc-event" 
+				style="cursor:grab"
+				data-value="${e.cedula}"
+				data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Piscina" }'
+				data-description="Piscina"
+				data-color="#4659e4"
+				>${e.nombre} ${e.apellido}</div>
+			`);
+			$("#usuariodropdownselecthorario_oficina").append(`
+				<div class="p-2 text-white bg-fresh1 font-weight-bold rounded mb-2 fc-event" 
+				style="cursor:grab"
+				data-value="${e.cedula}"
+				data-event='{ "title": "${e.nombre} ${e.apellido}", "duration": "01:00", "description": "Oficina" }'
+				data-description="Oficina"
+				data-color="#9fccff"
+				>${e.nombre} ${e.apellido}</div>
+			`);
+		}
 	});
 }
 function afterbuildCalendarHorarios(data){
