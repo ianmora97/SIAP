@@ -83,22 +83,24 @@
 					<tbody>
 						<!-- for grupos -->
 						<% grupos.forEach((e) => { %>
-							<tr>
-								<td style="line-height: 1.5;">
-									<div class="d-flex flex-column">
-										<div><strong>Dia: </strong><%= e.dia %></div>
-										<div><strong>Hora: </strong><%= e.hora %> - <%= e.hora_final %></div>
-									</div>
-								</td>
-								<td><%= e.descripcion %></td>
-								<td><%= e.cupo_base - e.cupo_actual %></td>
-								<td style="line-height: 1.5;">
-									<div class="d-flex flex-column">
-										<span><%= moment(e.periodo,"YYYY-MM-DD").format('LL') %></span>
-										<span><%= moment(e.periodo_final,"YYYY-MM-DD").format('LL') %></span>
-									</div>
-								</td>
-							</tr>
+							<%if( (e.cupo_base - e.cupo_actual) != 0){%>
+								<tr>
+									<td style="line-height: 1.5;">
+										<div class="d-flex flex-column">
+											<div><strong>Dia: </strong><%= e.dia %></div>
+											<div><strong>Hora: </strong><%= e.hora %> - <%= e.hora_final %></div>
+										</div>
+									</td>
+									<td><%= e.descripcion %></td>
+									<td><%= e.cupo_base - e.cupo_actual %></td>
+									<td style="line-height: 1.5;">
+										<div class="d-flex flex-column">
+											<span><%= moment(e.periodo,"YYYY-MM-DD").format('LL') %></span>
+											<span><%= moment(e.periodo_final,"YYYY-MM-DD").format('LL') %></span>
+										</div>
+									</td>
+								</tr>
+							<%}%>
 						<% }); %>
 						<script>
 							$(document).ready(function() {
