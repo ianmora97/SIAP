@@ -975,7 +975,7 @@ function showProfesores(data){
 	});
 }
 function dropdownAdminHorario(){
-	g_mapAdmins.forEach((e) => {
+	g_mapAdmins.filter(e => e.rol != 5).forEach((e) => {
 		$("#usuariodropdownselecthorario_piscina").append(`
 			<div class="p-2 text-white bg-primary font-weight-bold rounded mb-2 fc-event" 
 			style="cursor:grab"
