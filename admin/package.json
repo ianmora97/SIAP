@@ -42,7 +42,7 @@
     "imap": "^0.8.19",
     "instascan": "^1.0.0",
     "jquery": "^3.5.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.14",
     "multer": "^1.4.2",
